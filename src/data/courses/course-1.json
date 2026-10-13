@@ -218,9 +218,240 @@
     {
       "id": "c1-l1",
       "order": 1,
-      "title": "Nodes and Scenes",
+      "title": "What is a scene made of, and how do you run one?",
       "page": { "title": "Nodes and Scenes", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/nodes_and_scenes.html" },
-      "planned": true
+      "cardIds": [
+        "api:class:Node2D",
+        "api:class:Control",
+        "api:class:Label",
+        "gd:concept:node",
+        "gd:concept:scene",
+        "gd:concept:root-node",
+        "gd:concept:main-scene",
+        "gd:concept:res-path"
+      ],
+      "need": "Lesson 0 said that a game is a tree of scenes and each scene is a tree of nodes. Now you build one. The manual's first scene holds a single node that draws “Hello World”, but the steps are the ones every scene goes through: pick a root node, set its properties, save it, run it.\n\nOne choice comes before all of them. An empty scene offers three ready-made root nodes, and the one you take decides what kind of scene you are making.",
+      "agenda": [
+        "Nodes: what every node has, and how nodes form a tree.",
+        "Scenes: one root node, saved to disk, used as often as you like.",
+        "Your first scene: a `Label`, its Text property, running it, and the main scene."
+      ],
+      "chunks": [
+        {
+          "heading": "Nodes",
+          "text": "“Nodes are the fundamental building blocks of your game. They are like the ingredients in a recipe. There are dozens of kinds that can display an image, play a sound, represent a camera, and much more.”\n\n“All nodes have the following characteristics: a name; editable properties; they receive callbacks to update every frame; you can extend them with new properties and functions; you can add them to another node as a child.”\n\n“The last characteristic is important. Together, nodes form a tree, which is a powerful feature to organize projects. Since different nodes have different functions, combining them produces more complex behavior.”",
+          "image": {
+            "src": "nodes_and_scenes_nodes.webp",
+            "alt": "The Scene dock of a Main scene. Under Main: a Player with AnimatedSprite2D, CollisionShape2D, AudioStreamPlayer2D and Camera2D under it; an Enemy with AnimatedSprite2D, CollisionShape2D and an Area2D that holds its own CollisionShape2D; a CanvasLayer with a UI node.",
+            "caption": "Many kinds of node, combined into one tree.",
+            "width": 279,
+            "height": 389
+          },
+          "check": {
+            "prompt": "Which of these does every node have, in the manual's list?",
+            "choices": [
+              "A name and editable properties",
+              "A script attached to it",
+              "A picture to draw",
+              "A camera that follows it"
+            ],
+            "answer": 0,
+            "why": "The list starts “a name; editable properties”; a script, a picture or a camera depends on the kind of node."
+          }
+        },
+        {
+          "heading": "Scenes",
+          "text": "“When you organize nodes in a tree, like our character, we call this construct a scene. Once saved, scenes work like new node types in the editor, where you can add them as a child of an existing node. In that case, the instance of the scene appears as a single node with its internals hidden.”\n\n“You can compose nodes to create custom and complex node types, like a game character that runs and jumps, a life bar, a chest with which you can interact, and more.”\n\n“The Godot editor essentially is a scene editor. … A Godot project can contain as many of these scenes as you need. The engine only requires one as your application's main scene. This is the scene Godot will first load when you or a player runs the game.”\n\n“On top of acting like nodes, scenes have the following characteristics: 1. They always have one root node, like the ‘Player’ in our example. 2. You can save them to your local drive and load them later. 3. You can create as many instances of a scene as you'd like.”",
+          "image": {
+            "src": "nodes_and_scenes_3d_scene_example.webp",
+            "alt": "The Scene dock of a 3D Player scene: Mannequiny (a nested scene), a CollisionShape3D, a StateMachine with Move, Idle, Air and Run under it, and a CameraRig scene. Beside it, the blue mannequin character in the 3D view.",
+            "caption": "A character that runs and jumps, composed of nodes and nested scenes.",
+            "width": 695,
+            "height": 430
+          },
+          "check": {
+            "prompt": "How many root nodes does a scene have?",
+            "choices": [
+              "Exactly one",
+              "One for each kind of node in it",
+              "As many as you like",
+              "None until the game runs"
+            ],
+            "answer": 0,
+            "why": "“They always have one root node, like the ‘Player’ in our example.”"
+          }
+        },
+        {
+          "heading": "Three ways to start a scene",
+          "text": "“In an empty scene, the Scene dock on the left shows several options to add a root node quickly. 2D Scene adds a `Node2D` node, 3D Scene adds a `Node3D` node, and User Interface adds a `Control` node. These presets are here for convenience; they are not mandatory. Other Node lets you select any node to be the root node.”\n\n“We're going to add a single `Label` node to our scene. Its function is to draw text on the screen.”\n\n“A lot happens when you add a scene's first node. The scene changes to the 2D workspace because Label is a 2D node type. The Label appears, selected, in the top-left corner of the viewport. The node appears in the Scene dock on the left, and the node's properties appear in the Inspector dock on the right.”",
+          "image": {
+            "src": "nodes_and_scenes_02_scene_dock.webp",
+            "alt": "The Scene dock of an empty scene, under ‘Create Root Node:’: 2D Scene with a blue circle, 3D Scene with a red circle, User Interface with a green circle, and Other Node with a plus. The Add Child Node plus at the top left and Other Node are highlighted.",
+            "caption": "An empty scene's root node choices.",
+            "width": 280,
+            "height": 280
+          },
+          "check": {
+            "prompt": "In an empty scene you click User Interface. Which node becomes the root?",
+            "choices": ["`Control`", "`Node2D`", "`Node3D`", "`Label`"],
+            "answer": 0,
+            "why": "“User Interface adds a `Control` node”; 2D Scene adds a `Node2D` and 3D Scene a `Node3D`."
+          }
+        },
+        {
+          "heading": "Changing a property and running the scene",
+          "text": "“The next step is to change the Label's Text property. Let's change it to ‘Hello World’.” “You will see the text draw in the viewport as you type.”\n\n“Everything's ready to run the scene! Press the Run Current Scene button in the top-right of the screen or press F6 (Cmd + R on macOS).”\n\n“A popup invites you to save the scene, which is required to run it. Click the Save button in the file browser to save it as `label.tscn`.”\n\n“The application should open in a new window and display the text ‘Hello World’.”",
+          "image": {
+            "src": "nodes_and_scenes_06_label_text.webp",
+            "alt": "The Inspector with the Label selected: under the Text property, the field reads Hello World.",
+            "caption": "The Label's Text property, set in the Inspector.",
+            "width": 286,
+            "height": 337
+          },
+          "check": {
+            "prompt": "You press Run Current Scene on a scene you have never saved. What happens first?",
+            "choices": [
+              "A popup asks you to save it",
+              "It runs without saving",
+              "Godot refuses and shows an error",
+              "It runs the main scene instead"
+            ],
+            "answer": 0,
+            "why": "“A popup invites you to save the scene, which is required to run it.”"
+          }
+        },
+        {
+          "heading": "The main scene",
+          "text": "“To run our test scene, we used the Run Current Scene button. Another button next to it, Run Project, allows you to set and run the project's main scene. You can also press F5 (Cmd + B on macOS) to do so.”\n\n“A popup window appears and invites you to select the main scene.” Pick `label.tscn`. “Moving forward, every time you run the project, Godot will use this scene as a starting point.”\n\n“The editor saves the main scene's path in a project.godot file in your project's directory.”",
+          "image": {
+            "src": "nodes_and_scenes_12_play_button.webp",
+            "alt": "The run buttons at the top right of the editor. The first, a play triangle, is highlighted: Run Project. Pause, Stop and the buttons that run the current scene or a chosen scene follow it.",
+            "caption": "Run Project, the first of the run buttons.",
+            "width": 335,
+            "height": 44
+          },
+          "check": {
+            "prompt": "`label.tscn` is the main scene. You open another scene and press F5. What runs?",
+            "choices": [
+              "`label.tscn`, the main scene",
+              "The scene you have open",
+              "Both scenes, one after the other",
+              "Nothing until you save the open scene"
+            ],
+            "answer": 0,
+            "why": "F5 is Run Project, and it runs the main scene; F6 runs the scene you have open."
+          }
+        }
+      ],
+      "compare": {
+        "a": {
+          "title": "The Hello World scene",
+          "text": "One `Label` as the root and nothing under it. Its Text property says Hello World, and it is saved as `label.tscn`.",
+          "image": {
+            "src": "nodes_and_scenes_11_final_result.webp",
+            "alt": "The running game's window: a grey background with Hello World in white at the centre.",
+            "caption": "The Hello World scene, running.",
+            "width": 1164,
+            "height": 697
+          }
+        },
+        "b": {
+          "title": "The character scene",
+          "text": "A `CharacterBody2D` named Player as the root, with a `Sprite2D`, a `Camera2D` and a `CollisionShape2D` under it: “a playable character that the camera follows”.",
+          "drawing": {
+            "caption": "The character scene in the Scene dock",
+            "nodes": [
+              { "name": "Player", "type": "CharacterBody2D", "depth": 0 },
+              { "name": "Sprite2D", "type": "Sprite2D", "depth": 1 },
+              { "name": "Camera2D", "type": "Camera2D", "depth": 1 },
+              { "name": "CollisionShape2D", "type": "CollisionShape2D", "depth": 1 }
+            ]
+          }
+        },
+        "question": {
+          "prompt": "One scene has one node, the other four. What is true of both?",
+          "choices": [
+            "Each has exactly one root node",
+            "Each needs a camera to run",
+            "Each must be the main scene",
+            "Each root must be a `Node2D`"
+          ],
+          "answer": 0,
+          "why": "Scenes “always have one root node”: the `Label` in one, Player in the other."
+        }
+      },
+      "exercises": [
+        {
+          "type": "predict",
+          "prompt": "You add a `Label` as the first node of an empty scene. Which workspace does the editor switch to?",
+          "choices": ["2D", "3D", "Script", "AssetLib"],
+          "answer": 0,
+          "why": "“The scene changes to the 2D workspace because Label is a 2D node type.”"
+        },
+        {
+          "type": "blank",
+          "prompt": "Type the missing class name. Godot's names are case-sensitive.",
+          "text": "“We're going to add a single ____ node to our scene. Its function is to draw text on the screen.”",
+          "answer": "Label",
+          "why": "A `Label` draws text; its Text property holds the words."
+        },
+        {
+          "type": "fix",
+          "plain": true,
+          "prompt": "Four notes on an empty scene's root choices. Which one is wrong?",
+          "lines": [
+            "2D Scene adds a `Node2D` as the root.",
+            "3D Scene adds a `Node3D` as the root.",
+            "User Interface adds a `Node2D` as the root.",
+            "Other Node lets you pick any node as the root."
+          ],
+          "answer": 2,
+          "fixed": "User Interface adds a `Control` as the root.",
+          "why": "The three presets give three different roots: `Node2D`, `Node3D` and `Control`."
+        },
+        {
+          "type": "predict",
+          "prompt": "You add the saved Hello World scene as a child in another scene. How does it show in that scene's dock?",
+          "choices": [
+            "As a single node, its internals hidden",
+            "As the `Label` and every node under it",
+            "As a file name with no icon",
+            "It cannot be added to another scene"
+          ],
+          "answer": 0,
+          "why": "“The instance of the scene appears as a single node with its internals hidden”, as lesson 0 showed with the Player."
+        },
+        {
+          "type": "predict",
+          "prompt": "Your game has a level scene with the character scene nested in it, and the level is the main scene. The player starts the game. What does the scene tree hold?",
+          "choices": [
+            "The level's nodes, with the character's nodes as one branch",
+            "Only the character scene",
+            "Whichever scene you saved last",
+            "Two trees, one for each scene"
+          ],
+          "answer": 0,
+          "why": "The main scene “is the scene Godot will first load”, and every scene nested in it comes together in the one scene tree (lesson 0)."
+        }
+      ],
+      "errors": [
+        {
+          "what": "You press F5 and a different scene runs from the one you are editing.",
+          "fix": "F5 is Run Project and runs the main scene; press F6, Run Current Scene, to run the scene you have open.",
+          "source": "Godot manual, Nodes and Scenes, the note under Setting the main scene: “Running the project's main scene is distinct from running the current scene. If you encounter unexpected behavior, check to ensure you are running the correct scene.”"
+        },
+        {
+          "what": "The Save Scene As dialog will not let you save the scene outside your project's folder.",
+          "fix": "Save it inside the project: the `res://` path at the top of the window “represents the project's root directory and stands for ‘resource path’.”",
+          "source": "Godot manual, Nodes and Scenes, the note under Running the scene: the dialog “only allows you to save files inside the project.”"
+        },
+        {
+          "what": "“Difficulties with telling apart the static and dynamic aspects of programs.” In Godot: you read the Scene dock as the running game, and expect the `Label` to be on screen before you run anything.",
+          "fix": "The dock shows the scene as saved, the plan; the game is the window that opens when you press F6 or F5, built from that plan.",
+          "source": "Sorva 2012, Table A.1, row 6 (du Boulay 1986)."
+        }
+      ],
+      "exitStem": "A scene is made of …, and I run it by …"
     },
     {
       "id": "c1-l2",
