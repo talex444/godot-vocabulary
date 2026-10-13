@@ -1,10 +1,11 @@
 import { FAMILIES } from '../../cards/types';
+import { REMINDER_SENTENCE, isNativeApp, parseTime } from '../../reminder/reminder';
 import { projectedReviewsPerDay, totalNewPerDay, warningAboveTwenty, type Settings } from '../../settings/load';
 import { loadCards } from '../../session/deck';
-import { getSettings, listSkipped, saveSettings, unskipCard } from '../../store/db';
+import { getReminder, getSettings, listSkipped, saveReminder, saveSettings, unskipCard } from '../../store/db';
 import { exportFileName, exportText, importSummary, importText } from '../../store/file';
 import { FAMILY_LABEL, type Nav } from '../app';
-import { button, el, heading, panel, stat, stepper, toggle } from '../kit';
+import { button, el, heading, panel, stat, stepper, textField, toggle } from '../kit';
 
 export const WARNING_TEXT =
   'Above twenty new cards a day the review pile grows to about two hundred a day. It is allowed; it is a lot.';
@@ -69,12 +70,69 @@ export async function settingsScreen(nav: Nav): Promise<HTMLElement> {
     await showSkipped();
   });
 
+  // The Android package only; the web version has no way to wake the phone (decision 25).
+  const reminder = isNativeApp() ? await reminderSection() : null;
+
   return el('div', { class: 'gv-screen' }, [
     panel([heading('Settings'), families, load], { class: 'gv-stack' }),
+    reminder,
     panel([skippedHeading, skipped], { class: 'gv-stack gv-skipped' }),
     data,
     el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.start() })]),
   ]);
+}
+
+/**
+ * The daily reminder (decisions 25, 27): on/off, a time (default 20:00) and Exact time, which opens
+ * Android's exact-alarm setting and shows what Android allows. Turning it on asks for the
+ * notification permission when Android has not asked yet.
+ */
+async function reminderSection(): Promise<HTMLElement> {
+  const native = await import('../../reminder/native');
+  const reminder = await getReminder();
+  const result = el('p', { class: 'gv-result', attrs: { role: 'status' } });
+  const apply = async () => {
+    await saveReminder(reminder);
+    try {
+      await native.applyReminder(reminder);
+    } catch (error) {
+      result.textContent = `The reminder could not be set. ${error instanceof Error ? error.message : String(error)}`;
+    }
+  };
+
+  const onSwitch = toggle('Daily reminder', reminder.on, async (on) => {
+    if (on && (await native.askNotificationPermission()) === 'denied') {
+      onSwitch.setAttribute('aria-checked', 'false');
+      result.textContent = 'Notifications are off for this app. Turn them on in the phone’s Settings, under Apps › Godot Vocabulary › Notifications, then try again.';
+      return;
+    }
+    reminder.on = on;
+    result.textContent = on ? `Reminder on, every day at about ${reminder.time}.` : 'Reminder off.';
+    await apply();
+  });
+
+  const time = textField({ label: 'Time', value: reminder.time, time: true });
+  time.input.addEventListener('change', async () => {
+    if (!parseTime(time.input.value)) {
+      time.input.value = reminder.time;
+      return;
+    }
+    reminder.time = time.input.value;
+    if (reminder.on) result.textContent = `Reminder on, every day at about ${reminder.time}.`;
+    await apply();
+  });
+
+  const exact = toggle('Exact time', await native.exactAllowed(), async () => {
+    // Android decides: show what it allows once the learner comes back from its setting.
+    exact.setAttribute('aria-checked', String(await native.openExactSetting()));
+    await apply();
+  });
+  exact.setAttribute('aria-describedby', 'reminder-help');
+
+  return panel(
+    [heading('Reminder'), onSwitch, time.root, el('p', { class: 'gv-note', text: REMINDER_SENTENCE, attrs: { id: 'reminder-help' } }), exact, result],
+    { class: 'gv-stack' },
+  );
 }
 
 /** Cards skipped from a card screen (decision 26), oldest first, each with Undo. */

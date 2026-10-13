@@ -110,9 +110,12 @@ export function textField(options: {
   placeholder?: string;
   search?: boolean;
   multiline?: boolean;
+  /** A native time-of-day picker (`HH:MM`) instead of free text. */
+  time?: boolean;
 }): { root: HTMLElement; input: HTMLInputElement | HTMLTextAreaElement } {
   const id = `gv-field-${++fieldCount}`;
-  const input = options.multiline ? el('textarea', { attrs: { rows: '3' } }) : el('input', { attrs: { type: options.search ? 'search' : 'text' } });
+  const type = options.search ? 'search' : options.time ? 'time' : 'text';
+  const input = options.multiline ? el('textarea', { attrs: { rows: '3' } }) : el('input', { attrs: { type } });
   input.id = id;
   input.className = 'gv-field__input';
   if (options.value) input.value = options.value;

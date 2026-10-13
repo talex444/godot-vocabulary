@@ -7,6 +7,7 @@ export const DB_NAME = 'godot-vocabulary';
 const DB_VERSION = 2;
 const SETTINGS_KEY = 'settings';
 const LAST_SESSION_KEY = 'lastSessionDate';
+const REMINDER_KEY = 'reminder';
 
 /** A card the learner wrote on this device. */
 export type CustomCard = Card & { custom: true };
@@ -123,6 +124,32 @@ export async function addCustomCard(card: Card): Promise<CustomCard> {
 export async function deleteCustomCard(id: string): Promise<void> {
   const tx = (await db()).transaction(['customCards', 'progress'], 'readwrite');
   await Promise.all([tx.objectStore('customCards').delete(id), tx.objectStore('progress').delete(id), tx.done]);
+}
+
+/** The Android package's daily reminder; a setting of this device, so it is not exported. */
+export interface ReminderSetting {
+  on: boolean;
+  /** Local time, `HH:MM`. */
+  time: string;
+}
+
+export const DEFAULT_REMINDER: ReminderSetting = { on: false, time: '20:00' };
+
+export async function getReminder(): Promise<ReminderSetting> {
+  const stored = await (await db()).get('meta', REMINDER_KEY);
+  try {
+    const value = stored ? (JSON.parse(stored) as Partial<ReminderSetting>) : {};
+    return {
+      on: value.on === true,
+      time: typeof value.time === 'string' && /^\d{2}:\d{2}$/.test(value.time) ? value.time : DEFAULT_REMINDER.time,
+    };
+  } catch {
+    return { ...DEFAULT_REMINDER };
+  }
+}
+
+export async function saveReminder(reminder: ReminderSetting): Promise<void> {
+  await (await db()).put('meta', JSON.stringify(reminder), REMINDER_KEY);
 }
 
 export async function getLastSessionDate(): Promise<string | undefined> {
