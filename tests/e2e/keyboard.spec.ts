@@ -24,7 +24,8 @@ async function expectFocusShown(page: Page, where: string): Promise<void> {
     return {
       visible: n.matches(':focus-visible'),
       ring: (s.outlineStyle !== 'none' && Number.parseFloat(s.outlineWidth) > 0) || s.boxShadow !== 'none',
-      inView: r.top >= 0 && r.left >= 0 && r.bottom <= innerHeight && r.right <= innerWidth,
+      // Half a pixel of slack: a long page can scroll a target to a fractional edge (780.33 of 780).
+      inView: r.top >= -0.5 && r.left >= 0 && r.bottom <= innerHeight + 0.5 && r.right <= innerWidth,
       onTop: hit !== null && (hit === n || n.contains(hit)),
     };
   });

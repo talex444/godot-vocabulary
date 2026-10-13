@@ -74,7 +74,7 @@ async function checkEveryScreen(page: Page, options: { targets?: boolean; text?:
     },
     options.afterLoad,
   );
-  expect(seen).toHaveLength(8);
+  expect(seen).toHaveLength(10);
 }
 
 /** Cards vary (class icons, long names, code, inline code): measure twenty, before and after answering. */

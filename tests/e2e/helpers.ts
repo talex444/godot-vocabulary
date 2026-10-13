@@ -35,8 +35,14 @@ export async function screenReady(page: Page, heading: string): Promise<void> {
   await page.evaluate(() => document.fonts.ready);
 }
 
-/** From Start, one of the three flat links. */
-export async function open(page: Page, name: 'Settings' | 'Add card' | 'About'): Promise<void> {
+/** Lesson 0 of course 1, read from the course file. */
+export const COURSE1 = JSON.parse(readFileSync('src/data/courses/course-1.json', 'utf8')) as {
+  lessons: { id: string; title: string; cardIds?: string[]; exitStem?: string }[];
+};
+export const LESSON0_TITLE = COURSE1.lessons[0]!.title;
+
+/** From Start, one of the flat links. */
+export async function open(page: Page, name: 'Courses' | 'Settings' | 'Add card' | 'About'): Promise<void> {
   await page.getByRole('button', { name, exact: true }).click();
   await screenReady(page, name);
 }
@@ -202,7 +208,17 @@ export async function importOnSettings(page: Page, file: object | string, mode: 
   await expect(page.locator('.gv-result')).toHaveText(/^Restored /);
 }
 
-export type ScreenName = 'start' | 'card' | 'card-answered' | 'summary' | 'settings' | 'settings-warning' | 'add-card' | 'about';
+export type ScreenName =
+  | 'start'
+  | 'card'
+  | 'card-answered'
+  | 'summary'
+  | 'settings'
+  | 'settings-warning'
+  | 'add-card'
+  | 'about'
+  | 'courses'
+  | 'lesson';
 
 /**
  * Every screen once, in one pass: Start, a card before and after answering, the summary, Settings
@@ -235,5 +251,14 @@ export async function walkScreens(page: Page, visit: (name: ScreenName) => Promi
 
   await open(page, 'About');
   await visit('about');
+  await backToStart(page);
+
+  await open(page, 'Courses');
+  await visit('courses');
+  await page.locator('[data-lesson-id="c1-l0"] button').click();
+  await screenReady(page, LESSON0_TITLE);
+  await visit('lesson');
+  await page.getByRole('button', { name: 'Back to courses' }).click();
+  await screenReady(page, 'Courses');
   await backToStart(page);
 }

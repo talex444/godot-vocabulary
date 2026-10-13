@@ -10,6 +10,7 @@ import {
   exportFile,
   goNext,
   gotoStart,
+  LESSON0_TITLE,
   open,
   screenReady,
   settings,
@@ -154,6 +155,21 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async
   await open(page, 'About');
   await screenReady(page, 'About');
   await audit(page, 'about');
+  await backToStart(page);
+
+  await open(page, 'Courses');
+  await audit(page, 'courses');
+  await page.locator('[data-lesson-id="c1-l0"] button').click();
+  await screenReady(page, LESSON0_TITLE);
+  await audit(page, 'lesson');
+  await page.locator('[data-question="pretest-0"] .gv-choice').first().click();
+  await page.locator('[data-question="check-0"] .gv-choice').first().click();
+  await page.getByRole('button', { name: 'Add the next node' }).click();
+  await page.getByRole('textbox', { name: 'Missing word' }).fill('characterbody2d');
+  await page.getByRole('button', { name: 'Check', exact: true }).click();
+  await page.locator('[data-kind="fix"] .gv-choice').first().click();
+  await page.getByText('Check the case.').waitFor();
+  await audit(page, 'lesson answered');
 
   // Fixed order for the report: the card screens by family name.
   const fixed = ['Godot API', 'GDScript', 'GitHub'];
