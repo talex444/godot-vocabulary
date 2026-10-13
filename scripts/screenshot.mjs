@@ -122,6 +122,36 @@ await backToStart();
 await page.getByRole('button', { name: 'About' }).click();
 await ready('About');
 await shot('about.png');
+await backToStart();
+
+// Courses: the list, then lesson 0 in three phone-screen views (the page itself is one long scroll).
+const view = (name) => page.screenshot({ path: join(out, name) });
+const toTop = (locator) => locator.evaluate((n) => window.scrollTo(0, n.getBoundingClientRect().top + window.scrollY - 8));
+await page.getByRole('button', { name: 'Courses' }).click();
+await ready('Courses');
+await shot('courses.png');
+await page.locator('[data-lesson-id="c1-l0"] button').click();
+await page.locator('[data-question="pretest-0"]').waitFor();
+await page.evaluate(() => document.fonts.ready);
+const pretest = page.locator('[data-question="pretest-0"]');
+const pretestIds = await pretest.locator('.gv-choice').evaluateAll((nodes) => nodes.map((n) => n.dataset.cardId ?? ''));
+await pretest.locator('.gv-choice').nth(pretestIds.indexOf(await pretest.getAttribute('data-card-id'))).click();
+await page.evaluate(() => window.scrollTo(0, 0));
+await view('lesson-top.png');
+for (let i = 0; i < 2; i++) await page.getByRole('button', { name: 'Add the next node' }).click();
+await toTop(page.locator('.gv-drawing'));
+await view('lesson-drawing.png');
+const blankItem = page.locator('[data-kind="blank"]');
+await blankItem.getByRole('textbox', { name: 'Missing word' }).fill('characterbody2d');
+await blankItem.getByRole('button', { name: 'Check' }).click();
+await toTop(blankItem);
+await view('lesson-exercise.png');
+await page.getByLabel('When a Godot game runs, it is made of …').fill('a tree of nodes, grouped into scenes and wired with signals.');
+await page.getByRole('button', { name: 'Save', exact: true }).click();
+await page.getByText('Saved on this device.').waitFor();
+// The last error and the whole exit-ticket step, the page's bottom edge on the screen's.
+await page.locator('[data-step="exit"]').evaluate((n) => window.scrollTo(0, n.getBoundingClientRect().bottom + window.scrollY - window.innerHeight + 8));
+await view('lesson-end.png');
 
 await browser.close();
 console.log(`Screenshots written to ${out}`);
