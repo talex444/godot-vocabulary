@@ -27,6 +27,19 @@ The learning-science basis is Benedict Carey, *How We Learn* (2014): pretesting 
 | 22 | Accessibility standard | WCAG 2.2 Level AA, plus the AAA 44×44 px target size, as the bar for buttons, text and contrast ("since this is designed for mobile, we should use WCAG"). **Godot wins over WCAG contrast when they conflict** ("to feel like godot id rather godot wins where they disagree"): colours are never altered; failing pairs are measured and disclosed in `docs/contrast-report.md`. Every other WCAG criterion is a hard gate, checked by axe-core in Playwright. |
 | 21 | Per-family budgets vs cap | Each family has its own new-cards-per-day (defaults 10/5/5). Settings show the total and projected review load (~10 reviews per new card). Above 20 total: a plain-words warning, not a hard stop. No new cards while reviews are overdue. |
 
+## Round 8 (Tyler, 2026-10-13 evening, after his first real session of 20)
+
+| # | Decision | Chosen |
+|---|----------|--------|
+| 23 | Same-session repeats | **Keep, spaced and capped** (his challenge was right; Karpicke & Roediger 2008, Vaughn & Rawson 2011): a new card is asked up to three times in its first session, spread as far apart as the session allows, never adjacent; a wrong answer brings it back until answered right. The first answer sets the FSRS grade; repeats reinforce only. Cards in Review state never repeat the same day (FSRS short-term steps off). |
+| 24 | Anti-memorisation guards | Fresh wrong answers drawn from a pool every showing (never the same four twice); later showings flip direction on description cards (name shown, description to pick); snippet cards keep direction; the after-answer panel shows the full description and a link to the official docs page. |
+| 25 | Reminders | Android package via Capacitor with local notifications (no server). Web app on Android can only do best-effort background nudges; **Apple is out of scope** ("this is a personal project and im on android"). |
+| 26 | Bad cards | Both halves: generator rules for the detectable kinds (identical sibling descriptions, editor-only classes, hollowed prompts, four-word member descriptions) and a **Skip this card** with an optional reason, an undo list in Settings, included in export. A real doc error is worth reporting upstream. |
+| 27 | Reminder precision | Within a window by default (no exact-alarm permission); an "exact time" switch in Settings that sends the user to the Android setting. |
+| 28 | Signing key and data move | Tyler keeps the keystore (generated once on his PC, base64 in repo secrets for CI, file backed up by him); one Export from the web app and one Import in the package moves progress. |
+| 29 | Courses (phase three, after reading) | A courses section will come after the CoS reads *Teaching Tech Together*, *The Programmer's Brain*, *Make It Stick*, *How Learning Works* and the Dunlosky 2013 review; Mayer's pre-training principle is the basis (cards = pre-training, lessons = the scaffold). Lessons are mostly doing: pretest, one worked example, do-it, then the cards. Content from the manual's own step-by-step sequence (CC BY 3.0). |
+| 30 | Course hooks now | Every card gets a `topic` from the manual page that introduces it; the session builder gets a course-led new-card mode (a finished lesson's unseen cards first, then frequency order); the store records lessons done. No courses UI until the architecture is grilled. |
+
 Calls made by the Chief of Staff, open to veto: the app icon is not the Godot logo; the app states it is unofficial; distractors for API cards are siblings (same parent class / same class), for GitHub cards other glossary terms.
 
 Not in v1: concept cards, typing and running code, a Godot-project version, sync, accounts.

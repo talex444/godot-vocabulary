@@ -46,3 +46,21 @@ Each line is checked twice: by the Chief of Staff driving the built app in a pho
 
 ## Quality gates
 26. `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm e2e` all green; the README explains install, add-card, export/import, licences.
+
+## v1.1 — after Tyler's first real session (decisions 23–30, 2026-10-13)
+32. FSRS short-term steps are off: a new card answered correctly is next due at least one day later; answered wrongly, within about a day (unit test with the installed library's numbers).
+33. First-session learning: a new card is asked up to three times in its first session; its showings are never adjacent and are spread as far apart as the queue allows (unit test: minimum gap ≥ min(8, queue/4)); a wrong answer brings it back until it is answered right; the first answer of the session sets the FSRS grade and repeats do not change it; a card in Review state is never shown twice in one day (unit tests; e2e shows the pattern on a 10-card session).
+34. Every card carries a distractor pool of at least six where the data allows; the four choices are drawn fresh every showing and the same four never appear twice in one session for one card (unit test over 1,000 draws).
+35. Second and third showings of a description card flip direction (the name shown, four descriptions to pick); snippet cards keep direction; the icon rule still holds (e2e screenshot of a flipped API card).
+36. After answering, the panel shows the full description (BBCode converted, capped at a readable length with "…") and a link to the official docs page for that class, member, manual section or glossary term, opening in the browser; the app makes no request itself.
+37. Skip this card: a flat control on the card screen with an optional reason; the card leaves the deck; Settings lists skipped cards with undo; skips travel in export/import (e2e).
+38. Generator rules: no class card whose brief description is identical to a sibling's; no editor-only (`api_type="editor"`) classes; no prompt left with `____` or two words or fewer after masking; no member card whose description is four words or fewer; `pnpm generate` prints what each rule removed (unit test over the generated deck).
+39. Course hooks: every card has a `topic` (string, from the manual page that introduces the class or keyword, via a committed mapping); the builder accepts `newCardMode: 'frequency' | 'course'` and, in course mode, a finished lesson's unseen cards come first (unit test); the store records `lessonsDone`; no courses UI yet.
+40. The e2e suite and `docs/screenshots` reflect the new flow; the contrast and axe reports are regenerated.
+
+## v1.1 — Android package (decisions 25, 27, 28)
+41. A Capacitor Android project in `android/`, same web build, app id `io.github.talex444.godotvocabulary`; `pnpm android:build` produces a signed release APK locally when the keystore is present.
+42. CI builds and signs the APK on a version tag (`v*`) from repository secrets and attaches it to a GitHub Release; the web deploy is unchanged.
+43. A daily reminder: time set in Settings (Android only), scheduled with Capacitor Local Notifications, re-scheduled on launch; notification permission asked once from that setting; the "exact time" switch requests the exact-alarm setting and the plain sentence says the default is "about that time".
+44. "Check for updates" in About opens the Releases page in the browser; the app itself makes no request.
+45. Export and import work inside the package; progress moved from the web app by one export and one import (human check on the S24).
