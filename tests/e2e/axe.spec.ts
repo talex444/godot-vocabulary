@@ -1,7 +1,21 @@
 import { writeFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { answer, backToStart, endSession, exportFile, goNext, gotoStart, open, screenReady, settings, startReady, startSession } from './helpers';
+import {
+  answer,
+  answerShowing,
+  backToStart,
+  cardPanel,
+  endSession,
+  exportFile,
+  goNext,
+  gotoStart,
+  open,
+  screenReady,
+  settings,
+  startReady,
+  startSession,
+} from './helpers';
 
 // Done-criteria 27: axe-core with the WCAG 2.2 AA tags on every screen. Every rule but
 // `color-contrast` must pass. Contrast is reported, not failed (decision #22: where a Godot colour
@@ -58,7 +72,8 @@ function writeReport(): void {
     '(decision #22, Tyler, 2026-10-13). They are a known deviation from WCAG 1.4.3; see also',
     '[`contrast-report.md`](contrast-report.md), which measures every theme pair directly.',
     '',
-    'The card screens show the first new card of each family (daily budgets set to one each), so the run is repeatable.',
+    'The card screens show the first new card of each family (daily budgets set to one each), so the run is repeatable;',
+    'the flipped card is the Godot API card’s second look, and the skip field opens on the card after it.',
     '',
     `Screens audited: ${screens.join(', ')}.`,
     '',
@@ -103,10 +118,31 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async
     if (i < 2) await goNext(page);
   }
   expect(cards.sort()).toEqual(['GDScript', 'GitHub', 'Godot API']);
+
+  // Second looks: the API class card comes back flipped (name and icon asked, descriptions to pick).
+  for (let i = 0; i < 6; i++) {
+    await goNext(page);
+    const flipped = (await cardPanel(page).getAttribute('data-direction')) === 'flipped';
+    if (flipped && (await page.locator('.gv-card__family').textContent()) === 'Godot API') break;
+    await answerShowing(page);
+  }
+  await expect(cardPanel(page)).toHaveAttribute('data-direction', 'flipped');
+  await audit(page, 'flipped card (Godot API)');
+  await answerShowing(page);
+  await audit(page, 'flipped card answered (Godot API)');
+  await goNext(page);
+  await page.getByRole('button', { name: 'Skip this card' }).click();
+  await audit(page, 'skip this card (reason field)');
+  await page.getByLabel('Reason (optional)').fill('Testing the skip list');
+  await page.getByRole('button', { name: 'Skip', exact: true }).click();
+
   await endSession(page);
   await audit(page, 'summary');
   await page.getByRole('button', { name: 'Done' }).click();
   await startReady(page);
+  await open(page, 'Settings');
+  await audit(page, 'settings (skipped cards)');
+  await backToStart(page);
 
   await open(page, 'Add card');
   await audit(page, 'add card');

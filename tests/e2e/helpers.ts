@@ -69,6 +69,61 @@ export async function endSession(page: Page): Promise<void> {
   await screenReady(page, 'Session done');
 }
 
+/** One showing of a card, read from the card panel's data attributes and the choice rows. */
+export interface Showing {
+  cardId: string;
+  showing: number;
+  direction: 'forward' | 'flipped';
+  choices: string[];
+  correct: boolean;
+}
+
+export const cardPanel = (page: Page) => page.locator('.gv-card');
+
+/** Reads the current card, answers it (right unless `wrong` says otherwise) and waits for Next. */
+export async function answerShowing(page: Page, wrong = false): Promise<Showing> {
+  const panel = cardPanel(page);
+  const cardId = (await panel.getAttribute('data-card-id'))!;
+  const showing = Number(await panel.getAttribute('data-showing'));
+  const direction = (await panel.getAttribute('data-direction')) as Showing['direction'];
+  const rows = page.locator('.gv-choice');
+  const choices = await rows.locator('.gv-choice__label').allTextContents();
+  // The right choice is the one that names (or describes) the card itself.
+  const ids = await rows.evaluateAll((nodes) => nodes.map((n) => (n as HTMLElement).dataset.cardId ?? ''));
+  const index = wrong ? ids.findIndex((id) => id !== cardId) : ids.indexOf(cardId);
+  await rows.nth(index).click();
+  await nextButton(page).waitFor();
+  const state = await rows.nth(index).getAttribute('data-state');
+  return { cardId, showing, direction, choices, correct: state === 'chosen-right' };
+}
+
+/**
+ * Plays a whole session from the first card to the summary. `wrong(i, showing)` picks the answers
+ * to get wrong; every other answer is right. Returns the showings in order.
+ */
+export async function playSession(page: Page, wrong: (index: number, showing: number) => boolean = () => false): Promise<Showing[]> {
+  const out: Showing[] = [];
+  for (let i = 0; i < 200; i++) {
+    const showing = Number(await cardPanel(page).getAttribute('data-showing'));
+    out.push(await answerShowing(page, wrong(i, showing)));
+    const next = nextButton(page);
+    if ((await next.textContent()) === 'See summary') {
+      await next.click();
+      await screenReady(page, 'Session done');
+      return out;
+    }
+    await goNext(page);
+  }
+  throw new Error('The session did not end.');
+}
+
+/** Only `godot-api` (or the given family) with `n` new cards today, set through the app's own Import. */
+export async function onlyFamily(page: Page, family: Family, n: number): Promise<void> {
+  const off = { enabled: true, newPerDay: 0 };
+  const perFamily = { 'godot-api': off, gdscript: off, github: off, [family]: { enabled: true, newPerDay: n } };
+  await importFromStart(page, exportFile({ settings: settings(perFamily) }));
+}
+
 /** Due / New today / Overdue for one family on the Start screen. */
 export async function familyStats(page: Page, family: Family): Promise<Record<string, number>> {
   const block = page.locator('.gv-family').filter({ has: page.getByRole('heading', { name: FAMILY_LABEL[family], exact: true }) });

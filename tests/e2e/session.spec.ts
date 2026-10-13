@@ -1,7 +1,21 @@
 import { expect, test, type Page } from '@playwright/test';
-import { FAMILY_LABEL, answer, endSession, familyStats, goNext, gotoStart, nextButton, startSession, statValues } from './helpers';
+import {
+  FAMILY_LABEL,
+  answer,
+  answerShowing,
+  cardPanel,
+  endSession,
+  familyStats,
+  goNext,
+  gotoStart,
+  nextButton,
+  onlyFamily,
+  startSession,
+  statValues,
+  type Showing,
+} from './helpers';
 
-// Done-criteria 4–6, 8, 12 at the phone viewport on a fresh install.
+// Done-criteria 4–6, 8, 12, 34–36 at the phone viewport on a fresh install.
 
 /** Answers cards (first choice) until `match` holds for the current card; fails after `limit`. */
 async function findCard(page: Page, match: () => Promise<boolean>, limit = 40): Promise<void> {
@@ -39,7 +53,13 @@ test('5, 8: a new card is a question with one prompt and exactly four choices', 
 
 test('5: an API class card shows the class icon beside every choice', async ({ page }) => {
   await startSession(page);
-  await findCard(page, async () => (await page.locator('.gv-card__family').textContent()) === FAMILY_LABEL['godot-api'] && (await page.locator('.gv-card .gv-heading').textContent()) === 'Class');
+  await findCard(
+    page,
+    async () =>
+      (await page.locator('.gv-card__family').textContent()) === FAMILY_LABEL['godot-api'] &&
+      (await page.locator('.gv-card .gv-heading').textContent()) === 'Class' &&
+      (await page.locator('.gv-card').getAttribute('data-direction')) === 'forward',
+  );
   const choices = page.locator('.gv-choice');
   await expect(choices).toHaveCount(4);
   for (let i = 0; i < 4; i++) {
@@ -83,6 +103,54 @@ test('6: one tap locks all four, marks it, reveals the answer, explains, and off
   await expect(page.locator('.gv-choice:not([disabled])')).toHaveCount(4);
 });
 
+test('34, 35: each showing draws a fresh set of four; later showings of an API class are flipped with its icon', async ({ page }) => {
+  await onlyFamily(page, 'godot-api', 3);
+  await startSession(page);
+  const showings: Showing[] = [];
+  let flippedSeen = false;
+  for (let i = 0; i < 9; i++) {
+    const panel = cardPanel(page);
+    if (!flippedSeen && (await panel.getAttribute('data-direction')) === 'flipped' && (await panel.locator('.gv-heading').textContent()) === 'Class') {
+      flippedSeen = true;
+      const id = (await panel.getAttribute('data-card-id'))!;
+      // 35: the name is the question, with its class icon; four descriptions are the choices, without icons.
+      const name = panel.locator('.gv-card__name');
+      await expect(name).toHaveText(id.replace('api:class:', ''));
+      await expect(name.locator('img.gv-icon')).toHaveAttribute('src', new RegExp(`icons/${id.replace('api:class:', '')}\\.svg$`));
+      await expect(panel.locator('.gv-card__look')).toHaveText(/^(Second|Third) look$/);
+      const choices = page.locator('.gv-choice');
+      await expect(choices).toHaveCount(4);
+      await expect(choices.locator('img')).toHaveCount(0);
+      for (const text of await choices.locator('.gv-choice__label').allTextContents()) expect(text.split(/\s+/).length).toBeGreaterThan(2);
+    }
+    showings.push(await answerShowing(page));
+    if (i < 8) await goNext(page);
+  }
+  expect(flippedSeen).toBe(true);
+  // 34: never the same four twice for one card in one session.
+  for (const id of new Set(showings.map((s) => s.cardId))) {
+    const sets = showings.filter((s) => s.cardId === id).map((s) => [...s.choices].sort().join('|'));
+    expect(sets.length, id).toBe(3);
+    expect(new Set(sets).size, id).toBe(sets.length);
+  }
+});
+
+test('36: after answering, the full description and an official docs link that opens in the browser', async ({ page }) => {
+  await startSession(page);
+  await expect(page.getByRole('link', { name: /Open (in the Godot docs|on GitHub Docs)/ })).toHaveCount(0);
+  const family = await page.locator('.gv-card__family').textContent();
+  await answer(page, 0);
+  const full = page.getByRole('region', { name: 'Full description' });
+  await expect(full).not.toBeEmpty();
+  const link = page.getByRole('link', { name: family === 'GitHub' ? /^Open on GitHub Docs/ : /^Open in the Godot docs/ });
+  await expect(link).toHaveAttribute('target', '_blank');
+  await expect(link).toHaveAttribute('rel', 'noopener');
+  expect(await link.getAttribute('href')).toMatch(/^https:\/\/(docs\.godotengine\.org|docs\.github\.com)\//);
+  // Long text scrolls inside the panel; the screen itself never scrolls sideways.
+  expect(await full.evaluate((n) => getComputedStyle(n).overflowY)).toBe('auto');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
 test('12: the summary shows cards seen, right, wrong and due tomorrow', async ({ page }) => {
   await startSession(page);
   await answer(page, 0);
@@ -92,8 +160,11 @@ test('12: the summary shows cards seen, right, wrong and due tomorrow', async ({
   const stats = await statValues(page.locator('.gv-stat'));
   expect(stats['Cards seen']).toBe(2);
   expect(stats.Right! + stats.Wrong!).toBe(2);
-  // Both cards come back before the end of tomorrow (short-term steps or relearning).
-  expect(stats['Due tomorrow']).toBeGreaterThanOrEqual(2);
+  // A wrong first answer is due tomorrow; a right one in three days (short-term steps off).
+  expect(stats['Due tomorrow']).toBe(stats.Wrong);
+  // Each was shown once, so both carry on rather than count as learned.
+  expect(stats['Cards learned']).toBe(0);
+  expect(stats['Continue tomorrow']).toBe(2);
   await page.getByRole('button', { name: 'Done' }).click();
   await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible();
 });
