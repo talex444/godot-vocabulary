@@ -342,3 +342,101 @@ Classes with the same normalised brief now keep one card. The kept class is the 
 4. **"Continue tomorrow" is a label, not a date.** A new card answered right first is due in 3 days, so the note under it says the rest "carry on at their next review".
 5. **The last e2e run reused an orphaned preview.** Stopping the screenshot `pnpm preview` task ended pnpm but left its vite child on port 4173. Every way to find its process id (netstat, wmic, ps) needed approval, which the headless session cannot get. The suite ran green (26/26) against that server, which serves the same `dist/`, through a temporary config with `reuseExistingServer: true` that was deleted afterwards. **That vite process may still be running on port 4173. Close it before the next `pnpm e2e`.**
 6. **Docs anchors** for virtual methods and `@GDScript` members follow the CoS-verified hyphen rule. No change was made.
+
+## GV-5 — Android package with Capacitor, daily reminder, signed APK on Releases (2026-10-13)
+
+Decisions 25, 27 and 28; done-criteria 41 to 45. Seven commits, none pushed, no tag.
+
+### What was generated (done-criteria 41)
+- **Packages:** `@capacitor/core` 8.5.3, `@capacitor/android` 8.5.3 and `@capacitor/local-notifications` 8.3.1 (runtime); `@capacitor/cli` 8.5.3 (dev).
+- **`capacitor.config.ts`:** appId `io.github.talex444.godotvocabulary`, appName "Godot Vocabulary", webDir `dist`, background = theme `base_color`. `LocalNotifications.smallIcon` = `ic_stat_reminder` (hand-written vector, the glyph's tick in white), `iconColor` = theme `accent_color` `#579eff`.
+- **`android/`:** made by `pnpm exec cap add android` and committed. Capacitor's own `android/.gitignore` already leaves out `build/`, `.gradle/`, `local.properties`, the copied web assets and the generated `capacitor.config.json`/plugin lists. The root `.gitignore` adds `android/app/build/`, `android/build/`, `android/.gradle/`, `android/local.properties`, `*.keystore`, `*.jks` and `keystore.properties`. `.gitattributes` keeps `*.bat` at CRLF and `*.jar` binary.
+- **Edits to the generated project:**
+  - `app/build.gradle`: `versionName` comes from `package.json` (`1.1.0`), and `versionCode` = major·10000 + minor·100 + patch (`10100`). Release signing reads `android/keystore.properties` when the file exists.
+  - The launcher icons are the app's own glyph. `scripts/generate-icons.mjs` now also writes legacy, round and adaptive-foreground PNGs for every density, plus the `#242424` background. The `public/` icons are byte-identical.
+  - The launch theme uses the base colour instead of Capacitor's sample splash. The unused `splash.png` files stay in the tree.
+  - `SaveFilePlugin.java` is registered in `MainActivity` (see Export below).
+- **Scripts:** `build:android` = `tsc --noEmit && vite build --mode android && cap sync android`. `android:debug` / `android:build` = `node scripts/gradle.mjs assembleDebug|assembleRelease`. The wrapper runs `gradlew.bat` on Windows and `sh ./gradlew` on Linux, always with `--no-daemon`. On Windows it falls back to `%ProgramFiles%\Android\Android Studio\jbr` and `%LOCALAPPDATA%\Android\Sdk` when `JAVA_HOME`/`ANDROID_HOME` are unset, so no `local.properties` and no machine path in `gradle.properties`.
+
+### One source tree, two bases
+- `vite build --mode android` → `base: './'` and `VitePWA({ disable: true })`: no `sw.js`, no `manifest.webmanifest`, no `registerSW.js`. The plain `vite build` is unchanged. Before the reminder code went in, it produced the same asset hashes as before this session.
+- `index.html`'s favicon link changed from `/godot-vocabulary/app-icon.svg` to `/app-icon.svg`, so Vite prefixes it per target.
+- Checked in `dist/index.html`:
+  - Web build: `/godot-vocabulary/app-icon.svg`, `/godot-vocabulary/assets/index-….js|css`, manifest and registerSW present.
+  - Android build: `./app-icon.svg`, `./assets/…`, no manifest.
+  - Fonts are `url(../fonts/…)` in both. Class icons go through `import.meta.env.BASE_URL`, which becomes `./icons/…` in the package.
+
+### The reminder, exactly (done-criteria 43)
+- **Where:** `src/reminder/reminder.ts` holds the plain helpers and the platform check. `src/reminder/native.ts` holds every Capacitor call. The web build loads `native.ts` only through `import()`, behind `isNativeApp()`, which reads `window.Capacitor.isNativePlatform()` (the package's WebView injects `window.Capacitor` before the app's scripts run). The web bundle's main chunk has no Capacitor code; Vite puts it in separate chunks that the web never requests. Workbox still precaches those few KB.
+- **Setting:** `{ on, time }` in the IndexedDB `meta` store under `reminder`, with default `{ on: false, time: '20:00' }`. It is a property of this phone, so it is **not** in the export file, and a replace-import leaves it alone.
+- **Settings screen:** a **Reminder** panel appears between the family settings and Skipped cards, only inside the package. It has:
+  - a **Daily reminder** switch;
+  - a **Time** field (native `<input type="time">` in the kit's LineEdit box; `textField` gained a `time` option);
+  - the sentence "Fires at about that time. Turn on Exact time if you want the minute.";
+  - an **Exact time** switch, described by that sentence;
+  - a status line.
+- **Permission:** turning the reminder on calls `checkPermissions()`, and `requestPermissions()` only when the state is `prompt`/`prompt-with-rationale`, so Android asks once. If notifications are denied, the switch goes back off and the status line says where to turn them on.
+- **Exact time:** the switch shows `checkExactNotificationSetting()`. Tapping it calls `changeExactNotificationSetting()`, which opens Android's "Alarms & reminders" screen for the app. On return the switch shows what Android now allows, and the reminder is re-scheduled. Android owns this setting, so the switch mirrors it rather than storing a preference. On Android 14+ (the S24) exact alarms are off by default for a fresh install, so the default is the window. On Android 12–13 they are on by default, so the reminder will be exact there until the user turns it off.
+- **Scheduling (`applyReminder`):**
+  1. Cancel id 1.
+  2. If the reminder is on, the time parses, and notification permission is `granted`, schedule one notification with `schedule: { on: { hour, minute }, allowWhileIdle: true }` and `isExactNotification` = whether Android currently allows exact alarms.
+  3. **Why that flag:** plugin 8.3 opens the exact-alarm screen on every `schedule()` call whose notification wants exact (the default), so `isExactNotification: false` is what keeps the default a window. With it false, the plugin uses `setAndAllowWhileIdle` (inexact); with it true and allowed, `setExactAndAllowWhileIdle`. The plugin's publisher re-arms the `on` schedule after each firing, and its boot receiver restores it after a reboot.
+- **When it is re-scheduled:** on every launch (`main.ts` → `restoreReminder()`), whenever the app goes to the background (`visibilitychange` → hidden), on every change in the panel, and it is cancelled when switched off.
+- **Text:** the title is "Godot Vocabulary · N cards waiting" ("1 card waiting"; "cards are waiting" when the count is 0 or could not be computed). The body is "Due reviews and today's new cards. Tap to open." N = due reviews + today's new cards in the enabled families, as `sessionSummary` sees them **at the next firing time**. Tapping the notification opens the app (the plugin's default).
+- **Known limit:** the text is fixed when it is scheduled. If the app is not opened for days, later firings repeat the last count. Opening or leaving the app refreshes it.
+
+### Export and import inside the package (done-criteria 45, found during the session)
+- **Import already worked:** Capacitor's WebView implements the file chooser.
+- **Export did not:** the package's WebView has no download handler, so the blob `<a download>` would have done nothing.
+- **Fix:** an app-local plugin, `android/app/src/main/java/…/SaveFilePlugin.java` (`@CapacitorPlugin(name = "SaveFile")`, registered in `MainActivity.onCreate`). It opens `ACTION_CREATE_DOCUMENT` (Android's "Save as") with the export's file name and writes the JSON through the content resolver. It needs no storage permission. `src/store/save-file.ts` bridges it, loaded only inside the package. Cancelling says "Nothing was saved."
+- The web Export is unchanged.
+- The Settings help text still says "in Downloads". In the package the learner picks the folder, which Android usually opens in Downloads.
+
+### About (done-criteria 44)
+- A **Check for updates** link under the version opens `https://github.com/talex444/godot-vocabulary/releases` with `target="_blank"`. The e2e About test checks its href and target.
+- **How it leaves the app:** this WebView has no multi-window support, so the link navigates in place. Capacitor's `BridgeWebViewClient.shouldOverrideUrlLoading` then calls `Bridge.launchIntent`, which sends any host other than the app's to `ACTION_VIEW` (the browser). This was confirmed by reading `Bridge.java` in the installed 8.5.3, **not on a phone**.
+- The version is now **1.1.0** in `package.json`, so About, the APK's versionName and the `v1.1.0` tag agree.
+
+### CI signing flow (done-criteria 42): `.github/workflows/android.yml`
+1. **Triggers:** tags `v*` and manual dispatch. `permissions: contents: write`.
+2. **Checks:** checkout, pnpm (from `packageManager`), Node 22 with the pnpm cache, `pnpm install --frozen-lockfile`, `pnpm typecheck`, `pnpm test`.
+3. **On a tag:** the tag must equal `v` + `package.json` version, or the job fails.
+4. **Build:** `pnpm build:android`.
+5. **Java:** `actions/setup-java@v5`, **Temurin 21**.
+6. **Signing:** the step decodes `ANDROID_KEYSTORE_BASE64` to `$RUNNER_TEMP/godot-vocabulary.keystore`, outside the repo. It writes `android/keystore.properties` (storeFile, storePassword, keyAlias, keyPassword) from the four secrets, passed through `env:` and never echoed.
+7. **Release build:** `pnpm android:build` (assembleRelease, signed through the `signingConfigs.release` above).
+8. **Check the APK:** copy `app/build/outputs/apk/release/app-release.apk` to `godot-vocabulary-<ref>.apk`. If signing did not happen, Gradle names the output `app-release-unsigned.apk` and this copy fails. Then `apksigner verify --print-certs` with the newest build-tools.
+9. **Clean up:** an `always()` step deletes the keystore and `keystore.properties`.
+10. **Publish:** `actions/upload-artifact@v4` uploads the APK. On a tag, `gh release upload --clobber` attaches it if the release exists; otherwise `gh release create --verify-tag` creates the release with install notes. Both use `GITHUB_TOKEN`.
+- `deploy.yml` is untouched.
+- **Not run:** this workflow has never run. Its first run is the CoS's `v1.1.0` tag.
+
+### Local build result (done-criteria 41)
+- `pnpm build:android` and `cap sync android` succeed. Sync found the one plugin, `@capacitor/local-notifications@8.3.1`; the app-local SaveFile plugin is registered in Java, not through sync.
+- `pnpm android:debug` succeeds. The first run downloaded Gradle 8.14.3 and took 1 min 10 s; later runs took about 11 s. Output: **`android/app/build/outputs/apk/debug/app-debug.apk`, 5,197,420 bytes**.
+- `pnpm android:build` succeeds without a keystore (lint-vital passes): **`android/app/build/outputs/apk/release/app-release-unsigned.apk`, 3,836,180 bytes**. Signed local release builds were not tried, because the keystore is not on this machine.
+- The JDK was Android Studio's `jbr` and the SDK `%LOCALAPPDATA%\Android\Sdk`, both picked up by `scripts/gradle.mjs`.
+- The very first Gradle run used a daemon. It was stopped with `gradlew --stop`, and since then the wrapper always passes `--no-daemon`.
+- **Not installed on a phone.** Every on-device behaviour above is untested here and is the human check on the S24: the reminder firing, the permission prompt, the Exact time round trip, Export's Save as, Import, Check for updates, and the launcher icon.
+
+### Gates
+- `pnpm typecheck`, `pnpm test` (120 tests, 6 new in `tests/unit/reminder.test.ts`), `pnpm build`, `pnpm lint:css` and `pnpm e2e` (26/26) ran green before the commits, with three exceptions:
+  - The first two commits (setup, then base switch) shared one gate run.
+  - Before the Export commit, the full suite was 25/26 twice, failing only on the flaky test below. That spec file then passed on its own.
+  - For the README/notes commit only `pnpm e2e` was re-run, because it changes no code.
+- **One flaky e2e test, which predates this session:** "5: an API class card shows the class icon beside every choice". It failed in 2 of 7 full runs and passed when re-run.
+  - **Cause:** the distractor pools of several class cards list `InputEvent`. Godot ships no `InputEvent.svg` and `public/icons/` has none, so that choice's `<img>` fails, `icon()` removes it, and the test finds no icon.
+  - The draw is seeded by `Date.now()`, so the test fails whenever `InputEvent` is drawn.
+  - **Fix for a later session:** in the generator, drop icon-less classes from class-card distractor pools, or give them their parent's icon as the editor does. That needs `pnpm generate` with `data/sources/`.
+- The Reminder panel never renders in the browser, so neither axe nor the layout tests cover it. Its controls are the kit's `toggle` and `textField`, which those tests cover elsewhere.
+
+### Deviations and why
+1. **`--mode android` instead of a `BUILD_TARGET` env flag.** An env prefix in a package.json script does not run in `cmd.exe` on Windows. Vite's mode is cross-platform and needs no extra dependency.
+2. **Temurin 21, not 17.** Capacitor 8's Android library declares `JavaVersion.VERSION_21`, so a JDK 17 build would fail.
+3. **Signing through `keystore.properties`** instead of `-Pandroid.injected.signing.*`. The same file serves CI and Tyler's local `pnpm android:build` (done-criteria 41: signed locally when the keystore is present).
+4. **`gh release` instead of `softprops/action-gh-release`.** `gh` is preinstalled on the runner, so this adds no third-party action.
+5. **Export plugin added.** It was not in the brief, but without it done-criteria 45 (export works inside the package) could not be met.
+6. **`gradlew` is committed without the executable bit.** `git update-index --chmod=+x` needs approval in headless mode. The wrapper runs `sh ./gradlew`, so CI does not need the bit. Running `./gradlew` directly on Linux/macOS would.
+7. **Version bumped to 1.1.0** in the workflow commit, so the CI tag check passes for `v1.1.0`.
+8. **`THIRD_PARTY_NOTICES.md` and the About list went into the setup commit**, not the notes commit. `tests/unit/about.test.ts` requires every runtime dependency to be named in both, so the setup commit would fail its own gate without them. AndroidX (Apache 2.0) is named too, because it is inside the APK.
+9. **Capacitor's sample `splash.png` files and the default `drawable-v24/ic_launcher_foreground.xml` are committed but unused.** Deleting tracked generated files needs `git rm`, which this session does not use. They can go in a cleanup.

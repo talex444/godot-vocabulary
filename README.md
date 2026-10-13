@@ -13,6 +13,22 @@ The app lives at **https://talex444.github.io/godot-vocabulary/**.
 
 After the first load it works with no network at all, including in airplane mode. There are no accounts, no tracking and no analytics, and the app never sends your data anywhere.
 
+## Android app
+
+There is also an Android app. It is the same app, plus one thing the web version cannot do: a **daily reminder**. In the app, **Settings → Reminder** has an on/off switch and a time (8 pm unless you change it). The reminder says how many cards are waiting, and tapping it opens the app. By default Android sends it at *about* that time: it may hold it back a while to save battery. If you want it at the exact minute, turn on **Exact time**: it opens Android's "Alarms & reminders" setting for the app. The first time you turn the reminder on, Android asks whether the app may send notifications.
+
+**Download:** the newest `godot-vocabulary-vX.Y.Z.apk` is on the [Releases page](https://github.com/talex444/godot-vocabulary/releases). **About → Check for updates** opens that page; the app never checks by itself.
+
+**Install it on a Samsung (or any Android phone):**
+
+1. Open the Releases page in the phone's browser (Samsung Internet or Chrome) and tap the `.apk` file to download it.
+2. Open the downloaded file. Android says the browser is not allowed to install apps: tap **Settings**, switch on **Allow from this source**, then go back.
+3. Tap **Install**. To update later, download the newer APK and install it over the old one. Your progress stays.
+
+**Your progress does not move by itself.** The Android app keeps its own storage, separate from the browser's. To bring your progress across once: in the web version, **Settings → Export**; in the Android app, **Settings → Import** and pick that file (choose **Replace everything on this device** on a fresh install). In the Android app, **Export** opens Android's "Save as" screen, so you choose where the file goes.
+
+The web version keeps working as before for everyone else, on any phone. The Android app is for people who want the reminder. There is no iPhone app.
+
 ## How a session works
 
 - **Four choices, instant feedback.** Each card asks one question with four answers. Tap one: it is marked right or wrong, the correct answer is highlighted, the full description appears, and **Next** moves on. There is no second guess.
@@ -74,6 +90,7 @@ The app's code is MIT-licensed (see [`LICENSE`](LICENSE)). It is built from:
 - GitHub Docs glossary (CC BY 4.0, © GitHub, Inc.).
 - Inter and JetBrains Mono fonts (SIL Open Font License 1.1).
 - ts-fsrs (MIT), idb (ISC) and Workbox (MIT).
+- The Android app also contains Capacitor and its Local Notifications plugin (MIT) and the AndroidX libraries (Apache 2.0).
 
 The full notices are in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and on the app's **About** screen.
 
@@ -93,3 +110,24 @@ pnpm build && pnpm preview                    # the production build at http://l
 ```
 
 Pushes to `main` build, test and deploy to GitHub Pages through `.github/workflows/deploy.yml`.
+
+### The Android app
+
+You also need Android Studio (for the Android SDK and its bundled JDK 21). On Windows the scripts find both in their default places; elsewhere set `JAVA_HOME` and `ANDROID_HOME`.
+
+```sh
+pnpm build:android     # web build with relative paths, then copies it into android/ (cap sync)
+pnpm android:debug     # debug APK: android/app/build/outputs/apk/debug/app-debug.apk
+pnpm android:build     # release APK: android/app/build/outputs/apk/release/
+```
+
+`pnpm android:build` signs the APK when `android/keystore.properties` exists (it is gitignored, like every keystore):
+
+```properties
+storeFile=C:/path/to/godot-vocabulary.keystore
+storePassword=…
+keyAlias=godot-vocabulary
+keyPassword=…
+```
+
+Without it the release APK comes out unsigned (`app-release-unsigned.apk`). A version tag (`v1.1.0`, matching `package.json`) runs `.github/workflows/android.yml`, which signs the APK from the repository secrets and attaches `godot-vocabulary-<tag>.apk` to that tag's GitHub Release.
