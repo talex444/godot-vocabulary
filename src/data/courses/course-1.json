@@ -34,7 +34,9 @@
           "image": {
             "src": "key_concepts_scene_example.webp",
             "alt": "The Scene dock: Game at the top, Level under it, Player under Level and Hook under Player. Level, Player and Hook each carry the clapperboard icon of a nested scene. Beside the dock, the character holds a hook in the 2D view.",
-            "caption": "A character scene nested in a level, nested in the game."
+            "caption": "A character scene nested in a level, nested in the game.",
+            "width": 782,
+            "height": 363
           },
           "check": {
             "prompt": "Which of these can a Godot scene be?",
@@ -63,7 +65,9 @@
           "image": {
             "src": "key_concepts_character_nodes.webp",
             "alt": "The Scene dock with Player at the top and Camera2D, Sprite2D and CollisionShape2D under it; beside it, the 2D view shows a green square sprite.",
-            "caption": "The same scene in the editor, from the manual."
+            "caption": "The same scene in the editor, from the manual.",
+            "width": 609,
+            "height": 295
           },
           "check": {
             "prompt": "You save the Player tree as a scene and add it to a level. How does it show in the level's Scene dock?",
@@ -83,7 +87,9 @@
           "image": {
             "src": "key_concepts_scene_tree.webp",
             "alt": "The Scene dock of a level: Level01 at the root with BackgroundLayer, InterfaceLayer, a TileMap, a CharacterBody2D, Portal2D, Coins and Enemies under it. UserInterface, CharacterBody2D and Portal2D carry the clapperboard icon of a nested scene.",
-            "caption": "A level: other scenes nested as branches of one tree."
+            "caption": "A level: other scenes nested as branches of one tree.",
+            "width": 291,
+            "height": 342
           },
           "check": {
             "prompt": "The scene tree is a tree of scenes. What else is it, in the manual's words?",
@@ -103,7 +109,9 @@
           "image": {
             "src": "key_concepts_signals.webp",
             "alt": "The Node dock's Signals tab for an Area2D: area_entered, area_exited, body_entered and more. body_entered has a connection under it to a function named _on_area_2d_body_entered.",
-            "caption": "The signals one node can emit, one of them connected."
+            "caption": "The signals one node can emit, one of them connected.",
+            "width": 305,
+            "height": 369
           },
           "check": {
             "prompt": "A button in your menu is pressed. What does the button do, in the manual's words?",
@@ -125,7 +133,9 @@
           "image": {
             "src": "key_concepts_character_nodes.webp",
             "alt": "The Scene dock with Player at the top and Camera2D, Sprite2D and CollisionShape2D under it.",
-            "caption": "The Player scene."
+            "caption": "The Player scene.",
+            "width": 609,
+            "height": 295
           }
         },
         "b": {
@@ -134,7 +144,9 @@
           "image": {
             "src": "key_concepts_main_menu.webp",
             "alt": "The Godot editor with a scene called MainMenu open: the Scene dock lists Background, MainScreen, Context, Texts, an HBoxContainer and pictures named XboxA, PlaystationX and NintendoB; the 2D view shows a title screen reading Harvester Game, Press enter to start.",
-            "caption": "The MainMenu scene."
+            "caption": "The MainMenu scene.",
+            "width": 1125,
+            "height": 682
           }
         },
         "question": {

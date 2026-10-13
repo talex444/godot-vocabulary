@@ -176,7 +176,16 @@ function paragraphs(text: string): HTMLElement[] {
 
 function figure(image: LessonImage): HTMLElement {
   return el('figure', { class: 'gv-figure' }, [
-    el('img', { attrs: { src: asset(`courses/img/${image.src}`), alt: image.alt, loading: 'lazy', decoding: 'async' } }),
+    el('img', {
+      attrs: {
+        src: asset(`courses/img/${image.src}`),
+        alt: image.alt,
+        width: String(image.width),
+        height: String(image.height),
+        loading: 'lazy',
+        decoding: 'async',
+      },
+    }),
     el('figcaption', { class: 'gv-note', text: image.caption }),
   ]);
 }

@@ -517,7 +517,7 @@ button.gv-lesson-row:focus-visible {
 
 .gv-figure img {
   display: block;
-  width: 100%;
+  max-width: 100%;
   height: auto;
   border-radius: var(--corner-radius);
 }

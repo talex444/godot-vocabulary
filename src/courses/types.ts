@@ -53,6 +53,9 @@ export interface LessonImage {
   src: string;
   alt: string;
   caption: string;
+  /** Pixel size, so the page does not shift while the picture loads. */
+  width: number;
+  height: number;
 }
 
 /** A scene-dock drawing built up one node at a time from the editor icons. */
@@ -170,6 +173,7 @@ export function validateCourse(value: unknown): string[] {
     need(str(i?.src) && /^[\w.-]+\.(webp|png|svg|gif)$/.test(i!.src!), at, 'image src must be a file name');
     need(str(i?.alt), at, 'image alt missing');
     need(str(i?.caption), at, 'image caption missing');
+    need(Number.isInteger(i?.width) && Number.isInteger(i?.height) && i!.width! > 0 && i!.height! > 0, at, 'image width and height required');
   };
   const drawing = (v: unknown, at: string) => {
     const d = v as Partial<TreeDrawing>;
