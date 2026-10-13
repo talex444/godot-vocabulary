@@ -224,6 +224,33 @@
   overflow-wrap: anywhere;
 }
 
+/* About. */
+.gv-credits {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gv-credits p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.gv-link {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  min-height: var(--target);
+  color: var(--accent-color);
+  text-underline-offset: 3px;
+}
+
+.gv-screen p {
+  margin: 0;
+}
+
 /* A control with a plain sentence under it. */
 .gv-option {
   display: grid;

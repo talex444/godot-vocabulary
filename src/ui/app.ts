@@ -1,6 +1,7 @@
 import type { Family } from '../cards/types';
 import { deviceDeps } from '../session/deck';
 import { Session, type SessionResult } from '../session/run';
+import { aboutScreen } from './screens/about';
 import { addCardScreen } from './screens/add-card';
 import { cardScreen } from './screens/card';
 import { placeholderScreen } from './screens/placeholder';
@@ -48,7 +49,7 @@ export function mountApp(host: HTMLElement): void {
     summary: (result) => show(summaryScreen(result, nav)),
     settings: () => showAsync(settingsScreen(nav)),
     addCard: () => showAsync(addCardScreen(nav)),
-    about: () => nav.placeholder('About'),
+    about: () => showAsync(aboutScreen(nav)),
     placeholder: (title) => show(placeholderScreen(nav, title)),
   };
   nav.start();
