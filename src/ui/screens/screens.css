@@ -1,0 +1,135 @@
+/* Screen layout: one panel that fills a phone screen, 16 px gutter. Colours only from the theme properties. */
+
+#app {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 8px var(--gutter) calc(var(--gutter) + env(safe-area-inset-bottom));
+}
+
+.gv-app-name {
+  margin: 0 0 8px;
+  padding: 4px 0;
+  color: var(--font-color);
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.gv-screen {
+  display: grid;
+  gap: 8px;
+}
+
+.gv-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.gv-wide {
+  width: 100%;
+}
+
+.gv-note {
+  margin: 0;
+  color: var(--font-secondary-color);
+}
+
+.gv-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Start: one block per family. */
+.gv-family {
+  display: grid;
+  gap: 4px;
+}
+
+.gv-family + .gv-family {
+  padding-top: 12px;
+  border-top: 1px solid var(--base-color);
+}
+
+.gv-family__name {
+  margin: 0;
+  color: var(--font-color);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.gv-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.gv-stats--summary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  row-gap: 16px;
+}
+
+/* Card. */
+.gv-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--dark-color-1);
+  overflow: hidden;
+}
+
+.gv-progress__fill {
+  height: 100%;
+  background: var(--accent-color);
+}
+
+.gv-card {
+  gap: 12px;
+}
+
+.gv-card__family {
+  margin: 0 0 -8px;
+  color: var(--font-secondary-color);
+}
+
+.gv-card__prompt {
+  color: var(--font-focus-color);
+}
+
+.gv-card .gv-code {
+  margin-inline: -8px;
+}
+
+.gv-choices {
+  display: grid;
+  gap: 6px;
+}
+
+.gv-feedback:empty {
+  display: none;
+}
+
+.gv-feedback {
+  display: grid;
+  gap: 8px;
+}
+
+.gv-feedback p {
+  margin: 0;
+}
+
+.gv-feedback__right {
+  color: var(--success-color);
+  font-weight: 700;
+}
+
+.gv-feedback__wrong {
+  color: var(--error-color);
+  font-weight: 700;
+}
+
+.gv-after:empty {
+  display: none;
+}
