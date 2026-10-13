@@ -16,6 +16,7 @@ const KIND_LABEL: Record<string, string> = {
   builtin: 'Built-in function',
   lifecycle: 'Lifecycle callback',
   concept: 'Concept',
+  custom: 'Your card',
 };
 
 function kindLabel(kind: string): string {

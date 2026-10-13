@@ -122,6 +122,37 @@ export function textField(options: {
   return { root, input };
 }
 
+/** Godot's OptionButton: a native select in the LineEdit box, with a down-arrow glyph. */
+export function selectField(options: {
+  label: string;
+  choices: readonly { value: string; label: string }[];
+  value?: string;
+}): { root: HTMLElement; select: HTMLSelectElement } {
+  const id = `gv-field-${++fieldCount}`;
+  const select = el(
+    'select',
+    { class: 'gv-field__input gv-field__select' },
+    options.choices.map((c) => el('option', { text: c.label, attrs: { value: c.value } })),
+  );
+  select.id = id;
+  if (options.value) select.value = options.value;
+  const box = el('div', { class: 'gv-field__box' }, [select, arrowGlyph()]);
+  const root = el('div', { class: 'gv-field' }, [el('label', { class: 'gv-field__label', text: options.label, attrs: { for: id } }), box]);
+  return { root, select };
+}
+
+function arrowGlyph(): SVGSVGElement {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 16 16');
+  svg.setAttribute('class', 'gv-field__glyph gv-field__glyph--arrow');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS(ns, 'path');
+  path.setAttribute('d', 'M4 6l4 4 4-4');
+  svg.append(path);
+  return svg;
+}
+
 function searchGlyph(): SVGSVGElement {
   const ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg');
