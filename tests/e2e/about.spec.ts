@@ -33,4 +33,9 @@ test('About carries every attribution, the unofficial statement and the reposito
 
   const link = page.getByRole('link', { name: 'Source code on GitHub' });
   await expect(link).toHaveAttribute('href', 'https://github.com/talex444/godot-vocabulary');
+
+  // Done-criteria 44: the Releases page, opened outside the app; the app itself makes no request.
+  const updates = page.getByRole('link', { name: 'Check for updates' });
+  await expect(updates).toHaveAttribute('href', 'https://github.com/talex444/godot-vocabulary/releases');
+  await expect(updates).toHaveAttribute('target', '_blank');
 });

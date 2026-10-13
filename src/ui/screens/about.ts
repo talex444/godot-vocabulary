@@ -8,6 +8,8 @@ import { FAMILY_LABEL, type Nav } from '../app';
 import { button, el, heading, panel, stat } from '../kit';
 
 export const REPO_URL = 'https://github.com/talex444/godot-vocabulary';
+/** New Android packages are published here (decision 28); the app itself never checks. */
+export const RELEASES_URL = `${REPO_URL}/releases`;
 
 const DECKS: Record<Family, readonly Card[]> = { 'godot-api': api as Card[], gdscript: gdscript as Card[], github: github as Card[] };
 
@@ -73,6 +75,8 @@ export async function aboutScreen(nav: Nav): Promise<HTMLElement> {
         el('p', { text: 'The app’s own code is MIT-licensed.' }),
         el('a', { class: 'gv-link', text: 'Source code on GitHub', attrs: { href: REPO_URL, rel: 'noopener' } }),
         el('p', { class: 'gv-note', text: `Version ${version}` }),
+        // Opens the browser (in the Android package too: the WebView hands other sites to Android).
+        el('a', { class: 'gv-link', text: 'Check for updates', attrs: { href: RELEASES_URL, target: '_blank', rel: 'noopener' } }),
       ],
       { class: 'gv-stack' },
     ),
