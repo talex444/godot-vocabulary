@@ -292,3 +292,53 @@ The other specs pass because the card screen still draws forward from `distracto
 11. **Commit order**: the learning queue was committed before the scheduler, so each commit's unit tests pass on its own. The learning commit was also run under the old short-term setting.
 12. **Bundle**: the main chunk grew from 697 kB to 1,635 kB (249 kB gzip), mostly `explainFull` and the pools. It is still precached. Code-splitting the decks is the fix if load time matters.
 13. **Gates**: `CLAUDE.md` asks for `pnpm e2e` green before every commit. The store and notes commits went in with the two expected e2e failures above, as the brief directs.
+
+## GV-4b — screens for the new flow, Skip, the generator pair rule, e2e and screenshots (2026-10-13)
+
+Done-criteria 33 (e2e), 34 (UI), 35, 36 (UI), 37 (UI + e2e), 38 (the keep-one fix), 40.
+
+### What changed on screen
+- **Card** (`src/ui/screens/card.ts`). It now takes its four choices from `session.draw()` on every showing, so the wrong answers are fresh each time; the old per-card `shuffledChoices` is gone.
+  - **Flipped showings** (`data-direction="flipped"`, class `gv-card--flipped`): the question is the name. A class shows its icon beside the name. A member shows `Class.member` in code font, a language card shows the keyword in code font, and a GitHub term shows plain text. A line "Pick the description that fits." follows.
+  - The four choices on a flipped card are descriptions. `choiceRow` has a new `rich` option that renders `inline code` and `____` slots and wraps over several lines. On flipped member cards the choices drop their "Class: " prefix, so the class name does not give the answer away.
+  - **Repeat label**: "Second look", "Third look" (and on up) appears under the family label.
+  - **After answering**: "Right." or "Not quite. …" comes first. Then `explainFull` appears in a scrollable region (`role=region`, "Full description", focusable, max 16rem tall, on `base_color`). Below it is the flat link **Open in the Godot docs** / **Open on GitHub Docs** (`target=_blank rel=noopener`, with hidden text "(opens in a new tab)"), then Next.
+  - **Skip this card**: a flat control at the foot of the panel, available before and after answering. Tapping it opens a one-line "Reason (optional)" field with a note, **Skip** and **Cancel** (Enter skips, Escape cancels). Confirming calls `session.skip(reason, cardId)` and moves on.
+  - For tests, the panel carries `data-card-id`, `data-showing` and `data-direction`, and each choice row carries `data-card-id`. Assistive technology does not read these.
+- **Summary**: two more stats, **Cards learned** (three showings with the last one right) and **Continue tomorrow** (new cards answered but not learned). A one-line explanation follows. These only show when the session had new cards. Skipped cards count in neither.
+- **Settings**: a **Skipped cards** panel between the families and Data. Each entry shows the card's answer, its family, the skip date, and the reason (or "No reason given."), with **Undo** (accessible name "Undo skip: <title>"). After an Undo, focus stays in the section. The Export note mentions skipped cards.
+- **Look fixes after the screenshots**: on a flipped card the class icon wrapped onto its own line above a long name, so it is now pinned beside the name. On the summary, a wrapped "Continue tomorrow" label pushed its value below the one beside it, so summary stats now align their values.
+
+### Session wiring (`src/session/run.ts`)
+`SessionResult` gains `learned` and `continueTomorrow`. `skip(reason?, cardId?)` can name the card, because once a card is answered the queue has already moved on. The rest was wired in GV-4a: `draw()`, first-answer-only grading and appending after overdue cards are cleared.
+
+### Generator pair rule (CoS ruling)
+Classes with the same normalised brief now keep one card. The kept class is the one not `deprecated`; if neither is, the one with the better frequency rank. The dropped twins never appear in the kept card's pool.
+- **Rule (a) removes 4 (was 9)**: CheckBox (CheckButton kept), TileMap (TileMapLayer kept), NavigationMeshSourceGeometryData3D (2D kept), ParallaxBackground.
+- **Back in the deck**: TileMapLayer, CheckButton, XRPositionalTracker, AudioListener3D, NavigationMeshSourceGeometryData2D.
+- **New counts**: Godot API **855** (416 class + 439 member), GDScript 120, GitHub 96, **total 1,071**. The README count is updated.
+- The deck test pins the three pairs, the twin missing from each kept pool, and 4 removals.
+
+### e2e (26 tests, about 12 s)
+| Spec | Test | Done-criteria |
+|------|------|---------------|
+| `learning.spec.ts` | 10 API cards. The third first-showing is answered wrong. The test checks: no adjacent repeats, ≥ 3 showings each with the last right, showing numbers counting up, gaps of ≥ 8 while the queue is long, some flipped later showings, first showings forward, and a summary of seen 10 / right 9 / wrong 1 / learned 10 / continue 0 | 33 |
+| `session.spec.ts` "34, 35" | 3 API cards × 3 showings. No card shows the same four choices twice. A flipped class card has the icon and name as the question, "Second/Third look", and four icon-less descriptions | 34, 35 |
+| `session.spec.ts` "36" | Full-description region present, docs link with `target=_blank` / `rel=noopener` and an official host, no sideways scroll | 36 |
+| `skip.spec.ts` | Cancel keeps the card. Skip with a reason, and the card never reappears in the rest of the session. Settings lists it with family and reason. The export has it in `skipped`. Undo empties the list, and the card is the next new card | 37 |
+| `session.spec.ts` "12" (fixed) | Due tomorrow equals wrong first answers, learned 0, continue 2 | 12, 33 |
+| `data.spec.ts` (fixed) | The export is version 2 with `skipped: []` | 37 |
+| `axe.spec.ts` (extended) | Adds: flipped card, flipped card answered, the skip field, Settings with a skipped card | 40 |
+
+### Screenshots and reports (done-criteria 40)
+- `scripts/screenshot.mjs` adds `card-flipped.png`, `card-answered-full.png`, `card-skip.png` and `settings-skipped.png` (an element shot of the panel), and retakes the rest. It now answers right by default.
+- `docs/axe-contrast.md` has 8 findings. The new one is the same Godot accent-blue Next button on the flipped-answered screen.
+- `docs/contrast-report.md` is unchanged, because there are no new colour pairs.
+
+### Deviations and why
+1. **Card-screen Skip went into the card commit.** It shares `card.ts` and `run.ts` with the screen work. The Settings list is its own commit.
+2. **The generator commit missed two icons** (`public/icons/TileMapLayer.svg`, `AudioListener3D.svg`) that `pnpm generate` wrote for the classes back in the deck. They are in a follow-up `fix(generate)` commit.
+3. **ParallaxBackground has no card.** It is deprecated, and its non-deprecated twin is outside the deck (no demo-project uses), so the rule drops it and nothing replaces it. TileMap is in the same position, but TileMapLayer replaces it.
+4. **"Continue tomorrow" is a label, not a date.** A new card answered right first is due in 3 days, so the note under it says the rest "carry on at their next review".
+5. **The last e2e run reused an orphaned preview.** Stopping the screenshot `pnpm preview` task ended pnpm but left its vite child on port 4173. Every way to find its process id (netstat, wmic, ps) needed approval, which the headless session cannot get. The suite ran green (26/26) against that server, which serves the same `dist/`, through a temporary config with `reuseExistingServer: true` that was deleted afterwards. **That vite process may still be running on port 4173. Close it before the next `pnpm e2e`.**
+6. **Docs anchors** for virtual methods and `@GDScript` members follow the CoS-verified hyphen rule. No change was made.

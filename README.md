@@ -15,14 +15,16 @@ After the first load it works with no network at all, including in airplane mode
 
 ## How a session works
 
-- **Four choices, instant feedback.** Each card asks one question with four answers. Tap one: it is marked right or wrong, the correct answer is highlighted, a short explanation appears, and **Next** moves on. There is no second guess.
+- **Four choices, instant feedback.** Each card asks one question with four answers. Tap one: it is marked right or wrong, the correct answer is highlighted, the full description appears, and **Next** moves on. There is no second guess.
 - **Asked before taught.** A new card is a question the first time you see it, not a page to read. Guessing first and then seeing the answer helps it stick.
 - **Reviews first.** Cards that are due come back in the same session. If any review is **overdue** (it was due before today), no new cards appear until the overdue ones are answered.
 - **Daily new cards per family.** Godot API 10, GDScript 5, GitHub 5 by default. Change them in **Settings**, which shows the total and the review load it leads to (about ten reviews a day for each new card a day). Above twenty a day, Settings warns you in plain words, and still lets you do it.
 - **Mixed together.** Due reviews and new cards from every family that is switched on are shuffled into one session. You can switch a family off in Settings.
 - **New cards in a sensible order.** API cards follow how often each class appears in Godot's demo projects, with the classes from the "Your first 2D game" tutorial first. You always meet a class before its methods, properties and signals.
 
-A right answer counts as FSRS **Good**, a wrong one as **Again**, at a desired retention of 0.9.
+A new card is asked up to three times on its first day, spread out and never twice in a row; a wrong answer brings it back until you get it right. Each time, the three wrong answers are drawn fresh, and on the second and third look a description card turns around: it shows the name (with its class icon) and asks you to pick the right description out of four. After every answer the panel shows the full description and a link to the official Godot or GitHub docs page. The summary counts **cards learned** (three looks, the last one right) and the ones to **continue tomorrow**. If a card is wrong or confusing, **Skip this card** (under the choices) takes it out of your deck, with an optional reason. **Settings → Skipped cards** lists them with an **Undo** each.
+
+Only the first answer of the day is graded: right counts as FSRS **Good**, wrong as **Again**, at a desired retention of 0.9. The repeats help you learn and do not change the schedule.
 
 ## Where the cards come from
 
@@ -47,7 +49,7 @@ Your cards stay on your phone. They are never added to this repository.
 
 In **Settings → Data**:
 
-- **Export** saves one JSON file (`godot-vocabulary-YYYY-MM-DD.json`) with your progress, your settings and your own cards.
+- **Export** saves one JSON file (`godot-vocabulary-YYYY-MM-DD.json`) with your progress, your settings, your own cards and your skipped cards. Files from older versions still import.
 - **Import** reads such a file and offers two choices:
   - **Merge with this device** keeps your settings here, adds the file's cards and, for each card, keeps whichever progress was reviewed last.
   - **Replace everything on this device** wipes this device and restores the file's progress, settings and cards.
