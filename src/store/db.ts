@@ -4,7 +4,7 @@ import type { Progress } from '../scheduler/fsrs';
 import { withDefaults, type Settings } from '../settings/load';
 
 export const DB_NAME = 'godot-vocabulary';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const SETTINGS_KEY = 'settings';
 const LAST_SESSION_KEY = 'lastSessionDate';
 const REMINDER_KEY = 'reminder';
@@ -25,6 +25,13 @@ export interface LessonDone {
   at: Date;
 }
 
+/** A lesson's exit ticket (decision 39): the learner's own sentence, kept only on the device and in exports. */
+export interface ExitTicket {
+  lessonId: string;
+  text: string;
+  date: Date;
+}
+
 interface Schema extends DBSchema {
   progress: { key: string; value: Progress };
   settings: { key: string; value: Settings };
@@ -32,6 +39,7 @@ interface Schema extends DBSchema {
   meta: { key: string; value: string };
   skipped: { key: string; value: SkippedCard };
   lessonsDone: { key: string; value: LessonDone };
+  exitTickets: { key: string; value: ExitTicket };
 }
 
 /** Progress as written to the export file: dates become ISO strings. */
@@ -43,16 +51,21 @@ export type ExportedProgress = Omit<Progress, 'due' | 'last_review' | 'seenAt'> 
 
 export type ExportedSkip = Omit<SkippedCard, 'at'> & { at: string };
 export type ExportedLesson = Omit<LessonDone, 'at'> & { at: string };
+export type ExportedTicket = Omit<ExitTicket, 'date'> & { date: string };
 
-/** Version 2 adds `skipped` and `lessonsDone`; version 1 files (without them) still import. */
+/**
+ * Version 3 adds `exitTickets`; version 2 added `skipped` and `lessonsDone`. Version 1 and 2 files
+ * (without them) still import.
+ */
 export interface ExportFile {
-  version: 2;
+  version: 3;
   exportedAt: string;
   progress: ExportedProgress[];
   settings: Settings;
   customCards: CustomCard[];
   skipped: ExportedSkip[];
   lessonsDone: ExportedLesson[];
+  exitTickets: ExportedTicket[];
 }
 
 let opening: Promise<IDBPDatabase<Schema>> | undefined;
@@ -70,6 +83,7 @@ function db(): Promise<IDBPDatabase<Schema>> {
         database.createObjectStore('skipped', { keyPath: 'cardId' });
         database.createObjectStore('lessonsDone', { keyPath: 'lessonId' });
       }
+      if (oldVersion < 3) database.createObjectStore('exitTickets', { keyPath: 'lessonId' });
     },
   });
   return opening;
@@ -196,47 +210,73 @@ export async function markLessonDone(lessonId: string, at: Date = new Date()): P
   await tx.done;
 }
 
+export async function listExitTickets(): Promise<ExitTicket[]> {
+  return (await (await db()).getAll('exitTickets')).sort((a, b) => a.date.getTime() - b.date.getTime());
+}
+
+export async function getExitTicket(lessonId: string): Promise<ExitTicket | undefined> {
+  return (await db()).get('exitTickets', lessonId);
+}
+
+/** Saves (or replaces) a lesson's exit ticket; an empty text removes it. */
+export async function saveExitTicket(lessonId: string, text: string, date: Date = new Date()): Promise<void> {
+  const trimmed = text.trim();
+  if (trimmed) await (await db()).put('exitTickets', { lessonId, text: trimmed, date });
+  else await (await db()).delete('exitTickets', lessonId);
+}
+
 /** Everything the learner owns, as one JSON-safe object. */
 export async function exportAll(now: Date = new Date()): Promise<ExportFile> {
-  const [progress, settings, customCards, skipped, lessonsDone] = await Promise.all([
+  const [progress, settings, customCards, skipped, lessonsDone, exitTickets] = await Promise.all([
     getProgress(),
     getSettings(),
     listCustomCards(),
     listSkipped(),
     listLessonsDone(),
+    listExitTickets(),
   ]);
   return {
-    version: 2,
+    version: 3,
     exportedAt: now.toISOString(),
     progress: [...progress.values()].map(toExported),
     settings,
     customCards,
     skipped: skipped.map((s) => ({ ...s, at: s.at.toISOString() })),
     lessonsDone: lessonsDone.map((l) => ({ ...l, at: l.at.toISOString() })),
+    exitTickets: exitTickets.map((t) => ({ ...t, date: t.date.toISOString() })),
   };
 }
 
 /**
- * Restore an export (version 1 or 2). `replace` wipes this device first; `merge` keeps this
- * device's settings, adds the file's custom cards, skips and finished lessons (this device's entry
- * wins on the same id), and per card keeps whichever progress record was reviewed more recently.
+ * Restore an export (version 1, 2 or 3). `replace` wipes this device first; `merge` keeps this
+ * device's settings, adds the file's custom cards, skips, finished lessons and exit tickets (this
+ * device's entry wins on the same id), and per card keeps whichever progress record was reviewed more recently.
  */
 export async function importAll(json: unknown, mode: 'merge' | 'replace'): Promise<void> {
   const file = parseExport(typeof json === 'string' ? JSON.parse(json) : json);
   const progress = file.progress.map(fromExported);
   const skipped = file.skipped.map((s) => ({ ...s, at: new Date(s.at) }));
   const lessons = file.lessonsDone.map((l) => ({ ...l, at: new Date(l.at) }));
+  const tickets = file.exitTickets.map((t) => ({ ...t, date: new Date(t.date) }));
   const database = await db();
-  const tx = database.transaction(['progress', 'settings', 'customCards', 'skipped', 'lessonsDone'], 'readwrite');
+  const tx = database.transaction(['progress', 'settings', 'customCards', 'skipped', 'lessonsDone', 'exitTickets'], 'readwrite');
   const progressStore = tx.objectStore('progress');
   const skippedStore = tx.objectStore('skipped');
   const lessonStore = tx.objectStore('lessonsDone');
+  const ticketStore = tx.objectStore('exitTickets');
   const writes: Promise<unknown>[] = [];
   if (mode === 'replace') {
-    await Promise.all([progressStore.clear(), tx.objectStore('customCards').clear(), skippedStore.clear(), lessonStore.clear()]);
+    await Promise.all([
+      progressStore.clear(),
+      tx.objectStore('customCards').clear(),
+      skippedStore.clear(),
+      lessonStore.clear(),
+      ticketStore.clear(),
+    ]);
     writes.push(tx.objectStore('settings').put(withDefaults(file.settings), SETTINGS_KEY));
     writes.push(...progress.map((p) => progressStore.put(p)));
     writes.push(...skipped.map((s) => skippedStore.put(s)), ...lessons.map((l) => lessonStore.put(l)));
+    writes.push(...tickets.map((t) => ticketStore.put(t)));
   } else {
     for (const incoming of progress) {
       const existing = await progressStore.get(incoming.cardId);
@@ -244,6 +284,7 @@ export async function importAll(json: unknown, mode: 'merge' | 'replace'): Promi
     }
     for (const s of skipped) if (!(await skippedStore.get(s.cardId))) writes.push(skippedStore.put(s));
     for (const l of lessons) if (!(await lessonStore.get(l.lessonId))) writes.push(lessonStore.put(l));
+    for (const t of tickets) if (!(await ticketStore.get(t.lessonId))) writes.push(ticketStore.put(t));
   }
   writes.push(...file.customCards.map((c) => tx.objectStore('customCards').put({ ...c, custom: true })));
   await Promise.all([...writes, tx.done]);
@@ -275,24 +316,36 @@ function fromExported(p: ExportedProgress): Progress {
   };
 }
 
-/** Reads a version 1 or 2 file into the version 2 shape (version 1 has no skips or lessons). */
+/**
+ * Reads a version 1, 2 or 3 file into the version 3 shape (version 1 has no skips or lessons,
+ * versions 1 and 2 no exit tickets).
+ */
 function parseExport(value: unknown): ExportFile {
   const file = value as (Omit<Partial<ExportFile>, 'version'> & { version?: unknown }) | null;
-  if (!file || (file.version !== 1 && file.version !== 2)) throw new Error('Not a godot-vocabulary export (version 1 or 2).');
+  if (!file || (file.version !== 1 && file.version !== 2 && file.version !== 3)) {
+    throw new Error('Not a godot-vocabulary export (version 1, 2 or 3).');
+  }
   if (!Array.isArray(file.progress) || !Array.isArray(file.customCards) || typeof file.settings !== 'object') {
     throw new Error('Export file is missing progress, settings or custom cards.');
   }
   for (const p of file.progress) {
     if (typeof p?.cardId !== 'string' || Number.isNaN(Date.parse(p.due))) throw new Error('Export file has a broken progress record.');
   }
-  const skipped = file.version === 2 ? file.skipped : [];
-  const lessonsDone = file.version === 2 ? file.lessonsDone : [];
+  const skipped = file.version === 1 ? [] : file.skipped;
+  const lessonsDone = file.version === 1 ? [] : file.lessonsDone;
+  const exitTickets = file.version === 3 ? file.exitTickets : [];
   if (!Array.isArray(skipped) || !Array.isArray(lessonsDone)) throw new Error('Export file is missing skipped cards or lessons.');
+  if (!Array.isArray(exitTickets)) throw new Error('Export file is missing exit tickets.');
+  for (const t of exitTickets) {
+    if (typeof t?.lessonId !== 'string' || typeof t.text !== 'string' || Number.isNaN(Date.parse(t.date))) {
+      throw new Error('Export file has a broken exit ticket.');
+    }
+  }
   for (const s of skipped) {
     if (typeof s?.cardId !== 'string' || Number.isNaN(Date.parse(s.at))) throw new Error('Export file has a broken skipped card.');
   }
   for (const l of lessonsDone) {
     if (typeof l?.lessonId !== 'string' || Number.isNaN(Date.parse(l.at))) throw new Error('Export file has a broken lesson record.');
   }
-  return { ...(file as ExportFile), version: 2, skipped, lessonsDone };
+  return { ...(file as ExportFile), version: 3, skipped, lessonsDone, exitTickets };
 }

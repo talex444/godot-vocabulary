@@ -256,7 +256,7 @@ function dataSection(afterImport: () => Promise<void>): HTMLElement {
       heading('Data'),
       el('div', { class: 'gv-option' }, [
         exportButton,
-        el('p', { class: 'gv-note', text: 'Saves your progress, settings, custom cards and skipped cards as one JSON file in Downloads.', attrs: { id: 'export-help' } }),
+        el('p', { class: 'gv-note', text: 'Saves your progress, settings, custom cards, skipped cards, finished lessons and exit tickets as one JSON file in Downloads.', attrs: { id: 'export-help' } }),
       ]),
       el('div', { class: 'gv-option' }, [
         importButton,

@@ -43,6 +43,6 @@ describe('export and import files', () => {
 
   it('says plainly when a file is not JSON or not an export', async () => {
     await expect(importText('not json', 'merge')).rejects.toThrow('not a JSON file');
-    await expect(importText('{"version":3}', 'merge')).rejects.toThrow('Not a godot-vocabulary export');
+    await expect(importText('{"version":4}', 'merge')).rejects.toThrow('Not a godot-vocabulary export');
   });
 });

@@ -8,6 +8,7 @@ import {
   deleteCustomCard,
   deleteStore,
   exportAll,
+  getExitTicket,
   getLastSessionDate,
   getLessonsDoneIds,
   getProgress,
@@ -15,9 +16,11 @@ import {
   getSkippedIds,
   importAll,
   listCustomCards,
+  listExitTickets,
   listLessonsDone,
   listSkipped,
   markLessonDone,
+  saveExitTicket,
   saveProgress,
   saveSettings,
   setLastSessionDate,
@@ -93,7 +96,7 @@ describe('export and import', () => {
   it('writes one JSON-safe object with version, date, progress, settings and custom cards', async () => {
     await seed();
     const file = await exportAll(later);
-    expect(file.version).toBe(2);
+    expect(file.version).toBe(3);
     expect(file.exportedAt).toBe(later.toISOString());
     expect(file.progress).toHaveLength(1);
     expect(typeof file.progress[0]!.due).toBe('string');
@@ -154,7 +157,7 @@ describe('export and import', () => {
   });
 
   it('rejects files that are not an export', async () => {
-    await expect(importAll({ version: 3 }, 'merge')).rejects.toThrow(/version 1 or 2/);
+    await expect(importAll({ version: 4 }, 'merge')).rejects.toThrow(/version 1, 2 or 3/);
     await expect(importAll('{"version":1}', 'replace')).rejects.toThrow(/missing/);
     const v2 = { ...(await exportAll(later)), skipped: [{ cardId: 'x', at: 'not a date' }] };
     await expect(importAll(v2, 'replace')).rejects.toThrow(/skipped/);
@@ -185,11 +188,11 @@ describe('skipped cards and finished lessons (done-criteria 37, 39)', () => {
     expect(await getLessonsDoneIds()).toEqual(['l1', 'l2']);
   });
 
-  it('exports version 2 with skips and lessons, and restores them on a fresh install', async () => {
+  it('exports version 3 with skips and lessons, and restores them on a fresh install', async () => {
     await skipCard('api:class:Timer', 'confusing', t0);
     await markLessonDone('l1', t0);
     const file = await exportAll(later);
-    expect(file.version).toBe(2);
+    expect(file.version).toBe(3);
     expect(file.skipped).toEqual([{ cardId: 'api:class:Timer', reason: 'confusing', at: t0.toISOString() }]);
     expect(file.lessonsDone).toEqual([{ lessonId: 'l1', at: t0.toISOString() }]);
     expect(JSON.parse(JSON.stringify(file))).toEqual(file);
@@ -221,7 +224,7 @@ describe('skipped cards and finished lessons (done-criteria 37, 39)', () => {
 
   it('still imports a version 1 file, which has no skips or lessons', async () => {
     await saveProgress(newProgress('gd:keyword:var', 'gdscript', t0));
-    const { skipped: _s, lessonsDone: _l, ...rest } = await exportAll(later);
+    const { skipped: _s, lessonsDone: _l, exitTickets: _t, ...rest } = await exportAll(later);
     await deleteStore();
     await skipCard('gh:term:fork', undefined, t0);
     await importAll({ ...rest, version: 1 }, 'merge');
@@ -229,5 +232,50 @@ describe('skipped cards and finished lessons (done-criteria 37, 39)', () => {
     expect([...(await getSkippedIds())]).toEqual(['gh:term:fork']);
     await importAll({ ...rest, version: 1 }, 'replace');
     expect(await listSkipped()).toEqual([]);
+  });
+
+  it('still imports a version 2 file, which has no exit tickets', async () => {
+    await markLessonDone('l1', t0);
+    const { exitTickets: _t, ...rest } = await exportAll(later);
+    await deleteStore();
+    await saveExitTicket('l0', 'mine', t0);
+    await importAll({ ...rest, version: 2 }, 'merge');
+    expect(await getLessonsDoneIds()).toEqual(['l1']);
+    expect(await listExitTickets()).toEqual([{ lessonId: 'l0', text: 'mine', date: t0 }]);
+    await importAll({ ...rest, version: 2 }, 'replace');
+    expect(await listExitTickets()).toEqual([]);
+  });
+});
+
+describe('exit tickets (decision 39)', () => {
+  it('saves, replaces and removes a lesson\'s ticket; empty text removes it', async () => {
+    await saveExitTicket('c1-l0', '  a tree of nodes ', t0);
+    expect(await getExitTicket('c1-l0')).toEqual({ lessonId: 'c1-l0', text: 'a tree of nodes', date: t0 });
+    await saveExitTicket('c1-l0', 'a tree of scenes', later);
+    expect(await listExitTickets()).toEqual([{ lessonId: 'c1-l0', text: 'a tree of scenes', date: later }]);
+    await saveExitTicket('c1-l0', '   ');
+    expect(await getExitTicket('c1-l0')).toBeUndefined();
+  });
+
+  it('export v3 carries the tickets; replace restores them, merge keeps this device\'s on the same lesson', async () => {
+    await saveExitTicket('c1-l0', 'from the file', t0);
+    await saveExitTicket('c1-l1', 'second', t0);
+    const file = await exportAll(later);
+    expect(file.exitTickets).toEqual([
+      { lessonId: 'c1-l0', text: 'from the file', date: t0.toISOString() },
+      { lessonId: 'c1-l1', text: 'second', date: t0.toISOString() },
+    ]);
+    await deleteStore();
+    await importAll(JSON.stringify(file), 'replace');
+    expect((await listExitTickets()).map((t) => t.text)).toEqual(['from the file', 'second']);
+
+    await deleteStore();
+    await saveExitTicket('c1-l0', 'mine', later);
+    await importAll(file, 'merge');
+    expect((await listExitTickets()).map((t) => [t.lessonId, t.text])).toEqual([
+      ['c1-l1', 'second'],
+      ['c1-l0', 'mine'],
+    ]);
+    await expect(importAll({ ...file, exitTickets: [{ lessonId: 'x', text: 1, date: 'no' }] }, 'replace')).rejects.toThrow(/exit ticket/);
   });
 });

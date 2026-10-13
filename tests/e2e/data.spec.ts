@@ -89,8 +89,9 @@ test('add a card, export, then a fresh install imports it all back with replace'
   expect(download.suggestedFilename()).toMatch(/^godot-vocabulary-\d{4}-\d{2}-\d{2}\.json$/);
   const text = await readFile((await download.path())!, 'utf8');
   const file = JSON.parse(text);
-  expect(file.version).toBe(2);
+  expect(file.version).toBe(3);
   expect(file.skipped).toEqual([]);
+  expect(file.exitTickets).toEqual([]);
   expect(file.progress).toHaveLength(1);
   expect(file.customCards.map((c: { answer: string }) => c.answer)).toEqual(['_ready']);
   expect(file.settings.families['godot-api'].newPerDay).toBe(9);
