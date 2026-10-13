@@ -16,6 +16,17 @@ const DOCS = join(ROOT, 'data/sources/godot-docs');
 const MEMBER_CLASSES = 40;
 const MAX_METHODS = 10;
 const MAX_PROPERTIES = 8;
+/**
+ * Members course 1's lessons show in code (the step-by-step pages), carded past the per-kind caps and
+ * for classes past MEMBER_CLASSES, so the lesson term check has a card for each (GV-6b).
+ */
+const LESSON_MEMBERS = {
+  Node: ['set_process', 'is_processing'],
+  Vector2: ['rotated'],
+  Input: ['is_action_pressed'],
+  CanvasItem: ['visible'],
+  BaseButton: ['pressed'],
+};
 /** Distractor pool size (decision 24): enough for fresh wrong answers on every showing. */
 export const POOL_SIZE = 8;
 /** Smallest pool a card may ship with. */
@@ -164,14 +175,18 @@ const KINDS = [
   { kind: 'signal', list: 'signals', id: 'signal', max: Infinity, show: (n) => n },
 ];
 
-function memberCards(classes, cls, classCard, removed) {
+/** A class's member cards: the first few of each kind (unless `namedOnly`) plus its LESSON_MEMBERS. */
+function memberCards(classes, cls, classCard, removed, namedOnly = false) {
   const lineage = ancestors(classes, cls.name);
   const inherited = (list, name) => lineage.some((a) => classes.get(a)[list].some((m) => m.name === name));
   const listed = (owner, k) => owner[k.list].filter((m) => !flagged(m) && m.overrides === undefined);
+  const named = LESSON_MEMBERS[cls.name] ?? [];
   const picked = [];
   for (const k of KINDS) {
     const all = listed(cls, k);
-    const eligible = all.filter((m) => m.text !== '' && !(k.kind === 'method' && inherited('methods', m.name))).slice(0, k.max);
+    const askable = all.filter((m) => m.text !== '' && !(k.kind === 'method' && inherited('methods', m.name)));
+    const first = namedOnly ? [] : askable.slice(0, k.max);
+    const eligible = [...first, ...askable.filter((m) => named.includes(m.name) && !first.includes(m))];
     // Same-kind members of this class, then of its ancestors; ids say whose member each one is.
     const own = all.map((m) => ({ show: k.show(m.name), id: `api:${k.id}:${cls.name}.${m.name}` }));
     const parents = lineage.flatMap((a) => listed(classes.get(a), k).map((m) => ({ show: k.show(m.name), id: `api:${k.id}:${a}.${m.name}` })));
@@ -301,6 +316,10 @@ export function generateApiCards() {
     const cards = memberCards(classes, classes.get(deckOrder[i]), classCards[i], removed);
     if (cards.length) withMembers++;
     members.push(...cards);
+  }
+  for (const name of Object.keys(LESSON_MEMBERS)) {
+    const i = deckOrder.indexOf(name);
+    if (i >= 0 && !members.some((c) => c.requires === `api:class:${name}`)) members.push(...memberCards(classes, classes.get(name), classCards[i], removed, true));
   }
   const cards = [...classCards, ...members].sort((a, b) => a.rank - b.rank || byName(a.id, b.id));
 
