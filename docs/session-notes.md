@@ -57,3 +57,42 @@
 
 ### Left for session 2b
 Screens (start with `sessionSummary`, card, feedback, summary, settings with the `load.ts` maths, add-card, export/import, About), wiring `buildSession` + `review` + `saveProgress`, the same-session re-ask policy from deviation 1, rendering `code` in JetBrains Mono with Godot's syntax colours (done-criteria 5), 23 lint, 28 contrast test.
+
+## GV-2b — component kit, session screens, live flow, fonts, screenshots (2026-10-13)
+
+### Built
+- **Kit** `src/ui/kit/index.ts` (plain DOM factories) + `src/ui/kit.css` (only `--…` properties): `el`, `asset` (base-path URLs), `button` (primary = accent fill, secondary = `contrast_color_1`, flat; all ≥ 44 px), `panel` (`dark_color_1`, `--corner-radius`, no border), `heading` (accent blue, bold), `icon` (24 px, `alt=""`, removes itself if the file is missing), `choiceRow` + `setChoiceState` (`idle | chosen-right | chosen-wrong | revealed-right | disabled`; right/wrong use `success_color`/`error_color` as text and a 2 px inset ring, plus a visible note "Right" / "Your answer" / "Correct answer" so colour is never the only cue), `textField` (LineEdit look, accent ring on focus, optional search glyph drawn in `currentColor`), `toggle` (`role="switch"`, CheckButton look), `stepper` (−/+ 44 px buttons around an `<output>`), `stat` (`dt`/`dd`, used inside a `dl`), `blank` (the `____` slot in `selection_color`, read out as "blank"), `codeBlock`, `richText` (`inline code`, ``` fences, blanks).
+- **Fonts**: `@font-face` for Inter 400/700 and JetBrains Mono 400 at the top of `kit.css`; Vite rewrites `/fonts/…` to `/godot-vocabulary/fonts/…` (checked in `dist`). Body text 16 px; code 16 px.
+- **Tokenizer** `src/ui/kit/gdscript.ts`: per line; keywords, control-flow keywords, `@annotations`, strings (with `&`/`^` prefixes), numbers, `#` and `##` comments, function definitions, calls, global functions (a fixed list), base types, engine types, members after `.`, symbols, `$`/`%` node paths, and the `____` blank. `tests/unit/tokenizer.test.ts` checks the classes and that every snippet card tokenizes back to its exact text with one blank.
+- **`pnpm lint:css`** `scripts/lint-css.mjs`: fails on `#hex`, `rgb(a)(`, `hsl(a)(` in `src/**/*.{css,ts}` outside `src/theme/derive.ts` (done-criteria 23). Hover uses `color-mix(in srgb, var(--mono-color) 7%, transparent)`, which is Godot's `alpha1`.
+- **Screens** `src/ui/screens/`: **start** (per enabled family: Due / New today / Overdue from `sessionSummary`; primary Start, disabled with a plain reason; flat Settings / Add card / About open **placeholders** for GV-2c), **card** (thin accent progress bar with `role="progressbar"`; family in secondary text; the kind as an accent heading like the help panel's "Description"; prompt; code block; four choices in an order seeded by an FNV-1a hash of the card id; API class cards show `icons/<Choice>.svg` on every choice; one tap locks all four, marks right/wrong, reveals the answer, shows the explanation in a `role="status"` region, then a primary Next (or "See summary") that takes focus; a flat "End session" stops early), **summary** (cards seen, right, wrong, due tomorrow; Done → Start). `src/ui/app.ts` swaps screens in `#screen` (no router, no URL change) and moves focus to the new screen's heading. `index.html` keeps one `<main>` with the `<h1>` app name (small, centred like a Godot dialog title).
+- **Flow** `src/session/run.ts` (`Session`, deps injected; `src/session/deck.ts` wires the decks + IndexedDB):
+  - Start loads the three decks + custom cards, `getProgress()`, settings; `buildSession` with `seededRng(Date.now())`.
+  - Reviews first: when any enabled card is overdue the builder already yields reviews only; after each answer, once no enabled card is overdue, `buildSession` runs again and its ids not already queued are appended.
+  - Each answer: `review(progress ?? newProgress(...), correct, now)` → `saveProgress` awaited before Next appears.
+  - Re-ask: when the new `due` is before the next local midnight the card is reinserted at queue index 3 (three cards between) or at the end if fewer remain. Summary counts each card once, by its first answer.
+  - `finish()` (also on End session) writes `setLastSessionDate` (local `YYYY-MM-DD`). "Due tomorrow" = enabled-family progress with `due` before the end of tomorrow (so it includes anything left today).
+  - Start-blocked reasons: every family off; nothing due and today's new cards done; nothing due and every card seen. When reviews are overdue, a note says new cards wait until the N overdue reviews are done.
+  - `tests/unit/run.test.ts`: immediate save, re-ask position, once-only counting, `lastSessionDate`, overdue-first then new cards appended.
+- **Screenshots** `scripts/screenshot.mjs` (Playwright, 360×780, scale 2, touch, service workers blocked) → `docs/screenshots/start.png`, `card-api.png`, `card-code.png`, `card-answered.png`, `summary.png`. The run's order is random, so `card-answered.png` shows whichever card first got a wrong tap (a GitHub term in the committed one).
+- **Gates**: `pnpm typecheck`, `pnpm test` (10 files, 70 tests), `pnpm build`, `pnpm lint:css` green. `pnpm e2e` not run (no specs yet).
+
+### What the critique changed
+Compared with the Create New Node dialog, the help panel and the script editor:
+1. The right/wrong notes sat beside the label and broke class names mid-word ("CollisionObject2 D"). Now they go on their own line under the label, and labels break only when they must.
+2. The programmatically focused heading showed a focus ring. `tabindex="-1"` targets no longer show an outline; real controls keep the accent ring plus a `highlight_color` halo.
+3. Hover stuck after a tap on touch screens (End session looked pressed). Hover rules now sit under `@media (hover: hover)`.
+4. Code wrapped mid-string (`"u|i_accept"`). Now there is a break opportunity (`<wbr>`) after `.`, `(` and `,`, wrapped lines hang 2 columns in, and the tab size is 2 below 480 px (4 above, as in the editor).
+5. The progress line now moves as soon as a card is answered, not on Next.
+Kept on purpose: the code block has the same colour as the panel (`script_background_color` and `dark_color_1` are both `#171717` in 4.7), so the line numbers and the highlighted blank line mark it, as in the editor. The line with the blank gets `current_line_color`, like the caret line.
+
+### Deviations and why
+1. **Annotation colour**: the 4.7 annotation colour lives in `modules/gdscript/editor/gdscript_highlighter.cpp`, which is not vendored, and `data/theme/` has no annotation entry. `@annotations` use `--code-string-placeholder-color` (`#ffbf66`, the nearest orange) until the Chief of Staff adds the engine value to the theme JSON. Node paths (`$Node`, `%Name`) use the string colour for the same reason (no `node_path`/`node_ref` colour in the file).
+2. **Engine types are guessed** from PascalCase spelling, not checked against the class list. User-defined class names would be coloured as engine types; snippets don't define any.
+3. **Primary button text** is `font_focus_color` (white) on the accent. That is Godot's look, and it falls below 4.5:1. It goes on the contrast report (done-criteria 28, not built yet).
+4. **Playwright's Chromium is not installed** on this machine. `scripts/screenshot.mjs` falls back to the system Edge (`channel: 'msedge'`). `pnpm exec playwright install chromium` is needed before `pnpm e2e` (session 3).
+5. **Bundle size**: the three decks are bundled into the main chunk (697 kB, 128 kB gzip). Vite warns over 500 kB. Everything is precached for offline use, so it is left as is; code-splitting the decks is an option.
+6. **"End session"** is an extra flat control on the card screen (not in the brief), so a learner can stop and still get a summary. Every answer is already saved.
+
+### Left for session 2c / 3
+Settings, Add card, About screens (the kit's `toggle`, `stepper` and `textField` are ready for them), export/import UI, the contrast report (28), and the e2e + axe specs (25, 27, 29–31).
