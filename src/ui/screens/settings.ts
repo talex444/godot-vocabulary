@@ -180,6 +180,17 @@ function dataSection(afterImport: () => Promise<void>): HTMLElement {
     describedBy: 'export-help',
     onClick: async () => {
       const now = new Date();
+      if (isNativeApp()) {
+        // The Android package: Android's "Save as" screen, since its WebView cannot download.
+        try {
+          const { saveFile } = await import('../../store/save-file');
+          const saved = await saveFile(exportFileName(now), await exportText(now));
+          say(saved ? `Saved ${exportFileName(now)}.` : 'Nothing was saved.');
+        } catch (error) {
+          say(`Nothing was saved. ${error instanceof Error ? error.message : String(error)}`, 'error');
+        }
+        return;
+      }
       const url = URL.createObjectURL(new Blob([await exportText(now)], { type: 'application/json' }));
       const link = el('a', { attrs: { href: url, download: exportFileName(now) } });
       document.body.append(link);
