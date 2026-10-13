@@ -75,6 +75,11 @@ body {
   outline-offset: 2px;
 }
 
+/* Headings get focus only so a new screen is announced; they are not controls, so no ring. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
 /* Panel: flat box of dark_color_1, corner radius 4, no border. */
 .gv-panel {
   background: var(--dark-color-1);
@@ -106,9 +111,17 @@ body {
   touch-action: manipulation;
 }
 
-.gv-button:hover:not(:disabled) {
-  color: var(--font-hover-color);
-  background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
+/* Hover only where a pointer can hover; on touch screens it would stick after a tap. */
+@media (hover: hover) {
+  .gv-button:hover:not(:disabled),
+  .gv-choice:hover:not(:disabled) {
+    color: var(--font-hover-color);
+    background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
+  }
+
+  .gv-toggle:hover {
+    color: var(--font-hover-color);
+  }
 }
 
 .gv-button:active:not(:disabled) {
@@ -178,27 +191,24 @@ body {
   touch-action: manipulation;
 }
 
-.gv-choice:hover:not(:disabled) {
-  color: var(--font-hover-color);
-  background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
-}
-
 .gv-choice:focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 0;
   box-shadow: 0 0 0 4px var(--highlight-color);
 }
 
-.gv-choice__label {
+.gv-choice__text {
+  display: grid;
   flex: 1;
   min-width: 0;
-  overflow-wrap: anywhere;
+}
+
+.gv-choice__label {
+  overflow-wrap: break-word;
 }
 
 .gv-choice__note {
-  flex: none;
   font-size: 1rem;
-  font-weight: 700;
 }
 
 .gv-choice__note:empty {
@@ -301,10 +311,6 @@ body {
   font: inherit;
   text-align: start;
   cursor: pointer;
-}
-
-.gv-toggle:hover {
-  color: var(--font-hover-color);
 }
 
 .gv-toggle__track {
@@ -423,7 +429,14 @@ body {
   line-height: 1.6;
   tab-size: 4;
   white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+}
+
+/* On a phone, indent by two columns so snippets wrap less. */
+@media (max-width: 480px) {
+  .gv-code {
+    tab-size: 2;
+  }
 }
 
 .gv-code code {
@@ -435,6 +448,13 @@ body {
   display: grid;
   grid-template-columns: 3ch 1fr;
   column-gap: 12px;
+}
+
+/* Wrapped continuation lines hang two columns in, like the editor's wrapped lines. */
+.gv-code__text {
+  min-width: 0;
+  padding-inline-start: 2ch;
+  text-indent: -2ch;
 }
 
 .gv-code__number {

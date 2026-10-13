@@ -49,22 +49,15 @@ export function cardScreen(session: Session, nav: Nav): HTMLElement {
   }
 
   const finish = async () => nav.summary(await session.finish());
-  const percent = session.total === 0 ? 0 : (session.done / session.total) * 100;
-  const progress = el(
-    'div',
-    {
-      class: 'gv-progress',
-      attrs: {
-        role: 'progressbar',
-        'aria-label': 'Cards done',
-        'aria-valuemin': '0',
-        'aria-valuemax': String(session.total),
-        'aria-valuenow': String(session.done),
-        'aria-valuetext': `${session.done} of ${session.total}`,
-      },
-    },
-    [el('div', { class: 'gv-progress__fill', attrs: { style: `width: ${percent}%` } })],
-  );
+  const fill = el('div', { class: 'gv-progress__fill' });
+  const progress = el('div', { class: 'gv-progress', attrs: { role: 'progressbar', 'aria-label': 'Cards done', 'aria-valuemin': '0' } }, [fill]);
+  const showProgress = () => {
+    progress.setAttribute('aria-valuemax', String(session.total));
+    progress.setAttribute('aria-valuenow', String(session.done));
+    progress.setAttribute('aria-valuetext', `${session.done} of ${session.total}`);
+    fill.style.width = `${session.total === 0 ? 0 : (session.done / session.total) * 100}%`;
+  };
+  showProgress();
 
   const withIcons = card.family === 'godot-api' && card.kind === 'class';
   const feedback = el('div', { class: 'gv-feedback', attrs: { role: 'status' } });
@@ -88,6 +81,7 @@ export function cardScreen(session: Session, nav: Nav): HTMLElement {
     );
     // Saved before Next appears: the phone may be closed at any moment.
     await session.answer(choice);
+    showProgress();
     const last = session.current === undefined;
     const next = button(last ? 'See summary' : 'Next', {
       variant: 'primary',

@@ -82,8 +82,10 @@ const CHOICE_NOTE: Partial<Record<ChoiceState, string>> = {
 export function choiceRow(label: string, options: { icon?: string; onChoose: () => void }): HTMLButtonElement {
   const node = el('button', { class: 'gv-choice', attrs: { type: 'button', 'data-state': 'idle' } }, [
     options.icon ? icon(options.icon) : null,
-    el('span', { class: 'gv-choice__label', text: label }),
-    el('span', { class: 'gv-choice__note' }),
+    el('span', { class: 'gv-choice__text' }, [
+      el('span', { class: 'gv-choice__label', text: label }),
+      el('span', { class: 'gv-choice__note' }),
+    ]),
   ]);
   node.addEventListener('click', options.onChoose);
   return node;
@@ -202,7 +204,7 @@ export function codeBlock(code: string, options: { label?: string } = {}): HTMLE
       el(
         'span',
         { class: 'gv-code__text' },
-        tokens.length === 0 ? [' '] : tokens.map((t) => (t.kind === 'blank' ? blank() : tokenSpan(t.kind, t.text))),
+        tokens.length === 0 ? [' '] : tokens.flatMap((t) => (t.kind === 'blank' ? [blank()] : tokenNodes(t.kind, t.text))),
       ),
     ]),
   );
@@ -211,8 +213,10 @@ export function codeBlock(code: string, options: { label?: string } = {}): HTMLE
   ]);
 }
 
-function tokenSpan(kind: TokenKind, text: string): Node {
-  return kind === 'text' ? document.createTextNode(text) : el('span', { class: `tok-${kind}`, text });
+/** A coloured token; after `.`, `(` and `,` a line may wrap, so long calls break there and not mid-name. */
+function tokenNodes(kind: TokenKind, text: string): Node[] {
+  const node = kind === 'text' ? document.createTextNode(text) : el('span', { class: `tok-${kind}`, text });
+  return kind === 'symbol' && /^[.(,]$/.test(text) ? [node, el('wbr')] : [node];
 }
 
 /** Card text: `inline code` in JetBrains Mono, ``` fenced blocks as code blocks, `____` as slots. */
