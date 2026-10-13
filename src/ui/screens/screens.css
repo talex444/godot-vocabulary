@@ -448,6 +448,10 @@ button.gv-lesson-row:focus-visible {
   color: var(--font-focus-color);
 }
 
+.gv-lesson-row--planned .gv-lesson-row__title {
+  color: var(--font-color);
+}
+
 .gv-tick {
   flex: none;
   width: 20px;
@@ -580,13 +584,13 @@ button.gv-lesson-row:focus-visible {
 
 /* The typed blank: a LineEdit inside the line, in code font. */
 .gv-blank-line {
-  line-height: 2.9;
+  line-height: 1.6;
 }
 
 .gv-gap {
   max-width: 100%;
   min-height: var(--target);
-  margin-inline: 2px;
+  margin: 2px;
   padding: 0 8px;
   border: 0;
   border-radius: var(--corner-radius);
