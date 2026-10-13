@@ -23,6 +23,7 @@
     "ts-fsrs": "^5.4.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.64.0",
     "@types/node": "^26.6.5",
     "fake-indexeddb": "^6.2.5",
