@@ -456,9 +456,226 @@
     {
       "id": "c1-l2",
       "order": 2,
-      "title": "Creating instances",
+      "title": "How can one scene appear many times in a game?",
       "page": { "title": "Creating instances", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/instancing.html" },
-      "planned": true
+      "cardIds": [
+        "api:class:RigidBody2D",
+        "api:method:PackedScene.instantiate",
+        "gd:concept:instance",
+        "gd:concept:instantiate",
+        "api:class:PhysicsMaterial"
+      ],
+      "need": "A game rarely has one of anything: ten coins, six balls, a crowd of enemies. Building each one by hand would leave you six copies to keep in step every time you change your mind.\n\nGodot's answer is that a saved scene is a blueprint, and every copy in the game is an instance made from it. This lesson follows the manual's ball: one scene, six instances that each fall on their own, and what happens when you change the blueprint or just one copy.",
+      "agenda": [
+        "A saved scene as a blueprint, and instancing it.",
+        "Changing every instance through the scene, or one instance on its own.",
+        "Scenes as a way to plan a whole game."
+      ],
+      "chunks": [
+        {
+          "heading": "Packed scenes",
+          "text": "“In the previous part, we saw that a scene is a collection of nodes organized in a tree structure, with a single node as its root. You can split your project into any number of scenes.”\n\n“You can create as many scenes as you'd like and save them as files with the `.tscn` extension, which stands for ‘text scene’. The `label.tscn` file from the previous lesson was an example. We call those files ‘Packed Scenes’ as they pack information about your scene's content.” In the class reference, such a file is a `PackedScene`.\n\n“Here's an example of a ball. It's composed of a `RigidBody2D` node as its root named Ball, which allows the ball to fall and bounce on walls, a `Sprite2D` node, and a `CollisionShape2D`.”",
+          "image": {
+            "src": "instancing_ball_scene.webp",
+            "alt": "The Scene dock of the Ball scene: Ball at the top with a blue physics-body icon, Sprite2D and CollisionShape2D under it. Beside it, a light-blue ball in the 2D view.",
+            "caption": "The Ball scene: a RigidBody2D root and two children.",
+            "width": 450,
+            "height": 179
+          },
+          "check": {
+            "prompt": "Which node in the Ball scene lets the ball fall and bounce on walls?",
+            "choices": ["`RigidBody2D`", "`Sprite2D`", "`CollisionShape2D`", "`Node2D`"],
+            "answer": 0,
+            "why": "The root is “a `RigidBody2D` node … which allows the ball to fall and bounce on walls”."
+          }
+        },
+        {
+          "heading": "Instancing",
+          "text": "“Once you have saved a scene, it works as a blueprint: you can reproduce it in other scenes as many times as you'd like. Replicating an object from a template like this is called instancing.”\n\n“As we mentioned in the previous part, instanced scenes behave like a node: the editor hides their content by default. When you instance the Ball, you only see the Ball node. Notice also how each duplicate has a unique name.”\n\n“Every instance of the Ball scene starts with the same structure and properties as `ball.tscn`. However, you can modify each independently, such as changing how they bounce, how heavy they are, or any property exposed by the source scene.”",
+          "image": {
+            "src": "instancing_ball_instances_example.webp",
+            "alt": "The Main scene's dock: WallContainer, then Ball, Ball2, Ball3, Ball4, Ball5 and Ball6, each with the clapperboard icon of an instanced scene. The 2D view shows six balls above purple walls.",
+            "caption": "Six instances of one Ball scene, each with its own name.",
+            "width": 800,
+            "height": 295
+          },
+          "check": {
+            "prompt": "You instance the Ball scene six times in Main. How many Ball scene files are there?",
+            "choices": ["One, `ball.tscn`", "Six", "Seven", "None until the game runs"],
+            "answer": 0,
+            "why": "“Once you have saved a scene, it works as a blueprint”: the six balls are instances of one file."
+          }
+        },
+        {
+          "heading": "In practice",
+          "text": "“Let's add a ball as a child of the Main node. In the Scene dock, select the Main node. Then, click the link icon at the top of the scene dock. This button allows you to add an instance of a scene as a child of the currently selected node.”\n\n“Now, we want to create more instances of the Ball node. With the ball still selected, press Ctrl + D (Cmd + D on macOS) to call the duplicate command.”\n\n“Play the game again. You should now see every ball fall independently from one another. This is what instances do. Each is an independent reproduction of a template scene.”",
+          "image": {
+            "src": "instancing_scene_link_button.webp",
+            "alt": "The top of the Scene dock with Main selected: the chain-link button next to the plus is highlighted.",
+            "caption": "The link button adds an instance of a scene under the selected node.",
+            "width": 245,
+            "height": 131
+          },
+          "check": {
+            "prompt": "Six balls fall in the running game, and one of them hits a wall first. What do the other five do?",
+            "choices": [
+              "Keep falling, each on its own",
+              "Bounce at the same moment",
+              "Stop, since they share one body",
+              "Disappear with the first"
+            ],
+            "answer": 0,
+            "why": "“You should now see every ball fall independently from one another.”"
+          }
+        },
+        {
+          "heading": "Editing scenes and instances",
+          "text": "“There is more to instances. With this feature, you can: 1. Change the properties of one ball without affecting the others using the Inspector. 2. Change the default properties of every Ball by opening the `ball.tscn` scene and making a change to the Ball node there. Upon saving, all instances of the Ball in the project will see their values update.”\n\n“Changing a property on an instance always overrides values from the corresponding packed scene.”\n\n“A grey ‘revert’ button appears next to the adjusted property.” “This icon indicates you are overriding a value from the source packed scene. Even if you modify the property in the original scene, the value override will be preserved in the instance. Clicking the revert icon will restore the property to the value in the saved scene.”",
+          "image": {
+            "src": "instancing_property_revert_icon.webp",
+            "alt": "The Gravity Scale row in the Inspector, set to 10.0, with the circular revert arrow beside its name highlighted.",
+            "caption": "The revert button: this instance overrides the scene's value.",
+            "width": 310,
+            "height": 33
+          },
+          "check": {
+            "prompt": "You set one ball's Gravity Scale to 10. Then you set Gravity Scale to 2 in `ball.tscn` and save. What is that one ball's Gravity Scale?",
+            "choices": ["10", "2", "12", "1, the default"],
+            "answer": 0,
+            "why": "“Even if you modify the property in the original scene, the value override will be preserved in the instance.”"
+          }
+        },
+        {
+          "heading": "Scene instances as a design language",
+          "text": "“We recommend dismissing architectural code patterns when making games with Godot, such as Model-View-Controller (MVC) or Entity-Relationship diagrams. Instead, you can start by imagining the elements players will see in your game and structure your code around them.”\n\n“You can come up with a diagram like this for almost any type of game. Each rectangle represents an entity that's visible in the game from the player's perspective. The arrows point towards the instantiator of each scene.”\n\n“Once you have a diagram, we recommend creating a scene for each element listed in it to develop your game. You'll use instancing, either by code or directly in the editor, to build your tree of scenes.”",
+          "image": {
+            "src": "instancing_diagram_shooter.png",
+            "alt": "A diagram of a shooter game: boxes for Player Ship, Enemy, Obstacle, HUD, Weapon and Missile, with arrows pointing at Stage, the scene that instances them. A Weapon arrow points at Player Ship and a Market arrow at HUD; two dotted arrows are labelled ‘Instance by code’.",
+            "caption": "A shooter broken down into scenes.",
+            "width": 600,
+            "height": 210
+          },
+          "check": {
+            "prompt": "In the manual's scene diagram, what does each rectangle stand for?",
+            "choices": [
+              "Something the player sees in the game",
+              "A script file",
+              "One class of an MVC pattern",
+              "A folder in the project"
+            ],
+            "answer": 0,
+            "why": "“Each rectangle represents an entity that's visible in the game from the player's perspective.”"
+          }
+        }
+      ],
+      "compare": {
+        "a": {
+          "title": "The Ball scene",
+          "text": "One saved file, `ball.tscn`: a `RigidBody2D` named Ball with a `Sprite2D` and a `CollisionShape2D`. Change Bounce here and save, and every ball updates.",
+          "drawing": {
+            "caption": "The Ball scene in the Scene dock",
+            "nodes": [
+              { "name": "Ball", "type": "RigidBody2D", "depth": 0 },
+              { "name": "Sprite2D", "type": "Sprite2D", "depth": 1 },
+              { "name": "CollisionShape2D", "type": "CollisionShape2D", "depth": 1 }
+            ]
+          }
+        },
+        "b": {
+          "title": "Ball6, one instance in Main",
+          "text": "Ball6 shows in Main as a single node. Its Gravity Scale was changed in the Inspector, so it keeps its own value whatever `ball.tscn` says.",
+          "image": {
+            "src": "instancing_main_scene_with_balls.webp",
+            "alt": "The editor with Main open: the Scene dock lists the walls and Ball to Ball6, with Ball6 selected. The Inspector shows Ball6 as a RigidBody2D with Gravity Scale 4.0; the 2D view shows the balls above the walls, Ball6 highlighted.",
+            "caption": "Ball6 selected in Main, its properties in the Inspector.",
+            "width": 1152,
+            "height": 750
+          }
+        },
+        "question": {
+          "prompt": "How do the Ball scene and Ball6 differ?",
+          "choices": [
+            "The scene is the blueprint; Ball6 is one copy made from it, with its own changes",
+            "They are the same node shown in two places",
+            "Ball6 is a second scene file",
+            "A change to Ball6 changes every ball"
+          ],
+          "answer": 0,
+          "why": "A saved scene “works as a blueprint”, and “each is an independent reproduction of a template scene”."
+        }
+      },
+      "exercises": [
+        {
+          "type": "predict",
+          "prompt": "You open `ball.tscn`, set Bounce to 0.5 and save. No instance has its own Bounce value. What happens to the balls in Main?",
+          "choices": [
+            "All of them bounce more",
+            "Only the first ball changes",
+            "None change until you instance them again",
+            "Only the selected ball changes"
+          ],
+          "answer": 0,
+          "why": "“Upon saving, all instances of the Ball in the project will see their values update.”"
+        },
+        {
+          "type": "blank",
+          "prompt": "Type the missing class name. Godot's names are case-sensitive.",
+          "text": "“We call those files ‘Packed Scenes’ as they pack information about your scene's content.” In the class reference, such a file is a ____.",
+          "answer": "PackedScene",
+          "why": "A saved scene is a `PackedScene`, “an abstraction of a serialized scene”."
+        },
+        {
+          "type": "fix",
+          "plain": true,
+          "prompt": "Four notes on the manual's two scenes so far. Which one is wrong?",
+          "lines": [
+            "The Ball's root is a `RigidBody2D`, which lets it fall and bounce on walls.",
+            "The playable character is built on a `CharacterBody2D`, with a `Camera2D` that follows it.",
+            "Both scenes have a `Sprite2D` and a `CollisionShape2D` under the root.",
+            "The Ball's root is a `CharacterBody2D` named Ball."
+          ],
+          "answer": 3,
+          "fixed": "The Ball's root is a `RigidBody2D` named Ball.",
+          "why": "The falling, bouncing ball is a `RigidBody2D`; the `CharacterBody2D` is the root of the playable character."
+        },
+        {
+          "type": "predict",
+          "prompt": "You open `ball.tscn` itself. Which node is its root?",
+          "choices": ["Ball, the `RigidBody2D`", "`Sprite2D`", "`CollisionShape2D`", "Main"],
+          "answer": 0,
+          "why": "Scenes “always have one root node” (lesson 1); here it is “a `RigidBody2D` node as its root named Ball”."
+        },
+        {
+          "type": "predict",
+          "prompt": "Main is the main scene and holds six Ball instances. You press F5. What runs?",
+          "choices": [
+            "Main, with the six balls as branches of its tree",
+            "`ball.tscn`, six times in six windows",
+            "Only the scene you have open",
+            "Main without the balls"
+          ],
+          "answer": 0,
+          "why": "F5 runs the main scene (lesson 1), and every instance in it comes together in the one scene tree (lesson 0)."
+        }
+      ],
+      "errors": [
+        {
+          "what": "On one ball instance, the values of its PhysicsMaterial cannot be changed.",
+          "fix": "“PhysicsMaterial is a resource”: right-click the Physics Material property in the Inspector and click Make Unique, then edit it for that instance.",
+          "source": "Godot manual, Creating instances, the note under Editing scenes and instances."
+        },
+        {
+          "what": "“Two objects with the same value for a name attribute are the same object.” In Godot: you take two nodes both named Ball, in two different scenes, to be one node.",
+          "fix": "A name only labels a node among its siblings; every instance is a separate node with its own properties, whatever it is called.",
+          "source": "Sorva 2012, Table A.1, row 70."
+        },
+        {
+          "what": "“Confusion between a class and its instance.” In Godot: you change one ball in Main and expect `ball.tscn` and every other ball to change with it.",
+          "fix": "A change on an instance stays on that instance; to change every ball, open `ball.tscn`, change the Ball node there and save.",
+          "source": "Sorva 2012, Table A.1, row 79 (Holland et al. 1997)."
+        }
+      ],
+      "exitStem": "One scene appears many times in a game because …"
     },
     {
       "id": "c1-l3",
