@@ -78,14 +78,17 @@ const CHOICE_NOTE: Partial<Record<ChoiceState, string>> = {
   'revealed-right': 'Correct answer',
 };
 
-/** One answer as a tree-row-like button: optional class icon, then the label. */
-export function choiceRow(label: string, options: { icon?: string; onChoose: () => void }): HTMLButtonElement {
+/**
+ * One answer as a tree-row-like button: optional class icon, then the label. `rich` labels (a
+ * description, when a card is flipped) render `inline code` and `____` slots and wrap over lines.
+ */
+export function choiceRow(label: string, options: { icon?: string; rich?: boolean; onChoose: () => void }): HTMLButtonElement {
+  const text = options.rich
+    ? el('span', { class: 'gv-choice__label gv-choice__label--rich' }, inlineRich(label))
+    : el('span', { class: 'gv-choice__label', text: label });
   const node = el('button', { class: 'gv-choice', attrs: { type: 'button', 'data-state': 'idle' } }, [
     options.icon ? icon(options.icon) : null,
-    el('span', { class: 'gv-choice__text' }, [
-      el('span', { class: 'gv-choice__label', text: label }),
-      el('span', { class: 'gv-choice__note' }),
-    ]),
+    el('span', { class: 'gv-choice__text' }, [text, el('span', { class: 'gv-choice__note' })]),
   ]);
   node.addEventListener('click', options.onChoose);
   return node;
@@ -260,12 +263,14 @@ export function richText(text: string, tag: 'p' | 'div' = 'p', options: { class?
       return;
     }
     if (!part.trim()) return;
-    const para = el(tag);
-    part.trim().split(/(`[^`]+`)/).forEach((piece) => {
-      if (/^`[^`]+`$/.test(piece)) para.append(el('code', { class: 'gv-inline-code' }, withBlanks(piece.slice(1, -1))));
-      else para.append(...withBlanks(piece));
-    });
-    root.append(para);
+    root.append(el(tag, {}, inlineRich(part.trim())));
   });
   return root;
+}
+
+/** One line of card text: `inline code` in JetBrains Mono and `____` as slots. */
+export function inlineRich(text: string): Node[] {
+  return text.split(/(`[^`]+`)/).flatMap((piece) =>
+    /^`[^`]+`$/.test(piece) ? [el('code', { class: 'gv-inline-code' }, withBlanks(piece.slice(1, -1)))] : withBlanks(piece),
+  );
 }

@@ -75,7 +75,8 @@ describe('live session flow', () => {
     expect(session.current?.id).toBe(firstId); // the other card sat between: never adjacent
     await session.answer('right');
     const result = await session.finish();
-    expect(result).toMatchObject({ seen: 2, right: 1, wrong: 1 });
+    // Neither card reached three showings with the last one right.
+    expect(result).toMatchObject({ seen: 2, right: 1, wrong: 1, learned: 0, continueTomorrow: 2 });
     // Graded by first answers: the wrong one is due tomorrow, the right one in three days.
     expect(result.dueTomorrow).toBe(1);
     expect(lastSession()).toBe(localDate(NOW));

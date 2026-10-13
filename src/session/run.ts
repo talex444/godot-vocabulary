@@ -3,7 +3,7 @@ import { isOverdue, newProgress, review, startOfDay, type Progress } from '../sc
 import type { Settings } from '../settings/load';
 import { planSession, seededRng, type FamilySummary, type Lesson, type Rng } from './build';
 import { drawChoices, type Draw } from './choices';
-import { answerCurrent, appendCards, currentCard, dropCard, showingIndex, startLearning, type LearningState } from './learning';
+import { answerCurrent, appendCards, currentCard, dropCard, isLearned, showingIndex, startLearning, type LearningState } from './learning';
 
 /** What the flow needs from the device; `src/session/deck.ts` wires the real store. */
 export interface RunDeps {
@@ -34,6 +34,10 @@ export interface SessionResult {
   seen: number;
   right: number;
   wrong: number;
+  /** New cards shown three times with the last answer right (decision 23). */
+  learned: number;
+  /** New cards answered this session that still needed showings when it ended. */
+  continueTomorrow: number;
   /** Cards from enabled families due before the end of tomorrow. */
   dueTomorrow: number;
 }
@@ -170,14 +174,16 @@ export class Session {
     return { correct, card };
   }
 
-  /** Skips the current card: it leaves this session and, through the store, the deck. */
-  async skip(reason?: string): Promise<void> {
-    const card = this.current;
-    if (!card) return;
-    this.loaded.skipped = new Set([...(this.loaded.skipped ?? []), card.id]);
-    this.learning = dropCard(this.learning, card.id);
-    this.drawn = undefined;
-    await this.deps.skipCard?.(card.id, reason);
+  /**
+   * Skips a card (the current one by default, or one just answered): it leaves this session and,
+   * through the store, the deck.
+   */
+  async skip(reason?: string, cardId: string | undefined = this.current?.id): Promise<void> {
+    if (cardId === undefined) return;
+    this.loaded.skipped = new Set([...(this.loaded.skipped ?? []), cardId]);
+    this.learning = dropCard(this.learning, cardId);
+    if (this.drawn?.cardId === cardId) this.drawn = undefined;
+    await this.deps.skipCard?.(cardId, reason);
   }
 
   /** Ends the session (also when the learner stops early) and reports it. */
@@ -194,10 +200,14 @@ export class Session {
       const counted = this.loaded.settings.families[p.family]?.enabled && !this.loaded.skipped?.has(p.cardId);
       if (counted && p.due.getTime() < endOfTomorrow) dueTomorrow++;
     }
+    const answeredNew = [...this.learning.first.keys()].filter((id) => this.learning.newIds.has(id) && !this.loaded.skipped?.has(id));
+    const learned = answeredNew.filter((id) => isLearned(this.learning, id)).length;
     return {
       seen: results.length,
       right: results.filter(Boolean).length,
       wrong: results.filter((r) => !r).length,
+      learned,
+      continueTomorrow: answeredNew.length - learned,
       dueTomorrow,
     };
   }

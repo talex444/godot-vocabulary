@@ -16,6 +16,18 @@ export function summaryScreen(result: SessionResult, nav: Nav): HTMLElement {
           stat('Wrong', result.wrong),
           stat('Due tomorrow', result.dueTomorrow),
         ]),
+        result.learned + result.continueTomorrow > 0
+          ? el('dl', { class: 'gv-stats gv-stats--summary' }, [
+              stat('Cards learned', result.learned),
+              stat('Continue tomorrow', result.continueTomorrow),
+            ])
+          : null,
+        result.learned + result.continueTomorrow > 0
+          ? el('p', {
+              class: 'gv-note',
+              text: 'A new card counts as learned after three looks with the last one right. The rest carry on at their next review.',
+            })
+          : null,
         el('p', {
           class: 'gv-note',
           text: result.seen === 0 ? 'No cards answered this time.' : 'Progress is saved on this device after every answer.',
