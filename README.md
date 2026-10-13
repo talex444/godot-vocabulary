@@ -55,6 +55,10 @@ pnpm fetch-sources   # clones/downloads the sources into data/sources/ (not comm
 pnpm generate        # writes src/data/cards.*.json; running it twice gives the same files
 ```
 
+## Courses
+
+On the Start screen, tap **Courses**. Course 1 follows the Godot manual's step-by-step pages, one lesson per page. Lesson 0, "What is a Godot game made of when it runs?", is written from the manual's "Overview of Godot's key concepts"; lessons 1 to 5 come in a later version. A lesson is one scrolling page: three of its cards as a pretest, then short explanations in the manual's own words with its pictures, a check after each, a comparison, exercises (four-choice, type the missing word, find the wrong line), the common mistakes with their fixes, and an optional exit ticket you write in your own words. Nothing in a lesson is scored. **Mark done** puts the lesson's cards first among your next new cards; Settings shows this as **Lesson cards first**, which turns on by itself with your first finished lesson.
+
 ## Add your own cards
 
 On the Start screen, tap **Add card**. Pick a family, write the question, the right answer, three wrong answers and an optional explanation, then **Save**. The app tells you in plain words if something is missing, if two answers are the same, or if the question gives the answer away. Your card becomes the family's next new card. **Your cards** below the form lists them, each with a **Delete**.
@@ -65,7 +69,7 @@ Your cards stay on your phone. They are never added to this repository.
 
 In **Settings → Data**:
 
-- **Export** saves one JSON file (`godot-vocabulary-YYYY-MM-DD.json`) with your progress, your settings, your own cards and your skipped cards. Files from older versions still import.
+- **Export** saves one JSON file (`godot-vocabulary-YYYY-MM-DD.json`) with your progress, your settings, your own cards, your skipped cards, your finished lessons and your exit tickets. Files from older versions still import.
 - **Import** reads such a file and offers two choices:
   - **Merge with this device** keeps your settings here, adds the file's cards and, for each card, keeps whichever progress was reviewed last.
   - **Replace everything on this device** wipes this device and restores the file's progress, settings and cards.
@@ -86,7 +90,7 @@ The bar is WCAG 2.2 Level AA, plus the AAA target size: every tap target is at l
 The app's code is MIT-licensed (see [`LICENSE`](LICENSE)). It is built from:
 
 - Godot Engine 4.7: class reference, class icons and editor theme colours (MIT, © Godot Engine contributors, Juan Linietsky, Ariel Manzur).
-- Godot documentation: "Juan Linietsky, Ariel Manzur and the Godot community" (CC BY 3.0).
+- Godot documentation: "Juan Linietsky, Ariel Manzur and the Godot community" (CC BY 3.0), including the sentences and screenshots quoted in the course lessons.
 - GitHub Docs glossary (CC BY 4.0, © GitHub, Inc.).
 - Inter and JetBrains Mono fonts (SIL Open Font License 1.1).
 - ts-fsrs (MIT), idb (ISC) and Workbox (MIT).

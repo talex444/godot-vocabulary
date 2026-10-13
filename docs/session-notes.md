@@ -468,3 +468,105 @@ Decisions 25, 27 and 28; done-criteria 41 to 45. Seven commits, none pushed, no 
 ### Deviations
 1. **The new test has not been seen failing on the old deck.** `git stash` needs approval in headless mode, so it was not run. The CoS counts (117 + 94 mixed pools on the old deck) show the test would have failed there.
 2. **The e2e test now chooses an icon card**, as described under Tests. Icon-less rows have no e2e test of their own. The unit parity test covers them.
+
+## GV-6a — courses: the lesson engine, the two screens, lesson 0 (2026-10-13)
+
+Decisions 31–42; done-criteria 47–55. Ten commits, none pushed.
+
+### The format (`src/courses/types.ts`, `src/data/courses/course-1.json`)
+- A **course** is `{ id, title, lessons[] }`. A lesson is either written (`CourseLesson`) or **planned** (`{ id, order, title, page, planned: true }`). Lessons 1–5 are planned rows that the list shows as "Coming in a later version."
+- A written lesson has:
+  - `id`, `order`, `title` (the focus question), `page` `{ title, url }` (a docs.godotengine.org link) and `cardIds` (≥ 3).
+  - `need` (paragraphs split by a blank line), `agenda` (3 lines) and `chunks[]`. Each chunk has `heading`, `text`, optional `code`, `image` `{ src, alt, caption, width, height }` and `drawing` `{ caption, nodes: { name, type, depth }[] }`, and one `check`.
+  - `compare` `{ a, b, question }`. Examples have `title`, `text` and optional code, image or drawing.
+  - `exercises[]`: `predict` (a four-choice check), `blank` (`text` or `code` with exactly one `____`, a one-word `answer`, `why`) and `fix` (`lines[4]`, `answer`, `fixed`, `why`, optional `plain` for prose lines).
+  - `errors[]` `{ what, fix, source }` (2–3), `exitStem`, and an optional `table` `{ caption, columns, rows: { head, cells } }` for decision 41. It is stored and validated but not rendered yet.
+- Text fields use the cards' inline rule (`code`, `____`). `validateCourse` returns every shape problem; the unit test runs it on every file in `src/data/courses/`.
+- **Pictures:** `image.src` is a file name. `scripts/lesson-images.mjs` (run by `pnpm generate`, and run once by hand this session) copies each named picture from `data/sources/godot-docs/img/` to `public/courses/img/`. The term check fails a missing one. `webp` joined the service worker's precache globs, so the pictures work offline.
+- `src/courses/index.ts` holds `COURSES`, `findLesson`, `pretestCards` (the three lowest `rank`s among `cardIds`) and `sessionLessons()`. `load()` in `run.ts` now passes the written lessons to the session builder, so `courseFirst` has lessons to work with.
+
+### The term check (`scripts/check-lessons.mjs`, `pnpm lint:lessons`, first step of `pnpm build` after tsc)
+- **What counts as code font:** `inline code` in any text field, `code` blocks, non-plain `fix` lines, a blank's `answer`, and drawing node `type`s. String literals, `#` comments and `____` inside code are skipped. URLs, alt text, ids and image names are never read.
+- **Resolution** (an index built from the three decks):
+  - A class name → `api:class:<Name>`.
+  - `Class.member` → the member card, if there is one.
+  - A bare `member` or `member()` → any member card of that name, or the `gd:*` card whose answer it is (`_ready()` → `_ready`, `@export`, `func`, `print`, …).
+- **Met** = this lesson's `cardIds` plus those of earlier written lessons in the same course.
+- **It fails when:**
+  - a token resolves to cards and none of them is met;
+  - a capitalised name resolves to no card at all (e.g. `Spatial`);
+  - a `cardId` is not in the decks;
+  - a picture is missing.
+- **It passes** a lower-case name with no card (a local variable is not vocabulary). That is my reading of "identifier": without it, lessons 3–5 could not show `var speed = 400`.
+- **Message:** `course-1 lesson c1-l0 ("…"): \`Timer\` in code font (chunks[0].text) is not a card the learner has met; add api:class:Timer to this lesson's or an earlier lesson's cardIds`.
+- The unit tests cover: an unmet class added to lesson 0; `func`/`_ready`/`add_child` caught in a code block while strings, comments and local names pass; an earlier lesson's card counting as met; and a class the decks lack.
+
+### Store and export
+- **Database v3:** a new store, `exitTickets` (keyPath `lessonId`; `text`, `date`), with `saveExitTicket` (text trimmed; empty text deletes the ticket), `getExitTicket` and `listExitTickets`.
+- **Export v3:** adds `exitTickets` with ISO dates. Import reads versions 1, 2 and 3.
+  - Merge keeps this device's ticket for the same lesson.
+  - Replace clears and restores.
+  - The error text is now "version 1, 2 or 3".
+- Settings' Export note names finished lessons and exit tickets.
+
+### Screens
+- **Start:** a flat **Courses** link comes first among Settings / Add card / About.
+- **Course list** (`courses.ts`): a 44 px row per lesson, laid out like a Create New Node row: order number in code font, "Lesson n: title", and the manual page in secondary text. Done lessons get a green tick plus hidden "(done)" text. Planned rows are not buttons: they show an outline and "Coming in a later version."
+- **Lesson page** (`lesson.ts`): one panel per step, `data-step` = `pretest`, `need`, `chunk-n`, `compare`, `exercises`, `errors`, `exit`.
+  - The header shows "Course 1 · Lesson 0", the question as the h2, and a "Manual: …" link that opens in a new tab. On reopen, the saved exit ticket shows there too ("Your exit ticket").
+  - **Pretest:** it reuses `drawChoices` (showing 0, forward) and `choiceRow`, with class icons as on the card screen. It shows "Right." / "Not quite. It is X." and makes no scheduler call. Three right answers reveal **Skip to the exercises**, a flat button that scrolls to and focuses the Exercises heading.
+  - **Checks, predict and fix:** each shows "Right." or "Not quite. The right answer is marked." / "The wrong line is marked.", then the one-sentence why, then a flat **Next** that focuses the next step's heading. Fix items also show the fixed line.
+  - **Typed blank** (`judgeBlank` in `src/courses/blank.ts`; `gapField` in the kit): a LineEdit-styled input in code font sits inside the sentence. For code snippets, `codeBlock` gained a `gap` option, so the input replaces the `____` slot in the line.
+    - Enter or **Check** submits. An empty field is not a try.
+    - A case-only miss shows "Check the case. GDScript names are case-sensitive." and counts as a miss. Any other miss shows "Not that word. One more try."
+    - The second miss fills in the answer, shows it and marks the item `data-result="wrong"`.
+    - A right answer shows "Right.", or "Second try, and you had it." when it came after a miss.
+  - **Tree drawing:** Scene-dock rows (editor icon, name, and the type in code font when it differs from the name), indented with the dock's guide line. It starts with the root; **Add the next node** reveals one row at a time and announces "Added Camera2D under Player." When every row is shown, the button is disabled and reads "All nodes added".
+  - **Errors:** a warning-coloured edge (like a docs note), the error, **Fix:**, and the source in secondary text.
+  - **Exit:** the question again, a note ("Optional, never scored, kept only on this device."), a multi-line field labelled with the stem, **Save** ("Saved on this device."), and **Mark done**. Mark done calls `markLessonDone`, sets `newCardMode: 'course'` if it was not already, and returns to the list.
+- **Settings:** a **Lesson cards first** switch (course mode) with a sentence saying it turns on by itself. The brief's e2e check "Settings shows course mode on" needed something visible, so I made it a switch rather than a read-only line.
+- **About:** a "Lessons and cards" panel (the two paths, and why memorise). The course attribution row is in About and `THIRD_PARTY_NOTICES.md`.
+
+### Lesson 0, measured
+- **Source:** "Overview of Godot's key concepts" (4.7 branch). It quotes the page's sentences in curly quotes, plus three class-reference briefs (`Node`, `PackedScene`, `SceneTree`). Framing is mine: the need, agenda, bridge sentences, questions and error fixes.
+- **Chunks:** 4 (Scenes 118 words, Nodes 141, The scene tree 95, Signals 108), so **462 words** in the explanation, inside 400–1,000. About 1,780 words on the whole page, which is a twenty-minute read-and-do.
+- **Cards (9):** `Node`, `PackedScene`, `SceneTree`, `Signal`, `CharacterBody2D`, `Camera2D`, `Sprite2D`, `CollisionShape2D`, `Node3D`. The pretest is `CharacterBody2D` (rank 1), `CollisionShape2D` (6) and `Node` (11).
+- **Pictures:** 5 of the page's 6 (`key_concepts_scene_example`, `character_nodes` (twice), `scene_tree`, `signals`, `main_menu` in compare). `node_menu` is not used. The drawing is the Player scene: Player (`CharacterBody2D`) → `Camera2D`, `Sprite2D`, `CollisionShape2D`.
+- **Checks and exercises:** 4 chunk checks; compare (Player scene vs the MainMenu scene: what they share); 3 exercises (predict, blank `CharacterBody2D`, plain-prose fix).
+- **Errors (3):**
+  - the page's note "‘Spatial’ Nodes are now called ‘Node3D’ starting with Godot 4";
+  - Sorva row 79 (class vs instance → saved scene vs the nodes made from it);
+  - Sorva row 91 (objects created by themselves → a scene is in the game only once it is in the tree).
+  - Row 70 is not used.
+- **Exit stem:** "When a Godot game runs, it is made of …".
+
+### e2e and reports
+- **`courses.spec.ts`** (3 tests, about 5 s together):
+  - the list (six rows, the planned note, no sideways scroll, the step order);
+  - the perfect-pretest skip;
+  - lesson 0 end to end, under one family at 3 new cards a day. Pretest wrong then right; a check and Next focus; the drawing to four rows; the blank with `characterbody2d`, then `CharacterBody2D`; fix; three errors; the ticket saved; Mark done and the tick; the ticket shown on reopen; the Settings switch on; export v3 with the lesson and the ticket. Then a session whose new cards are exactly the first three `cardIds`, a replace with an empty file (lesson not done, no ticket), and an import of the export (both back).
+- **`walkScreens`** now visits Courses and the lesson page, so the layout specs (44 px, 16 px, 320 px, 200 %, landscape) and the keyboard spec cover them. `axe.spec.ts` audits "courses", "lesson" and "lesson answered".
+- **Full suite:** 29 tests, about 16 s.
+- **`docs/axe-contrast.md`:** 10 findings. The 2 new ones are the same Godot accent-blue primary button (Mark done). `docs/contrast-report.md` is unchanged: no new colour pairs.
+- **Screenshots:** `courses.png`, `lesson-top.png` (pretest answered), `lesson-drawing.png` (extra: the tree at three rows), `lesson-exercise.png` (the case hint), and `lesson-end.png` (last error and the exit ticket). All the others were retaken.
+- **What the screenshots changed:**
+  - the blank's paragraph had line-height 2.9 on every line, and now has 1.6;
+  - nested straight quotes inside the manual's curly ones became ‘single’ quotes;
+  - planned lesson titles are no longer the focus white;
+  - pictures carry their size (no jump while a lazy picture loads, which had also put a focused row 0.33 px under the fold) and keep their natural width instead of stretching.
+- **Preview server:** started as `node node_modules/vite/bin/vite.js preview` (no pnpm wrapper, so no orphaned child) and stopped. The next `pnpm e2e` started its own server on 4173 with `--strictPort`, so the port was free.
+
+### Gates
+`pnpm typecheck`, `pnpm test` (18 files, 137 tests), `pnpm build` (with the term check), `pnpm lint:css` and `pnpm e2e` (29/29) are green on the final tree. Each commit had typecheck and the unit tests run before it. The full e2e ran before the e2e commit and again after the screenshot fixes.
+
+### Deviations and why
+1. **Commit order and grouping.** Lesson 0 went into the first commit with the format and the term check. The schema test, `pretestCards` and the screens all import `course-1.json`, so a format commit without it would not build. About came before the screens because it is independent. Two `fix` commits came out of the e2e and screenshot looks.
+2. **Lesson 0's minimal-fix uses prose lines** (`plain: true`). Lesson 0 has no code (decision 38), but the e2e asks for a minimal-fix item. The format still renders code lines (code font, the fixed line as a code block) for lessons 1–5.
+3. **Lesson 0's typed blank is an identifier in a quoted sentence**, not a code line, for the same reason. The code path (`codeBlock` with `gap`) exists but has no lesson using it yet.
+4. **Scope of the term check:** lower-case names with no card pass (see above). Drawing types and a blank's answer count as code font.
+5. **Planned lessons in the file.** Course 1 lists lessons 1–5 as `planned` rows with their manual pages, so the list shows six rows now and GV-6b only replaces them.
+6. **`Button` is not one of lesson 0's cards.** The page says "buttons" in plain words, and the lesson does too; the card comes with lesson 5.
+7. **The keyboard spec's in-view check allows 0.5 px.** On a long page the browser can scroll a focused row to a fractional edge (bottom 780.33 of 780). That is not obscured focus.
+8. **The pretest draw is random** (`Math.random`). It is not seeded per lesson, so the three distractor sets vary between visits, like the card screen.
+9. **`fetch-sources.mjs` was not run** (no network). Checked offline instead: its image rule (every `.. image::`/`.. figure::` in the introduction and step-by-step pages) names exactly the 75 files in `data/sources/godot-docs/img/`. The first-2D-game pages' pictures are not fetched, because today's hand fetch did not have them either.
+10. **`docs/decisions.md` has uncommitted CoS edits** (rows 31–43 and "Noted ideas"). I left them unstaged.
