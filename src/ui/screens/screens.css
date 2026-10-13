@@ -134,7 +134,15 @@
   display: none;
 }
 
-/* Settings. */
+/* Settings: the switch carries the family name, bold and flush like the Start screen's. */
+.gv-settings .gv-toggle {
+  padding-inline: 0;
+}
+
+.gv-settings .gv-toggle__label {
+  font-weight: 700;
+}
+
 .gv-load {
   display: grid;
   gap: 12px;

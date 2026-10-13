@@ -56,5 +56,46 @@ await page.getByRole('button', { name: 'End session' }).click();
 await page.getByRole('heading', { name: 'Session done' }).waitFor();
 await shot('summary.png');
 
+const ready = async (heading) => {
+  await page.getByRole('heading', { name: heading, exact: true }).waitFor();
+  await page.evaluate(() => document.fonts.ready);
+};
+const backToStart = async () => {
+  await page.getByRole('button', { name: 'Back', exact: true }).last().click();
+  await page.getByRole('button', { name: 'Start' }).waitFor();
+};
+
+await page.getByRole('button', { name: 'Done' }).click();
+await page.getByRole('button', { name: 'Settings' }).click();
+await ready('Settings');
+await shot('settings.png');
+await page.getByRole('button', { name: 'More: New cards per day' }).first().click();
+await page.locator('.gv-warning:not(:empty)').waitFor();
+await shot('settings-warning.png');
+await page.getByRole('button', { name: 'Fewer: New cards per day' }).first().click();
+await backToStart();
+
+await page.getByRole('button', { name: 'Add card' }).click();
+await ready('Add card');
+await page.getByLabel('Family').selectOption('github');
+await page.getByLabel('Question').fill('Replays your commits on top of another branch, one by one.');
+await page.getByLabel('Right answer').fill('rebase');
+await page.getByLabel('Wrong answer 1').fill('merge');
+await page.getByLabel('Wrong answer 2').fill('cherry-pick');
+await page.getByLabel('Wrong answer 3').fill('rebase');
+await page.getByRole('button', { name: 'Save' }).click();
+await page.locator('.gv-errors li').first().waitFor();
+await shot('add-card-errors.png');
+await page.getByLabel('Wrong answer 3').fill('squash');
+await page.getByRole('button', { name: 'Save' }).click();
+await page.getByRole('button', { name: 'Add another' }).click();
+await ready('Add card');
+await shot('add-card.png');
+await backToStart();
+
+await page.getByRole('button', { name: 'About' }).click();
+await ready('About');
+await shot('about.png');
+
 await browser.close();
 console.log(`Screenshots written to ${out}`);

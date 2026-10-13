@@ -24,7 +24,7 @@ export async function settingsScreen(nav: Nav): Promise<HTMLElement> {
     void saveSettings(settings);
   };
 
-  const families = el('div', { class: 'gv-stack' });
+  const families = el('div', { class: 'gv-stack gv-settings' });
   const showFamilies = (current: Settings) => {
     families.replaceChildren(
       ...FAMILIES.map((family) =>
