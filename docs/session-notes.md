@@ -185,3 +185,110 @@ Compared with the existing screenshots: the family switches sat 4 px in from the
 6. **Screenshots were not re-taken** after the CSS fix: `scripts/screenshot.mjs` needs a running preview server, and this session runs nothing in the background. At 360 px the layout is unchanged; the visible differences are inline code at 16 px instead of 15.2 px, and how text reflows at 320 px or 200%.
 7. **axe report rows** add the text and background colours next to the brief's screen, selector, expected and actual, because they make each row checkable against `contrast-report.md`.
 8. **Workflow action majors** (checkout v5, setup-node v5, upload-pages-artifact v4, deploy-pages v4, pnpm/action-setup v4) are the latest majors I know of. Not run on GitHub yet.
+
+## GV-4a — generator rules, pools, full descriptions, links, topics; scheduler; learning queue; skips and course hooks (2026-10-13)
+
+Logic and data only; no screens changed. Done-criteria 32, 33, 34, 36 (data half), 37 (store half), 38, 39.
+
+### Card data (done-criteria 34, 36, 39)
+`Card` gains `distractorPool`, `distractorIds`, `explainFull`, `docsUrl` and `topic`. `distractors` stays as the first three entries of the pool.
+
+- **Pools** hold up to 8 entries.
+  - Class cards: siblings under the same `inherits`, then the nearest ancestor's other children, then rank neighbours. Editor-only classes are never used. A class whose own card a rule dropped stays in the pool.
+  - Member cards: same-kind members of the class, then of its ancestors.
+  - GitHub: up to 6 terms from the same group, then other terms. Synonym sets never stand as each other's wrong answer (see deviation 6).
+  - Language cards (`generate.mjs`, so `data/cards/gdscript.json` is untouched): the hand-written wrong answers first, then same-kind answers of the same form (snippet or not), then any of the same kind.
+  - Pool sizes: **8 for 1,057 cards, 7 for 6, 4 for 3** (99.2% have six or more).
+- **`explainFull`**: the complete converted description, capped at 1,200 characters at the last sentence end with " …". The cap never cuts inside a code fence. Members get the signature line first. GitHub cards get "term: description". Language cards copy `explain`, the only text they have.
+- **`docsUrl`**: built in `scripts/lib/docs.mjs`.
+  - Class page `…/en/4.7/classes/class_<lower>.html`.
+  - Member anchors are docutils ids of `class_<Class>_<kind>_<member>`, e.g. `#class-timer-property-one-shot`.
+  - Manual sections use the Sphinx slug (`#if-else-elif`).
+  - Glossary: `…/github-glossary#<slug>`.
+- **Topics**: `scripts/topics.json`, read by `scripts/lib/topics.mjs`.
+  - Class topics come from the first staged page that mentions the class (step by step → first 2D game → GDScript pages), otherwise from the inheritance roots (Control → UI, Node3D → 3D nodes, CanvasItem → 2D nodes, Resource → Resources), otherwise Core.
+  - Members take their class's topic. Language cards take their page's topic; class-reference pages take that class's topic.
+  - GitHub topics: the group in `scripts/github-terms-allowlist.json` ("Git basics", "Branches and pull requests", "GitHub features").
+  - Class cards per topic: Resources 127, Core 89, 3D nodes 60, UI 42, GDScript basics 31, 2D nodes 24, Your first 2D game 16, Nodes and scenes 8, Signals 5, Your first script 5, and Instancing, Player input, Exports and Static typing 1 each.
+
+### Generator rules (done-criteria 38)
+`pnpm generate` prints each count. The removed ids are written to `data/removed-cards.json`, which the deck test reads.
+
+| Rule | Removed | Cards |
+|------|---------|-------|
+| (a) class brief identical (normalised) to another non-editor class's | 9 | CheckButton, CheckBox, TileMapLayer, TileMap, ParallaxBackground, XRPositionalTracker, AudioListener3D, NavigationMeshSourceGeometryData2D/3D |
+| (b) `api_type="editor"` | 6 | EditorPlugin, EditorInterface, EditorImportPlugin, EditorFileSystem, EditorScript, EditorSelection |
+| (c) prompt still has `____` or ≤ 2 words after masking (fallback: first sentence of the full description for classes, first sentence alone for members) | 9 | JSON, IP, RemoteTransform3D, GDExtension, GraphFrame; Color.hex, Transform3D.is_equal_approx, Transform3D.is_finite, Environment.adjustment_contrast |
+| (d) member description of ≤ 4 words | 12 | AnimatedSprite2D.offset/animation_changed/frame_changed/sprite_frames_changed, Animation.step, VisibleOnScreenNotifier2D.rect, CollisionObject2D.get_rid, CanvasLayer.offset/scale/transform, Label.justification_flags, TextureRect.texture |
+| (extra) fewer than 4 wrong answers | 7 | Vector2.x/y, Vector3.x/y/z, Transform3D.basis/origin |
+
+The fallback saved Image ("____ datatype." → "Native image datatype."). **New counts: Godot API 850 (411 class + 439 member, was 431 + 455), GDScript 120, GitHub 96, total 1,066.** The README count is updated. `pnpm generate` run twice gives an identical diff.
+
+### Scheduler (done-criteria 32)
+`enable_short_term: false`. ts-fsrs 5.4.2 numbers, pinned in `tests/unit/fsrs.test.ts`:
+
+| Answer | Result |
+|--------|--------|
+| New card, right | Review, due in **3 days** |
+| Right again | **14 days** |
+| New card, wrong | Due in **1 day** |
+| Wrong on a Review card | Stays in Review, 1 lapse, due in **2 days** (shorter than the 14) |
+
+There is no Relearning state.
+
+### Learning queue (done-criteria 33), exactly as implemented (`src/session/learning.ts`)
+- **Plan**: `planSession(input, rng)` returns `{ order, newIds }`. `order` holds the first showings, interleaved as before. `newIds` are today's new cards. Cards with progress are reviews.
+- **Showings**: a new card is shown until it has been shown **≥ 3 times AND its last answer was right**, or the session ends. A review card is shown once.
+- **Due slots**: slot = the number of answers given before a showing. First showings are due at their index in `order`. After an answer at slot `s`, a card that is not done is due at `s + max(8, floor(remaining / 4))`, where `remaining` = showings still queued. It goes in behind everything due at or before that slot, but always with at least `min(8, remaining)` showings in front of it. The queue is served in due order.
+- **Tail**: a card with nothing left to put between is not asked again (never adjacent).
+- **Grading**: only the first answer of the session is returned as `grade` and passed to `review()`; repeats never touch FSRS. "Seen/right/wrong" in the summary count first answers.
+- **Tests**: never adjacent and gap ≥ min(8, remaining) over 1,000 seeded sessions (1–30 new + 0–29 reviews, 70% right); three showings; wrong-until-right (5 showings after 4 wrong); first-answer-only grades; reviews once; append.
+
+10-card trace (seed 42, about 75% right; first answers c0✓ c1✓ c2✗ c3✓ c4✓ c5✓ c6✓ c7✓ c8✗ c9✓):
+```
+1:c0 2:c1 3:c2 4:c3 5:c4 6:c5 7:c6 8:c7 9:c8 10:c0 11:c9 12:c1 13:c2 14:c3 15:c4 16:c5 17:c6 18:c7 19:c8 20:c0
+21:c9 22:c1 23:c2 24:c3 25:c4 26:c5 27:c6 28:c7 29:c8 30:c9 31:c7
+```
+c7 was wrong on its third showing, so it got a fourth.
+
+### What GV-4b needs
+- **`src/session/choices.ts`**: `drawChoices(card, showingIndex, rng, previousSets, cardsById?)` returns `{ direction: 'forward' | 'flipped', choices: { text, correct, cardId? }[4], key }`.
+  - `showingIndex` counts from 0. Showings 1 and 2 flip when `canFlip(card)` holds (class/method/property/signal/term, or a language keyword/builtin/lifecycle/concept/operator/annotation card without `code`). The flip also needs three pool ids that resolve to cards with no `code`, and an unused set of four. Otherwise the draw is forward.
+  - Flipped choices are prompts. The right one is the card's own `prompt`, and the screen shows `card.answer` as the question.
+  - Keep each `key` in `previousSets`. Pools of 4 have only four sets, so a fifth forward showing repeats one.
+- **`src/session/learning.ts`**: `startLearning(plan)`, `currentCard`, `showingIndex`, `answerCurrent(state, correct)` → `{ state, grade, requeuedAt }`, `appendCards`, `dropCard`, `isLearned`, `requeueDelay`, `SHOWINGS`, `GAP`.
+- **`src/session/build.ts`**:
+  - `planSession`, `Lesson`, `SessionPlan`.
+  - `SessionInput` gains `skipped?`, `lessonsDone?` and `lessons?`.
+  - `Settings.newCardMode` (`'frequency'` by default; stored, no UI).
+  - `buildSession` remains as `planSession(...).order`.
+- **`src/session/run.ts`**: already uses the plan and the state machine.
+  - New: `session.showing`, `session.draw()` (cached per showing; adds to the card's sets) and `session.skip(reason?)`.
+  - `answer(choiceText)` checks against the current draw, so a flipped answer is the description text. Without `draw()` it compares with `card.answer`, which is what today's card screen does.
+  - `RunDeps` gains optional `getSkipped`, `skipCard` and `getLessonsDone` (wired in `deck.ts`).
+- **`src/store/db.ts`**: database v2 with stores `skipped` (cardId, reason?, at) and `lessonsDone` (lessonId, at).
+  - Functions: `listSkipped`, `getSkippedIds`, `skipCard(id, reason?, at?)` (reason trimmed, empty dropped), `unskipCard`, `listLessonsDone`, `getLessonsDoneIds`, `markLessonDone` (first date kept).
+  - `exportAll()` writes version 2 with `skipped` and `lessonsDone` (ISO dates). `importAll` reads versions 1 and 2. Replace clears both stores; merge adds missing entries and keeps this device's on the same id. The error text is now "Not a godot-vocabulary export (version 1 or 2)."
+- **Card screen still to do**: it still shuffles `card.distractors` itself. It should call `session.draw()`; show `explainFull` and a `docsUrl` link (`target="_blank" rel="noopener"`) after answering; and add the Skip control.
+
+### Gates
+`pnpm typecheck`, `pnpm test` (16 files, 114 tests), `pnpm build`, `pnpm lint:css` green. **`pnpm e2e`: 20 pass, 2 fail**, both left for GV-4b:
+1. `data.spec.ts` "add a card, export, then a fresh install imports…": it expects `file.version` 1, and the export is now version 2.
+2. `session.spec.ts` "12: the summary shows … due tomorrow": it expects due tomorrow ≥ 2 after two answers. With short-term steps off, a right first answer is due in 3 days, so only wrong answers count.
+
+The other specs pass because the card screen still draws forward from `distractors`. They will need changes once the screen uses `draw()` (repeats, flipped cards) and once session lengths include repeats: `aria-valuemax` now grows as repeats are queued.
+
+### Deviations and why
+1. **The pool's ids live in a parallel `distractorIds`** rather than the pool being ids. Forward choices need the text even when no card exists (a dropped class, a hand-written wrong answer), and flipped choices need a card to take the prompt from. `distractorIds[i]` is the id entry `i` would have; `drawChoices` resolves it through `cardsById`. Unresolvable hand-written language distractors get `gd:wrong:<kind>:<text>`.
+2. **The new `Card` fields are optional in the type.** Custom cards have no docs link, pool or topic. Every generated card has them (deck test). `drawChoices` falls back to `distractors`.
+3. **Rule (c) applies to Godot API cards only.** GitHub prompts ("A ____ is…") and the hand-written language prompts use the blank as the question itself.
+4. **Rule (a) drops both classes of a pair** and compares against every non-editor class, not only those in the deck. That removes TileMap, TileMapLayer and ParallaxBackground, which a 2D learner meets. **Chief of Staff:** worth deciding whether such classes should fall back to the first sentence of their full description (as rule (c) does) instead of being dropped.
+5. **Extra rule "fewer than 4 wrong answers"** (7 cards). The deck test asserts pools ≥ 4 everywhere, and these cards had exactly three wrong answers.
+6. **The GitHub allow-list changed shape** to `{ terms: [[term, group]…], synonyms: [[…]…] }`. Preferring the same group brings near-synonyms together (main/master/default branch, feature/topic branch, review/pull request review, …), and two of them could both fit one description. Eleven synonym sets keep them apart. The sets are my judgement.
+7. **Topic list**: besides the brief's examples, `topics.json` names "Instancing", "Your first script", "Player input", "GDScript advanced", "Format strings", and "Built-in functions" (for `@GlobalScope`/`@GDScript` language cards). Because step-by-step pages come first, Area2D, Timer and Button get "Signals", and CharacterBody2D gets "Nodes and scenes".
+8. **The learning queue uses due slots, not a plain insert at position `max(8, remaining/4)`.** The first version inserted at that position, which pushed the cards behind it back on every answer. In a 10-card session the last card was never shown until the end, and then only once. With due slots the spacing rule is the same, first showings keep their place, and the minimum gap still holds. A repeat can wait one or two slots longer than its delay when other repeats are due at the same time (pinned in the test: 9, then 10 between).
+9. **Docs anchors not verified for virtual methods, annotations and `@` classes.** They are built by the docutils id rule from the class reference's labels: `_ready` → `#class-node-private-method-ready`, `@warning_ignore` → `#class-gdscript-annotation-warning-ignore`, `@GlobalScope.lerp` → `class_@globalscope.html#class-globalscope-method-lerp`. Worth one check in a browser.
+10. **`run.ts` is rewired to the plan and state machine** (logic, not a screen), so the live app never sends a repeat to FSRS. Without that, the scheduler change would have made the old re-ask path grade repeats.
+11. **Commit order**: the learning queue was committed before the scheduler, so each commit's unit tests pass on its own. The learning commit was also run under the old short-term setting.
+12. **Bundle**: the main chunk grew from 697 kB to 1,635 kB (249 kB gzip), mostly `explainFull` and the pools. It is still precached. Code-splitting the decks is the fix if load time matters.
+13. **Gates**: `CLAUDE.md` asks for `pnpm e2e` green before every commit. The store and notes commits went in with the two expected e2e failures above, as the brief directs.
