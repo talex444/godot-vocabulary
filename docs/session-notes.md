@@ -96,3 +96,49 @@ Kept on purpose: the code block has the same colour as the panel (`script_backgr
 
 ### Left for session 2c / 3
 Settings, Add card, About screens (the kit's `toggle`, `stepper` and `textField` are ready for them), export/import UI, the contrast report (28), and the e2e + axe specs (25, 27, 29–31).
+
+## GV-2c — settings, add card, export/import, About, contrast report (2026-10-13)
+
+### Built
+- **Navigation**: `Nav` gained `settings()`, `addCard()` and `about()`; the Start screen's three flat buttons open them. `placeholderScreen` now serves only as the "Something went wrong" screen. Every new screen ends with a secondary **Back** (to Start) in a `gv-links` nav below the panels.
+- **Settings** `src/ui/screens/settings.ts` (done-criteria 19): one block per family (`role="group"` named after the family) with a `toggle` carrying the family name (bold, flush, like Start's family names) and a `stepper` "New cards per day", 0–50. Below them a `role="status"` area: `stat` "New per day" (`totalNewPerDay`) and "Reviews per day" ("about N", `projectedReviewsPerDay`). Above twenty it adds the warning in `warning_color`: "Above twenty new cards a day the review pile grows to about two hundred a day. It is allowed; it is a lot." The value is still accepted. Retention is not shown. Every change calls `saveSettings` straight away.
+- **Data panel** (same screen; helpers in `src/store/file.ts`, tested in `tests/unit/file.test.ts`):
+  - **Export** writes `exportAll()` as pretty-printed JSON to `godot-vocabulary-YYYY-MM-DD.json` (local date), using a Blob and an `<a download>`. File shape: `{ version: 1, exportedAt, progress: [ts-fsrs card fields + cardId, family, seenAt; dates as ISO strings], settings: { families: {…: { enabled, newPerDay }}, retention }, customCards: [Card + custom: true] }`.
+  - **Import** is a secondary button that opens a hidden `<input type="file" accept=".json,application/json">`. After a file is picked, the screen asks "<file name>: how should it be imported?" and offers two buttons, each with a sentence under it:
+    - **Merge with this device**: "Keeps your settings here. Adds the file's custom cards. For each card, keeps whichever progress was reviewed last."
+    - **Replace everything on this device**: "Deletes the progress and custom cards on this device, then restores the file's progress, settings and custom cards."
+    - Plus **Cancel**.
+  - The result is one line, e.g. "Restored 12 cards of progress and 1 custom card." (the counts are what the file carried). A bad file gives, in `error_color`, "Nothing was imported." followed by the reason ("This file is not a JSON file." or the store's "Not a godot-vocabulary export (version 1)."). After an import the family controls redraw from the stored settings.
+- **Add card** `src/ui/screens/add-card.ts` + `src/cards/custom.ts` (done-criteria 20; tested in `tests/unit/custom-card.test.ts`):
+  - Fields: Family (select), Question (multi-line), Right answer, Wrong answer 1–3, Explanation (optional, multi-line).
+  - **Save** checks the draft and lists problems in plain words in a `role="alert"` list: "Write a question." / "Write the right answer." / "Write all three wrong answers." / "The four answers must all be different." (ignores case and outer spaces) / "The question gives the answer away: take the answer out of it." (the answer appears anywhere in the question, ignoring case). The offending fields get `aria-invalid` and an `error_color` ring; when focused they show the accent ring instead.
+  - The saved card gets id `custom:<family>:<slug of the answer>-<6 random base-36 chars>` (`crypto.getRandomValues`), kind `custom` (shown as "Your card" on the card screen), source `{ doc: 'custom', ref: 'your card' }`, and `rank` = floor(the family's highest rank, decks and custom cards together) + 1. It is then the family's next new card in rank order.
+  - Then "Card saved" names the answer and offers **Add another** (keeps the family) and **Back**. Below the form, "Your cards" lists every custom card: answer, family and prompt (clamped to two lines), and a flat **Delete**. Delete swaps in "Delete this card and its progress?" with **Delete** / **Keep**, inline, with no browser dialog.
+- **About** `src/ui/screens/about.ts` (done-criteria 22; `tests/unit/about.test.ts`):
+  - Two sentences on what the app is, then the unofficial statement and "The Godot logo is not used; the app icon is its own glyph."
+  - Card counts per family read from the bundled decks (886 / 120 / 96), plus the number of your own cards.
+  - Every notice from `THIRD_PARTY_NOTICES.md`: Godot Engine MIT copyright, the Godot docs CC BY 3.0 line with the licence URL, GitHub Docs CC BY 4.0, the demo projects, Inter and JetBrains Mono OFL, ts-fsrs, idb, Workbox. The test checks the required lines and that every `dependencies` entry in `package.json` appears both here and in the notices file.
+  - The repository link `https://github.com/talex444/godot-vocabulary` (accent link, 44 px tall), and "Version 0.1.0" from `package.json`.
+- **Kit additions**: `selectField` (Godot's OptionButton: a native `<select>` in the LineEdit box, with a down-arrow glyph drawn in `currentColor`), the `[hidden] { display: none !important }` rule, and the invalid-field ring. Screen-level classes in `screens.css`: `gv-load`, `gv-warning`, `gv-error`, `gv-result`, `gv-label`, `gv-option` (a button with a sentence under it), `gv-row`, `gv-errors`, `gv-custom…`, `gv-credits`, `gv-link`. Also `.gv-screen p { margin: 0 }`; the summary and start screenshots are unchanged by it.
+- **Contrast report** `tests/unit/contrast.test.ts` → `docs/contrast-report.md` (done-criteria 28):
+  - How it measures: WCAG 2.x relative luminance. A translucent foreground is composited onto its background, and a translucent background onto `base_color`, both rounded to 8 bits.
+  - What it covers: 49 pairs. Body, secondary and disabled text on `base_color`, `dark_color_1` and the script background. Focus text on `dark_color_1`. Accent heading (large, 3:1), accent link text (4.5:1) and accent focus ring (3:1) on `base_color` and `dark_color_1`. Success, warning and error on `dark_color_1` and on `base_color` (the choice rows sit on `base_color`). All 16 syntax colours the tokenizer uses, on the script background. Code text on the blank line's `current_line_color`. Inline code. Primary and secondary button text. As controls (3:1): field border, switch tracks and thumb, right/wrong rings, blank slot.
+  - It never fails on a ratio. It rewrites the file and fails only when the committed report differs from what it computed, so the report cannot go stale.
+  - **5 of 49 pairs fall short**: disabled text on all three backgrounds (3.18–3.22:1; WCAG 1.4.3 exempts inactive controls, but they are listed anyway), primary button text, white on accent (2.71:1), and the blank slot, `selection_color` on `dark_color_1` (2.08:1).
+- **Screenshots**: `scripts/screenshot.mjs` now also captures `settings.png`, `settings-warning.png` (Godot API at 11, total 21), `add-card-errors.png` (a duplicate answer), `add-card.png` (after saving one card, so the list shows it) and `about.png`. The session screenshots were re-taken in the same run (random order, same screens).
+- **Gates**: `pnpm typecheck`, `pnpm test` (14 files, 83 tests), `pnpm build`, `pnpm lint:css` green. `pnpm e2e` not run (no specs; session 3).
+
+### What the critique changed
+Compared with the existing screenshots: the family switches sat 4 px in from the stepper labels and looked lighter than the Start screen's family names. They are now flush and bold. Nothing else was restyled.
+
+### Deviations and why
+1. **No README yet**, so done-criteria 28's "the README names that file as a known deviation" is open. The README is session 3's (26); it should link `docs/contrast-report.md`.
+2. **`selectField` added to the kit**: no existing component fitted a family choice. A native select keeps keyboard and screen-reader behaviour for free.
+3. **Extra screenshot** `add-card-errors.png`, to show the validation. The brief listed four screenshots.
+4. **The import result counts what the file carried**, not what a merge actually changed: a merge that keeps newer local progress still reports the file's totals. Counting the real writes would mean changing `importAll`'s return value; not done.
+5. **The warning text is fixed** ("about two hundred a day"), even when the projected figure beside it reads 210 or more. That is the brief's wording; the number is right there in the stat.
+6. **About's attribution text is a copy of `THIRD_PARTY_NOTICES.md`**, not read from it at runtime (the file isn't shipped). `about.test.ts` guards the required lines and the dependency names, not the exact wording.
+7. **Export on a phone**: the download goes through `<a download>`. On Android Chrome this lands in Downloads; on iOS Safari it opens the share/save sheet. Not checked on a device this session.
+
+### Left for session 3
+21 (export → fresh install → import e2e), 25, 27 (axe on settings, add-card and about too), 29–31, 26 (README, including the contrast-report link from deviation 1).
