@@ -919,9 +919,192 @@
     {
       "id": "c1-l4",
       "order": 4,
-      "title": "Listening to player input",
+      "title": "How does a script know which key the player is pressing?",
       "page": { "title": "Listening to player input", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/scripting_player_input.html" },
-      "planned": true
+      "cardIds": [
+        "api:class:Input",
+        "api:method:Input.is_action_pressed",
+        "gd:keyword:if",
+        "gd:keyword:true",
+        "gd:lifecycle:_unhandled_input"
+      ],
+      "need": "The icon from the last lesson runs in circles by itself. A game hands that control to the player: turn while they hold left or right, move while they hold up.\n\nNothing in a node changes by itself when a key goes down. The script has to ask, and the manual's way to ask on every frame is a single object that the whole game can reach. Its answer is yes or no, and an `if` turns that answer into a choice.",
+      "agenda": [
+        "Two tools for input: the input callbacks and the `Input` singleton.",
+        "`Input.is_action_pressed()` and `if`: turning only while a key is held.",
+        "Moving forward only while up is held."
+      ],
+      "chunks": [
+        {
+          "heading": "Two tools",
+          "text": "“You have two main tools to process the player's input in Godot:”\n\n“1. The built-in input callbacks, mainly `_unhandled_input()`. Like `_process()`, it's a built-in virtual function that Godot calls every time the player presses a key. It's the tool you want to use to react to events that don't happen every frame, like pressing Space to jump.”\n\n“2. The `Input` singleton. A singleton is a globally accessible object. Godot provides access to several in scripts. It's the right tool to check for input every frame.”\n\n“We're going to use the `Input` singleton here as we need to know if the player wants to turn or move every frame.”",
+          "image": {
+            "src": "scripting_first_script_moving_with_input.gif",
+            "alt": "Animation: the Godot icon turning and moving across a grey background, steered with the arrow keys.",
+            "caption": "Where this lesson ends: turn with left and right, move with up.",
+            "width": 782,
+            "height": 488
+          },
+          "check": {
+            "prompt": "The player presses Space once to jump. Which tool does the manual recommend for that?",
+            "choices": [
+              "An input callback, such as `_unhandled_input()`",
+              "The `Input` singleton, asked every frame",
+              "`_init()`",
+              "`print()`"
+            ],
+            "answer": 0,
+            "why": "Callbacks are “the tool you want to use to react to events that don't happen every frame, like pressing Space to jump.”"
+          }
+        },
+        {
+          "heading": "Turning with the arrow keys",
+          "text": "In `_process()`, the `rotation` line gives way to this:\n\n“Our `direction` local variable is a multiplier representing the direction in which the player wants to turn. A value of `0` means the player isn't pressing the left or the right arrow key. A value of `1` means the player wants to turn right, and `-1` means they want to turn left.”\n\n“A conditional statement starts with the `if` keyword in GDScript and ends with a colon. The condition is specifically the expression between the keyword and the colon at the end of the line.”",
+          "code": "var direction = 0\nif Input.is_action_pressed(\"ui_left\"):\n\tdirection = -1\nif Input.is_action_pressed(\"ui_right\"):\n\tdirection = 1\n\nrotation += angular_speed * direction * delta",
+          "check": {
+            "prompt": "The player holds neither arrow key. What is `direction` when the `rotation` line runs?",
+            "choices": [
+              "`0`, so the icon does not turn",
+              "`1`",
+              "`-1`",
+              "Whatever it was on the last frame"
+            ],
+            "answer": 0,
+            "why": "Each frame starts with `var direction = 0`, and neither `if` changes it."
+          }
+        },
+        {
+          "heading": "Asking Input",
+          "text": "“To check if a key was pressed this frame, we call `Input.is_action_pressed()`. The method takes a text string representing an input action and returns `true` if the action is pressed …”\n\n“The two actions we use above, ‘ui_left’ and ‘ui_right’, are predefined in every Godot project. They respectively trigger when the player presses the left and right arrows on the keyboard or left and right on a gamepad's D-pad.”\n\n“You can see and edit input actions in your project by going to Project > Project Settings and clicking on the Input Map tab.”\n\n“Finally, we use the `direction` as a multiplier when we update the node's `rotation`: `rotation += angular_speed * direction * delta`.”",
+          "check": {
+            "prompt": "The player holds the right arrow. What does `Input.is_action_pressed(\"ui_right\")` return on that frame?",
+            "choices": ["`true`", "`1`", "The name of the key", "Nothing: it waits for the key"],
+            "answer": 0,
+            "why": "It “returns `true` if the action is pressed”; ‘ui_right’ is “predefined in every Godot project”."
+          }
+        },
+        {
+          "heading": "Moving when pressing up",
+          "text": "“To only move when pressing a key, we need to modify the code that calculates the velocity.” The `var velocity` line becomes:\n\n“We initialize the `velocity` with a value of `Vector2.ZERO`, another constant of the built-in Vector type representing a 2D vector of length 0.”\n\n“If the player presses the ‘ui_up’ action, we then update the velocity's value, causing the sprite to move forward.” The `position += velocity * delta` line stays as it was.\n\n“If you run the scene, you should now be able to rotate with the left and right arrow keys and move forward by pressing Up.”",
+          "code": "var velocity = Vector2.ZERO\nif Input.is_action_pressed(\"ui_up\"):\n\tvelocity = Vector2.UP.rotated(rotation) * speed",
+          "check": {
+            "prompt": "The player lets go of Up. What is `velocity` on the next frame?",
+            "choices": [
+              "`Vector2.ZERO`, so the icon stops moving",
+              "The last velocity, so it glides on",
+              "`Vector2.UP`",
+              "`speed`"
+            ],
+            "answer": 0,
+            "why": "Each frame starts with `var velocity = Vector2.ZERO`; only a held ‘ui_up’ changes it."
+          }
+        },
+        {
+          "heading": "Summary",
+          "text": "“In summary, every script in Godot represents a class and extends one of the engine's built-in classes. The node types your classes inherit from give you access to properties, such as `rotation` and `position` in our sprite's case.”\n\n“In GDScript, the variables you put at the top of the file are your class's properties, also called member variables. Besides variables, you can define functions, which, for the most part, will be your classes' methods.”\n\n“Godot provides several virtual functions you can define to connect your class with the engine. These include `_process()`, to apply changes to the node every frame, and `_unhandled_input()`, to receive input events like key and button presses from the users.”\n\n“The `Input` singleton allows you to react to the player's input anywhere in your code. In particular, you'll get to use it in the `_process()` loop.”",
+          "check": {
+            "prompt": "`speed` sits at the top of the script; `velocity` is declared inside `_process()`. Which one is a member variable?",
+            "choices": ["`speed`", "`velocity`", "Both", "Neither"],
+            "answer": 0,
+            "why": "“The variables you put at the top of the file are your class's properties, also called member variables”; `velocity` is local to `_process()`."
+          }
+        }
+      ],
+      "compare": {
+        "a": {
+          "title": "The Input singleton",
+          "text": "Asked on every frame inside `_process()`: is this action held right now? Right for turning and moving, which last as long as a key is down.",
+          "code": "if Input.is_action_pressed(\"ui_up\"):\n\tvelocity = Vector2.UP.rotated(rotation) * speed"
+        },
+        "b": {
+          "title": "An input callback",
+          "text": "`_unhandled_input()`: a virtual function “Godot calls every time the player presses a key.” Right for events that happen once, like a jump on Space."
+        },
+        "question": {
+          "prompt": "Holding Up keeps the icon moving forward. Which tool fits that, and why?",
+          "choices": [
+            "`Input.is_action_pressed()` in `_process()`: it is asked every frame",
+            "`_unhandled_input()`: it runs every frame",
+            "`_init()`: it runs when the key goes down",
+            "Either one: they are called at the same moments"
+          ],
+          "answer": 0,
+          "why": "The `Input` singleton is “the right tool to check for input every frame”; the callback reacts once to each press."
+        }
+      },
+      "exercises": [
+        {
+          "type": "predict",
+          "prompt": "The player holds Left and Right together. What is `direction` when the `rotation` line runs?",
+          "code": "var direction = 0\nif Input.is_action_pressed(\"ui_left\"):\n\tdirection = -1\nif Input.is_action_pressed(\"ui_right\"):\n\tdirection = 1",
+          "choices": ["`1`", "`-1`", "`0`", "`2`"],
+          "answer": 0,
+          "why": "Both conditions are `true`, so `direction` is set to `-1` and then to `1`; the later line wins."
+        },
+        {
+          "type": "blank",
+          "prompt": "Type the method that asks whether an action is held. GDScript names are case-sensitive.",
+          "code": "var velocity = Vector2.ZERO\nif Input.____(\"ui_up\"):\n\tvelocity = Vector2.UP.rotated(rotation) * speed",
+          "answer": "is_action_pressed",
+          "why": "`Input.is_action_pressed()` “takes a text string representing an input action and returns `true` if the action is pressed”."
+        },
+        {
+          "type": "fix",
+          "plain": true,
+          "prompt": "Four notes on the two input tools. Which one is wrong?",
+          "lines": [
+            "`_unhandled_input()` is a virtual function Godot calls when the player presses a key.",
+            "The `Input` singleton can be asked from anywhere in your code.",
+            "Jumping once on Space suits an input callback.",
+            "Checking on every frame whether Left is held suits `_unhandled_input()`."
+          ],
+          "answer": 3,
+          "fixed": "Checking on every frame whether Left is held suits the `Input` singleton.",
+          "why": "The `Input` singleton is “the right tool to check for input every frame”."
+        },
+        {
+          "type": "predict",
+          "prompt": "You delete `* delta` from the turning line, so it reads `rotation += angular_speed * direction`. What changes?",
+          "choices": [
+            "The turn per second now depends on the frame rate, and is far faster",
+            "Nothing: `delta` is always 1",
+            "The icon turns only once",
+            "Left and Right swap"
+          ],
+          "answer": 0,
+          "why": "`delta` is what makes “our motion independent of our framerate” (lesson 3); without it the icon turns `angular_speed` radians every frame."
+        },
+        {
+          "type": "predict",
+          "prompt": "Two instances of the sprite scene sit in one scene, and the player holds Left. What happens?",
+          "choices": [
+            "Both turn: each runs its own `_process()` and asks `Input`",
+            "Only the first one turns",
+            "Neither: `Input` answers one node only",
+            "They take turns, one frame each"
+          ],
+          "answer": 0,
+          "why": "Each instance is its own node running the same script (lesson 2), and the `Input` singleton is “a globally accessible object”."
+        }
+      ],
+      "errors": [
+        {
+          "what": "The icon still runs in circles on its own after you add the turning code.",
+          "fix": "Comment out the old `var velocity = Vector2.UP.rotated(rotation) * speed` and `position += velocity * delta` lines: “This will ignore the code that moved the icon's position in a circle without user input.”",
+          "source": "Godot manual, Listening to player input, the step after the turning code."
+        },
+        {
+          "what": "“Values are updated automatically according to a logical context.” In Godot: you expect `velocity` to change by itself when Up is pressed, and write no `if`.",
+          "fix": "Nothing changes by itself: on every frame, ask `Input.is_action_pressed(\"ui_up\")` in `_process()` and set `velocity` when it returns `true`.",
+          "source": "Sorva 2012, Table A.1, row 3 (Ragonis & Ben-Ari 2005a)."
+        },
+        {
+          "what": "“Variables always receive a particular default value upon creation.” In Godot: you write `var velocity` with no value and expect it to start as a zero vector.",
+          "fix": "Give the variable its starting value yourself, as the manual does: `var velocity = Vector2.ZERO`.",
+          "source": "Sorva 2012, Table A.1, row 10 (du Boulay 1986; Samuray 1989)."
+        }
+      ],
+      "exitStem": "A script knows which key is pressed because …"
     },
     {
       "id": "c1-l5",
