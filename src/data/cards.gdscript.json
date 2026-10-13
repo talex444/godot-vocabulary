@@ -17,7 +17,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Inheritance",
       "version": "4.7"
     },
-    "rank": 0
+    "rank": 0,
+    "distractorPool": [
+      "class_name",
+      "class",
+      "super",
+      "void",
+      "var",
+      "if",
+      "is",
+      "for"
+    ],
+    "distractorIds": [
+      "gd:keyword:class_name",
+      "gd:keyword:class",
+      "gd:keyword:super",
+      "gd:keyword:void",
+      "gd:keyword:var",
+      "gd:keyword:if",
+      "gd:keyword:is",
+      "gd:keyword:for"
+    ],
+    "explainFull": "`extends` names the class the script inherits from, so this script adds behaviour to a CharacterBody2D node.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#inheritance",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:func",
@@ -36,7 +59,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Functions",
       "version": "4.7"
     },
-    "rank": 1
+    "rank": 1,
+    "distractorPool": [
+      "def",
+      "var",
+      "signal",
+      "false",
+      "const",
+      "match",
+      "null",
+      "self"
+    ],
+    "distractorIds": [
+      "gd:wrong:keyword:def",
+      "gd:keyword:var",
+      "gd:keyword:signal",
+      "gd:keyword:false",
+      "gd:keyword:const",
+      "gd:keyword:match",
+      "gd:keyword:null",
+      "gd:keyword:self"
+    ],
+    "explainFull": "`func` defines a function; its body is the indented block after the colon.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#functions",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:void",
@@ -56,7 +102,30 @@
       "ref": "tutorials/scripting/gdscript/static_typing#Specify the return type of a function with the arrow ->",
       "version": "4.7"
     },
-    "rank": 2
+    "rank": 2,
+    "distractorPool": [
+      "null",
+      "Variant",
+      "int",
+      "var",
+      "if",
+      "is",
+      "for",
+      "else"
+    ],
+    "distractorIds": [
+      "gd:keyword:null",
+      "gd:wrong:keyword:Variant",
+      "gd:wrong:keyword:int",
+      "gd:keyword:var",
+      "gd:keyword:if",
+      "gd:keyword:is",
+      "gd:keyword:for",
+      "gd:keyword:else"
+    ],
+    "explainFull": "`-> void` declares that a function returns no value; with it, Godot warns you if you try to use a result that does not exist.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/static_typing.html#specify-the-return-type-of-a-function-with-the-arrow",
+    "topic": "Static typing"
   },
   {
     "id": "gd:keyword:var",
@@ -76,7 +145,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Variables",
       "version": "4.7"
     },
-    "rank": 3
+    "rank": 3,
+    "distractorPool": [
+      "const",
+      "let",
+      "static",
+      "if",
+      "is",
+      "for",
+      "else",
+      "true"
+    ],
+    "distractorIds": [
+      "gd:keyword:const",
+      "gd:wrong:keyword:let",
+      "gd:keyword:static",
+      "gd:keyword:if",
+      "gd:keyword:is",
+      "gd:keyword:for",
+      "gd:keyword:else",
+      "gd:keyword:true"
+    ],
+    "explainFull": "`var` declares a variable, either as a class member or local to a function; it may be given a value straight away.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#variables",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:if",
@@ -96,7 +188,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#if/else/elif",
       "version": "4.7"
     },
-    "rank": 4
+    "rank": 4,
+    "distractorPool": [
+      "when",
+      "while",
+      "match",
+      "is",
+      "for",
+      "else",
+      "true",
+      "as"
+    ],
+    "distractorIds": [
+      "gd:keyword:when",
+      "gd:keyword:while",
+      "gd:keyword:match",
+      "gd:keyword:is",
+      "gd:keyword:for",
+      "gd:keyword:else",
+      "gd:keyword:true",
+      "gd:keyword:as"
+    ],
+    "explainFull": "`if` runs its indented block only when the condition is true; `elif` and `else` can follow it.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#if-else-elif",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:lifecycle:_ready",
@@ -115,7 +230,30 @@
       "ref": "classes/class_node#_ready",
       "version": "4.7"
     },
-    "rank": 5
+    "rank": 5,
+    "distractorPool": [
+      "_enter_tree()",
+      "_init()",
+      "_process()",
+      "_input()",
+      "_unhandled_input()",
+      "_exit_tree()",
+      "_notification()",
+      "_process"
+    ],
+    "distractorIds": [
+      "gd:lifecycle:_enter_tree",
+      "gd:lifecycle:_init",
+      "gd:wrong:lifecycle:_process()",
+      "gd:lifecycle:_input",
+      "gd:lifecycle:_unhandled_input",
+      "gd:lifecycle:_exit_tree",
+      "gd:lifecycle:_notification",
+      "gd:lifecycle:_process"
+    ],
+    "explainFull": "`_ready()` is called once the node and its children are in the tree, so it is the safe place to reach child nodes.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_node.html#class-node-private-method-ready",
+    "topic": "Your first script"
   },
   {
     "id": "gd:keyword:is",
@@ -135,7 +273,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Keywords",
       "version": "4.7"
     },
-    "rank": 6
+    "rank": 6,
+    "distractorPool": [
+      "as",
+      "in",
+      "extends",
+      "for",
+      "else",
+      "true",
+      "return",
+      "when"
+    ],
+    "distractorIds": [
+      "gd:keyword:as",
+      "gd:wrong:keyword:in",
+      "gd:keyword:extends",
+      "gd:keyword:for",
+      "gd:keyword:else",
+      "gd:keyword:true",
+      "gd:keyword:return",
+      "gd:keyword:when"
+    ],
+    "explainFull": "`is` tests whether a value is an instance of a class or of a built-in type, and gives true or false.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#keywords",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:and",
@@ -155,7 +316,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 7
+    "rank": 7,
+    "distractorPool": [
+      "or",
+      "not",
+      "&",
+      "in",
+      "**",
+      "==",
+      "+=",
+      "-="
+    ],
+    "distractorIds": [
+      "gd:operator:or",
+      "gd:operator:not",
+      "gd:wrong:operator:&",
+      "gd:operator:in",
+      "gd:operator:power",
+      "gd:operator:equal",
+      "gd:operator:plus-assign",
+      "gd:operator:minus-assign"
+    ],
+    "explainFull": "`and` is true only when both sides are true; `&&` is an older alias the docs do not recommend.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:for",
@@ -175,7 +359,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#for",
       "version": "4.7"
     },
-    "rank": 8
+    "rank": 8,
+    "distractorPool": [
+      "while",
+      "foreach",
+      "match",
+      "else",
+      "true",
+      "as",
+      "return",
+      "when"
+    ],
+    "distractorIds": [
+      "gd:keyword:while",
+      "gd:wrong:keyword:foreach",
+      "gd:keyword:match",
+      "gd:keyword:else",
+      "gd:keyword:true",
+      "gd:keyword:as",
+      "gd:keyword:return",
+      "gd:keyword:when"
+    ],
+    "explainFull": "`for x in list:` runs its block once per element; with `range()` it counts through numbers.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#for",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:in",
@@ -195,7 +402,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 9
+    "rank": 9,
+    "distractorPool": [
+      "is",
+      "==",
+      "as",
+      "or",
+      "**",
+      "+=",
+      "-=",
+      ":="
+    ],
+    "distractorIds": [
+      "gd:wrong:operator:is",
+      "gd:operator:equal",
+      "gd:wrong:operator:as",
+      "gd:operator:or",
+      "gd:operator:power",
+      "gd:operator:plus-assign",
+      "gd:operator:minus-assign",
+      "gd:operator:infer-assign"
+    ],
+    "explainFull": "`x in y` is true when y contains x; it works on arrays, strings, dictionary keys and ranges. After `for` it iterates instead of testing.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:else",
@@ -215,7 +445,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#if/else/elif",
       "version": "4.7"
     },
-    "rank": 10
+    "rank": 10,
+    "distractorPool": [
+      "elif",
+      "otherwise",
+      "pass",
+      "true",
+      "as",
+      "return",
+      "when",
+      "preload"
+    ],
+    "distractorIds": [
+      "gd:keyword:elif",
+      "gd:wrong:keyword:otherwise",
+      "gd:keyword:pass",
+      "gd:keyword:true",
+      "gd:keyword:as",
+      "gd:keyword:return",
+      "gd:keyword:when",
+      "gd:keyword:preload"
+    ],
+    "explainFull": "`else:` runs its block when the `if` condition, and any `elif` conditions, were all false.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#if-else-elif",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:not",
@@ -234,7 +487,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 11
+    "rank": 11,
+    "distractorPool": [
+      "and",
+      "or",
+      "is",
+      "%",
+      "!=",
+      "*=",
+      ":",
+      "**"
+    ],
+    "distractorIds": [
+      "gd:operator:and",
+      "gd:operator:or",
+      "gd:wrong:operator:is",
+      "gd:operator:remainder",
+      "gd:operator:not-equal",
+      "gd:operator:times-assign",
+      "gd:operator:type-hint",
+      "gd:operator:power"
+    ],
+    "explainFull": "`not x` flips a boolean; the docs recommend it over the `!` alias.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:true",
@@ -254,7 +530,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Literals",
       "version": "4.7"
     },
-    "rank": 12
+    "rank": 12,
+    "distractorPool": [
+      "false",
+      "null",
+      "True",
+      "as",
+      "return",
+      "when",
+      "elif",
+      "preload"
+    ],
+    "distractorIds": [
+      "gd:keyword:false",
+      "gd:keyword:null",
+      "gd:wrong:keyword:True",
+      "gd:keyword:as",
+      "gd:keyword:return",
+      "gd:keyword:when",
+      "gd:keyword:elif",
+      "gd:keyword:preload"
+    ],
+    "explainFull": "`true` and `false` are the two boolean literals, always written in lowercase.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#literals",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:annotation:onready",
@@ -274,7 +573,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#@onready annotation",
       "version": "4.7"
     },
-    "rank": 13
+    "rank": 13,
+    "distractorPool": [
+      "@export",
+      "@tool",
+      "@static_unload",
+      "@export_range",
+      "@icon",
+      "@export_group",
+      "@export_enum",
+      "@warning_ignore"
+    ],
+    "distractorIds": [
+      "gd:annotation:export",
+      "gd:annotation:tool",
+      "gd:annotation:static_unload",
+      "gd:annotation:export_range",
+      "gd:annotation:icon",
+      "gd:annotation:export_group",
+      "gd:annotation:export_enum",
+      "gd:annotation:warning_ignore"
+    ],
+    "explainFull": "`@onready` defers the variable's initial value until just before `_ready()` runs, when child nodes can be reached.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#onready-annotation",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:false",
@@ -293,7 +615,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Literals",
       "version": "4.7"
     },
-    "rank": 14
+    "rank": 14,
+    "distractorPool": [
+      "true",
+      "null",
+      "0",
+      "const",
+      "match",
+      "self",
+      "class",
+      "PI"
+    ],
+    "distractorIds": [
+      "gd:keyword:true",
+      "gd:keyword:null",
+      "gd:wrong:keyword:0",
+      "gd:keyword:const",
+      "gd:keyword:match",
+      "gd:keyword:self",
+      "gd:keyword:class",
+      "gd:keyword:PI"
+    ],
+    "explainFull": "`false` is one of the two boolean literals; conditions such as `if` treat it as not met.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#literals",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:as",
@@ -313,7 +658,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Casting",
       "version": "4.7"
     },
-    "rank": 15
+    "rank": 15,
+    "distractorPool": [
+      "is",
+      "to",
+      "extends",
+      "return",
+      "when",
+      "elif",
+      "preload",
+      "signal"
+    ],
+    "distractorIds": [
+      "gd:keyword:is",
+      "gd:wrong:keyword:to",
+      "gd:keyword:extends",
+      "gd:keyword:return",
+      "gd:keyword:when",
+      "gd:keyword:elif",
+      "gd:keyword:preload",
+      "gd:keyword:signal"
+    ],
+    "explainFull": "`value as Type` casts to that type; for objects it gives null when the type does not match.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#casting",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:return",
@@ -333,7 +701,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Functions",
       "version": "4.7"
     },
-    "rank": 16
+    "rank": 16,
+    "distractorPool": [
+      "yield",
+      "pass",
+      "emit",
+      "when",
+      "elif",
+      "preload",
+      "signal",
+      "while"
+    ],
+    "distractorIds": [
+      "gd:wrong:keyword:yield",
+      "gd:keyword:pass",
+      "gd:wrong:keyword:emit",
+      "gd:keyword:when",
+      "gd:keyword:elif",
+      "gd:keyword:preload",
+      "gd:keyword:signal",
+      "gd:keyword:while"
+    ],
+    "explainFull": "`return` ends the function and gives a value back to whoever called it.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#functions",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:const",
@@ -352,7 +743,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Constants",
       "version": "4.7"
     },
-    "rank": 17
+    "rank": 17,
+    "distractorPool": [
+      "var",
+      "static",
+      "enum",
+      "match",
+      "null",
+      "self",
+      "class",
+      "PI"
+    ],
+    "distractorIds": [
+      "gd:keyword:var",
+      "gd:keyword:static",
+      "gd:keyword:enum",
+      "gd:keyword:match",
+      "gd:keyword:null",
+      "gd:keyword:self",
+      "gd:keyword:class",
+      "gd:keyword:PI"
+    ],
+    "explainFull": "`const` values are fixed when the script is compiled; assigning to one later is an error.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#constants",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:or",
@@ -372,7 +786,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 18
+    "rank": 18,
+    "distractorPool": [
+      "and",
+      "not",
+      "else",
+      "**",
+      "==",
+      "+=",
+      "-=",
+      ":="
+    ],
+    "distractorIds": [
+      "gd:operator:and",
+      "gd:operator:not",
+      "gd:wrong:operator:else",
+      "gd:operator:power",
+      "gd:operator:equal",
+      "gd:operator:plus-assign",
+      "gd:operator:minus-assign",
+      "gd:operator:infer-assign"
+    ],
+    "explainFull": "`or` is true when either side is true; `||` is an older alias the docs do not recommend.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:when",
@@ -392,7 +829,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Pattern guards",
       "version": "4.7"
     },
-    "rank": 19
+    "rank": 19,
+    "distractorPool": [
+      "if",
+      "and",
+      "where",
+      "elif",
+      "preload",
+      "signal",
+      "while",
+      "class_name"
+    ],
+    "distractorIds": [
+      "gd:keyword:if",
+      "gd:wrong:keyword:and",
+      "gd:wrong:keyword:where",
+      "gd:keyword:elif",
+      "gd:keyword:preload",
+      "gd:keyword:signal",
+      "gd:keyword:while",
+      "gd:keyword:class_name"
+    ],
+    "explainFull": "`when` adds a guard to a `match` pattern; the branch runs only if the pattern matches and the condition is true.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#pattern-guards",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:elif",
@@ -412,7 +872,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#if/else/elif",
       "version": "4.7"
     },
-    "rank": 20
+    "rank": 20,
+    "distractorPool": [
+      "else if",
+      "elseif",
+      "elsif",
+      "preload",
+      "signal",
+      "while",
+      "class_name",
+      "enum"
+    ],
+    "distractorIds": [
+      "gd:wrong:keyword:else if",
+      "gd:wrong:keyword:elseif",
+      "gd:wrong:keyword:elsif",
+      "gd:keyword:preload",
+      "gd:keyword:signal",
+      "gd:keyword:while",
+      "gd:keyword:class_name",
+      "gd:keyword:enum"
+    ],
+    "explainFull": "`elif` is GDScript's \"else if\": one word, checked only when every condition above it was false.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#if-else-elif",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:match",
@@ -431,7 +914,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#match",
       "version": "4.7"
     },
-    "rank": 21
+    "rank": 21,
+    "distractorPool": [
+      "switch",
+      "when",
+      "case",
+      "null",
+      "self",
+      "class",
+      "PI",
+      "INF"
+    ],
+    "distractorIds": [
+      "gd:wrong:keyword:switch",
+      "gd:keyword:when",
+      "gd:wrong:keyword:case",
+      "gd:keyword:null",
+      "gd:keyword:self",
+      "gd:keyword:class",
+      "gd:keyword:PI",
+      "gd:keyword:INF"
+    ],
+    "explainFull": "`match` checks its value against each pattern in order and runs only the first branch that fits; there is no fall-through.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#match",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:preload",
@@ -451,7 +957,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Classes as resources",
       "version": "4.7"
     },
-    "rank": 22
+    "rank": 22,
+    "distractorPool": [
+      "load",
+      "import",
+      "include",
+      "signal",
+      "while",
+      "class_name",
+      "enum",
+      "pass"
+    ],
+    "distractorIds": [
+      "gd:wrong:keyword:load",
+      "gd:wrong:keyword:import",
+      "gd:wrong:keyword:include",
+      "gd:keyword:signal",
+      "gd:keyword:while",
+      "gd:keyword:class_name",
+      "gd:keyword:enum",
+      "gd:keyword:pass"
+    ],
+    "explainFull": "`preload()` loads a resource at compile time and needs a constant path; `load()` loads it when the line runs.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#classes-as-resources",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:null",
@@ -470,7 +999,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#null",
       "version": "4.7"
     },
-    "rank": 23
+    "rank": 23,
+    "distractorPool": [
+      "void",
+      "false",
+      "nil",
+      "self",
+      "class",
+      "PI",
+      "INF",
+      "get"
+    ],
+    "distractorIds": [
+      "gd:keyword:void",
+      "gd:keyword:false",
+      "gd:wrong:keyword:nil",
+      "gd:keyword:self",
+      "gd:keyword:class",
+      "gd:keyword:PI",
+      "gd:keyword:INF",
+      "gd:keyword:get"
+    ],
+    "explainFull": "`null` is the empty value: it holds no information, and untyped variables start out as it.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#null",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:signal",
@@ -490,7 +1042,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Signals",
       "version": "4.7"
     },
-    "rank": 24
+    "rank": 24,
+    "distractorPool": [
+      "event",
+      "func",
+      "const",
+      "while",
+      "class_name",
+      "enum",
+      "pass",
+      "await"
+    ],
+    "distractorIds": [
+      "gd:wrong:keyword:event",
+      "gd:keyword:func",
+      "gd:keyword:const",
+      "gd:keyword:while",
+      "gd:keyword:class_name",
+      "gd:keyword:enum",
+      "gd:keyword:pass",
+      "gd:keyword:await"
+    ],
+    "explainFull": "`signal name` declares a custom signal; other objects connect functions to it and the script emits it.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#signals",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:while",
@@ -510,7 +1085,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#while",
       "version": "4.7"
     },
-    "rank": 25
+    "rank": 25,
+    "distractorPool": [
+      "for",
+      "if",
+      "until",
+      "class_name",
+      "enum",
+      "pass",
+      "await",
+      "TAU"
+    ],
+    "distractorIds": [
+      "gd:keyword:for",
+      "gd:keyword:if",
+      "gd:wrong:keyword:until",
+      "gd:keyword:class_name",
+      "gd:keyword:enum",
+      "gd:keyword:pass",
+      "gd:keyword:await",
+      "gd:keyword:TAU"
+    ],
+    "explainFull": "`while` checks its condition before each pass and repeats the block until the condition is false.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#while",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:class_name",
@@ -530,7 +1128,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Registering named classes",
       "version": "4.7"
     },
-    "rank": 26
+    "rank": 26,
+    "distractorPool": [
+      "class",
+      "extends",
+      "static",
+      "enum",
+      "pass",
+      "await",
+      "TAU",
+      "assert"
+    ],
+    "distractorIds": [
+      "gd:keyword:class",
+      "gd:keyword:extends",
+      "gd:keyword:static",
+      "gd:keyword:enum",
+      "gd:keyword:pass",
+      "gd:keyword:await",
+      "gd:keyword:TAU",
+      "gd:keyword:assert"
+    ],
+    "explainFull": "`class_name` gives the script a global name, usable as a type anywhere and listed in the Create New Node dialog.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#registering-named-classes",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:enum",
@@ -550,7 +1171,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Enums",
       "version": "4.7"
     },
-    "rank": 27
+    "rank": 27,
+    "distractorPool": [
+      "const",
+      "class",
+      "match",
+      "pass",
+      "await",
+      "TAU",
+      "assert",
+      "break"
+    ],
+    "distractorIds": [
+      "gd:keyword:const",
+      "gd:keyword:class",
+      "gd:keyword:match",
+      "gd:keyword:pass",
+      "gd:keyword:await",
+      "gd:keyword:TAU",
+      "gd:keyword:assert",
+      "gd:keyword:break"
+    ],
+    "explainFull": "`enum` declares named integer constants, counting up from 0 unless you give values.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#enums",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:pass",
@@ -570,7 +1214,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Keywords",
       "version": "4.7"
     },
-    "rank": 28
+    "rank": 28,
+    "distractorPool": [
+      "continue",
+      "break",
+      "void",
+      "await",
+      "TAU",
+      "assert",
+      "static",
+      "super"
+    ],
+    "distractorIds": [
+      "gd:keyword:continue",
+      "gd:keyword:break",
+      "gd:keyword:void",
+      "gd:keyword:await",
+      "gd:keyword:TAU",
+      "gd:keyword:assert",
+      "gd:keyword:static",
+      "gd:keyword:super"
+    ],
+    "explainFull": "`pass` is a placeholder statement for places where the syntax needs one but nothing should happen, such as an empty function.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#keywords",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:await",
@@ -590,7 +1257,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Awaiting signals or coroutines",
       "version": "4.7"
     },
-    "rank": 29
+    "rank": 29,
+    "distractorPool": [
+      "yield",
+      "wait",
+      "emit",
+      "TAU",
+      "assert",
+      "break",
+      "continue",
+      "static"
+    ],
+    "distractorIds": [
+      "gd:wrong:keyword:yield",
+      "gd:wrong:keyword:wait",
+      "gd:wrong:keyword:emit",
+      "gd:keyword:TAU",
+      "gd:keyword:assert",
+      "gd:keyword:break",
+      "gd:keyword:continue",
+      "gd:keyword:static"
+    ],
+    "explainFull": "`await` suspends the function until the signal is emitted or the called coroutine finishes, then resumes from that line.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#awaiting-signals-or-coroutines",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:self",
@@ -609,7 +1299,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#self",
       "version": "4.7"
     },
-    "rank": 30
+    "rank": 30,
+    "distractorPool": [
+      "this",
+      "super",
+      "owner",
+      "class",
+      "PI",
+      "INF",
+      "get",
+      "func"
+    ],
+    "distractorIds": [
+      "gd:wrong:keyword:this",
+      "gd:keyword:super",
+      "gd:wrong:keyword:owner",
+      "gd:keyword:class",
+      "gd:keyword:PI",
+      "gd:keyword:INF",
+      "gd:keyword:get",
+      "gd:keyword:func"
+    ],
+    "explainFull": "`self` is the object running the script; it is rarely needed, since members can be used by name.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#self",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:TAU",
@@ -629,7 +1342,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Keywords",
       "version": "4.7"
     },
-    "rank": 31
+    "rank": 31,
+    "distractorPool": [
+      "PI",
+      "INF",
+      "NAN",
+      "assert",
+      "break",
+      "continue",
+      "static",
+      "super"
+    ],
+    "distractorIds": [
+      "gd:keyword:PI",
+      "gd:keyword:INF",
+      "gd:wrong:keyword:NAN",
+      "gd:keyword:assert",
+      "gd:keyword:break",
+      "gd:keyword:continue",
+      "gd:keyword:static",
+      "gd:keyword:super"
+    ],
+    "explainFull": "`TAU` is 2 × PI: a full turn in radians, the unit Godot uses for rotation.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#keywords",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:assert",
@@ -649,7 +1385,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Assert keyword",
       "version": "4.7"
     },
-    "rank": 32
+    "rank": 32,
+    "distractorPool": [
+      "check",
+      "push_error",
+      "expect",
+      "break",
+      "continue",
+      "static",
+      "super",
+      "set"
+    ],
+    "distractorIds": [
+      "gd:wrong:keyword:check",
+      "gd:wrong:keyword:push_error",
+      "gd:wrong:keyword:expect",
+      "gd:keyword:break",
+      "gd:keyword:continue",
+      "gd:keyword:static",
+      "gd:keyword:super",
+      "gd:keyword:set"
+    ],
+    "explainFull": "`assert(condition, message)` pauses a debug run when the condition is false; exported release builds ignore it.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#assert-keyword",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:break",
@@ -669,7 +1428,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Keywords",
       "version": "4.7"
     },
-    "rank": 33
+    "rank": 33,
+    "distractorPool": [
+      "continue",
+      "return",
+      "pass",
+      "static",
+      "super",
+      "set",
+      "extends",
+      "void"
+    ],
+    "distractorIds": [
+      "gd:keyword:continue",
+      "gd:keyword:return",
+      "gd:keyword:pass",
+      "gd:keyword:static",
+      "gd:keyword:super",
+      "gd:keyword:set",
+      "gd:keyword:extends",
+      "gd:keyword:void"
+    ],
+    "explainFull": "`break` exits the current `for` or `while` loop immediately.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#keywords",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:class",
@@ -688,7 +1470,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Inner classes",
       "version": "4.7"
     },
-    "rank": 34
+    "rank": 34,
+    "distractorPool": [
+      "class_name",
+      "extends",
+      "struct",
+      "PI",
+      "INF",
+      "get",
+      "func",
+      "false"
+    ],
+    "distractorIds": [
+      "gd:keyword:class_name",
+      "gd:keyword:extends",
+      "gd:wrong:keyword:struct",
+      "gd:keyword:PI",
+      "gd:keyword:INF",
+      "gd:keyword:get",
+      "gd:keyword:func",
+      "gd:keyword:false"
+    ],
+    "explainFull": "`class Name:` defines an inner class inside the script; create one with `Name.new()`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#inner-classes",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:continue",
@@ -708,7 +1513,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Keywords",
       "version": "4.7"
     },
-    "rank": 35
+    "rank": 35,
+    "distractorPool": [
+      "break",
+      "pass",
+      "return",
+      "static",
+      "super",
+      "set",
+      "extends",
+      "void"
+    ],
+    "distractorIds": [
+      "gd:keyword:break",
+      "gd:keyword:pass",
+      "gd:keyword:return",
+      "gd:keyword:static",
+      "gd:keyword:super",
+      "gd:keyword:set",
+      "gd:keyword:extends",
+      "gd:keyword:void"
+    ],
+    "explainFull": "`continue` jumps straight to the next iteration of the `for` or `while` loop.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#keywords",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:PI",
@@ -727,7 +1555,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Keywords",
       "version": "4.7"
     },
-    "rank": 36
+    "rank": 36,
+    "distractorPool": [
+      "TAU",
+      "INF",
+      "NAN",
+      "get",
+      "func",
+      "false",
+      "const",
+      "match"
+    ],
+    "distractorIds": [
+      "gd:keyword:TAU",
+      "gd:keyword:INF",
+      "gd:wrong:keyword:NAN",
+      "gd:keyword:get",
+      "gd:keyword:func",
+      "gd:keyword:false",
+      "gd:keyword:const",
+      "gd:keyword:match"
+    ],
+    "explainFull": "`PI` is the ratio of a circle's circumference to its diameter; rotating by it turns a node half way round.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#keywords",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:static",
@@ -747,7 +1598,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Static functions",
       "version": "4.7"
     },
-    "rank": 37
+    "rank": 37,
+    "distractorPool": [
+      "const",
+      "class",
+      "global",
+      "super",
+      "set",
+      "extends",
+      "void",
+      "var"
+    ],
+    "distractorIds": [
+      "gd:keyword:const",
+      "gd:keyword:class",
+      "gd:wrong:keyword:global",
+      "gd:keyword:super",
+      "gd:keyword:set",
+      "gd:keyword:extends",
+      "gd:keyword:void",
+      "gd:keyword:var"
+    ],
+    "explainFull": "`static func` belongs to the class rather than to an instance, so it cannot use instance members or `self`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#static-functions",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:super",
@@ -767,7 +1641,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Inheritance",
       "version": "4.7"
     },
-    "rank": 38
+    "rank": 38,
+    "distractorPool": [
+      "self",
+      "base",
+      "parent",
+      "set",
+      "extends",
+      "void",
+      "var",
+      "if"
+    ],
+    "distractorIds": [
+      "gd:keyword:self",
+      "gd:wrong:keyword:base",
+      "gd:wrong:keyword:parent",
+      "gd:keyword:set",
+      "gd:keyword:extends",
+      "gd:keyword:void",
+      "gd:keyword:var",
+      "gd:keyword:if"
+    ],
+    "explainFull": "`super()` inside an overriding method calls the parent class's method of the same name; `super.other()` calls another one.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#inheritance",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:INF",
@@ -786,7 +1683,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Keywords",
       "version": "4.7"
     },
-    "rank": 39
+    "rank": 39,
+    "distractorPool": [
+      "NAN",
+      "TAU",
+      "PI",
+      "get",
+      "func",
+      "false",
+      "const",
+      "match"
+    ],
+    "distractorIds": [
+      "gd:wrong:keyword:NAN",
+      "gd:keyword:TAU",
+      "gd:keyword:PI",
+      "gd:keyword:get",
+      "gd:keyword:func",
+      "gd:keyword:false",
+      "gd:keyword:const",
+      "gd:keyword:match"
+    ],
+    "explainFull": "`INF` is larger than every other float, so any real distance will beat it in a comparison.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#keywords",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:node",
@@ -805,7 +1725,30 @@
       "ref": "getting_started/step_by_step/nodes_and_scenes#Nodes",
       "version": "4.7"
     },
-    "rank": 40
+    "rank": 40,
+    "distractorPool": [
+      "scene",
+      "resource",
+      "component",
+      "root node",
+      "instance",
+      "delta",
+      "get_node()",
+      "res://"
+    ],
+    "distractorIds": [
+      "gd:concept:scene",
+      "gd:wrong:concept:resource",
+      "gd:wrong:concept:component",
+      "gd:concept:root-node",
+      "gd:concept:instance",
+      "gd:concept:delta",
+      "gd:concept:get_node",
+      "gd:concept:res-path"
+    ],
+    "explainFull": "A node is the basic building block; you combine nodes into trees to make scenes.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/nodes_and_scenes.html#nodes",
+    "topic": "Nodes and scenes"
   },
   {
     "id": "gd:concept:scene",
@@ -824,7 +1767,30 @@
       "ref": "getting_started/step_by_step/nodes_and_scenes#Scenes",
       "version": "4.7"
     },
-    "rank": 41
+    "rank": 41,
+    "distractorPool": [
+      "node",
+      "prefab",
+      "resource",
+      "root node",
+      "instance",
+      "delta",
+      "get_node()",
+      "res://"
+    ],
+    "distractorIds": [
+      "gd:concept:node",
+      "gd:wrong:concept:prefab",
+      "gd:wrong:concept:resource",
+      "gd:concept:root-node",
+      "gd:concept:instance",
+      "gd:concept:delta",
+      "gd:concept:get_node",
+      "gd:concept:res-path"
+    ],
+    "explainFull": "A scene is a saved tree of nodes; a character, a level or a menu can each be one.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/nodes_and_scenes.html#scenes",
+    "topic": "Nodes and scenes"
   },
   {
     "id": "gd:concept:root-node",
@@ -843,7 +1809,30 @@
       "ref": "getting_started/step_by_step/nodes_and_scenes#Scenes",
       "version": "4.7"
     },
-    "rank": 42
+    "rank": 42,
+    "distractorPool": [
+      "parent node",
+      "main scene",
+      "scene tree",
+      "instance",
+      "delta",
+      "get_node()",
+      "res://",
+      "queue_free()"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:parent node",
+      "gd:concept:main-scene",
+      "gd:concept:scene-tree",
+      "gd:concept:instance",
+      "gd:concept:delta",
+      "gd:concept:get_node",
+      "gd:concept:res-path",
+      "gd:concept:queue_free"
+    ],
+    "explainFull": "Every scene has exactly one root node; its type usually decides what the scene is, such as a CharacterBody2D for a player.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/nodes_and_scenes.html#scenes",
+    "topic": "Nodes and scenes"
   },
   {
     "id": "gd:concept:instance",
@@ -862,7 +1851,30 @@
       "ref": "getting_started/step_by_step/instancing#Creating instances",
       "version": "4.7"
     },
-    "rank": 43
+    "rank": 43,
+    "distractorPool": [
+      "clone",
+      "prefab",
+      "child",
+      "delta",
+      "get_node()",
+      "res://",
+      "queue_free()",
+      "user://"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:clone",
+      "gd:wrong:concept:prefab",
+      "gd:wrong:concept:child",
+      "gd:concept:delta",
+      "gd:concept:get_node",
+      "gd:concept:res-path",
+      "gd:concept:queue_free",
+      "gd:concept:user-path"
+    ],
+    "explainFull": "An instance is a copy of a scene used inside another; editing the original scene updates every instance.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/instancing.html#creating-instances",
+    "topic": "Instancing"
   },
   {
     "id": "gd:builtin:print",
@@ -882,7 +1894,30 @@
       "ref": "getting_started/step_by_step/scripting_first_script#Hello, world!",
       "version": "4.7"
     },
-    "rank": 44
+    "rank": 44,
+    "distractorPool": [
+      "str",
+      "echo",
+      "log",
+      "range",
+      "is_instance_valid",
+      "lerp",
+      "randi_range",
+      "sign"
+    ],
+    "distractorIds": [
+      "gd:builtin:str",
+      "gd:wrong:builtin:echo",
+      "gd:wrong:builtin:log",
+      "gd:builtin:range",
+      "gd:builtin:is_instance_valid",
+      "gd:builtin:lerp",
+      "gd:builtin:randi_range",
+      "gd:builtin:sign"
+    ],
+    "explainFull": "`print()` turns its arguments into text and writes them to the Output panel, which is the quickest way to check what your code is doing.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/scripting_first_script.html#hello-world",
+    "topic": "Your first script"
   },
   {
     "id": "gd:lifecycle:_init",
@@ -901,7 +1936,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Class constructor",
       "version": "4.7"
     },
-    "rank": 45
+    "rank": 45,
+    "distractorPool": [
+      "_ready()",
+      "_enter_tree()",
+      "_notification()",
+      "_input()",
+      "_unhandled_input()",
+      "_exit_tree()",
+      "_process",
+      "_physics_process"
+    ],
+    "distractorIds": [
+      "gd:lifecycle:_ready",
+      "gd:lifecycle:_enter_tree",
+      "gd:lifecycle:_notification",
+      "gd:lifecycle:_input",
+      "gd:lifecycle:_unhandled_input",
+      "gd:lifecycle:_exit_tree",
+      "gd:lifecycle:_process",
+      "gd:lifecycle:_physics_process"
+    ],
+    "explainFull": "`_init()` runs first, when the object is constructed; child nodes are not available yet.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#class-constructor",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:lifecycle:_process",
@@ -921,7 +1979,30 @@
       "ref": "getting_started/step_by_step/scripting_first_script#Turning around",
       "version": "4.7"
     },
-    "rank": 46
+    "rank": 46,
+    "distractorPool": [
+      "_physics_process",
+      "_ready",
+      "_input",
+      "_draw",
+      "_input()",
+      "_unhandled_input()",
+      "_enter_tree()",
+      "_exit_tree()"
+    ],
+    "distractorIds": [
+      "gd:lifecycle:_physics_process",
+      "gd:wrong:lifecycle:_ready",
+      "gd:wrong:lifecycle:_input",
+      "gd:lifecycle:_draw",
+      "gd:lifecycle:_input",
+      "gd:lifecycle:_unhandled_input",
+      "gd:lifecycle:_enter_tree",
+      "gd:lifecycle:_exit_tree"
+    ],
+    "explainFull": "`_process(delta)` is called once per frame; the frame rate varies, so multiply movement by `delta`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/scripting_first_script.html#turning-around",
+    "topic": "Your first script"
   },
   {
     "id": "gd:concept:delta",
@@ -940,7 +2021,30 @@
       "ref": "getting_started/step_by_step/scripting_first_script#Turning around",
       "version": "4.7"
     },
-    "rank": 47
+    "rank": 47,
+    "distractorPool": [
+      "fps",
+      "tick",
+      "frame_time",
+      "get_node()",
+      "res://",
+      "queue_free()",
+      "user://",
+      "get_tree()"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:fps",
+      "gd:wrong:concept:tick",
+      "gd:wrong:concept:frame_time",
+      "gd:concept:get_node",
+      "gd:concept:res-path",
+      "gd:concept:queue_free",
+      "gd:concept:user-path",
+      "gd:concept:get_tree"
+    ],
+    "explainFull": "`delta` is the frame's elapsed time in seconds, so `speed * delta` moves the same distance per second on any machine.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/scripting_first_script.html#turning-around",
+    "topic": "Your first script"
   },
   {
     "id": "gd:lifecycle:_input",
@@ -959,7 +2063,30 @@
       "ref": "classes/class_node#_input",
       "version": "4.7"
     },
-    "rank": 48
+    "rank": 48,
+    "distractorPool": [
+      "_unhandled_input()",
+      "_process()",
+      "_notification()",
+      "_enter_tree()",
+      "_exit_tree()",
+      "_ready()",
+      "_init()",
+      "_physics_process"
+    ],
+    "distractorIds": [
+      "gd:lifecycle:_unhandled_input",
+      "gd:wrong:lifecycle:_process()",
+      "gd:lifecycle:_notification",
+      "gd:lifecycle:_enter_tree",
+      "gd:lifecycle:_exit_tree",
+      "gd:lifecycle:_ready",
+      "gd:lifecycle:_init",
+      "gd:lifecycle:_physics_process"
+    ],
+    "explainFull": "`_input(event)` sees every event first; most gameplay code uses `_unhandled_input()` instead so menus can take clicks.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_node.html#class-node-private-method-input",
+    "topic": "Your first script"
   },
   {
     "id": "gd:lifecycle:_unhandled_input",
@@ -978,7 +2105,30 @@
       "ref": "getting_started/step_by_step/scripting_player_input#Listening to player input",
       "version": "4.7"
     },
-    "rank": 49
+    "rank": 49,
+    "distractorPool": [
+      "_input()",
+      "_gui_input()",
+      "_physics_process()",
+      "_enter_tree()",
+      "_exit_tree()",
+      "_notification()",
+      "_ready()",
+      "_init()"
+    ],
+    "distractorIds": [
+      "gd:lifecycle:_input",
+      "gd:wrong:lifecycle:_gui_input()",
+      "gd:wrong:lifecycle:_physics_process()",
+      "gd:lifecycle:_enter_tree",
+      "gd:lifecycle:_exit_tree",
+      "gd:lifecycle:_notification",
+      "gd:lifecycle:_ready",
+      "gd:lifecycle:_init"
+    ],
+    "explainFull": "`_unhandled_input(event)` receives the events nobody handled, so a click on a button does not also fire your weapon.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/scripting_player_input.html#listening-to-player-input",
+    "topic": "Player input"
   },
   {
     "id": "gd:concept:connect",
@@ -998,7 +2148,30 @@
       "ref": "getting_started/step_by_step/signals#Connecting a signal via code",
       "version": "4.7"
     },
-    "rank": 50
+    "rank": 50,
+    "distractorPool": [
+      "emit",
+      "bind",
+      "call",
+      "$",
+      "%",
+      "func",
+      "_",
+      "new"
+    ],
+    "distractorIds": [
+      "gd:concept:emit",
+      "gd:concept:bind",
+      "gd:concept:call",
+      "gd:concept:dollar-node-path",
+      "gd:concept:unique-name",
+      "gd:concept:lambda",
+      "gd:concept:wildcard",
+      "gd:concept:new"
+    ],
+    "explainFull": "`signal.connect(callable)` links a signal to a function, which then runs every time the signal is emitted.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/signals.html#connecting-a-signal-via-code",
+    "topic": "Signals"
   },
   {
     "id": "gd:concept:emit",
@@ -1018,7 +2191,30 @@
       "ref": "getting_started/step_by_step/signals#Custom signals",
       "version": "4.7"
     },
-    "rank": 51
+    "rank": 51,
+    "distractorPool": [
+      "connect",
+      "call",
+      "send",
+      "$",
+      "%",
+      "func",
+      "bind",
+      "_"
+    ],
+    "distractorIds": [
+      "gd:concept:connect",
+      "gd:concept:call",
+      "gd:wrong:concept:send",
+      "gd:concept:dollar-node-path",
+      "gd:concept:unique-name",
+      "gd:concept:lambda",
+      "gd:concept:bind",
+      "gd:concept:wildcard"
+    ],
+    "explainFull": "`signal.emit(args)` fires the signal; every connected function runs and receives the arguments.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/signals.html#custom-signals",
+    "topic": "Signals"
   },
   {
     "id": "gd:operator:power",
@@ -1038,7 +2234,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 52
+    "rank": 52,
+    "distractorPool": [
+      "^",
+      "*",
+      "%",
+      "==",
+      "+=",
+      "-=",
+      ":=",
+      "->"
+    ],
+    "distractorIds": [
+      "gd:wrong:operator:^",
+      "gd:wrong:operator:*",
+      "gd:operator:remainder",
+      "gd:operator:equal",
+      "gd:operator:plus-assign",
+      "gd:operator:minus-assign",
+      "gd:operator:infer-assign",
+      "gd:operator:return-arrow"
+    ],
+    "explainFull": "`x ** y` multiplies x by itself y times; `^` is bitwise XOR in GDScript, not a power.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:remainder",
@@ -1057,7 +2276,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 53
+    "rank": 53,
+    "distractorPool": [
+      "/",
+      "//",
+      "mod",
+      "!=",
+      "*=",
+      ":",
+      "not",
+      "=="
+    ],
+    "distractorIds": [
+      "gd:wrong:operator:/",
+      "gd:wrong:operator://",
+      "gd:wrong:operator:mod",
+      "gd:operator:not-equal",
+      "gd:operator:times-assign",
+      "gd:operator:type-hint",
+      "gd:operator:not",
+      "gd:operator:equal"
+    ],
+    "explainFull": "`%` is the integer remainder; for floats use `fmod()` instead.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:equal",
@@ -1077,7 +2319,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 54
+    "rank": 54,
+    "distractorPool": [
+      "=",
+      "!=",
+      ":=",
+      "+=",
+      "-=",
+      "->",
+      "and",
+      "in"
+    ],
+    "distractorIds": [
+      "gd:wrong:operator:=",
+      "gd:operator:not-equal",
+      "gd:operator:infer-assign",
+      "gd:operator:plus-assign",
+      "gd:operator:minus-assign",
+      "gd:operator:return-arrow",
+      "gd:operator:and",
+      "gd:operator:in"
+    ],
+    "explainFull": "`==` compares two values and gives true or false; a single `=` assigns and cannot be used inside a condition.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:not-equal",
@@ -1096,7 +2361,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 55
+    "rank": 55,
+    "distractorPool": [
+      "==",
+      "<>",
+      "!==",
+      "*=",
+      ":",
+      "not",
+      "%",
+      "+="
+    ],
+    "distractorIds": [
+      "gd:operator:equal",
+      "gd:wrong:operator:<>",
+      "gd:wrong:operator:!==",
+      "gd:operator:times-assign",
+      "gd:operator:type-hint",
+      "gd:operator:not",
+      "gd:operator:remainder",
+      "gd:operator:plus-assign"
+    ],
+    "explainFull": "`a != b` is true when a and b are not equal; it is the opposite of `==`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:plus-assign",
@@ -1116,7 +2404,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 56
+    "rank": 56,
+    "distractorPool": [
+      "=+",
+      "++",
+      "=",
+      "-=",
+      ":=",
+      "->",
+      "and",
+      "in"
+    ],
+    "distractorIds": [
+      "gd:wrong:operator:=+",
+      "gd:wrong:operator:++",
+      "gd:wrong:operator:=",
+      "gd:operator:minus-assign",
+      "gd:operator:infer-assign",
+      "gd:operator:return-arrow",
+      "gd:operator:and",
+      "gd:operator:in"
+    ],
+    "explainFull": "`score += n` is short for `score = score + n`; GDScript has no `++` operator.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:minus-assign",
@@ -1136,7 +2447,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 57
+    "rank": 57,
+    "distractorPool": [
+      "=-",
+      "--",
+      "+=",
+      ":=",
+      "->",
+      "and",
+      "in",
+      "or"
+    ],
+    "distractorIds": [
+      "gd:wrong:operator:=-",
+      "gd:wrong:operator:--",
+      "gd:operator:plus-assign",
+      "gd:operator:infer-assign",
+      "gd:operator:return-arrow",
+      "gd:operator:and",
+      "gd:operator:in",
+      "gd:operator:or"
+    ],
+    "explainFull": "`health -= amount` is short for `health = health - amount`; `=-` would assign the negative instead.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:times-assign",
@@ -1155,7 +2489,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 58
+    "rank": 58,
+    "distractorPool": [
+      "**=",
+      "=*",
+      "x=",
+      ":",
+      "not",
+      "%",
+      "!=",
+      ":="
+    ],
+    "distractorIds": [
+      "gd:wrong:operator:**=",
+      "gd:wrong:operator:=*",
+      "gd:wrong:operator:x=",
+      "gd:operator:type-hint",
+      "gd:operator:not",
+      "gd:operator:remainder",
+      "gd:operator:not-equal",
+      "gd:operator:infer-assign"
+    ],
+    "explainFull": "`speed *= 2` is short for `speed = speed * 2`; `**=` would square it instead.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:dollar-node-path",
@@ -1175,7 +2532,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Literals",
       "version": "4.7"
     },
-    "rank": 59
+    "rank": 59,
+    "distractorPool": [
+      "%",
+      "@",
+      "&",
+      "func",
+      "bind",
+      "_",
+      "new",
+      "add_child"
+    ],
+    "distractorIds": [
+      "gd:concept:unique-name",
+      "gd:wrong:concept:@",
+      "gd:wrong:concept:&",
+      "gd:concept:lambda",
+      "gd:concept:bind",
+      "gd:concept:wildcard",
+      "gd:concept:new",
+      "gd:concept:add_child"
+    ],
+    "explainFull": "`$Path` is shorthand for `get_node(\"Path\")`, a path relative to the node running the script.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#literals",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:unique-name",
@@ -1195,7 +2575,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Literals",
       "version": "4.7"
     },
-    "rank": 60
+    "rank": 60,
+    "distractorPool": [
+      "$",
+      "@",
+      "#",
+      "func",
+      "bind",
+      "_",
+      "new",
+      "add_child"
+    ],
+    "distractorIds": [
+      "gd:concept:dollar-node-path",
+      "gd:wrong:concept:@",
+      "gd:wrong:concept:#",
+      "gd:concept:lambda",
+      "gd:concept:bind",
+      "gd:concept:wildcard",
+      "gd:concept:new",
+      "gd:concept:add_child"
+    ],
+    "explainFull": "`%Name` finds a scene-unique node by name, so moving it to another parent does not break the path.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#literals",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:get_node",
@@ -1214,7 +2617,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Literals",
       "version": "4.7"
     },
-    "rank": 61
+    "rank": 61,
+    "distractorPool": [
+      "get_parent()",
+      "find()",
+      "get_child()",
+      "res://",
+      "queue_free()",
+      "user://",
+      "get_tree()",
+      "group"
+    ],
+    "distractorIds": [
+      "gd:concept:get_parent",
+      "gd:wrong:concept:find()",
+      "gd:wrong:concept:get_child()",
+      "gd:concept:res-path",
+      "gd:concept:queue_free",
+      "gd:concept:user-path",
+      "gd:concept:get_tree",
+      "gd:concept:group"
+    ],
+    "explainFull": "`get_node(\"Path\")` returns the node at that path relative to this one; `$Path` is the same call written short.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#literals",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:annotation:export",
@@ -1234,7 +2660,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_exports#Basic use",
       "version": "4.7"
     },
-    "rank": 62
+    "rank": 62,
+    "distractorPool": [
+      "@onready",
+      "@tool",
+      "@inspect",
+      "@export_range",
+      "@icon",
+      "@export_group",
+      "@export_enum",
+      "@warning_ignore"
+    ],
+    "distractorIds": [
+      "gd:annotation:onready",
+      "gd:annotation:tool",
+      "gd:wrong:annotation:@inspect",
+      "gd:annotation:export_range",
+      "gd:annotation:icon",
+      "gd:annotation:export_group",
+      "gd:annotation:export_enum",
+      "gd:annotation:warning_ignore"
+    ],
+    "explainFull": "`@export` makes the variable appear in the Inspector, and the value you set there is saved with the scene.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_exports.html#basic-use",
+    "topic": "Exports"
   },
   {
     "id": "gd:annotation:export_range",
@@ -1254,7 +2703,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_exports#Limiting editor input ranges",
       "version": "4.7"
     },
-    "rank": 63
+    "rank": 63,
+    "distractorPool": [
+      "@export_enum",
+      "@export_clamp",
+      "@export_flags",
+      "@icon",
+      "@export_group",
+      "@warning_ignore",
+      "@onready",
+      "@export"
+    ],
+    "distractorIds": [
+      "gd:annotation:export_enum",
+      "gd:wrong:annotation:@export_clamp",
+      "gd:wrong:annotation:@export_flags",
+      "gd:annotation:icon",
+      "gd:annotation:export_group",
+      "gd:annotation:warning_ignore",
+      "gd:annotation:onready",
+      "gd:annotation:export"
+    ],
+    "explainFull": "`@export_range(min, max, step)` exports a number and limits what the Inspector lets you enter.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_exports.html#limiting-editor-input-ranges",
+    "topic": "Exports"
   },
   {
     "id": "gd:operator:type-hint",
@@ -1273,7 +2745,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Variables",
       "version": "4.7"
     },
-    "rank": 64
+    "rank": 64,
+    "distractorPool": [
+      "->",
+      ":=",
+      "::",
+      "not",
+      "%",
+      "!=",
+      "*=",
+      "and"
+    ],
+    "distractorIds": [
+      "gd:operator:return-arrow",
+      "gd:operator:infer-assign",
+      "gd:wrong:operator:::",
+      "gd:operator:not",
+      "gd:operator:remainder",
+      "gd:operator:not-equal",
+      "gd:operator:times-assign",
+      "gd:operator:and"
+    ],
+    "explainFull": "A colon after the name sets the type; assigning a value of an incompatible type then raises an error.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#variables",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:infer-assign",
@@ -1293,7 +2788,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Variables",
       "version": "4.7"
     },
-    "rank": 65
+    "rank": 65,
+    "distractorPool": [
+      "=",
+      ":",
+      "==",
+      "->",
+      "and",
+      "in",
+      "or",
+      "**"
+    ],
+    "distractorIds": [
+      "gd:wrong:operator:=",
+      "gd:operator:type-hint",
+      "gd:operator:equal",
+      "gd:operator:return-arrow",
+      "gd:operator:and",
+      "gd:operator:in",
+      "gd:operator:or",
+      "gd:operator:power"
+    ],
+    "explainFull": "`:=` fixes the type to that of the starting value, here Vector2, without writing the type name.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#variables",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:operator:return-arrow",
@@ -1313,7 +2831,30 @@
       "ref": "tutorials/scripting/gdscript/static_typing#Specify the return type of a function with the arrow ->",
       "version": "4.7"
     },
-    "rank": 66
+    "rank": 66,
+    "distractorPool": [
+      ":",
+      "=>",
+      ":=",
+      "and",
+      "in",
+      "or",
+      "**",
+      "=="
+    ],
+    "distractorIds": [
+      "gd:operator:type-hint",
+      "gd:wrong:operator:=>",
+      "gd:operator:infer-assign",
+      "gd:operator:and",
+      "gd:operator:in",
+      "gd:operator:or",
+      "gd:operator:power",
+      "gd:operator:equal"
+    ],
+    "explainFull": "`-> Type` after the parameter list declares the return type; `-> void` means nothing is returned.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/static_typing.html#specify-the-return-type-of-a-function-with-the-arrow",
+    "topic": "Static typing"
   },
   {
     "id": "gd:concept:lambda",
@@ -1333,7 +2874,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Lambda functions",
       "version": "4.7"
     },
-    "rank": 67
+    "rank": 67,
+    "distractorPool": [
+      "lambda",
+      "fn",
+      "def",
+      "bind",
+      "_",
+      "new",
+      "add_child",
+      "instantiate"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:lambda",
+      "gd:wrong:concept:fn",
+      "gd:wrong:concept:def",
+      "gd:concept:bind",
+      "gd:concept:wildcard",
+      "gd:concept:new",
+      "gd:concept:add_child",
+      "gd:concept:instantiate"
+    ],
+    "explainFull": "A lambda is written with the same keyword as a named function, minus the name; call it with `.call()`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#lambda-functions",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:bind",
@@ -1353,7 +2917,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Signals",
       "version": "4.7"
     },
-    "rank": 68
+    "rank": 68,
+    "distractorPool": [
+      "call",
+      "emit",
+      "with",
+      "_",
+      "new",
+      "add_child",
+      "instantiate",
+      "add_to_group"
+    ],
+    "distractorIds": [
+      "gd:concept:call",
+      "gd:concept:emit",
+      "gd:wrong:concept:with",
+      "gd:concept:wildcard",
+      "gd:concept:new",
+      "gd:concept:add_child",
+      "gd:concept:instantiate",
+      "gd:concept:add_to_group"
+    ],
+    "explainFull": "`callable.bind(values)` makes a copy of the callable that adds those values after the signal's own arguments.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#signals",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:builtin:range",
@@ -1373,7 +2960,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#for",
       "version": "4.7"
     },
-    "rank": 69
+    "rank": 69,
+    "distractorPool": [
+      "len",
+      "abs",
+      "randi_range",
+      "is_instance_valid",
+      "lerp",
+      "sign",
+      "max",
+      "sqrt"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:len",
+      "gd:wrong:builtin:abs",
+      "gd:builtin:randi_range",
+      "gd:builtin:is_instance_valid",
+      "gd:builtin:lerp",
+      "gd:builtin:sign",
+      "gd:builtin:max",
+      "gd:builtin:sqrt"
+    ],
+    "explainFull": "`range(n)` gives 0 up to n − 1; `range(a, b)` and `range(a, b, step)` set the start and step.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#for",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:wildcard",
@@ -1393,7 +3003,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#match",
       "version": "4.7"
     },
-    "rank": 70
+    "rank": 70,
+    "distractorPool": [
+      "else",
+      "default",
+      "*",
+      "new",
+      "add_child",
+      "instantiate",
+      "add_to_group",
+      "call"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:else",
+      "gd:wrong:concept:default",
+      "gd:wrong:concept:*",
+      "gd:concept:new",
+      "gd:concept:add_child",
+      "gd:concept:instantiate",
+      "gd:concept:add_to_group",
+      "gd:concept:call"
+    ],
+    "explainFull": "The wildcard pattern `_` matches anything, like `default` in a switch statement.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#match",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:new",
@@ -1413,7 +3046,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Class constructor",
       "version": "4.7"
     },
-    "rank": 71
+    "rank": 71,
+    "distractorPool": [
+      "instantiate",
+      "create",
+      "make",
+      "add_child",
+      "add_to_group",
+      "call",
+      "connect",
+      "emit"
+    ],
+    "distractorIds": [
+      "gd:concept:instantiate",
+      "gd:wrong:concept:create",
+      "gd:wrong:concept:make",
+      "gd:concept:add_child",
+      "gd:concept:add_to_group",
+      "gd:concept:call",
+      "gd:concept:connect",
+      "gd:concept:emit"
+    ],
+    "explainFull": "`ClassName.new()` constructs an object and runs its `_init()`; scenes use `instantiate()` instead.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#class-constructor",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:res-path",
@@ -1432,7 +3088,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Classes as resources",
       "version": "4.7"
     },
-    "rank": 72
+    "rank": 72,
+    "distractorPool": [
+      "user://",
+      "file://",
+      "C:/",
+      "queue_free()",
+      "get_tree()",
+      "group",
+      "autoload",
+      "get_parent()"
+    ],
+    "distractorIds": [
+      "gd:concept:user-path",
+      "gd:wrong:concept:file://",
+      "gd:wrong:concept:C:/",
+      "gd:concept:queue_free",
+      "gd:concept:get_tree",
+      "gd:concept:group",
+      "gd:concept:autoload",
+      "gd:concept:get_parent"
+    ],
+    "explainFull": "`res://` is the project's root folder; it is read-only once the game is exported.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#classes-as-resources",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:annotation:icon",
@@ -1452,7 +3131,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Registering named classes",
       "version": "4.7"
     },
-    "rank": 73
+    "rank": 73,
+    "distractorPool": [
+      "@export_file",
+      "@tool",
+      "@texture",
+      "@export_group",
+      "@export_enum",
+      "@warning_ignore",
+      "@onready",
+      "@export"
+    ],
+    "distractorIds": [
+      "gd:annotation:export_file",
+      "gd:annotation:tool",
+      "gd:wrong:annotation:@texture",
+      "gd:annotation:export_group",
+      "gd:annotation:export_enum",
+      "gd:annotation:warning_ignore",
+      "gd:annotation:onready",
+      "gd:annotation:export"
+    ],
+    "explainFull": "`@icon(\"path\")` sets the editor icon shown for a script class registered with `class_name`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#registering-named-classes",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:annotation:export_group",
@@ -1472,7 +3174,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_exports#Grouping exports",
       "version": "4.7"
     },
-    "rank": 74
+    "rank": 74,
+    "distractorPool": [
+      "@export_enum",
+      "@export_range",
+      "@tool",
+      "@warning_ignore",
+      "@onready",
+      "@export",
+      "@icon",
+      "@export_file"
+    ],
+    "distractorIds": [
+      "gd:annotation:export_enum",
+      "gd:annotation:export_range",
+      "gd:annotation:tool",
+      "gd:annotation:warning_ignore",
+      "gd:annotation:onready",
+      "gd:annotation:export",
+      "gd:annotation:icon",
+      "gd:annotation:export_file"
+    ],
+    "explainFull": "`@export_group(\"Name\")` puts every exported property below it into a collapsible group until the next group starts.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_exports.html#grouping-exports",
+    "topic": "Exports"
   },
   {
     "id": "gd:annotation:export_enum",
@@ -1492,7 +3217,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_exports#Exporting enums",
       "version": "4.7"
     },
-    "rank": 75
+    "rank": 75,
+    "distractorPool": [
+      "@export_group",
+      "@export_flags",
+      "@export_range",
+      "@warning_ignore",
+      "@onready",
+      "@export",
+      "@icon",
+      "@export_file"
+    ],
+    "distractorIds": [
+      "gd:annotation:export_group",
+      "gd:wrong:annotation:@export_flags",
+      "gd:annotation:export_range",
+      "gd:annotation:warning_ignore",
+      "gd:annotation:onready",
+      "gd:annotation:export",
+      "gd:annotation:icon",
+      "gd:annotation:export_file"
+    ],
+    "explainFull": "`@export_enum(...)` lets the Inspector offer a fixed list of choices for an int or String property.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_exports.html#exporting-enums",
+    "topic": "Exports"
   },
   {
     "id": "gd:annotation:export_file",
@@ -1511,7 +3259,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_exports#Strings as paths",
       "version": "4.7"
     },
-    "rank": 76
+    "rank": 76,
+    "distractorPool": [
+      "@export_dir",
+      "@export_enum",
+      "@export_multiline",
+      "@tool",
+      "@static_unload",
+      "@warning_ignore",
+      "@onready",
+      "@export"
+    ],
+    "distractorIds": [
+      "gd:wrong:annotation:@export_dir",
+      "gd:annotation:export_enum",
+      "gd:wrong:annotation:@export_multiline",
+      "gd:annotation:tool",
+      "gd:annotation:static_unload",
+      "gd:annotation:warning_ignore",
+      "gd:annotation:onready",
+      "gd:annotation:export"
+    ],
+    "explainFull": "`@export_file` stores a path chosen in a file dialog; an optional filter such as `\"*.json\"` limits the choices.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_exports.html#strings-as-paths",
+    "topic": "Exports"
   },
   {
     "id": "gd:keyword:set",
@@ -1531,7 +3302,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Properties (setters and getters)",
       "version": "4.7"
     },
-    "rank": 77
+    "rank": 77,
+    "distractorPool": [
+      "get",
+      "on_change",
+      "func",
+      "extends",
+      "void",
+      "var",
+      "if",
+      "is"
+    ],
+    "distractorIds": [
+      "gd:keyword:get",
+      "gd:wrong:keyword:on_change",
+      "gd:keyword:func",
+      "gd:keyword:extends",
+      "gd:keyword:void",
+      "gd:keyword:var",
+      "gd:keyword:if",
+      "gd:keyword:is"
+    ],
+    "explainFull": "A `set(value):` block after a variable is its setter; it runs on every assignment from outside the block.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#properties-setters-and-getters",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:keyword:get",
@@ -1550,7 +3344,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Properties (setters and getters)",
       "version": "4.7"
     },
-    "rank": 78
+    "rank": 78,
+    "distractorPool": [
+      "set",
+      "read",
+      "return",
+      "func",
+      "false",
+      "const",
+      "match",
+      "null"
+    ],
+    "distractorIds": [
+      "gd:keyword:set",
+      "gd:wrong:keyword:read",
+      "gd:keyword:return",
+      "gd:keyword:func",
+      "gd:keyword:false",
+      "gd:keyword:const",
+      "gd:keyword:match",
+      "gd:keyword:null"
+    ],
+    "explainFull": "A `get:` block is the property's getter: whatever it returns is what other code sees when it reads the property.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#properties-setters-and-getters",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:annotation:tool",
@@ -1569,7 +3386,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Tool mode",
       "version": "4.7"
     },
-    "rank": 79
+    "rank": 79,
+    "distractorPool": [
+      "@editor",
+      "@icon",
+      "@onready",
+      "@static_unload",
+      "@export_file",
+      "@warning_ignore",
+      "@export",
+      "@export_range"
+    ],
+    "distractorIds": [
+      "gd:wrong:annotation:@editor",
+      "gd:annotation:icon",
+      "gd:annotation:onready",
+      "gd:annotation:static_unload",
+      "gd:annotation:export_file",
+      "gd:annotation:warning_ignore",
+      "gd:annotation:export",
+      "gd:annotation:export_range"
+    ],
+    "explainFull": "`@tool` scripts run in the editor too, which is useful for previews; check `Engine.is_editor_hint()` to keep game logic out.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#tool-mode",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:queue_free",
@@ -1588,7 +3428,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Memory management",
       "version": "4.7"
     },
-    "rank": 80
+    "rank": 80,
+    "distractorPool": [
+      "free()",
+      "remove_child()",
+      "hide()",
+      "user://",
+      "get_tree()",
+      "group",
+      "autoload",
+      "get_parent()"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:free()",
+      "gd:wrong:concept:remove_child()",
+      "gd:wrong:concept:hide()",
+      "gd:concept:user-path",
+      "gd:concept:get_tree",
+      "gd:concept:group",
+      "gd:concept:autoload",
+      "gd:concept:get_parent"
+    ],
+    "explainFull": "`queue_free()` waits until the frame is over before deleting, so code still using the node this frame does not crash.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#memory-management",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:builtin:is_instance_valid",
@@ -1608,7 +3471,30 @@
       "ref": "classes/class_@globalscope#is_instance_valid",
       "version": "4.7"
     },
-    "rank": 81
+    "rank": 81,
+    "distractorPool": [
+      "is_same",
+      "typeof",
+      "bool",
+      "lerp",
+      "randi_range",
+      "sign",
+      "max",
+      "sqrt"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:is_same",
+      "gd:wrong:builtin:typeof",
+      "gd:wrong:builtin:bool",
+      "gd:builtin:lerp",
+      "gd:builtin:randi_range",
+      "gd:builtin:sign",
+      "gd:builtin:max",
+      "gd:builtin:sqrt"
+    ],
+    "explainFull": "`is_instance_valid(obj)` is false once the object has been freed, so you avoid using a dangling reference.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-is-instance-valid",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:concept:user-path",
@@ -1627,7 +3513,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Memory management",
       "version": "4.7"
     },
-    "rank": 82
+    "rank": 82,
+    "distractorPool": [
+      "res://",
+      "file://",
+      "save://",
+      "get_tree()",
+      "group",
+      "autoload",
+      "get_parent()",
+      "main scene"
+    ],
+    "distractorIds": [
+      "gd:concept:res-path",
+      "gd:wrong:concept:file://",
+      "gd:wrong:concept:save://",
+      "gd:concept:get_tree",
+      "gd:concept:group",
+      "gd:concept:autoload",
+      "gd:concept:get_parent",
+      "gd:concept:main-scene"
+    ],
+    "explainFull": "`user://` maps to a per-user data folder that stays writable after export; `res://` does not.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#memory-management",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:lifecycle:_physics_process",
@@ -1647,7 +3556,30 @@
       "ref": "classes/class_node#_physics_process",
       "version": "4.7"
     },
-    "rank": 83
+    "rank": 83,
+    "distractorPool": [
+      "_process",
+      "_input",
+      "_fixed_update",
+      "_draw",
+      "_enter_tree()",
+      "_exit_tree()",
+      "_notification()",
+      "_ready()"
+    ],
+    "distractorIds": [
+      "gd:lifecycle:_process",
+      "gd:wrong:lifecycle:_input",
+      "gd:wrong:lifecycle:_fixed_update",
+      "gd:lifecycle:_draw",
+      "gd:lifecycle:_enter_tree",
+      "gd:lifecycle:_exit_tree",
+      "gd:lifecycle:_notification",
+      "gd:lifecycle:_ready"
+    ],
+    "explainFull": "`_physics_process(delta)` runs in step with the physics engine, so movement and collisions stay consistent.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_node.html#class-node-private-method-physics-process",
+    "topic": "Your first script"
   },
   {
     "id": "gd:lifecycle:_enter_tree",
@@ -1666,7 +3598,30 @@
       "ref": "classes/class_node#_enter_tree",
       "version": "4.7"
     },
-    "rank": 84
+    "rank": 84,
+    "distractorPool": [
+      "_ready()",
+      "_init()",
+      "_exit_tree()",
+      "_notification()",
+      "_input()",
+      "_unhandled_input()",
+      "_draw",
+      "_process"
+    ],
+    "distractorIds": [
+      "gd:lifecycle:_ready",
+      "gd:lifecycle:_init",
+      "gd:lifecycle:_exit_tree",
+      "gd:lifecycle:_notification",
+      "gd:lifecycle:_input",
+      "gd:lifecycle:_unhandled_input",
+      "gd:lifecycle:_draw",
+      "gd:lifecycle:_process"
+    ],
+    "explainFull": "`_enter_tree()` fires on every entry into the tree, parent first; `_ready()` fires once, children first.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_node.html#class-node-private-method-enter-tree",
+    "topic": "Your first script"
   },
   {
     "id": "gd:lifecycle:_exit_tree",
@@ -1685,7 +3640,30 @@
       "ref": "classes/class_node#_exit_tree",
       "version": "4.7"
     },
-    "rank": 85
+    "rank": 85,
+    "distractorPool": [
+      "_enter_tree()",
+      "_notification()",
+      "_process()",
+      "_ready()",
+      "_init()",
+      "_input()",
+      "_unhandled_input()",
+      "_draw"
+    ],
+    "distractorIds": [
+      "gd:lifecycle:_enter_tree",
+      "gd:lifecycle:_notification",
+      "gd:wrong:lifecycle:_process()",
+      "gd:lifecycle:_ready",
+      "gd:lifecycle:_init",
+      "gd:lifecycle:_input",
+      "gd:lifecycle:_unhandled_input",
+      "gd:lifecycle:_draw"
+    ],
+    "explainFull": "`_exit_tree()` runs when the node is removed from the tree or freed, after its children have left.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_node.html#class-node-private-method-exit-tree",
+    "topic": "Your first script"
   },
   {
     "id": "gd:lifecycle:_draw",
@@ -1705,7 +3683,30 @@
       "ref": "classes/class_canvasitem#_draw",
       "version": "4.7"
     },
-    "rank": 86
+    "rank": 86,
+    "distractorPool": [
+      "_process",
+      "_paint",
+      "_render",
+      "_physics_process",
+      "_notification()",
+      "_ready()",
+      "_init()",
+      "_input()"
+    ],
+    "distractorIds": [
+      "gd:lifecycle:_process",
+      "gd:wrong:lifecycle:_paint",
+      "gd:wrong:lifecycle:_render",
+      "gd:lifecycle:_physics_process",
+      "gd:lifecycle:_notification",
+      "gd:lifecycle:_ready",
+      "gd:lifecycle:_init",
+      "gd:lifecycle:_input"
+    ],
+    "explainFull": "`_draw()` is where a CanvasItem calls `draw_*` methods; the result is kept until you request a redraw.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_canvasitem.html#class-canvasitem-private-method-draw",
+    "topic": "Your first script"
   },
   {
     "id": "gd:lifecycle:_notification",
@@ -1724,7 +3725,30 @@
       "ref": "classes/class_object#_notification",
       "version": "4.7"
     },
-    "rank": 87
+    "rank": 87,
+    "distractorPool": [
+      "_input()",
+      "_init()",
+      "_draw()",
+      "_ready()",
+      "_unhandled_input()",
+      "_enter_tree()",
+      "_exit_tree()",
+      "_process"
+    ],
+    "distractorIds": [
+      "gd:lifecycle:_input",
+      "gd:lifecycle:_init",
+      "gd:wrong:lifecycle:_draw()",
+      "gd:lifecycle:_ready",
+      "gd:lifecycle:_unhandled_input",
+      "gd:lifecycle:_enter_tree",
+      "gd:lifecycle:_exit_tree",
+      "gd:lifecycle:_process"
+    ],
+    "explainFull": "`_notification(what)` gets every notification the object is sent; the other callbacks are friendlier wrappers around some of them.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_object.html#class-object-private-method-notification",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:builtin:lerp",
@@ -1744,7 +3768,30 @@
       "ref": "classes/class_@globalscope#lerp",
       "version": "4.7"
     },
-    "rank": 88
+    "rank": 88,
+    "distractorPool": [
+      "move_toward",
+      "clamp",
+      "min",
+      "randi_range",
+      "sign",
+      "max",
+      "sqrt",
+      "deg_to_rad"
+    ],
+    "distractorIds": [
+      "gd:builtin:move_toward",
+      "gd:wrong:builtin:clamp",
+      "gd:wrong:builtin:min",
+      "gd:builtin:randi_range",
+      "gd:builtin:sign",
+      "gd:builtin:max",
+      "gd:builtin:sqrt",
+      "gd:builtin:deg_to_rad"
+    ],
+    "explainFull": "`lerp(from, to, weight)` blends between two values: weight 0 gives from, 1 gives to, 0.1 a tenth of the way.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-lerp",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:clamp",
@@ -1763,7 +3810,30 @@
       "ref": "classes/class_@globalscope#clamp",
       "version": "4.7"
     },
-    "rank": 89
+    "rank": 89,
+    "distractorPool": [
+      "lerp()",
+      "min()",
+      "max()",
+      "randf()",
+      "randi()",
+      "abs()",
+      "floor()",
+      "ceil()"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:lerp()",
+      "gd:builtin:min",
+      "gd:wrong:builtin:max()",
+      "gd:builtin:randf",
+      "gd:builtin:randi",
+      "gd:builtin:abs",
+      "gd:builtin:floor",
+      "gd:builtin:ceil"
+    ],
+    "explainFull": "`clamp(value, min, max)` returns the value, pushed back inside the range if it went outside.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-clamp",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:randf",
@@ -1782,7 +3852,30 @@
       "ref": "classes/class_@globalscope#randf",
       "version": "4.7"
     },
-    "rank": 90
+    "rank": 90,
+    "distractorPool": [
+      "randi()",
+      "randi_range()",
+      "random()",
+      "abs()",
+      "min()",
+      "floor()",
+      "ceil()",
+      "rad_to_deg()"
+    ],
+    "distractorIds": [
+      "gd:builtin:randi",
+      "gd:wrong:builtin:randi_range()",
+      "gd:wrong:builtin:random()",
+      "gd:builtin:abs",
+      "gd:builtin:min",
+      "gd:builtin:floor",
+      "gd:builtin:ceil",
+      "gd:builtin:rad_to_deg"
+    ],
+    "explainFull": "`randf()` gives a random float from 0.0 to 1.0, handy for chances such as `if randf() < 0.25`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-randf",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:randi_range",
@@ -1802,7 +3895,30 @@
       "ref": "classes/class_@globalscope#randi_range",
       "version": "4.7"
     },
-    "rank": 91
+    "rank": 91,
+    "distractorPool": [
+      "randf",
+      "range",
+      "clamp",
+      "sign",
+      "max",
+      "sqrt",
+      "deg_to_rad",
+      "move_toward"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:randf",
+      "gd:builtin:range",
+      "gd:wrong:builtin:clamp",
+      "gd:builtin:sign",
+      "gd:builtin:max",
+      "gd:builtin:sqrt",
+      "gd:builtin:deg_to_rad",
+      "gd:builtin:move_toward"
+    ],
+    "explainFull": "`randi_range(from, to)` returns a random integer between the two bounds, inclusive.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-randi-range",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:randi",
@@ -1821,7 +3937,30 @@
       "ref": "classes/class_@globalscope#randi",
       "version": "4.7"
     },
-    "rank": 92
+    "rank": 92,
+    "distractorPool": [
+      "randf()",
+      "randi_range()",
+      "range()",
+      "abs()",
+      "min()",
+      "floor()",
+      "ceil()",
+      "rad_to_deg()"
+    ],
+    "distractorIds": [
+      "gd:builtin:randf",
+      "gd:wrong:builtin:randi_range()",
+      "gd:wrong:builtin:range()",
+      "gd:builtin:abs",
+      "gd:builtin:min",
+      "gd:builtin:floor",
+      "gd:builtin:ceil",
+      "gd:builtin:rad_to_deg"
+    ],
+    "explainFull": "`randi()` returns a random integer from 0 to 2³² − 1; `randi() % 6` gives 0 to 5.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-randi",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:abs",
@@ -1840,7 +3979,30 @@
       "ref": "classes/class_@globalscope#abs",
       "version": "4.7"
     },
-    "rank": 93
+    "rank": 93,
+    "distractorPool": [
+      "sign()",
+      "floor()",
+      "sqrt()",
+      "min()",
+      "ceil()",
+      "rad_to_deg()",
+      "len()",
+      "clamp()"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:sign()",
+      "gd:builtin:floor",
+      "gd:wrong:builtin:sqrt()",
+      "gd:builtin:min",
+      "gd:builtin:ceil",
+      "gd:builtin:rad_to_deg",
+      "gd:builtin:len",
+      "gd:builtin:clamp"
+    ],
+    "explainFull": "`abs(x)` drops the minus sign: the distance of x from zero.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-abs",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:sign",
@@ -1860,7 +4022,30 @@
       "ref": "classes/class_@globalscope#sign",
       "version": "4.7"
     },
-    "rank": 94
+    "rank": 94,
+    "distractorPool": [
+      "abs",
+      "floor",
+      "round",
+      "max",
+      "sqrt",
+      "deg_to_rad",
+      "move_toward",
+      "load"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:abs",
+      "gd:wrong:builtin:floor",
+      "gd:wrong:builtin:round",
+      "gd:builtin:max",
+      "gd:builtin:sqrt",
+      "gd:builtin:deg_to_rad",
+      "gd:builtin:move_toward",
+      "gd:builtin:load"
+    ],
+    "explainFull": "`sign(x)` gives -1 for negative values, 1 for positive ones and 0 for zero.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-sign",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:min",
@@ -1879,7 +4064,30 @@
       "ref": "classes/class_@globalscope#min",
       "version": "4.7"
     },
-    "rank": 95
+    "rank": 95,
+    "distractorPool": [
+      "max()",
+      "clamp()",
+      "floor()",
+      "ceil()",
+      "rad_to_deg()",
+      "len()",
+      "randf()",
+      "randi()"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:max()",
+      "gd:builtin:clamp",
+      "gd:builtin:floor",
+      "gd:builtin:ceil",
+      "gd:builtin:rad_to_deg",
+      "gd:builtin:len",
+      "gd:builtin:randf",
+      "gd:builtin:randi"
+    ],
+    "explainFull": "`min(a, b, ...)` returns the lowest argument; `min(speed, 500)` caps speed at 500.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-min",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:max",
@@ -1899,7 +4107,30 @@
       "ref": "classes/class_@globalscope#max",
       "version": "4.7"
     },
-    "rank": 96
+    "rank": 96,
+    "distractorPool": [
+      "min",
+      "clamp",
+      "abs",
+      "sqrt",
+      "deg_to_rad",
+      "move_toward",
+      "load",
+      "str"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:min",
+      "gd:wrong:builtin:clamp",
+      "gd:wrong:builtin:abs",
+      "gd:builtin:sqrt",
+      "gd:builtin:deg_to_rad",
+      "gd:builtin:move_toward",
+      "gd:builtin:load",
+      "gd:builtin:str"
+    ],
+    "explainFull": "`max(a, b, ...)` returns the highest argument, so the result is never below 0.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-max",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:floor",
@@ -1918,7 +4149,30 @@
       "ref": "classes/class_@globalscope#floor",
       "version": "4.7"
     },
-    "rank": 97
+    "rank": 97,
+    "distractorPool": [
+      "ceil()",
+      "round()",
+      "abs()",
+      "rad_to_deg()",
+      "len()",
+      "clamp()",
+      "randf()",
+      "randi()"
+    ],
+    "distractorIds": [
+      "gd:builtin:ceil",
+      "gd:wrong:builtin:round()",
+      "gd:builtin:abs",
+      "gd:builtin:rad_to_deg",
+      "gd:builtin:len",
+      "gd:builtin:clamp",
+      "gd:builtin:randf",
+      "gd:builtin:randi"
+    ],
+    "explainFull": "`floor(x)` rounds towards negative infinity: 2.9 gives 2.0 and -2.1 gives -3.0.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-floor",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:ceil",
@@ -1937,7 +4191,30 @@
       "ref": "classes/class_@globalscope#ceil",
       "version": "4.7"
     },
-    "rank": 98
+    "rank": 98,
+    "distractorPool": [
+      "floor()",
+      "round()",
+      "sqrt()",
+      "rad_to_deg()",
+      "len()",
+      "clamp()",
+      "randf()",
+      "randi()"
+    ],
+    "distractorIds": [
+      "gd:builtin:floor",
+      "gd:wrong:builtin:round()",
+      "gd:wrong:builtin:sqrt()",
+      "gd:builtin:rad_to_deg",
+      "gd:builtin:len",
+      "gd:builtin:clamp",
+      "gd:builtin:randf",
+      "gd:builtin:randi"
+    ],
+    "explainFull": "`ceil(x)` rounds towards positive infinity, the opposite of `floor()`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-ceil",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:sqrt",
@@ -1957,7 +4234,30 @@
       "ref": "classes/class_@globalscope#sqrt",
       "version": "4.7"
     },
-    "rank": 99
+    "rank": 99,
+    "distractorPool": [
+      "pow",
+      "abs",
+      "sign",
+      "deg_to_rad",
+      "move_toward",
+      "load",
+      "str",
+      "int"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:pow",
+      "gd:wrong:builtin:abs",
+      "gd:builtin:sign",
+      "gd:builtin:deg_to_rad",
+      "gd:builtin:move_toward",
+      "gd:builtin:load",
+      "gd:builtin:str",
+      "gd:builtin:int"
+    ],
+    "explainFull": "`sqrt(x)` returns the square root; for vectors, `a.distance_to(b)` does this whole calculation for you.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-sqrt",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:deg_to_rad",
@@ -1977,7 +4277,30 @@
       "ref": "classes/class_@globalscope#deg_to_rad",
       "version": "4.7"
     },
-    "rank": 100
+    "rank": 100,
+    "distractorPool": [
+      "rad_to_deg",
+      "deg2rad",
+      "to_radians",
+      "move_toward",
+      "load",
+      "str",
+      "int",
+      "float"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:rad_to_deg",
+      "gd:wrong:builtin:deg2rad",
+      "gd:wrong:builtin:to_radians",
+      "gd:builtin:move_toward",
+      "gd:builtin:load",
+      "gd:builtin:str",
+      "gd:builtin:int",
+      "gd:builtin:float"
+    ],
+    "explainFull": "`deg_to_rad(degrees)` converts to radians; Godot 3 called it `deg2rad`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-deg-to-rad",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:rad_to_deg",
@@ -1996,7 +4319,30 @@
       "ref": "classes/class_@globalscope#rad_to_deg",
       "version": "4.7"
     },
-    "rank": 101
+    "rank": 101,
+    "distractorPool": [
+      "deg_to_rad()",
+      "rad2deg()",
+      "lerp_angle()",
+      "len()",
+      "clamp()",
+      "randf()",
+      "randi()",
+      "abs()"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:deg_to_rad()",
+      "gd:wrong:builtin:rad2deg()",
+      "gd:wrong:builtin:lerp_angle()",
+      "gd:builtin:len",
+      "gd:builtin:clamp",
+      "gd:builtin:randf",
+      "gd:builtin:randi",
+      "gd:builtin:abs"
+    ],
+    "explainFull": "`rad_to_deg(radians)` gives degrees, so `rad_to_deg(PI)` is 180.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-rad-to-deg",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:move_toward",
@@ -2016,7 +4362,30 @@
       "ref": "classes/class_@globalscope#move_toward",
       "version": "4.7"
     },
-    "rank": 102
+    "rank": 102,
+    "distractorPool": [
+      "lerp",
+      "clamp",
+      "min",
+      "load",
+      "str",
+      "int",
+      "float",
+      "print"
+    ],
+    "distractorIds": [
+      "gd:builtin:lerp",
+      "gd:wrong:builtin:clamp",
+      "gd:wrong:builtin:min",
+      "gd:builtin:load",
+      "gd:builtin:str",
+      "gd:builtin:int",
+      "gd:builtin:float",
+      "gd:builtin:print"
+    ],
+    "explainFull": "`move_toward(from, to, delta)` steps by at most delta and never overshoots the target.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-move-toward",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:load",
@@ -2036,7 +4405,30 @@
       "ref": "classes/class_@gdscript#load",
       "version": "4.7"
     },
-    "rank": 103
+    "rank": 103,
+    "distractorPool": [
+      "preload",
+      "open",
+      "import",
+      "str",
+      "int",
+      "float",
+      "print",
+      "range"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:preload",
+      "gd:wrong:builtin:open",
+      "gd:wrong:builtin:import",
+      "gd:builtin:str",
+      "gd:builtin:int",
+      "gd:builtin:float",
+      "gd:builtin:print",
+      "gd:builtin:range"
+    ],
+    "explainFull": "`load(path)` reads a resource when the line runs and accepts any path; `preload()` needs a constant one.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@gdscript.html#class-gdscript-method-load",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:str",
@@ -2056,7 +4448,30 @@
       "ref": "classes/class_@globalscope#str",
       "version": "4.7"
     },
-    "rank": 104
+    "rank": 104,
+    "distractorPool": [
+      "int",
+      "len",
+      "print",
+      "float",
+      "range",
+      "is_instance_valid",
+      "lerp",
+      "randi_range"
+    ],
+    "distractorIds": [
+      "gd:builtin:int",
+      "gd:wrong:builtin:len",
+      "gd:builtin:print",
+      "gd:builtin:float",
+      "gd:builtin:range",
+      "gd:builtin:is_instance_valid",
+      "gd:builtin:lerp",
+      "gd:builtin:randi_range"
+    ],
+    "explainFull": "`str(value)` converts any value to a String; adding an int straight to a String is an error.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@globalscope.html#class-globalscope-method-str",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:len",
@@ -2075,7 +4490,30 @@
       "ref": "classes/class_@gdscript#len",
       "version": "4.7"
     },
-    "rank": 105
+    "rank": 105,
+    "distractorPool": [
+      "range()",
+      "count()",
+      "str()",
+      "clamp()",
+      "randf()",
+      "randi()",
+      "abs()",
+      "min()"
+    ],
+    "distractorIds": [
+      "gd:wrong:builtin:range()",
+      "gd:wrong:builtin:count()",
+      "gd:wrong:builtin:str()",
+      "gd:builtin:clamp",
+      "gd:builtin:randf",
+      "gd:builtin:randi",
+      "gd:builtin:abs",
+      "gd:builtin:min"
+    ],
+    "explainFull": "`len(value)` returns the number of characters or elements; arrays also have `.size()`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@gdscript.html#class-gdscript-method-len",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:builtin:int",
@@ -2095,7 +4533,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#int",
       "version": "4.7"
     },
-    "rank": 106
+    "rank": 106,
+    "distractorPool": [
+      "float",
+      "str",
+      "round",
+      "print",
+      "range",
+      "is_instance_valid",
+      "lerp",
+      "randi_range"
+    ],
+    "distractorIds": [
+      "gd:builtin:float",
+      "gd:builtin:str",
+      "gd:wrong:builtin:round",
+      "gd:builtin:print",
+      "gd:builtin:range",
+      "gd:builtin:is_instance_valid",
+      "gd:builtin:lerp",
+      "gd:builtin:randi_range"
+    ],
+    "explainFull": "`int(x)` truncates towards zero, so 7.9 becomes 7; use `round()` to get the nearest number.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#int",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:builtin:float",
@@ -2115,7 +4576,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Operators",
       "version": "4.7"
     },
-    "rank": 107
+    "rank": 107,
+    "distractorPool": [
+      "int",
+      "str",
+      "abs",
+      "print",
+      "range",
+      "is_instance_valid",
+      "lerp",
+      "randi_range"
+    ],
+    "distractorIds": [
+      "gd:builtin:int",
+      "gd:builtin:str",
+      "gd:wrong:builtin:abs",
+      "gd:builtin:print",
+      "gd:builtin:range",
+      "gd:builtin:is_instance_valid",
+      "gd:builtin:lerp",
+      "gd:builtin:randi_range"
+    ],
+    "explainFull": "Dividing two ints gives an int; converting one side with `float()` keeps the fraction.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#operators",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:get_tree",
@@ -2134,7 +4618,30 @@
       "ref": "classes/class_node#get_tree",
       "version": "4.7"
     },
-    "rank": 108
+    "rank": 108,
+    "distractorPool": [
+      "get_parent()",
+      "get_owner()",
+      "get_scene()",
+      "group",
+      "autoload",
+      "main scene",
+      "scene tree",
+      "node"
+    ],
+    "distractorIds": [
+      "gd:concept:get_parent",
+      "gd:wrong:concept:get_owner()",
+      "gd:wrong:concept:get_scene()",
+      "gd:concept:group",
+      "gd:concept:autoload",
+      "gd:concept:main-scene",
+      "gd:concept:scene-tree",
+      "gd:concept:node"
+    ],
+    "explainFull": "`get_tree()` gives access to the running SceneTree, for example `get_tree().reload_current_scene()`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_node.html#class-node-method-get-tree",
+    "topic": "Your first script"
   },
   {
     "id": "gd:concept:add_child",
@@ -2154,7 +4661,30 @@
       "ref": "classes/class_node#add_child",
       "version": "4.7"
     },
-    "rank": 109
+    "rank": 109,
+    "distractorPool": [
+      "append",
+      "instantiate",
+      "insert",
+      "add_to_group",
+      "call",
+      "connect",
+      "emit",
+      "$"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:append",
+      "gd:concept:instantiate",
+      "gd:wrong:concept:insert",
+      "gd:concept:add_to_group",
+      "gd:concept:call",
+      "gd:concept:connect",
+      "gd:concept:emit",
+      "gd:concept:dollar-node-path"
+    ],
+    "explainFull": "`add_child(node)` attaches a node as a child, which puts it in the tree so it is processed and drawn.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_node.html#class-node-method-add-child",
+    "topic": "Your first script"
   },
   {
     "id": "gd:concept:instantiate",
@@ -2174,7 +4704,30 @@
       "ref": "classes/class_packedscene#instantiate",
       "version": "4.7"
     },
-    "rank": 110
+    "rank": 110,
+    "distractorPool": [
+      "new",
+      "duplicate",
+      "load",
+      "add_to_group",
+      "call",
+      "connect",
+      "emit",
+      "$"
+    ],
+    "distractorIds": [
+      "gd:concept:new",
+      "gd:wrong:concept:duplicate",
+      "gd:wrong:concept:load",
+      "gd:concept:add_to_group",
+      "gd:concept:call",
+      "gd:concept:connect",
+      "gd:concept:emit",
+      "gd:concept:dollar-node-path"
+    ],
+    "explainFull": "`PackedScene.instantiate()` builds the scene's node tree and returns its root, ready for `add_child()`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_packedscene.html#class-packedscene-method-instantiate",
+    "topic": "Exports"
   },
   {
     "id": "gd:concept:group",
@@ -2193,7 +4746,30 @@
       "ref": "classes/class_node#add_to_group",
       "version": "4.7"
     },
-    "rank": 111
+    "rank": 111,
+    "distractorPool": [
+      "layer",
+      "category",
+      "tag",
+      "autoload",
+      "get_parent()",
+      "main scene",
+      "scene tree",
+      "node"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:layer",
+      "gd:wrong:concept:category",
+      "gd:wrong:concept:tag",
+      "gd:concept:autoload",
+      "gd:concept:get_parent",
+      "gd:concept:main-scene",
+      "gd:concept:scene-tree",
+      "gd:concept:node"
+    ],
+    "explainFull": "Nodes in a group can be found or called together, for example with `get_tree().call_group(\"enemies\", \"die\")`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_node.html#class-node-method-add-to-group",
+    "topic": "Your first script"
   },
   {
     "id": "gd:concept:add_to_group",
@@ -2213,7 +4789,30 @@
       "ref": "classes/class_node#add_to_group",
       "version": "4.7"
     },
-    "rank": 112
+    "rank": 112,
+    "distractorPool": [
+      "is_in_group",
+      "set_group",
+      "join_group",
+      "call",
+      "connect",
+      "emit",
+      "$",
+      "%"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:is_in_group",
+      "gd:wrong:concept:set_group",
+      "gd:wrong:concept:join_group",
+      "gd:concept:call",
+      "gd:concept:connect",
+      "gd:concept:emit",
+      "gd:concept:dollar-node-path",
+      "gd:concept:unique-name"
+    ],
+    "explainFull": "`add_to_group(\"name\")` puts the node in that group; `is_in_group()` checks membership.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_node.html#class-node-method-add-to-group",
+    "topic": "Your first script"
   },
   {
     "id": "gd:concept:autoload",
@@ -2232,7 +4831,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Variables",
       "version": "4.7"
     },
-    "rank": 113
+    "rank": 113,
+    "distractorPool": [
+      "main scene",
+      "plugin",
+      "resource",
+      "get_parent()",
+      "scene tree",
+      "node",
+      "scene",
+      "root node"
+    ],
+    "distractorIds": [
+      "gd:concept:main-scene",
+      "gd:wrong:concept:plugin",
+      "gd:wrong:concept:resource",
+      "gd:concept:get_parent",
+      "gd:concept:scene-tree",
+      "gd:concept:node",
+      "gd:concept:scene",
+      "gd:concept:root-node"
+    ],
+    "explainFull": "Autoloads are listed in Project Settings and stay alive across scene changes, so they suit game state such as the score.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#variables",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:get_parent",
@@ -2251,7 +4873,30 @@
       "ref": "classes/class_node#get_parent",
       "version": "4.7"
     },
-    "rank": 114
+    "rank": 114,
+    "distractorPool": [
+      "get_owner()",
+      "get_tree()",
+      "get_child()",
+      "main scene",
+      "scene tree",
+      "node",
+      "scene",
+      "root node"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:get_owner()",
+      "gd:concept:get_tree",
+      "gd:wrong:concept:get_child()",
+      "gd:concept:main-scene",
+      "gd:concept:scene-tree",
+      "gd:concept:node",
+      "gd:concept:scene",
+      "gd:concept:root-node"
+    ],
+    "explainFull": "`get_parent()` returns the parent node, or null if the node has none.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_node.html#class-node-method-get-parent",
+    "topic": "Your first script"
   },
   {
     "id": "gd:concept:main-scene",
@@ -2270,7 +4915,30 @@
       "ref": "getting_started/step_by_step/nodes_and_scenes#Setting the main scene",
       "version": "4.7"
     },
-    "rank": 115
+    "rank": 115,
+    "distractorPool": [
+      "root node",
+      "autoload",
+      "start scene",
+      "scene tree",
+      "node",
+      "scene",
+      "instance",
+      "delta"
+    ],
+    "distractorIds": [
+      "gd:concept:root-node",
+      "gd:concept:autoload",
+      "gd:wrong:concept:start scene",
+      "gd:concept:scene-tree",
+      "gd:concept:node",
+      "gd:concept:scene",
+      "gd:concept:instance",
+      "gd:concept:delta"
+    ],
+    "explainFull": "The main scene is set in Project Settings, or chosen the first time you press Run Project.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/nodes_and_scenes.html#setting-the-main-scene",
+    "topic": "Nodes and scenes"
   },
   {
     "id": "gd:concept:scene-tree",
@@ -2289,7 +4957,30 @@
       "ref": "classes/class_scenetree#Description",
       "version": "4.7"
     },
-    "rank": 116
+    "rank": 116,
+    "distractorPool": [
+      "node path",
+      "main scene",
+      "file system",
+      "node",
+      "scene",
+      "root node",
+      "instance",
+      "delta"
+    ],
+    "distractorIds": [
+      "gd:wrong:concept:node path",
+      "gd:concept:main-scene",
+      "gd:wrong:concept:file system",
+      "gd:concept:node",
+      "gd:concept:scene",
+      "gd:concept:root-node",
+      "gd:concept:instance",
+      "gd:concept:delta"
+    ],
+    "explainFull": "The scene tree holds every active node; a node only gets callbacks such as `_process()` while it is in the tree.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_scenetree.html#description",
+    "topic": "Core"
   },
   {
     "id": "gd:annotation:warning_ignore",
@@ -2309,7 +5000,30 @@
       "ref": "classes/class_@gdscript#@warning_ignore",
       "version": "4.7"
     },
-    "rank": 117
+    "rank": 117,
+    "distractorPool": [
+      "@tool",
+      "@onready",
+      "@export",
+      "@export_range",
+      "@icon",
+      "@export_group",
+      "@export_enum",
+      "@static_unload"
+    ],
+    "distractorIds": [
+      "gd:annotation:tool",
+      "gd:annotation:onready",
+      "gd:annotation:export",
+      "gd:annotation:export_range",
+      "gd:annotation:icon",
+      "gd:annotation:export_group",
+      "gd:annotation:export_enum",
+      "gd:annotation:static_unload"
+    ],
+    "explainFull": "`@warning_ignore(\"name\")` hides one kind of warning for the statement that follows.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_@gdscript.html#class-gdscript-annotation-warning-ignore",
+    "topic": "Built-in functions"
   },
   {
     "id": "gd:annotation:static_unload",
@@ -2328,7 +5042,30 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#@static_unload annotation",
       "version": "4.7"
     },
-    "rank": 118
+    "rank": 118,
+    "distractorPool": [
+      "@tool",
+      "@onready",
+      "@export_storage",
+      "@export_file",
+      "@export",
+      "@export_range",
+      "@icon",
+      "@export_group"
+    ],
+    "distractorIds": [
+      "gd:annotation:tool",
+      "gd:annotation:onready",
+      "gd:wrong:annotation:@export_storage",
+      "gd:annotation:export_file",
+      "gd:annotation:export",
+      "gd:annotation:export_range",
+      "gd:annotation:icon",
+      "gd:annotation:export_group"
+    ],
+    "explainFull": "Static variables normally live until the game quits; `@static_unload` marks the whole script so they may be freed when unused (the manual notes a current bug that keeps scripts loaded anyway).",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#static-unload-annotation",
+    "topic": "GDScript basics"
   },
   {
     "id": "gd:concept:call",
@@ -2348,6 +5085,29 @@
       "ref": "tutorials/scripting/gdscript/gdscript_basics#Lambda functions",
       "version": "4.7"
     },
-    "rank": 119
+    "rank": 119,
+    "distractorPool": [
+      "emit",
+      "bind",
+      "run",
+      "connect",
+      "$",
+      "%",
+      "func",
+      "_"
+    ],
+    "distractorIds": [
+      "gd:concept:emit",
+      "gd:concept:bind",
+      "gd:wrong:concept:run",
+      "gd:concept:connect",
+      "gd:concept:dollar-node-path",
+      "gd:concept:unique-name",
+      "gd:concept:lambda",
+      "gd:concept:wildcard"
+    ],
+    "explainFull": "A function stored in a variable is a Callable; run it with `.call(args)`, not with plain brackets.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/tutorials/scripting/gdscript/gdscript_basics.html#lambda-functions",
+    "topic": "GDScript basics"
   }
 ]

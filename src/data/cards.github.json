@@ -6,11 +6,34 @@
     "prompt": "A ____ is the most basic element of GitHub. They're easiest to imagine as a project's folder. A ____ contains all of the project files (including documentation), and stores each file's revision history. Repositories can have multiple collaborators and can be either public or private.",
     "answer": "repository",
     "distractors": [
-      "feature branch",
-      "line ending",
-      "notification"
+      "commit",
+      "clone",
+      "push"
+    ],
+    "distractorPool": [
+      "commit",
+      "clone",
+      "push",
+      "pull",
+      "fetch",
+      "merge",
+      "branch",
+      "pull request"
+    ],
+    "distractorIds": [
+      "gh:term:commit",
+      "gh:term:clone",
+      "gh:term:push",
+      "gh:term:pull",
+      "gh:term:fetch",
+      "gh:term:merge",
+      "gh:term:branch",
+      "gh:term:pull-request"
     ],
     "explain": "repository: A repository is the most basic element of GitHub. They're easiest to imagine as a project's folder.",
+    "explainFull": "repository: A repository is the most basic element of GitHub. They're easiest to imagine as a project's folder. A repository contains all of the project files (including documentation), and stores each file's revision history. Repositories can have multiple collaborators and can be either public or private.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#repository",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "repository",
@@ -25,11 +48,34 @@
     "prompt": "A ____, or \"revision\", is an individual change to a file (or set of files). When you make a ____ to save your work, Git creates a unique ID (a.k.a. the \"SHA\" or \"hash\") that allows you to keep record of the specific changes committed along with who made them and when. ____ usually contain a ____ message which is a brief description of what changes were made.",
     "answer": "commit",
     "distractors": [
-      "topic branch",
-      "LFS",
-      "watch"
+      "clone",
+      "push",
+      "pull"
+    ],
+    "distractorPool": [
+      "clone",
+      "push",
+      "pull",
+      "fetch",
+      "merge",
+      "merge conflict",
+      "branch",
+      "pull request"
+    ],
+    "distractorIds": [
+      "gh:term:clone",
+      "gh:term:push",
+      "gh:term:pull",
+      "gh:term:fetch",
+      "gh:term:merge",
+      "gh:term:merge-conflict",
+      "gh:term:branch",
+      "gh:term:pull-request"
     ],
     "explain": "commit: A commit, or \"revision\", is an individual change to a file (or set of files). When you make a commit to save your work, Git creates a unique ID (a.k.a.",
+    "explainFull": "commit: A commit, or \"revision\", is an individual change to a file (or set of files). When you make a commit to save your work, Git creates a unique ID (a.k.a. the \"SHA\" or \"hash\") that allows you to keep record of the specific changes committed along with who made them and when. Commits usually contain a commit message which is a brief description of what changes were made.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#commit",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "commit",
@@ -44,11 +90,34 @@
     "prompt": "A ____ is a parallel version of a repository. It is contained within the repository, but does not affect the primary or main ____ allowing you to work freely without disrupting the \"live\" version. When you've made the changes you want to make, you can merge your ____ back into the main ____ to publish your changes.",
     "answer": "branch",
     "distractors": [
-      "checkout",
-      "collaborator",
-      "star"
+      "pull request",
+      "main",
+      "default branch"
+    ],
+    "distractorPool": [
+      "pull request",
+      "main",
+      "default branch",
+      "review",
+      "pull request review",
+      "base branch",
+      "clone",
+      "push"
+    ],
+    "distractorIds": [
+      "gh:term:pull-request",
+      "gh:term:main",
+      "gh:term:default-branch",
+      "gh:term:review",
+      "gh:term:pull-request-review",
+      "gh:term:base-branch",
+      "gh:term:clone",
+      "gh:term:push"
     ],
     "explain": "branch: A branch is a parallel version of a repository. It is contained within the repository, but does not affect the primary or main branch allowing you to work freely without disrupting the \"live\" version.",
+    "explainFull": "branch: A branch is a parallel version of a repository. It is contained within the repository, but does not affect the primary or main branch allowing you to work freely without disrupting the \"live\" version. When you've made the changes you want to make, you can merge your branch back into the main branch to publish your changes.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#branch",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "branch",
@@ -63,11 +132,34 @@
     "prompt": "A ____ is a copy of a repository that lives on your computer instead of on a website's server somewhere, or the act of making that copy. When you make a ____, you can edit the files in your preferred editor and use Git to keep track of your changes without having to be online. The repository you cloned is still connected to the remote version so that you can push your local changes to the remote to keep them synced when you're online.",
     "answer": "clone",
     "distractors": [
-      "HEAD",
-      "contributor",
-      "SSH key"
+      "push",
+      "pull",
+      "fetch"
+    ],
+    "distractorPool": [
+      "push",
+      "pull",
+      "fetch",
+      "merge",
+      "merge conflict",
+      "remote",
+      "pull request",
+      "main"
+    ],
+    "distractorIds": [
+      "gh:term:push",
+      "gh:term:pull",
+      "gh:term:fetch",
+      "gh:term:merge",
+      "gh:term:merge-conflict",
+      "gh:term:remote",
+      "gh:term:pull-request",
+      "gh:term:main"
     ],
     "explain": "clone: A clone is a copy of a repository that lives on your computer instead of on a website's server somewhere, or the act of making that copy. When you make a clone, you can edit the files in your preferred editor and use Git to keep track of your changes without having to be online.",
+    "explainFull": "clone: A clone is a copy of a repository that lives on your computer instead of on a website's server somewhere, or the act of making that copy. When you make a clone, you can edit the files in your preferred editor and use Git to keep track of your changes without having to be online. The repository you cloned is still connected to the remote version so that you can push your local changes to the remote to keep them synced when you're online.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#clone",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "clone",
@@ -82,11 +174,34 @@
     "prompt": "To ____ means to send your committed changes to a remote repository on GitHub.com. For instance, if you change something locally, you can ____ those changes so that others may access them.",
     "answer": "push",
     "distractors": [
-      "detached HEAD",
-      "assignee",
-      "deploy key"
+      "pull",
+      "fetch",
+      "merge"
+    ],
+    "distractorPool": [
+      "pull",
+      "fetch",
+      "merge",
+      "merge conflict",
+      "remote",
+      "origin",
+      "pull request",
+      "main"
+    ],
+    "distractorIds": [
+      "gh:term:pull",
+      "gh:term:fetch",
+      "gh:term:merge",
+      "gh:term:merge-conflict",
+      "gh:term:remote",
+      "gh:term:origin",
+      "gh:term:pull-request",
+      "gh:term:main"
     ],
     "explain": "push: To push means to send your committed changes to a remote repository on GitHub.com. For instance, if you change something locally, you can push those changes so that others may access them.",
+    "explainFull": "push: To push means to send your committed changes to a remote repository on GitHub.com. For instance, if you change something locally, you can push those changes so that others may access them.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#push",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "push",
@@ -101,11 +216,34 @@
     "prompt": "____ refers to when you are fetching in changes and merging them. For instance, if someone has edited the remote file you're both working on, you'll want to ____ in those changes to your local copy so that it's up to date. See also fetch.",
     "answer": "pull",
     "distractors": [
-      "revert",
-      "label",
-      "access token"
+      "fetch",
+      "merge",
+      "merge conflict"
+    ],
+    "distractorPool": [
+      "fetch",
+      "merge",
+      "merge conflict",
+      "remote",
+      "origin",
+      "commit message",
+      "pull request",
+      "main"
+    ],
+    "distractorIds": [
+      "gh:term:fetch",
+      "gh:term:merge",
+      "gh:term:merge-conflict",
+      "gh:term:remote",
+      "gh:term:origin",
+      "gh:term:commit-message",
+      "gh:term:pull-request",
+      "gh:term:main"
     ],
     "explain": "pull: Pull refers to when you are fetching in changes and merging them. For instance, if someone has edited the remote file you're both working on, you'll want to pull in those changes to your local copy so that it's up to date.",
+    "explainFull": "pull: Pull refers to when you are fetching in changes and merging them. For instance, if someone has edited the remote file you're both working on, you'll want to pull in those changes to your local copy so that it's up to date. See also fetch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#pull",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "pull",
@@ -120,11 +258,34 @@
     "prompt": "When you use `git ____`, you're adding changes from the remote repository to your local working branch without committing them. Unlike `git pull`, fetching allows you to review changes before committing them to your local branch.",
     "answer": "fetch",
     "distractors": [
-      "rebase",
-      "milestone",
-      "private repository"
+      "merge",
+      "merge conflict",
+      "remote"
+    ],
+    "distractorPool": [
+      "merge",
+      "merge conflict",
+      "remote",
+      "origin",
+      "commit message",
+      "diff",
+      "pull request",
+      "main"
+    ],
+    "distractorIds": [
+      "gh:term:merge",
+      "gh:term:merge-conflict",
+      "gh:term:remote",
+      "gh:term:origin",
+      "gh:term:commit-message",
+      "gh:term:diff",
+      "gh:term:pull-request",
+      "gh:term:main"
     ],
     "explain": "fetch: When you use `git fetch`, you're adding changes from the remote repository to your local working branch without committing them. Unlike `git pull`, fetching allows you to review changes before committing them to your local branch.",
+    "explainFull": "fetch: When you use `git fetch`, you're adding changes from the remote repository to your local working branch without committing them. Unlike `git pull`, fetching allows you to review changes before committing them to your local branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#fetch",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "fetch",
@@ -139,11 +300,34 @@
     "prompt": "Merging takes the changes from one branch (in the same repository or from a fork), and applies them into another. This often happens as a \"pull request\" (which can be thought of as a request to ____), or via the command line. A ____ can be done through a pull request via the GitHub.com web interface if there are no conflicting changes, or can always be done via the command line.",
     "answer": "merge",
     "distractors": [
-      "squash",
-      "release",
-      "public repository"
+      "merge conflict",
+      "remote",
+      "origin"
+    ],
+    "distractorPool": [
+      "merge conflict",
+      "remote",
+      "origin",
+      "commit message",
+      "diff",
+      "Git",
+      "pull request",
+      "main"
+    ],
+    "distractorIds": [
+      "gh:term:merge-conflict",
+      "gh:term:remote",
+      "gh:term:origin",
+      "gh:term:commit-message",
+      "gh:term:diff",
+      "gh:term:git",
+      "gh:term:pull-request",
+      "gh:term:main"
     ],
     "explain": "merge: Merging takes the changes from one branch (in the same repository or from a fork), and applies them into another. This often happens as a \"pull request\" (which can be thought of as a request to merge), or via the command line.",
+    "explainFull": "merge: Merging takes the changes from one branch (in the same repository or from a fork), and applies them into another. This often happens as a \"pull request\" (which can be thought of as a request to merge), or via the command line. A merge can be done through a pull request via the GitHub.com web interface if there are no conflicting changes, or can always be done via the command line.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#merge",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "merge",
@@ -158,11 +342,34 @@
     "prompt": "A difference that occurs between merged branches. ____ happen when people make different changes to the same line of the same file, or when one person edits a file and another person deletes the same file. The ____ must be resolved before you can merge the branches.",
     "answer": "merge conflict",
     "distractors": [
-      "cherry-picking",
-      "protected branch",
-      "owner"
+      "remote",
+      "origin",
+      "commit message"
+    ],
+    "distractorPool": [
+      "remote",
+      "origin",
+      "commit message",
+      "diff",
+      "Git",
+      "checkout",
+      "pull request",
+      "main"
+    ],
+    "distractorIds": [
+      "gh:term:remote",
+      "gh:term:origin",
+      "gh:term:commit-message",
+      "gh:term:diff",
+      "gh:term:git",
+      "gh:term:checkout",
+      "gh:term:pull-request",
+      "gh:term:main"
     ],
     "explain": "merge conflict: A difference that occurs between merged branches. Merge conflicts happen when people make different changes to the same line of the same file, or when one person edits a file and another person deletes the same file.",
+    "explainFull": "merge conflict: A difference that occurs between merged branches. Merge conflicts happen when people make different changes to the same line of the same file, or when one person edits a file and another person deletes the same file. The merge conflict must be resolved before you can merge the branches.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#merge-conflict",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "merge conflict",
@@ -177,11 +384,34 @@
     "prompt": "____ are proposed changes to a repository submitted by a user and accepted or rejected by a repository's collaborators. Like issues, ____ each have their own discussion forum.",
     "answer": "pull request",
     "distractors": [
-      "fast-forward",
-      "branch restriction",
-      "organization"
+      "main",
+      "default branch",
+      "review"
+    ],
+    "distractorPool": [
+      "main",
+      "default branch",
+      "review",
+      "pull request review",
+      "base branch",
+      "head branch",
+      "remote",
+      "origin"
+    ],
+    "distractorIds": [
+      "gh:term:main",
+      "gh:term:default-branch",
+      "gh:term:review",
+      "gh:term:pull-request-review",
+      "gh:term:base-branch",
+      "gh:term:head-branch",
+      "gh:term:remote",
+      "gh:term:origin"
     ],
     "explain": "pull request: Pull requests are proposed changes to a repository submitted by a user and accepted or rejected by a repository's collaborators. Like issues, pull requests each have their own discussion forum.",
+    "explainFull": "pull request: Pull requests are proposed changes to a repository submitted by a user and accepted or rejected by a repository's collaborators. Like issues, pull requests each have their own discussion forum.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#pull-request",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "pull request",
@@ -196,11 +426,34 @@
     "prompt": "This is the version of a repository or branch that is hosted on a server, most likely GitHub.com. ____ versions can be connected to local clones so that changes can be synced.",
     "answer": "remote",
     "distractors": [
-      "non-fast-forward",
-      "required pull request review",
-      "team"
+      "origin",
+      "commit message",
+      "diff"
+    ],
+    "distractorPool": [
+      "origin",
+      "commit message",
+      "diff",
+      "Git",
+      "checkout",
+      "HEAD",
+      "main",
+      "default branch"
+    ],
+    "distractorIds": [
+      "gh:term:origin",
+      "gh:term:commit-message",
+      "gh:term:diff",
+      "gh:term:git",
+      "gh:term:checkout",
+      "gh:term:head",
+      "gh:term:main",
+      "gh:term:default-branch"
     ],
     "explain": "remote: This is the version of a repository or branch that is hosted on a server, most likely GitHub.com. Remote versions can be connected to local clones so that changes can be synced.",
+    "explainFull": "remote: This is the version of a repository or branch that is hosted on a server, most likely GitHub.com. Remote versions can be connected to local clones so that changes can be synced.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#remote",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "remote",
@@ -215,11 +468,34 @@
     "prompt": "The default upstream repository. Most projects have at least one upstream project that they track. By default, ____ is used for that purpose.",
     "answer": "origin",
     "distractors": [
-      "force push",
-      "status checks",
-      "outside collaborator"
+      "commit message",
+      "diff",
+      "Git"
+    ],
+    "distractorPool": [
+      "commit message",
+      "diff",
+      "Git",
+      "checkout",
+      "HEAD",
+      "detached HEAD",
+      "main",
+      "default branch"
+    ],
+    "distractorIds": [
+      "gh:term:commit-message",
+      "gh:term:diff",
+      "gh:term:git",
+      "gh:term:checkout",
+      "gh:term:head",
+      "gh:term:detached-head",
+      "gh:term:main",
+      "gh:term:default-branch"
     ],
     "explain": "origin: The default upstream repository. Most projects have at least one upstream project that they track.",
+    "explainFull": "origin: The default upstream repository. Most projects have at least one upstream project that they track. By default, origin is used for that purpose.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#origin",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "origin",
@@ -234,11 +510,34 @@
     "prompt": "The default development branch. Whenever you create a Git repository, a branch named `____` is created, and becomes the active branch. In most cases, this contains the local development, though that is purely by convention and is not required.",
     "answer": "main",
     "distractors": [
-      "push a branch",
-      "required status check",
-      "project board"
+      "review",
+      "pull request review",
+      "base branch"
+    ],
+    "distractorPool": [
+      "review",
+      "pull request review",
+      "base branch",
+      "head branch",
+      "compare branch",
+      "feature branch",
+      "commit message",
+      "diff"
+    ],
+    "distractorIds": [
+      "gh:term:review",
+      "gh:term:pull-request-review",
+      "gh:term:base-branch",
+      "gh:term:head-branch",
+      "gh:term:compare-branch",
+      "gh:term:feature-branch",
+      "gh:term:commit-message",
+      "gh:term:diff"
     ],
     "explain": "main: The default development branch. Whenever you create a Git repository, a branch named `main` is created, and becomes the active branch.",
+    "explainFull": "main: The default development branch. Whenever you create a Git repository, a branch named `main` is created, and becomes the active branch. In most cases, this contains the local development, though that is purely by convention and is not required.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#main",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "main",
@@ -253,11 +552,34 @@
     "prompt": "The base branch for new pull requests and code commits in a repository. Each repository has at least one branch, which Git creates when you initialize the repository. The first branch is usually called `main`, and is often the ____.",
     "answer": "default branch",
     "distractors": [
-      "upstream",
-      "code owner",
-      "GitHub Pages"
+      "review",
+      "pull request review",
+      "base branch"
+    ],
+    "distractorPool": [
+      "review",
+      "pull request review",
+      "base branch",
+      "head branch",
+      "compare branch",
+      "feature branch",
+      "commit message",
+      "diff"
+    ],
+    "distractorIds": [
+      "gh:term:review",
+      "gh:term:pull-request-review",
+      "gh:term:base-branch",
+      "gh:term:head-branch",
+      "gh:term:compare-branch",
+      "gh:term:feature-branch",
+      "gh:term:commit-message",
+      "gh:term:diff"
     ],
     "explain": "default branch: The base branch for new pull requests and code commits in a repository. Each repository has at least one branch, which Git creates when you initialize the repository.",
+    "explainFull": "default branch: The base branch for new pull requests and code commits in a repository. Each repository has at least one branch, which Git creates when you initialize the repository. The first branch is usually called `main`, and is often the default branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#default-branch",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "default branch",
@@ -272,11 +594,34 @@
     "prompt": "Short, descriptive text that accompanies a commit and communicates the change the commit is introducing.",
     "answer": "commit message",
     "distractors": [
-      "upstream branch",
-      "continuous integration",
-      "GitHub Wiki"
+      "diff",
+      "Git",
+      "checkout"
+    ],
+    "distractorPool": [
+      "diff",
+      "Git",
+      "checkout",
+      "HEAD",
+      "detached HEAD",
+      "revert",
+      "README",
+      "issue"
+    ],
+    "distractorIds": [
+      "gh:term:diff",
+      "gh:term:git",
+      "gh:term:checkout",
+      "gh:term:head",
+      "gh:term:detached-head",
+      "gh:term:revert",
+      "gh:term:readme",
+      "gh:term:issue"
     ],
     "explain": "commit message: Short, descriptive text that accompanies a commit and communicates the change the commit is introducing.",
+    "explainFull": "commit message: Short, descriptive text that accompanies a commit and communicates the change the commit is introducing.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#commit-message",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "commit message",
@@ -291,11 +636,34 @@
     "prompt": "A ____ is the difference in changes between two commits, or saved changes. The ____ will visually describe what was added or removed from a file since its last commit.",
     "answer": "diff",
     "distractors": [
-      "fork",
-      "license",
-      "dependency graph"
+      "Git",
+      "checkout",
+      "HEAD"
+    ],
+    "distractorPool": [
+      "Git",
+      "checkout",
+      "HEAD",
+      "detached HEAD",
+      "revert",
+      "rebase",
+      "README",
+      "issue"
+    ],
+    "distractorIds": [
+      "gh:term:git",
+      "gh:term:checkout",
+      "gh:term:head",
+      "gh:term:detached-head",
+      "gh:term:revert",
+      "gh:term:rebase",
+      "gh:term:readme",
+      "gh:term:issue"
     ],
     "explain": "diff: A diff is the difference in changes between two commits, or saved changes. The diff will visually describe what was added or removed from a file since its last commit.",
+    "explainFull": "diff: A diff is the difference in changes between two commits, or saved changes. The diff will visually describe what was added or removed from a file since its last commit.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#diff",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "diff",
@@ -310,11 +678,34 @@
     "prompt": "____ is an open source program for tracking changes in text files. It was written by the author of the Linux operating system, and is the core technology that GitHub, the social and user interface, is built on top of.",
     "answer": "Git",
     "distractors": [
-      "remote repository",
-      "gist",
-      "webhooks"
+      "checkout",
+      "HEAD",
+      "detached HEAD"
+    ],
+    "distractorPool": [
+      "checkout",
+      "HEAD",
+      "detached HEAD",
+      "revert",
+      "rebase",
+      "squash",
+      "README",
+      "issue"
+    ],
+    "distractorIds": [
+      "gh:term:checkout",
+      "gh:term:head",
+      "gh:term:detached-head",
+      "gh:term:revert",
+      "gh:term:rebase",
+      "gh:term:squash",
+      "gh:term:readme",
+      "gh:term:issue"
     ],
     "explain": "Git: Git is an open source program for tracking changes in text files. It was written by the author of the Linux operating system, and is the core technology that GitHub, the social and user interface, is built on top of.",
+    "explainFull": "Git: Git is an open source program for tracking changes in text files. It was written by the author of the Linux operating system, and is the core technology that GitHub, the social and user interface, is built on top of.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#git",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "Git",
@@ -329,11 +720,34 @@
     "prompt": "A text file containing information about the files in a repository that is typically the first file a visitor to your repository will see. A ____ file, along with a repository license, contribution guidelines, and a code of conduct, helps you share expectations and manage contributions to your project.",
     "answer": "README",
     "distractors": [
-      "remote URL",
-      "Markdown",
-      "hook"
+      "issue",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorPool": [
+      "issue",
+      "collaborator",
+      "contributor",
+      "assignee",
+      "label",
+      "milestone",
+      "review",
+      "pull request review"
+    ],
+    "distractorIds": [
+      "gh:term:issue",
+      "gh:term:collaborator",
+      "gh:term:contributor",
+      "gh:term:assignee",
+      "gh:term:label",
+      "gh:term:milestone",
+      "gh:term:review",
+      "gh:term:pull-request-review"
     ],
     "explain": "README: A text file containing information about the files in a repository that is typically the first file a visitor to your repository will see. A README file, along with a repository license, contribution guidelines, and a code of conduct, helps you share expectations and manage contributions to your project.",
+    "explainFull": "README: A text file containing information about the files in a repository that is typically the first file a visitor to your repository will see. A README file, along with a repository license, contribution guidelines, and a code of conduct, helps you share expectations and manage contributions to your project.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#readme",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "README",
@@ -348,11 +762,34 @@
     "prompt": "____ are suggested improvements, tasks or questions related to the repository. ____ can be created by anyone (for public repositories), and are moderated by repository collaborators. Each ____ contains its own discussion thread. You can also categorize an ____ with labels and assign it to someone.",
     "answer": "issue",
     "distractors": [
-      "clean",
-      "GitHub Flavored Markdown",
-      "mirror"
+      "collaborator",
+      "contributor",
+      "assignee"
+    ],
+    "distractorPool": [
+      "collaborator",
+      "contributor",
+      "assignee",
+      "label",
+      "milestone",
+      "release",
+      "review",
+      "pull request review"
+    ],
+    "distractorIds": [
+      "gh:term:collaborator",
+      "gh:term:contributor",
+      "gh:term:assignee",
+      "gh:term:label",
+      "gh:term:milestone",
+      "gh:term:release",
+      "gh:term:review",
+      "gh:term:pull-request-review"
     ],
     "explain": "issue: Issues are suggested improvements, tasks or questions related to the repository. Issues can be created by anyone (for public repositories), and are moderated by repository collaborators.",
+    "explainFull": "issue: Issues are suggested improvements, tasks or questions related to the repository. Issues can be created by anyone (for public repositories), and are moderated by repository collaborators. Each issue contains its own discussion thread. You can also categorize an issue with labels and assign it to someone.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#issue",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "issue",
@@ -367,11 +804,34 @@
     "prompt": "____ allow others with access to your repository to comment on the changes proposed in pull requests, approve the changes, or request further changes before the pull request is merged.",
     "answer": "review",
     "distractors": [
-      "dirty",
-      "fenced code block",
-      "transfer"
+      "base branch",
+      "head branch",
+      "compare branch"
+    ],
+    "distractorPool": [
+      "base branch",
+      "head branch",
+      "compare branch",
+      "feature branch",
+      "topic branch",
+      "push a branch",
+      "checkout",
+      "HEAD"
+    ],
+    "distractorIds": [
+      "gh:term:base-branch",
+      "gh:term:head-branch",
+      "gh:term:compare-branch",
+      "gh:term:feature-branch",
+      "gh:term:topic-branch",
+      "gh:term:push-a-branch",
+      "gh:term:checkout",
+      "gh:term:head"
     ],
     "explain": "review: Reviews allow others with access to your repository to comment on the changes proposed in pull requests, approve the changes, or request further changes before the pull request is merged.",
+    "explainFull": "review: Reviews allow others with access to your repository to comment on the changes proposed in pull requests, approve the changes, or request further changes before the pull request is merged.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#review",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "review",
@@ -386,11 +846,34 @@
     "prompt": "Comments from collaborators on a pull request that approve the changes or request further changes before the pull request is merged.",
     "answer": "pull request review",
     "distractors": [
-      "commit ID",
-      "@mention",
-      "master"
+      "base branch",
+      "head branch",
+      "compare branch"
+    ],
+    "distractorPool": [
+      "base branch",
+      "head branch",
+      "compare branch",
+      "feature branch",
+      "topic branch",
+      "push a branch",
+      "checkout",
+      "HEAD"
+    ],
+    "distractorIds": [
+      "gh:term:base-branch",
+      "gh:term:head-branch",
+      "gh:term:compare-branch",
+      "gh:term:feature-branch",
+      "gh:term:topic-branch",
+      "gh:term:push-a-branch",
+      "gh:term:checkout",
+      "gh:term:head"
     ],
     "explain": "pull request review: Comments from collaborators on a pull request that approve the changes or request further changes before the pull request is merged.",
+    "explainFull": "pull request review: Comments from collaborators on a pull request that approve the changes or request further changes before the pull request is merged.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#pull-request-review",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "pull request review",
@@ -405,11 +888,34 @@
     "prompt": "The branch into which changes are combined when you merge a pull request. When you create a pull request, you can change the ____ from the repository's default branch to another branch if required.",
     "answer": "base branch",
     "distractors": [
-      "commit author",
-      "line comment",
-      "open source"
+      "head branch",
+      "compare branch",
+      "feature branch"
+    ],
+    "distractorPool": [
+      "head branch",
+      "compare branch",
+      "feature branch",
+      "topic branch",
+      "push a branch",
+      "upstream branch",
+      "checkout",
+      "HEAD"
+    ],
+    "distractorIds": [
+      "gh:term:head-branch",
+      "gh:term:compare-branch",
+      "gh:term:feature-branch",
+      "gh:term:topic-branch",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch",
+      "gh:term:checkout",
+      "gh:term:head"
     ],
     "explain": "base branch: The branch into which changes are combined when you merge a pull request. When you create a pull request, you can change the base branch from the repository's default branch to another branch if required.",
+    "explainFull": "base branch: The branch into which changes are combined when you merge a pull request. When you create a pull request, you can change the base branch from the repository's default branch to another branch if required.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#base-branch",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "base branch",
@@ -424,11 +930,34 @@
     "prompt": "The branch whose changes are combined into the base branch when you merge a pull request. Also known as the \"compare branch.\"",
     "answer": "head branch",
     "distractors": [
-      "blame",
-      "permalink",
-      "contribution guidelines"
+      "compare branch",
+      "feature branch",
+      "topic branch"
+    ],
+    "distractorPool": [
+      "compare branch",
+      "feature branch",
+      "topic branch",
+      "push a branch",
+      "upstream branch",
+      "fork",
+      "checkout",
+      "HEAD"
+    ],
+    "distractorIds": [
+      "gh:term:compare-branch",
+      "gh:term:feature-branch",
+      "gh:term:topic-branch",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch",
+      "gh:term:fork",
+      "gh:term:checkout",
+      "gh:term:head"
     ],
     "explain": "head branch: The branch whose changes are combined into the base branch when you merge a pull request. Also known as the \"compare branch.\"",
+    "explainFull": "head branch: The branch whose changes are combined into the base branch when you merge a pull request. Also known as the \"compare branch.\"",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#head-branch",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "head branch",
@@ -443,11 +972,34 @@
     "prompt": "The branch you use to create a pull request. This branch is compared to the base branch you choose for the pull request, and the changes are identified. When the pull request is merged, the base branch is updated with the changes from the ____. Also known as the \"head branch\" of the pull request.",
     "answer": "compare branch",
     "distractors": [
-      "resolve",
-      "timeline",
-      "code of conduct"
+      "feature branch",
+      "topic branch",
+      "push a branch"
+    ],
+    "distractorPool": [
+      "feature branch",
+      "topic branch",
+      "push a branch",
+      "upstream branch",
+      "fork",
+      "protected branch",
+      "checkout",
+      "HEAD"
+    ],
+    "distractorIds": [
+      "gh:term:feature-branch",
+      "gh:term:topic-branch",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch",
+      "gh:term:fork",
+      "gh:term:protected-branch",
+      "gh:term:checkout",
+      "gh:term:head"
     ],
     "explain": "compare branch: The branch you use to create a pull request. This branch is compared to the base branch you choose for the pull request, and the changes are identified.",
+    "explainFull": "compare branch: The branch you use to create a pull request. This branch is compared to the base branch you choose for the pull request, and the changes are identified. When the pull request is merged, the base branch is updated with the changes from the compare branch. Also known as the \"head branch\" of the pull request.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#compare-branch",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "compare branch",
@@ -462,11 +1014,34 @@
     "prompt": "A branch used to experiment with a new feature or fix an issue that is not in production. Also called a topic branch.",
     "answer": "feature branch",
     "distractors": [
-      "line ending",
-      "notification",
-      "repository"
+      "push a branch",
+      "upstream branch",
+      "fork"
+    ],
+    "distractorPool": [
+      "push a branch",
+      "upstream branch",
+      "fork",
+      "protected branch",
+      "branch restriction",
+      "required pull request review",
+      "checkout",
+      "HEAD"
+    ],
+    "distractorIds": [
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch",
+      "gh:term:fork",
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction",
+      "gh:term:required-pull-request-review",
+      "gh:term:checkout",
+      "gh:term:head"
     ],
     "explain": "feature branch: A branch used to experiment with a new feature or fix an issue that is not in production. Also called a topic branch.",
+    "explainFull": "feature branch: A branch used to experiment with a new feature or fix an issue that is not in production. Also called a topic branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#feature-branch",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "feature branch",
@@ -481,11 +1056,34 @@
     "prompt": "A regular Git branch that is used by a developer to identify a conceptual line of development. Since branches are very easy and inexpensive, it is often desirable to have several small branches that each contain very well defined concepts or small incremental yet related changes. Can also be called a feature branch.",
     "answer": "topic branch",
     "distractors": [
-      "LFS",
-      "watch",
-      "commit"
+      "push a branch",
+      "upstream branch",
+      "fork"
+    ],
+    "distractorPool": [
+      "push a branch",
+      "upstream branch",
+      "fork",
+      "protected branch",
+      "branch restriction",
+      "required pull request review",
+      "checkout",
+      "HEAD"
+    ],
+    "distractorIds": [
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch",
+      "gh:term:fork",
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction",
+      "gh:term:required-pull-request-review",
+      "gh:term:checkout",
+      "gh:term:head"
     ],
     "explain": "topic branch: A regular Git branch that is used by a developer to identify a conceptual line of development. Since branches are very easy and inexpensive, it is often desirable to have several small branches that each contain very well defined concepts or small incremental yet related changes.",
+    "explainFull": "topic branch: A regular Git branch that is used by a developer to identify a conceptual line of development. Since branches are very easy and inexpensive, it is often desirable to have several small branches that each contain very well defined concepts or small incremental yet related changes. Can also be called a feature branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#topic-branch",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "topic branch",
@@ -500,11 +1098,34 @@
     "prompt": "You can use `git ____` on the command line to create a new branch, change your current working branch to a different branch, or even to switch to a different version of a file from a different branch with `git ____ [branchname] [path to file]`. The \"____\" action updates all or part of the working tree with a tree object or blob from the object database, and updates the index and HEAD if the whole working tree is pointing to a new branch.",
     "answer": "checkout",
     "distractors": [
-      "collaborator",
-      "star",
-      "branch"
+      "HEAD",
+      "detached HEAD",
+      "revert"
+    ],
+    "distractorPool": [
+      "HEAD",
+      "detached HEAD",
+      "revert",
+      "rebase",
+      "squash",
+      "cherry-picking",
+      "push a branch",
+      "upstream branch"
+    ],
+    "distractorIds": [
+      "gh:term:head",
+      "gh:term:detached-head",
+      "gh:term:revert",
+      "gh:term:rebase",
+      "gh:term:squash",
+      "gh:term:cherry-picking",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch"
     ],
     "explain": "checkout: You can use `git checkout` on the command line to create a new branch, change your current working branch to a different branch, or even to switch to a different version of a file from a different branch with `git checkout [branchname] [path to file]`. The \"checkout\" action updates all or part of the working tree with a tree object or blob from the object database, and updates the index and HEAD if the whole working tree is pointing to a new branch.",
+    "explainFull": "checkout: You can use `git checkout` on the command line to create a new branch, change your current working branch to a different branch, or even to switch to a different version of a file from a different branch with `git checkout [branchname] [path to file]`. The \"checkout\" action updates all or part of the working tree with a tree object or blob from the object database, and updates the index and HEAD if the whole working tree is pointing to a new branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#checkout",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "checkout",
@@ -519,11 +1140,34 @@
     "prompt": "A defined commit of a branch, usually the most recent commit at the tip of the branch.",
     "answer": "HEAD",
     "distractors": [
-      "contributor",
-      "SSH key",
-      "clone"
+      "detached HEAD",
+      "revert",
+      "rebase"
+    ],
+    "distractorPool": [
+      "detached HEAD",
+      "revert",
+      "rebase",
+      "squash",
+      "cherry-picking",
+      "fast-forward",
+      "push a branch",
+      "upstream branch"
+    ],
+    "distractorIds": [
+      "gh:term:detached-head",
+      "gh:term:revert",
+      "gh:term:rebase",
+      "gh:term:squash",
+      "gh:term:cherry-picking",
+      "gh:term:fast-forward",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch"
     ],
     "explain": "HEAD: A defined commit of a branch, usually the most recent commit at the tip of the branch.",
+    "explainFull": "HEAD: A defined commit of a branch, usually the most recent commit at the tip of the branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#head",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "HEAD",
@@ -538,11 +1182,34 @@
     "prompt": "Git will warn you if you're working on a ____, which means that Git is not pointing to a branch and that any commits you make will not appear in commit history. For example, when you check out an arbitrary commit that is not the latest commit of any particular branch, you're working on a \"____.\"",
     "answer": "detached HEAD",
     "distractors": [
-      "assignee",
-      "deploy key",
-      "push"
+      "revert",
+      "rebase",
+      "squash"
+    ],
+    "distractorPool": [
+      "revert",
+      "rebase",
+      "squash",
+      "cherry-picking",
+      "fast-forward",
+      "non-fast-forward",
+      "push a branch",
+      "upstream branch"
+    ],
+    "distractorIds": [
+      "gh:term:revert",
+      "gh:term:rebase",
+      "gh:term:squash",
+      "gh:term:cherry-picking",
+      "gh:term:fast-forward",
+      "gh:term:non-fast-forward",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch"
     ],
     "explain": "detached HEAD: Git will warn you if you're working on a detached HEAD, which means that Git is not pointing to a branch and that any commits you make will not appear in commit history. For example, when you check out an arbitrary commit that is not the latest commit of any particular branch, you're working on a \"detached HEAD.\"",
+    "explainFull": "detached HEAD: Git will warn you if you're working on a detached HEAD, which means that Git is not pointing to a branch and that any commits you make will not appear in commit history. For example, when you check out an arbitrary commit that is not the latest commit of any particular branch, you're working on a \"detached HEAD.\"",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#detached-head",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "detached HEAD",
@@ -557,11 +1224,34 @@
     "prompt": "When you ____ a pull request on GitHub, a new pull request is automatically opened, which has one commit that ____ the merge commit from the original merged pull request. In Git, you can ____ commits with `git ____`.",
     "answer": "revert",
     "distractors": [
-      "label",
-      "access token",
-      "pull"
+      "rebase",
+      "squash",
+      "cherry-picking"
+    ],
+    "distractorPool": [
+      "rebase",
+      "squash",
+      "cherry-picking",
+      "fast-forward",
+      "non-fast-forward",
+      "force push",
+      "push a branch",
+      "upstream branch"
+    ],
+    "distractorIds": [
+      "gh:term:rebase",
+      "gh:term:squash",
+      "gh:term:cherry-picking",
+      "gh:term:fast-forward",
+      "gh:term:non-fast-forward",
+      "gh:term:force-push",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch"
     ],
     "explain": "revert: When you revert a pull request on GitHub, a new pull request is automatically opened, which has one commit that reverts the merge commit from the original merged pull request. In Git, you can revert commits with `git revert`.",
+    "explainFull": "revert: When you revert a pull request on GitHub, a new pull request is automatically opened, which has one commit that reverts the merge commit from the original merged pull request. In Git, you can revert commits with `git revert`.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#revert",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "revert",
@@ -576,11 +1266,34 @@
     "prompt": "To reapply a series of changes from a branch to a different base, and reset the HEAD of that branch to the result.",
     "answer": "rebase",
     "distractors": [
-      "milestone",
-      "private repository",
-      "fetch"
+      "squash",
+      "cherry-picking",
+      "fast-forward"
+    ],
+    "distractorPool": [
+      "squash",
+      "cherry-picking",
+      "fast-forward",
+      "non-fast-forward",
+      "force push",
+      "upstream",
+      "push a branch",
+      "upstream branch"
+    ],
+    "distractorIds": [
+      "gh:term:squash",
+      "gh:term:cherry-picking",
+      "gh:term:fast-forward",
+      "gh:term:non-fast-forward",
+      "gh:term:force-push",
+      "gh:term:upstream",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch"
     ],
     "explain": "rebase: To reapply a series of changes from a branch to a different base, and reset the HEAD of that branch to the result.",
+    "explainFull": "rebase: To reapply a series of changes from a branch to a different base, and reset the HEAD of that branch to the result.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#rebase",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "rebase",
@@ -595,11 +1308,34 @@
     "prompt": "To combine multiple commits into a single commit. Also a Git command.",
     "answer": "squash",
     "distractors": [
-      "release",
-      "public repository",
-      "merge"
+      "cherry-picking",
+      "fast-forward",
+      "non-fast-forward"
+    ],
+    "distractorPool": [
+      "cherry-picking",
+      "fast-forward",
+      "non-fast-forward",
+      "force push",
+      "upstream",
+      "remote repository",
+      "push a branch",
+      "upstream branch"
+    ],
+    "distractorIds": [
+      "gh:term:cherry-picking",
+      "gh:term:fast-forward",
+      "gh:term:non-fast-forward",
+      "gh:term:force-push",
+      "gh:term:upstream",
+      "gh:term:remote-repository",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch"
     ],
     "explain": "squash: To combine multiple commits into a single commit. Also a Git command.",
+    "explainFull": "squash: To combine multiple commits into a single commit. Also a Git command.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#squash",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "squash",
@@ -614,11 +1350,34 @@
     "prompt": "To choose a subset of changes from a series of changes (typically commits) and record them as a new series of changes on top of a different codebase. In Git, this is performed by the `git cherry-pick` command to extract the change introduced by an existing commit on another branch and to record it based on the tip of the current branch as a new commit. For more information, see git-cherry-pick in the Git documentation.",
     "answer": "cherry-picking",
     "distractors": [
-      "protected branch",
-      "owner",
-      "merge conflict"
+      "fast-forward",
+      "non-fast-forward",
+      "force push"
+    ],
+    "distractorPool": [
+      "fast-forward",
+      "non-fast-forward",
+      "force push",
+      "upstream",
+      "remote repository",
+      "remote URL",
+      "push a branch",
+      "upstream branch"
+    ],
+    "distractorIds": [
+      "gh:term:fast-forward",
+      "gh:term:non-fast-forward",
+      "gh:term:force-push",
+      "gh:term:upstream",
+      "gh:term:remote-repository",
+      "gh:term:remote-url",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch"
     ],
     "explain": "cherry-picking: To choose a subset of changes from a series of changes (typically commits) and record them as a new series of changes on top of a different codebase. In Git, this is performed by the `git cherry-pick` command to extract the change introduced by an existing commit on another branch and to record it based on the tip of the current branch as a new commit.",
+    "explainFull": "cherry-picking: To choose a subset of changes from a series of changes (typically commits) and record them as a new series of changes on top of a different codebase. In Git, this is performed by the `git cherry-pick` command to extract the change introduced by an existing commit on another branch and to record it based on the tip of the current branch as a new commit. For more information, see git-cherry-pick in the Git documentation.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#cherry-picking",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "cherry-picking",
@@ -633,11 +1392,34 @@
     "prompt": "A ____ is a special type of merge where you have a revision and you are \"merging\" another branch's changes that happen to be a descendant of what you have. In such a case, you do not make a new merge commit but instead just update to this revision. This will happen frequently on a remote-tracking branch of a remote repository.",
     "answer": "fast-forward",
     "distractors": [
-      "branch restriction",
-      "organization",
-      "pull request"
+      "non-fast-forward",
+      "force push",
+      "upstream"
+    ],
+    "distractorPool": [
+      "non-fast-forward",
+      "force push",
+      "upstream",
+      "remote repository",
+      "remote URL",
+      "clean",
+      "push a branch",
+      "upstream branch"
+    ],
+    "distractorIds": [
+      "gh:term:non-fast-forward",
+      "gh:term:force-push",
+      "gh:term:upstream",
+      "gh:term:remote-repository",
+      "gh:term:remote-url",
+      "gh:term:clean",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch"
     ],
     "explain": "fast-forward: A fast-forward is a special type of merge where you have a revision and you are \"merging\" another branch's changes that happen to be a descendant of what you have. In such a case, you do not make a new merge commit but instead just update to this revision.",
+    "explainFull": "fast-forward: A fast-forward is a special type of merge where you have a revision and you are \"merging\" another branch's changes that happen to be a descendant of what you have. In such a case, you do not make a new merge commit but instead just update to this revision. This will happen frequently on a remote-tracking branch of a remote repository.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#fast-forward",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "fast-forward",
@@ -652,11 +1434,34 @@
     "prompt": "When your local copy of a repository is out-of-sync with the upstream repository and you need to fetch the upstream changes before you push your local changes.",
     "answer": "non-fast-forward",
     "distractors": [
-      "required pull request review",
-      "team",
-      "remote"
+      "force push",
+      "upstream",
+      "remote repository"
+    ],
+    "distractorPool": [
+      "force push",
+      "upstream",
+      "remote repository",
+      "remote URL",
+      "clean",
+      "dirty",
+      "push a branch",
+      "upstream branch"
+    ],
+    "distractorIds": [
+      "gh:term:force-push",
+      "gh:term:upstream",
+      "gh:term:remote-repository",
+      "gh:term:remote-url",
+      "gh:term:clean",
+      "gh:term:dirty",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch"
     ],
     "explain": "non-fast-forward: When your local copy of a repository is out-of-sync with the upstream repository and you need to fetch the upstream changes before you push your local changes.",
+    "explainFull": "non-fast-forward: When your local copy of a repository is out-of-sync with the upstream repository and you need to fetch the upstream changes before you push your local changes.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#non-fast-forward",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "non-fast-forward",
@@ -671,11 +1476,34 @@
     "prompt": "A Git push that overwrites the remote repository with local changes without regard for conflicts.",
     "answer": "force push",
     "distractors": [
-      "status checks",
-      "outside collaborator",
-      "origin"
+      "upstream",
+      "remote repository",
+      "remote URL"
+    ],
+    "distractorPool": [
+      "upstream",
+      "remote repository",
+      "remote URL",
+      "clean",
+      "dirty",
+      "commit ID",
+      "push a branch",
+      "upstream branch"
+    ],
+    "distractorIds": [
+      "gh:term:upstream",
+      "gh:term:remote-repository",
+      "gh:term:remote-url",
+      "gh:term:clean",
+      "gh:term:dirty",
+      "gh:term:commit-id",
+      "gh:term:push-a-branch",
+      "gh:term:upstream-branch"
     ],
     "explain": "force push: A Git push that overwrites the remote repository with local changes without regard for conflicts.",
+    "explainFull": "force push: A Git push that overwrites the remote repository with local changes without regard for conflicts.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#force-push",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "force push",
@@ -690,11 +1518,34 @@
     "prompt": "When you successfully ____ to a remote repository, you update the remote branch with changes from your local branch. When you \"____\", Git will search for the branch's HEAD ref in the remote repository and verify that it is a direct ancestor to the branch's local HEAD ref. Once verified, Git pulls all objects (reachable from the local HEAD ref and missing from the remote repository) into the remote object database and then updates the remote HEAD ref. If the remote HEAD is not an ancestor to the local HEAD, the push fails.",
     "answer": "push a branch",
     "distractors": [
-      "required status check",
-      "project board",
-      "main"
+      "upstream branch",
+      "fork",
+      "protected branch"
+    ],
+    "distractorPool": [
+      "upstream branch",
+      "fork",
+      "protected branch",
+      "branch restriction",
+      "required pull request review",
+      "status checks",
+      "upstream",
+      "remote repository"
+    ],
+    "distractorIds": [
+      "gh:term:upstream-branch",
+      "gh:term:fork",
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction",
+      "gh:term:required-pull-request-review",
+      "gh:term:status-checks",
+      "gh:term:upstream",
+      "gh:term:remote-repository"
     ],
     "explain": "push a branch: When you successfully push a branch to a remote repository, you update the remote branch with changes from your local branch. When you \"push a branch\", Git will search for the branch's HEAD ref in the remote repository and verify that it is a direct ancestor to the branch's local HEAD ref.",
+    "explainFull": "push a branch: When you successfully push a branch to a remote repository, you update the remote branch with changes from your local branch. When you \"push a branch\", Git will search for the branch's HEAD ref in the remote repository and verify that it is a direct ancestor to the branch's local HEAD ref. Once verified, Git pulls all objects (reachable from the local HEAD ref and missing from the remote repository) into the remote object database and then updates the remote HEAD ref. If the remote HEAD is not an ancestor to the local HEAD, the push fails.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#push-a-branch",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "push a branch",
@@ -709,11 +1560,34 @@
     "prompt": "When talking about a branch or a fork, the primary branch on the original repository is often referred to as the \"____\", since that is the main place that other changes will come in from. The branch/fork you are working on is then called the \"downstream.\" Also called origin.",
     "answer": "upstream",
     "distractors": [
-      "code owner",
-      "GitHub Pages",
-      "default branch"
+      "remote repository",
+      "remote URL",
+      "clean"
+    ],
+    "distractorPool": [
+      "remote repository",
+      "remote URL",
+      "clean",
+      "dirty",
+      "commit ID",
+      "commit author",
+      "fork",
+      "collaborator"
+    ],
+    "distractorIds": [
+      "gh:term:remote-repository",
+      "gh:term:remote-url",
+      "gh:term:clean",
+      "gh:term:dirty",
+      "gh:term:commit-id",
+      "gh:term:commit-author",
+      "gh:term:fork",
+      "gh:term:collaborator"
     ],
     "explain": "upstream: When talking about a branch or a fork, the primary branch on the original repository is often referred to as the \"upstream\", since that is the main place that other changes will come in from. The branch/fork you are working on is then called the \"downstream.\" Also called origin.",
+    "explainFull": "upstream: When talking about a branch or a fork, the primary branch on the original repository is often referred to as the \"upstream\", since that is the main place that other changes will come in from. The branch/fork you are working on is then called the \"downstream.\" Also called origin.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#upstream",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "upstream",
@@ -728,11 +1602,34 @@
     "prompt": "The default branch that is merged into the branch in question (or the branch in question is rebased onto). It is configured via `branch.<name>.remote` and `branch.<name>.merge`. If the ____ of A is origin/B sometimes we say \"A is tracking origin/B.\"",
     "answer": "upstream branch",
     "distractors": [
-      "continuous integration",
-      "GitHub Wiki",
-      "commit message"
+      "fork",
+      "protected branch",
+      "branch restriction"
+    ],
+    "distractorPool": [
+      "fork",
+      "protected branch",
+      "branch restriction",
+      "required pull request review",
+      "status checks",
+      "required status check",
+      "remote repository",
+      "remote URL"
+    ],
+    "distractorIds": [
+      "gh:term:fork",
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction",
+      "gh:term:required-pull-request-review",
+      "gh:term:status-checks",
+      "gh:term:required-status-check",
+      "gh:term:remote-repository",
+      "gh:term:remote-url"
     ],
     "explain": "upstream branch: The default branch that is merged into the branch in question (or the branch in question is rebased onto). It is configured via `branch.<name>.remote` and `branch.<name>.merge`.",
+    "explainFull": "upstream branch: The default branch that is merged into the branch in question (or the branch in question is rebased onto). It is configured via `branch.<name>.remote` and `branch.<name>.merge`. If the upstream branch of A is origin/B sometimes we say \"A is tracking origin/B.\"",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#upstream-branch",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "upstream branch",
@@ -747,11 +1644,34 @@
     "prompt": "A ____ is a personal copy of another user's repository that lives on your account. ____ allow you to freely make changes to a project without affecting the original upstream repository. You can also open a pull request in the upstream repository and keep your ____ synced with the latest changes since both repositories are still connected.",
     "answer": "fork",
     "distractors": [
-      "license",
-      "dependency graph",
-      "diff"
+      "protected branch",
+      "branch restriction",
+      "required pull request review"
+    ],
+    "distractorPool": [
+      "protected branch",
+      "branch restriction",
+      "required pull request review",
+      "status checks",
+      "required status check",
+      "code owner",
+      "remote repository",
+      "remote URL"
+    ],
+    "distractorIds": [
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction",
+      "gh:term:required-pull-request-review",
+      "gh:term:status-checks",
+      "gh:term:required-status-check",
+      "gh:term:code-owner",
+      "gh:term:remote-repository",
+      "gh:term:remote-url"
     ],
     "explain": "fork: A fork is a personal copy of another user's repository that lives on your account. Forks allow you to freely make changes to a project without affecting the original upstream repository.",
+    "explainFull": "fork: A fork is a personal copy of another user's repository that lives on your account. Forks allow you to freely make changes to a project without affecting the original upstream repository. You can also open a pull request in the upstream repository and keep your fork synced with the latest changes since both repositories are still connected.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#fork",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "fork",
@@ -766,11 +1686,34 @@
     "prompt": "A repository that is used to track the same project but resides somewhere else.",
     "answer": "remote repository",
     "distractors": [
-      "gist",
-      "webhooks",
-      "Git"
+      "remote URL",
+      "clean",
+      "dirty"
+    ],
+    "distractorPool": [
+      "remote URL",
+      "clean",
+      "dirty",
+      "commit ID",
+      "commit author",
+      "blame",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorIds": [
+      "gh:term:remote-url",
+      "gh:term:clean",
+      "gh:term:dirty",
+      "gh:term:commit-id",
+      "gh:term:commit-author",
+      "gh:term:blame",
+      "gh:term:collaborator",
+      "gh:term:contributor"
     ],
     "explain": "remote repository: A repository that is used to track the same project but resides somewhere else.",
+    "explainFull": "remote repository: A repository that is used to track the same project but resides somewhere else.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#remote-repository",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "remote repository",
@@ -785,11 +1728,34 @@
     "prompt": "The place where your code is stored: a repository on GitHub, another user's fork, or even a different server.",
     "answer": "remote URL",
     "distractors": [
-      "Markdown",
-      "hook",
-      "README"
+      "clean",
+      "dirty",
+      "commit ID"
+    ],
+    "distractorPool": [
+      "clean",
+      "dirty",
+      "commit ID",
+      "commit author",
+      "blame",
+      "resolve",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorIds": [
+      "gh:term:clean",
+      "gh:term:dirty",
+      "gh:term:commit-id",
+      "gh:term:commit-author",
+      "gh:term:blame",
+      "gh:term:resolve",
+      "gh:term:collaborator",
+      "gh:term:contributor"
     ],
     "explain": "remote URL: The place where your code is stored: a repository on GitHub, another user's fork, or even a different server.",
+    "explainFull": "remote URL: The place where your code is stored: a repository on GitHub, another user's fork, or even a different server.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#remote-url",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "remote URL",
@@ -804,11 +1770,34 @@
     "prompt": "A working tree is ____ if it corresponds to the revision referenced by the current HEAD. Also see dirty.",
     "answer": "clean",
     "distractors": [
-      "GitHub Flavored Markdown",
-      "mirror",
-      "issue"
+      "dirty",
+      "commit ID",
+      "commit author"
+    ],
+    "distractorPool": [
+      "dirty",
+      "commit ID",
+      "commit author",
+      "blame",
+      "resolve",
+      "line ending",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorIds": [
+      "gh:term:dirty",
+      "gh:term:commit-id",
+      "gh:term:commit-author",
+      "gh:term:blame",
+      "gh:term:resolve",
+      "gh:term:line-ending",
+      "gh:term:collaborator",
+      "gh:term:contributor"
     ],
     "explain": "clean: A working tree is clean if it corresponds to the revision referenced by the current HEAD. Also see dirty.",
+    "explainFull": "clean: A working tree is clean if it corresponds to the revision referenced by the current HEAD. Also see dirty.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#clean",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "clean",
@@ -823,11 +1812,34 @@
     "prompt": "A working tree is considered \"____\" if it contains modifications that have not been committed to the current branch.",
     "answer": "dirty",
     "distractors": [
-      "fenced code block",
-      "transfer",
-      "review"
+      "commit ID",
+      "commit author",
+      "blame"
+    ],
+    "distractorPool": [
+      "commit ID",
+      "commit author",
+      "blame",
+      "resolve",
+      "line ending",
+      "LFS",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorIds": [
+      "gh:term:commit-id",
+      "gh:term:commit-author",
+      "gh:term:blame",
+      "gh:term:resolve",
+      "gh:term:line-ending",
+      "gh:term:lfs",
+      "gh:term:collaborator",
+      "gh:term:contributor"
     ],
     "explain": "dirty: A working tree is considered \"dirty\" if it contains modifications that have not been committed to the current branch.",
+    "explainFull": "dirty: A working tree is considered \"dirty\" if it contains modifications that have not been committed to the current branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#dirty",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "dirty",
@@ -842,11 +1854,34 @@
     "prompt": "Also known as SHA. A 40-character checksum hash that identifies the commit.",
     "answer": "commit ID",
     "distractors": [
-      "@mention",
-      "master",
-      "pull request review"
+      "commit author",
+      "blame",
+      "resolve"
+    ],
+    "distractorPool": [
+      "commit author",
+      "blame",
+      "resolve",
+      "line ending",
+      "LFS",
+      "hook",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorIds": [
+      "gh:term:commit-author",
+      "gh:term:blame",
+      "gh:term:resolve",
+      "gh:term:line-ending",
+      "gh:term:lfs",
+      "gh:term:hook",
+      "gh:term:collaborator",
+      "gh:term:contributor"
     ],
     "explain": "commit ID: Also known as SHA. A 40-character checksum hash that identifies the commit.",
+    "explainFull": "commit ID: Also known as SHA. A 40-character checksum hash that identifies the commit.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#commit-id",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "commit ID",
@@ -861,11 +1896,34 @@
     "prompt": "The user who makes the commit.",
     "answer": "commit author",
     "distractors": [
-      "line comment",
-      "open source",
-      "base branch"
+      "blame",
+      "resolve",
+      "line ending"
+    ],
+    "distractorPool": [
+      "blame",
+      "resolve",
+      "line ending",
+      "LFS",
+      "hook",
+      "mirror",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorIds": [
+      "gh:term:blame",
+      "gh:term:resolve",
+      "gh:term:line-ending",
+      "gh:term:lfs",
+      "gh:term:hook",
+      "gh:term:mirror",
+      "gh:term:collaborator",
+      "gh:term:contributor"
     ],
     "explain": "commit author: The user who makes the commit.",
+    "explainFull": "commit author: The user who makes the commit.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#commit-author",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "commit author",
@@ -880,11 +1938,34 @@
     "prompt": "The \"____\" feature in Git describes the last modification to each line of a file, which generally displays the revision, author and time. This is helpful, for example, in tracking down when a feature was added, or which commit led to a particular bug.",
     "answer": "blame",
     "distractors": [
-      "permalink",
-      "contribution guidelines",
-      "head branch"
+      "resolve",
+      "line ending",
+      "LFS"
+    ],
+    "distractorPool": [
+      "resolve",
+      "line ending",
+      "LFS",
+      "hook",
+      "mirror",
+      "repository",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorIds": [
+      "gh:term:resolve",
+      "gh:term:line-ending",
+      "gh:term:lfs",
+      "gh:term:hook",
+      "gh:term:mirror",
+      "gh:term:repository",
+      "gh:term:collaborator",
+      "gh:term:contributor"
     ],
     "explain": "blame: The \"blame\" feature in Git describes the last modification to each line of a file, which generally displays the revision, author and time. This is helpful, for example, in tracking down when a feature was added, or which commit led to a particular bug.",
+    "explainFull": "blame: The \"blame\" feature in Git describes the last modification to each line of a file, which generally displays the revision, author and time. This is helpful, for example, in tracking down when a feature was added, or which commit led to a particular bug.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#blame",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "blame",
@@ -899,11 +1980,34 @@
     "prompt": "The action of fixing up manually what a failed automatic merge left behind.",
     "answer": "resolve",
     "distractors": [
-      "timeline",
-      "code of conduct",
-      "compare branch"
+      "line ending",
+      "LFS",
+      "hook"
+    ],
+    "distractorPool": [
+      "line ending",
+      "LFS",
+      "hook",
+      "mirror",
+      "repository",
+      "commit",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorIds": [
+      "gh:term:line-ending",
+      "gh:term:lfs",
+      "gh:term:hook",
+      "gh:term:mirror",
+      "gh:term:repository",
+      "gh:term:commit",
+      "gh:term:collaborator",
+      "gh:term:contributor"
     ],
     "explain": "resolve: The action of fixing up manually what a failed automatic merge left behind.",
+    "explainFull": "resolve: The action of fixing up manually what a failed automatic merge left behind.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#resolve",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "resolve",
@@ -918,11 +2022,34 @@
     "prompt": "An invisible character or characters that symbolize the end of a line in a text file.",
     "answer": "line ending",
     "distractors": [
-      "notification",
+      "LFS",
+      "hook",
+      "mirror"
+    ],
+    "distractorPool": [
+      "LFS",
+      "hook",
+      "mirror",
       "repository",
-      "feature branch"
+      "commit",
+      "clone",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorIds": [
+      "gh:term:lfs",
+      "gh:term:hook",
+      "gh:term:mirror",
+      "gh:term:repository",
+      "gh:term:commit",
+      "gh:term:clone",
+      "gh:term:collaborator",
+      "gh:term:contributor"
     ],
     "explain": "line ending: An invisible character or characters that symbolize the end of a line in a text file.",
+    "explainFull": "line ending: An invisible character or characters that symbolize the end of a line in a text file.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#line-ending",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "line ending",
@@ -937,11 +2064,34 @@
     "prompt": "Git Large File Storage. An open source Git extension for versioning large files.",
     "answer": "LFS",
     "distractors": [
-      "watch",
+      "hook",
+      "mirror",
+      "repository"
+    ],
+    "distractorPool": [
+      "hook",
+      "mirror",
+      "repository",
       "commit",
-      "topic branch"
+      "clone",
+      "push",
+      "collaborator",
+      "contributor"
+    ],
+    "distractorIds": [
+      "gh:term:hook",
+      "gh:term:mirror",
+      "gh:term:repository",
+      "gh:term:commit",
+      "gh:term:clone",
+      "gh:term:push",
+      "gh:term:collaborator",
+      "gh:term:contributor"
     ],
     "explain": "LFS: Git Large File Storage. An open source Git extension for versioning large files.",
+    "explainFull": "LFS: Git Large File Storage. An open source Git extension for versioning large files.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#lfs",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "LFS",
@@ -956,11 +2106,34 @@
     "prompt": "A ____ is a person with read and write access to a repository who has been invited to contribute by the repository owner.",
     "answer": "collaborator",
     "distractors": [
-      "star",
-      "branch",
-      "checkout"
+      "contributor",
+      "assignee",
+      "label"
+    ],
+    "distractorPool": [
+      "contributor",
+      "assignee",
+      "label",
+      "milestone",
+      "release",
+      "license",
+      "protected branch",
+      "branch restriction"
+    ],
+    "distractorIds": [
+      "gh:term:contributor",
+      "gh:term:assignee",
+      "gh:term:label",
+      "gh:term:milestone",
+      "gh:term:release",
+      "gh:term:license",
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction"
     ],
     "explain": "collaborator: A collaborator is a person with read and write access to a repository who has been invited to contribute by the repository owner.",
+    "explainFull": "collaborator: A collaborator is a person with read and write access to a repository who has been invited to contribute by the repository owner.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#collaborator",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "collaborator",
@@ -975,11 +2148,34 @@
     "prompt": "A ____ is someone who does not have collaborator access to a repository but has contributed to a project and had a pull request they opened merged into the repository.",
     "answer": "contributor",
     "distractors": [
-      "SSH key",
-      "clone",
-      "HEAD"
+      "assignee",
+      "label",
+      "milestone"
+    ],
+    "distractorPool": [
+      "assignee",
+      "label",
+      "milestone",
+      "release",
+      "license",
+      "gist",
+      "protected branch",
+      "branch restriction"
+    ],
+    "distractorIds": [
+      "gh:term:assignee",
+      "gh:term:label",
+      "gh:term:milestone",
+      "gh:term:release",
+      "gh:term:license",
+      "gh:term:gist",
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction"
     ],
     "explain": "contributor: A contributor is someone who does not have collaborator access to a repository but has contributed to a project and had a pull request they opened merged into the repository.",
+    "explainFull": "contributor: A contributor is someone who does not have collaborator access to a repository but has contributed to a project and had a pull request they opened merged into the repository.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#contributor",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "contributor",
@@ -994,11 +2190,34 @@
     "prompt": "The user that is assigned to an issue.",
     "answer": "assignee",
     "distractors": [
-      "deploy key",
-      "push",
-      "detached HEAD"
+      "label",
+      "milestone",
+      "release"
+    ],
+    "distractorPool": [
+      "label",
+      "milestone",
+      "release",
+      "license",
+      "gist",
+      "Markdown",
+      "protected branch",
+      "branch restriction"
+    ],
+    "distractorIds": [
+      "gh:term:label",
+      "gh:term:milestone",
+      "gh:term:release",
+      "gh:term:license",
+      "gh:term:gist",
+      "gh:term:markdown",
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction"
     ],
     "explain": "assignee: The user that is assigned to an issue.",
+    "explainFull": "assignee: The user that is assigned to an issue.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#assignee",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "assignee",
@@ -1013,11 +2232,34 @@
     "prompt": "A tag on an issue or pull request. Repositories come with a handful of default ____, but users can create custom ____.",
     "answer": "label",
     "distractors": [
-      "access token",
-      "pull",
-      "revert"
+      "milestone",
+      "release",
+      "license"
+    ],
+    "distractorPool": [
+      "milestone",
+      "release",
+      "license",
+      "gist",
+      "Markdown",
+      "GitHub Flavored Markdown",
+      "protected branch",
+      "branch restriction"
+    ],
+    "distractorIds": [
+      "gh:term:milestone",
+      "gh:term:release",
+      "gh:term:license",
+      "gh:term:gist",
+      "gh:term:markdown",
+      "gh:term:github-flavored-markdown",
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction"
     ],
     "explain": "label: A tag on an issue or pull request. Repositories come with a handful of default labels, but users can create custom labels.",
+    "explainFull": "label: A tag on an issue or pull request. Repositories come with a handful of default labels, but users can create custom labels.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#label",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "label",
@@ -1032,11 +2274,34 @@
     "prompt": "A way to track the progress on groups of issues or pull requests in a repository.",
     "answer": "milestone",
     "distractors": [
-      "private repository",
-      "fetch",
-      "rebase"
+      "release",
+      "license",
+      "gist"
+    ],
+    "distractorPool": [
+      "release",
+      "license",
+      "gist",
+      "Markdown",
+      "GitHub Flavored Markdown",
+      "fenced code block",
+      "protected branch",
+      "branch restriction"
+    ],
+    "distractorIds": [
+      "gh:term:release",
+      "gh:term:license",
+      "gh:term:gist",
+      "gh:term:markdown",
+      "gh:term:github-flavored-markdown",
+      "gh:term:fenced-code-block",
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction"
     ],
     "explain": "milestone: A way to track the progress on groups of issues or pull requests in a repository.",
+    "explainFull": "milestone: A way to track the progress on groups of issues or pull requests in a repository.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#milestone",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "milestone",
@@ -1051,11 +2316,34 @@
     "prompt": "GitHub's way of packaging and providing software to your users.",
     "answer": "release",
     "distractors": [
-      "public repository",
-      "merge",
-      "squash"
+      "license",
+      "gist",
+      "Markdown"
+    ],
+    "distractorPool": [
+      "license",
+      "gist",
+      "Markdown",
+      "GitHub Flavored Markdown",
+      "fenced code block",
+      "@mention",
+      "protected branch",
+      "branch restriction"
+    ],
+    "distractorIds": [
+      "gh:term:license",
+      "gh:term:gist",
+      "gh:term:markdown",
+      "gh:term:github-flavored-markdown",
+      "gh:term:fenced-code-block",
+      "gh:term:at-mention",
+      "gh:term:protected-branch",
+      "gh:term:branch-restriction"
     ],
     "explain": "release: GitHub's way of packaging and providing software to your users.",
+    "explainFull": "release: GitHub's way of packaging and providing software to your users.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#release",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "release",
@@ -1070,11 +2358,34 @@
     "prompt": "____ block several features of Git on a branch that a repository administrator chooses to protect. They can't be force pushed, deleted, have changes merged without required checks passing or required reviews approved, or have files uploaded to it from the GitHub web interface. A ____ is usually the default branch.",
     "answer": "protected branch",
     "distractors": [
-      "owner",
-      "merge conflict",
-      "cherry-picking"
+      "required pull request review",
+      "status checks",
+      "required status check"
+    ],
+    "distractorPool": [
+      "required pull request review",
+      "status checks",
+      "required status check",
+      "code owner",
+      "continuous integration",
+      "line comment",
+      "license",
+      "gist"
+    ],
+    "distractorIds": [
+      "gh:term:required-pull-request-review",
+      "gh:term:status-checks",
+      "gh:term:required-status-check",
+      "gh:term:code-owner",
+      "gh:term:continuous-integration",
+      "gh:term:line-comment",
+      "gh:term:license",
+      "gh:term:gist"
     ],
     "explain": "protected branch: Protected branches block several features of Git on a branch that a repository administrator chooses to protect. They can't be force pushed, deleted, have changes merged without required checks passing or required reviews approved, or have files uploaded to it from the GitHub web interface.",
+    "explainFull": "protected branch: Protected branches block several features of Git on a branch that a repository administrator chooses to protect. They can't be force pushed, deleted, have changes merged without required checks passing or required reviews approved, or have files uploaded to it from the GitHub web interface. A protected branch is usually the default branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#protected-branch",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "protected branch",
@@ -1089,11 +2400,34 @@
     "prompt": "A restriction that repository admins can enable so that only certain users or teams can push or make certain changes to the branch.",
     "answer": "branch restriction",
     "distractors": [
-      "organization",
-      "pull request",
-      "fast-forward"
+      "required pull request review",
+      "status checks",
+      "required status check"
+    ],
+    "distractorPool": [
+      "required pull request review",
+      "status checks",
+      "required status check",
+      "code owner",
+      "continuous integration",
+      "line comment",
+      "license",
+      "gist"
+    ],
+    "distractorIds": [
+      "gh:term:required-pull-request-review",
+      "gh:term:status-checks",
+      "gh:term:required-status-check",
+      "gh:term:code-owner",
+      "gh:term:continuous-integration",
+      "gh:term:line-comment",
+      "gh:term:license",
+      "gh:term:gist"
     ],
     "explain": "branch restriction: A restriction that repository admins can enable so that only certain users or teams can push or make certain changes to the branch.",
+    "explainFull": "branch restriction: A restriction that repository admins can enable so that only certain users or teams can push or make certain changes to the branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#branch-restriction",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "branch restriction",
@@ -1108,11 +2442,34 @@
     "prompt": "Required reviews ensure that pull requests have at least one approved review before collaborators can make changes to a protected branch.",
     "answer": "required pull request review",
     "distractors": [
-      "team",
-      "remote",
-      "non-fast-forward"
+      "status checks",
+      "required status check",
+      "code owner"
+    ],
+    "distractorPool": [
+      "status checks",
+      "required status check",
+      "code owner",
+      "continuous integration",
+      "line comment",
+      "master",
+      "license",
+      "gist"
+    ],
+    "distractorIds": [
+      "gh:term:status-checks",
+      "gh:term:required-status-check",
+      "gh:term:code-owner",
+      "gh:term:continuous-integration",
+      "gh:term:line-comment",
+      "gh:term:master",
+      "gh:term:license",
+      "gh:term:gist"
     ],
     "explain": "required pull request review: Required reviews ensure that pull requests have at least one approved review before collaborators can make changes to a protected branch.",
+    "explainFull": "required pull request review: Required reviews ensure that pull requests have at least one approved review before collaborators can make changes to a protected branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#required-pull-request-review",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "required pull request review",
@@ -1127,11 +2484,34 @@
     "prompt": "____ are external processes, such as continuous integration builds, which run for each commit you make in a repository. For more information, see AUTOTITLE.",
     "answer": "status checks",
     "distractors": [
-      "outside collaborator",
-      "origin",
-      "force push"
+      "code owner",
+      "continuous integration",
+      "line comment"
+    ],
+    "distractorPool": [
+      "code owner",
+      "continuous integration",
+      "line comment",
+      "master",
+      "branch",
+      "pull request",
+      "license",
+      "gist"
+    ],
+    "distractorIds": [
+      "gh:term:code-owner",
+      "gh:term:continuous-integration",
+      "gh:term:line-comment",
+      "gh:term:master",
+      "gh:term:branch",
+      "gh:term:pull-request",
+      "gh:term:license",
+      "gh:term:gist"
     ],
     "explain": "status checks: Status checks are external processes, such as continuous integration builds, which run for each commit you make in a repository. For more information, see AUTOTITLE.",
+    "explainFull": "status checks: Status checks are external processes, such as continuous integration builds, which run for each commit you make in a repository. For more information, see AUTOTITLE.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#status-checks",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "status checks",
@@ -1146,11 +2526,34 @@
     "prompt": "Checks on pull requests that ensure all required CI tests are passing before collaborators can make changes to a protected branch.",
     "answer": "required status check",
     "distractors": [
-      "project board",
-      "main",
-      "push a branch"
+      "code owner",
+      "continuous integration",
+      "line comment"
+    ],
+    "distractorPool": [
+      "code owner",
+      "continuous integration",
+      "line comment",
+      "master",
+      "branch",
+      "pull request",
+      "license",
+      "gist"
+    ],
+    "distractorIds": [
+      "gh:term:code-owner",
+      "gh:term:continuous-integration",
+      "gh:term:line-comment",
+      "gh:term:master",
+      "gh:term:branch",
+      "gh:term:pull-request",
+      "gh:term:license",
+      "gh:term:gist"
     ],
     "explain": "required status check: Checks on pull requests that ensure all required CI tests are passing before collaborators can make changes to a protected branch.",
+    "explainFull": "required status check: Checks on pull requests that ensure all required CI tests are passing before collaborators can make changes to a protected branch.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#required-status-check",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "required status check",
@@ -1165,11 +2568,34 @@
     "prompt": "A person who is designated as an owner of a portion of a repository's code. The ____ is automatically requested for review when someone opens a pull request (not in draft mode) that makes changes to code the ____ owns.",
     "answer": "code owner",
     "distractors": [
-      "GitHub Pages",
-      "default branch",
-      "upstream"
+      "continuous integration",
+      "line comment",
+      "master"
+    ],
+    "distractorPool": [
+      "continuous integration",
+      "line comment",
+      "master",
+      "branch",
+      "pull request",
+      "main",
+      "license",
+      "gist"
+    ],
+    "distractorIds": [
+      "gh:term:continuous-integration",
+      "gh:term:line-comment",
+      "gh:term:master",
+      "gh:term:branch",
+      "gh:term:pull-request",
+      "gh:term:main",
+      "gh:term:license",
+      "gh:term:gist"
     ],
     "explain": "code owner: A person who is designated as an owner of a portion of a repository's code. The code owner is automatically requested for review when someone opens a pull request (not in draft mode) that makes changes to code the code owner owns.",
+    "explainFull": "code owner: A person who is designated as an owner of a portion of a repository's code. The code owner is automatically requested for review when someone opens a pull request (not in draft mode) that makes changes to code the code owner owns.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#code-owner",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "code owner",
@@ -1184,11 +2610,34 @@
     "prompt": "Also known as CI. A process that runs automated builds and tests once a person commits a change to a configured repository on GitHub. CI is a common best practice in software development that helps detect errors.",
     "answer": "continuous integration",
     "distractors": [
-      "GitHub Wiki",
-      "commit message",
-      "upstream branch"
+      "line comment",
+      "master",
+      "branch"
+    ],
+    "distractorPool": [
+      "line comment",
+      "master",
+      "branch",
+      "pull request",
+      "main",
+      "default branch",
+      "license",
+      "gist"
+    ],
+    "distractorIds": [
+      "gh:term:line-comment",
+      "gh:term:master",
+      "gh:term:branch",
+      "gh:term:pull-request",
+      "gh:term:main",
+      "gh:term:default-branch",
+      "gh:term:license",
+      "gh:term:gist"
     ],
     "explain": "continuous integration: Also known as CI. A process that runs automated builds and tests once a person commits a change to a configured repository on GitHub.",
+    "explainFull": "continuous integration: Also known as CI. A process that runs automated builds and tests once a person commits a change to a configured repository on GitHub. CI is a common best practice in software development that helps detect errors.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#continuous-integration",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "continuous integration",
@@ -1203,11 +2652,34 @@
     "prompt": "A document that you can include with your project to let people know what they can and can't do with your source code.",
     "answer": "license",
     "distractors": [
-      "dependency graph",
-      "diff",
-      "fork"
+      "gist",
+      "Markdown",
+      "GitHub Flavored Markdown"
+    ],
+    "distractorPool": [
+      "gist",
+      "Markdown",
+      "GitHub Flavored Markdown",
+      "fenced code block",
+      "@mention",
+      "permalink",
+      "line comment",
+      "hook"
+    ],
+    "distractorIds": [
+      "gh:term:gist",
+      "gh:term:markdown",
+      "gh:term:github-flavored-markdown",
+      "gh:term:fenced-code-block",
+      "gh:term:at-mention",
+      "gh:term:permalink",
+      "gh:term:line-comment",
+      "gh:term:hook"
     ],
     "explain": "license: A document that you can include with your project to let people know what they can and can't do with your source code.",
+    "explainFull": "license: A document that you can include with your project to let people know what they can and can't do with your source code.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#license",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "license",
@@ -1222,11 +2694,34 @@
     "prompt": "A ____ is a shareable file that you can edit, clone, and fork on GitHub. You can make a ____ public or secret, although secret ____ will be available to anyone with the URL.",
     "answer": "gist",
     "distractors": [
-      "webhooks",
-      "Git",
-      "remote repository"
+      "Markdown",
+      "GitHub Flavored Markdown",
+      "fenced code block"
+    ],
+    "distractorPool": [
+      "Markdown",
+      "GitHub Flavored Markdown",
+      "fenced code block",
+      "@mention",
+      "permalink",
+      "timeline",
+      "line comment",
+      "hook"
+    ],
+    "distractorIds": [
+      "gh:term:markdown",
+      "gh:term:github-flavored-markdown",
+      "gh:term:fenced-code-block",
+      "gh:term:at-mention",
+      "gh:term:permalink",
+      "gh:term:timeline",
+      "gh:term:line-comment",
+      "gh:term:hook"
     ],
     "explain": "gist: A gist is a shareable file that you can edit, clone, and fork on GitHub. You can make a gist public or secret, although secret gists will be available to anyone with the URL.",
+    "explainFull": "gist: A gist is a shareable file that you can edit, clone, and fork on GitHub. You can make a gist public or secret, although secret gists will be available to anyone with the URL.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#gist",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "gist",
@@ -1241,11 +2736,34 @@
     "prompt": "____ is an incredibly simple semantic file format, not too dissimilar from .doc, .rtf and .txt. ____ makes it easy for even those without a web-publishing background to write prose (including with links, lists, bullets, etc.) and have it displayed like a website. GitHub supports ____ and uses a particular form of ____ called GitHub Flavored ____. See GitHub Flavored ____ Spec or Getting started with writing and formatting on GitHub.",
     "answer": "Markdown",
     "distractors": [
-      "hook",
-      "README",
-      "remote URL"
+      "fenced code block",
+      "@mention",
+      "permalink"
+    ],
+    "distractorPool": [
+      "fenced code block",
+      "@mention",
+      "permalink",
+      "timeline",
+      "notification",
+      "watch",
+      "line comment",
+      "hook"
+    ],
+    "distractorIds": [
+      "gh:term:fenced-code-block",
+      "gh:term:at-mention",
+      "gh:term:permalink",
+      "gh:term:timeline",
+      "gh:term:notification",
+      "gh:term:watch",
+      "gh:term:line-comment",
+      "gh:term:hook"
     ],
     "explain": "Markdown: Markdown is an incredibly simple semantic file format, not too dissimilar from .doc, .rtf and .txt. Markdown makes it easy for even those without a web-publishing background to write prose (including with links, lists, bullets, etc.) and have it displayed like a website.",
+    "explainFull": "Markdown: Markdown is an incredibly simple semantic file format, not too dissimilar from .doc, .rtf and .txt. Markdown makes it easy for even those without a web-publishing background to write prose (including with links, lists, bullets, etc.) and have it displayed like a website. GitHub supports Markdown and uses a particular form of Markdown called GitHub Flavored Markdown. See GitHub Flavored Markdown Spec or Getting started with writing and formatting on GitHub.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#markdown",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "Markdown",
@@ -1260,11 +2778,34 @@
     "prompt": "GitHub-specific Markdown used to format prose and code across GitHub. See ____ Spec or Getting started with writing and formatting on GitHub.",
     "answer": "GitHub Flavored Markdown",
     "distractors": [
-      "mirror",
-      "issue",
-      "clean"
+      "fenced code block",
+      "@mention",
+      "permalink"
+    ],
+    "distractorPool": [
+      "fenced code block",
+      "@mention",
+      "permalink",
+      "timeline",
+      "notification",
+      "watch",
+      "line comment",
+      "hook"
+    ],
+    "distractorIds": [
+      "gh:term:fenced-code-block",
+      "gh:term:at-mention",
+      "gh:term:permalink",
+      "gh:term:timeline",
+      "gh:term:notification",
+      "gh:term:watch",
+      "gh:term:line-comment",
+      "gh:term:hook"
     ],
     "explain": "GitHub Flavored Markdown: GitHub-specific Markdown used to format prose and code across GitHub. See GitHub Flavored Markdown Spec or Getting started with writing and formatting on GitHub.",
+    "explainFull": "GitHub Flavored Markdown: GitHub-specific Markdown used to format prose and code across GitHub. See GitHub Flavored Markdown Spec or Getting started with writing and formatting on GitHub.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#github-flavored-markdown",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "GitHub Flavored Markdown",
@@ -1279,11 +2820,34 @@
     "prompt": "An indented block of code you can create with GitHub Flavored Markdown using triple backticks \\`\\`\\` before and after the code block. See this example.",
     "answer": "fenced code block",
     "distractors": [
-      "transfer",
-      "review",
-      "dirty"
+      "@mention",
+      "permalink",
+      "timeline"
+    ],
+    "distractorPool": [
+      "@mention",
+      "permalink",
+      "timeline",
+      "notification",
+      "watch",
+      "star",
+      "line comment",
+      "hook"
+    ],
+    "distractorIds": [
+      "gh:term:at-mention",
+      "gh:term:permalink",
+      "gh:term:timeline",
+      "gh:term:notification",
+      "gh:term:watch",
+      "gh:term:star",
+      "gh:term:line-comment",
+      "gh:term:hook"
     ],
     "explain": "fenced code block: An indented block of code you can create with GitHub Flavored Markdown using triple backticks \\`\\`\\` before and after the code block. See this example.",
+    "explainFull": "fenced code block: An indented block of code you can create with GitHub Flavored Markdown using triple backticks \\`\\`\\` before and after the code block. See this example.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#fenced-code-block",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "fenced code block",
@@ -1298,11 +2862,34 @@
     "prompt": "To notify a person on GitHub by using `@` before their username. Users in an organization on GitHub can also be a part of a team that can be mentioned.",
     "answer": "@mention",
     "distractors": [
-      "master",
-      "pull request review",
-      "commit ID"
+      "permalink",
+      "timeline",
+      "notification"
+    ],
+    "distractorPool": [
+      "permalink",
+      "timeline",
+      "notification",
+      "watch",
+      "star",
+      "SSH key",
+      "line comment",
+      "hook"
+    ],
+    "distractorIds": [
+      "gh:term:permalink",
+      "gh:term:timeline",
+      "gh:term:notification",
+      "gh:term:watch",
+      "gh:term:star",
+      "gh:term:ssh-key",
+      "gh:term:line-comment",
+      "gh:term:hook"
     ],
     "explain": "@mention: To notify a person on GitHub by using `@` before their username. Users in an organization on GitHub can also be a part of a team that can be mentioned.",
+    "explainFull": "@mention: To notify a person on GitHub by using `@` before their username. Users in an organization on GitHub can also be a part of a team that can be mentioned.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#mention",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "@mention",
@@ -1317,11 +2904,34 @@
     "prompt": "A comment within a pull request on a specific line of code.",
     "answer": "line comment",
     "distractors": [
-      "open source",
-      "base branch",
-      "commit author"
+      "master",
+      "branch",
+      "pull request"
+    ],
+    "distractorPool": [
+      "master",
+      "branch",
+      "pull request",
+      "main",
+      "default branch",
+      "review",
+      "permalink",
+      "timeline"
+    ],
+    "distractorIds": [
+      "gh:term:master",
+      "gh:term:branch",
+      "gh:term:pull-request",
+      "gh:term:main",
+      "gh:term:default-branch",
+      "gh:term:review",
+      "gh:term:permalink",
+      "gh:term:timeline"
     ],
     "explain": "line comment: A comment within a pull request on a specific line of code.",
+    "explainFull": "line comment: A comment within a pull request on a specific line of code.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#line-comment",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "line comment",
@@ -1336,11 +2946,34 @@
     "prompt": "A permanent static hyperlink to a particular web page.",
     "answer": "permalink",
     "distractors": [
-      "contribution guidelines",
-      "head branch",
-      "blame"
+      "timeline",
+      "notification",
+      "watch"
+    ],
+    "distractorPool": [
+      "timeline",
+      "notification",
+      "watch",
+      "star",
+      "SSH key",
+      "deploy key",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:timeline",
+      "gh:term:notification",
+      "gh:term:watch",
+      "gh:term:star",
+      "gh:term:ssh-key",
+      "gh:term:deploy-key",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "permalink: A permanent static hyperlink to a particular web page.",
+    "explainFull": "permalink: A permanent static hyperlink to a particular web page.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#permalink",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "permalink",
@@ -1355,11 +2988,34 @@
     "prompt": "A series of events in a pull request or on a user profile.",
     "answer": "timeline",
     "distractors": [
-      "code of conduct",
-      "compare branch",
-      "resolve"
+      "notification",
+      "watch",
+      "star"
+    ],
+    "distractorPool": [
+      "notification",
+      "watch",
+      "star",
+      "SSH key",
+      "deploy key",
+      "access token",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:notification",
+      "gh:term:watch",
+      "gh:term:star",
+      "gh:term:ssh-key",
+      "gh:term:deploy-key",
+      "gh:term:access-token",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "timeline: A series of events in a pull request or on a user profile.",
+    "explainFull": "timeline: A series of events in a pull request or on a user profile.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#timeline",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "timeline",
@@ -1374,11 +3030,34 @@
     "prompt": "Updates, delivered by either the web or email depending on your settings, that give you information about the activities you're interested in.",
     "answer": "notification",
     "distractors": [
-      "repository",
-      "feature branch",
-      "line ending"
+      "watch",
+      "star",
+      "SSH key"
+    ],
+    "distractorPool": [
+      "watch",
+      "star",
+      "SSH key",
+      "deploy key",
+      "access token",
+      "private repository",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:watch",
+      "gh:term:star",
+      "gh:term:ssh-key",
+      "gh:term:deploy-key",
+      "gh:term:access-token",
+      "gh:term:private-repository",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "notification: Updates, delivered by either the web or email depending on your settings, that give you information about the activities you're interested in.",
+    "explainFull": "notification: Updates, delivered by either the web or email depending on your settings, that give you information about the activities you're interested in.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#notification",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "notification",
@@ -1393,11 +3072,34 @@
     "prompt": "You can ____ a repository or issue to receive notifications when updates are made to an issue or pull request.",
     "answer": "watch",
     "distractors": [
-      "commit",
-      "topic branch",
-      "LFS"
+      "star",
+      "SSH key",
+      "deploy key"
+    ],
+    "distractorPool": [
+      "star",
+      "SSH key",
+      "deploy key",
+      "access token",
+      "private repository",
+      "public repository",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:star",
+      "gh:term:ssh-key",
+      "gh:term:deploy-key",
+      "gh:term:access-token",
+      "gh:term:private-repository",
+      "gh:term:public-repository",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "watch: You can watch a repository or issue to receive notifications when updates are made to an issue or pull request.",
+    "explainFull": "watch: You can watch a repository or issue to receive notifications when updates are made to an issue or pull request.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#watch",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "watch",
@@ -1412,11 +3114,34 @@
     "prompt": "A bookmark or display of appreciation for a repository. ____ are a manual way to rank the popularity of projects.",
     "answer": "star",
     "distractors": [
-      "branch",
-      "checkout",
-      "collaborator"
+      "SSH key",
+      "deploy key",
+      "access token"
+    ],
+    "distractorPool": [
+      "SSH key",
+      "deploy key",
+      "access token",
+      "private repository",
+      "public repository",
+      "owner",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:ssh-key",
+      "gh:term:deploy-key",
+      "gh:term:access-token",
+      "gh:term:private-repository",
+      "gh:term:public-repository",
+      "gh:term:owner",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "star: A bookmark or display of appreciation for a repository. Stars are a manual way to rank the popularity of projects.",
+    "explainFull": "star: A bookmark or display of appreciation for a repository. Stars are a manual way to rank the popularity of projects.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#star",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "star",
@@ -1431,11 +3156,34 @@
     "prompt": "____ are a way to identify yourself to an online server, using an encrypted message. It's as if your computer has its own unique password to another service. GitHub uses ____ to securely transfer information to your computer.",
     "answer": "SSH key",
     "distractors": [
-      "clone",
-      "HEAD",
-      "contributor"
+      "deploy key",
+      "access token",
+      "private repository"
+    ],
+    "distractorPool": [
+      "deploy key",
+      "access token",
+      "private repository",
+      "public repository",
+      "owner",
+      "organization",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:deploy-key",
+      "gh:term:access-token",
+      "gh:term:private-repository",
+      "gh:term:public-repository",
+      "gh:term:owner",
+      "gh:term:organization",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "SSH key: SSH keys are a way to identify yourself to an online server, using an encrypted message. It's as if your computer has its own unique password to another service.",
+    "explainFull": "SSH key: SSH keys are a way to identify yourself to an online server, using an encrypted message. It's as if your computer has its own unique password to another service. GitHub uses SSH keys to securely transfer information to your computer.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#ssh-key",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "SSH key",
@@ -1450,11 +3198,34 @@
     "prompt": "A ____ is an SSH key that is stored on your server and grants access to a single GitHub repository. This key is attached directly to the repository instead of to a personal user account.",
     "answer": "deploy key",
     "distractors": [
-      "push",
-      "detached HEAD",
-      "assignee"
+      "access token",
+      "private repository",
+      "public repository"
+    ],
+    "distractorPool": [
+      "access token",
+      "private repository",
+      "public repository",
+      "owner",
+      "organization",
+      "team",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:access-token",
+      "gh:term:private-repository",
+      "gh:term:public-repository",
+      "gh:term:owner",
+      "gh:term:organization",
+      "gh:term:team",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "deploy key: A deploy key is an SSH key that is stored on your server and grants access to a single GitHub repository. This key is attached directly to the repository instead of to a personal user account.",
+    "explainFull": "deploy key: A deploy key is an SSH key that is stored on your server and grants access to a single GitHub repository. This key is attached directly to the repository instead of to a personal user account.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#deploy-key",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "deploy key",
@@ -1469,11 +3240,34 @@
     "prompt": "A token that is used in place of a password when performing Git operations over HTTPS with Git on the command line or the API. Also called a personal ____.",
     "answer": "access token",
     "distractors": [
-      "pull",
-      "revert",
-      "label"
+      "private repository",
+      "public repository",
+      "owner"
+    ],
+    "distractorPool": [
+      "private repository",
+      "public repository",
+      "owner",
+      "organization",
+      "team",
+      "outside collaborator",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:private-repository",
+      "gh:term:public-repository",
+      "gh:term:owner",
+      "gh:term:organization",
+      "gh:term:team",
+      "gh:term:outside-collaborator",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "access token: A token that is used in place of a password when performing Git operations over HTTPS with Git on the command line or the API. Also called a personal access token.",
+    "explainFull": "access token: A token that is used in place of a password when performing Git operations over HTTPS with Git on the command line or the API. Also called a personal access token.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#access-token",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "access token",
@@ -1488,11 +3282,34 @@
     "prompt": "Private repositories are only visible to the repository owner and collaborators that the owner specified.",
     "answer": "private repository",
     "distractors": [
-      "fetch",
-      "rebase",
-      "milestone"
+      "public repository",
+      "owner",
+      "organization"
+    ],
+    "distractorPool": [
+      "public repository",
+      "owner",
+      "organization",
+      "team",
+      "outside collaborator",
+      "project board",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:public-repository",
+      "gh:term:owner",
+      "gh:term:organization",
+      "gh:term:team",
+      "gh:term:outside-collaborator",
+      "gh:term:project-board",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "private repository: Private repositories are only visible to the repository owner and collaborators that the owner specified.",
+    "explainFull": "private repository: Private repositories are only visible to the repository owner and collaborators that the owner specified.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#private-repository",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "private repository",
@@ -1507,11 +3324,34 @@
     "prompt": "A ____ can be viewed by anyone, including people who aren't GitHub users.",
     "answer": "public repository",
     "distractors": [
-      "merge",
-      "squash",
-      "release"
+      "owner",
+      "organization",
+      "team"
+    ],
+    "distractorPool": [
+      "owner",
+      "organization",
+      "team",
+      "outside collaborator",
+      "project board",
+      "GitHub Pages",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:owner",
+      "gh:term:organization",
+      "gh:term:team",
+      "gh:term:outside-collaborator",
+      "gh:term:project-board",
+      "gh:term:github-pages",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "public repository: A public repository can be viewed by anyone, including people who aren't GitHub users.",
+    "explainFull": "public repository: A public repository can be viewed by anyone, including people who aren't GitHub users.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#public-repository",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "public repository",
@@ -1526,11 +3366,34 @@
     "prompt": "Organization members that have complete administrative access to the organization.",
     "answer": "owner",
     "distractors": [
-      "merge conflict",
-      "cherry-picking",
-      "protected branch"
+      "organization",
+      "team",
+      "outside collaborator"
+    ],
+    "distractorPool": [
+      "organization",
+      "team",
+      "outside collaborator",
+      "project board",
+      "GitHub Pages",
+      "GitHub Wiki",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:organization",
+      "gh:term:team",
+      "gh:term:outside-collaborator",
+      "gh:term:project-board",
+      "gh:term:github-pages",
+      "gh:term:github-wiki",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "owner: Organization members that have complete administrative access to the organization.",
+    "explainFull": "owner: Organization members that have complete administrative access to the organization.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#owner",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "owner",
@@ -1545,11 +3408,34 @@
     "prompt": "____ are a group of two or more users that typically mirror real-world ____. They are administered by users and can contain both repositories and teams.",
     "answer": "organization",
     "distractors": [
-      "pull request",
-      "fast-forward",
-      "branch restriction"
+      "team",
+      "outside collaborator",
+      "project board"
+    ],
+    "distractorPool": [
+      "team",
+      "outside collaborator",
+      "project board",
+      "GitHub Pages",
+      "GitHub Wiki",
+      "dependency graph",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:team",
+      "gh:term:outside-collaborator",
+      "gh:term:project-board",
+      "gh:term:github-pages",
+      "gh:term:github-wiki",
+      "gh:term:dependency-graph",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "organization: Organizations are a group of two or more users that typically mirror real-world organizations. They are administered by users and can contain both repositories and teams.",
+    "explainFull": "organization: Organizations are a group of two or more users that typically mirror real-world organizations. They are administered by users and can contain both repositories and teams.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#organization",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "organization",
@@ -1564,11 +3450,34 @@
     "prompt": "A group of organization members that reflect your company or group's structure with cascading access permissions and mentions.",
     "answer": "team",
     "distractors": [
-      "remote",
-      "non-fast-forward",
-      "required pull request review"
+      "outside collaborator",
+      "project board",
+      "GitHub Pages"
+    ],
+    "distractorPool": [
+      "outside collaborator",
+      "project board",
+      "GitHub Pages",
+      "GitHub Wiki",
+      "dependency graph",
+      "webhooks",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:outside-collaborator",
+      "gh:term:project-board",
+      "gh:term:github-pages",
+      "gh:term:github-wiki",
+      "gh:term:dependency-graph",
+      "gh:term:webhooks",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "team: A group of organization members that reflect your company or group's structure with cascading access permissions and mentions.",
+    "explainFull": "team: A group of organization members that reflect your company or group's structure with cascading access permissions and mentions.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#team",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "team",
@@ -1583,11 +3492,34 @@
     "prompt": "A user who has been given access to one or more of an organization’s repositories, but has no other access to the organization and is not a member of the organization.",
     "answer": "outside collaborator",
     "distractors": [
-      "origin",
-      "force push",
-      "status checks"
+      "project board",
+      "GitHub Pages",
+      "GitHub Wiki"
+    ],
+    "distractorPool": [
+      "project board",
+      "GitHub Pages",
+      "GitHub Wiki",
+      "dependency graph",
+      "webhooks",
+      "transfer",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:project-board",
+      "gh:term:github-pages",
+      "gh:term:github-wiki",
+      "gh:term:dependency-graph",
+      "gh:term:webhooks",
+      "gh:term:transfer",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "outside collaborator: A user who has been given access to one or more of an organization’s repositories, but has no other access to the organization and is not a member of the organization.",
+    "explainFull": "outside collaborator: A user who has been given access to one or more of an organization’s repositories, but has no other access to the organization and is not a member of the organization.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#outside-collaborator",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "outside collaborator",
@@ -1602,11 +3534,34 @@
     "prompt": "Boards within GitHub that are made up of issues, pull requests, and notes that are categorized as cards in columns.",
     "answer": "project board",
     "distractors": [
-      "main",
-      "push a branch",
-      "required status check"
+      "GitHub Pages",
+      "GitHub Wiki",
+      "dependency graph"
+    ],
+    "distractorPool": [
+      "GitHub Pages",
+      "GitHub Wiki",
+      "dependency graph",
+      "webhooks",
+      "transfer",
+      "open source",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:github-pages",
+      "gh:term:github-wiki",
+      "gh:term:dependency-graph",
+      "gh:term:webhooks",
+      "gh:term:transfer",
+      "gh:term:open-source",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "project board: Boards within GitHub that are made up of issues, pull requests, and notes that are categorized as cards in columns.",
+    "explainFull": "project board: Boards within GitHub that are made up of issues, pull requests, and notes that are categorized as cards in columns.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#project-board",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "project board",
@@ -1621,11 +3576,34 @@
     "prompt": "Also referred to as Pages. A static site hosting service designed to host your personal, organization, or project pages directly from a GitHub repository.",
     "answer": "GitHub Pages",
     "distractors": [
-      "default branch",
-      "upstream",
-      "code owner"
+      "GitHub Wiki",
+      "dependency graph",
+      "webhooks"
+    ],
+    "distractorPool": [
+      "GitHub Wiki",
+      "dependency graph",
+      "webhooks",
+      "transfer",
+      "open source",
+      "contribution guidelines",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:github-wiki",
+      "gh:term:dependency-graph",
+      "gh:term:webhooks",
+      "gh:term:transfer",
+      "gh:term:open-source",
+      "gh:term:contribution-guidelines",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "GitHub Pages: Also referred to as Pages. A static site hosting service designed to host your personal, organization, or project pages directly from a GitHub repository.",
+    "explainFull": "GitHub Pages: Also referred to as Pages. A static site hosting service designed to host your personal, organization, or project pages directly from a GitHub repository.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#github-pages",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "GitHub Pages",
@@ -1640,11 +3618,34 @@
     "prompt": "A section for hosting wiki style documentation on a GitHub repository.",
     "answer": "GitHub Wiki",
     "distractors": [
-      "commit message",
-      "upstream branch",
-      "continuous integration"
+      "dependency graph",
+      "webhooks",
+      "transfer"
+    ],
+    "distractorPool": [
+      "dependency graph",
+      "webhooks",
+      "transfer",
+      "open source",
+      "contribution guidelines",
+      "code of conduct",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:dependency-graph",
+      "gh:term:webhooks",
+      "gh:term:transfer",
+      "gh:term:open-source",
+      "gh:term:contribution-guidelines",
+      "gh:term:code-of-conduct",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "GitHub Wiki: A section for hosting wiki style documentation on a GitHub repository.",
+    "explainFull": "GitHub Wiki: A section for hosting wiki style documentation on a GitHub repository.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#github-wiki",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "GitHub Wiki",
@@ -1659,11 +3660,34 @@
     "prompt": "A repository graph that shows the packages and projects that the repository depends on.",
     "answer": "dependency graph",
     "distractors": [
-      "diff",
-      "fork",
-      "license"
+      "webhooks",
+      "transfer",
+      "open source"
+    ],
+    "distractorPool": [
+      "webhooks",
+      "transfer",
+      "open source",
+      "contribution guidelines",
+      "code of conduct",
+      "README",
+      "hook",
+      "mirror"
+    ],
+    "distractorIds": [
+      "gh:term:webhooks",
+      "gh:term:transfer",
+      "gh:term:open-source",
+      "gh:term:contribution-guidelines",
+      "gh:term:code-of-conduct",
+      "gh:term:readme",
+      "gh:term:hook",
+      "gh:term:mirror"
     ],
     "explain": "dependency graph: A repository graph that shows the packages and projects that the repository depends on.",
+    "explainFull": "dependency graph: A repository graph that shows the packages and projects that the repository depends on.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#dependency-graph",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "dependency graph",
@@ -1678,11 +3702,34 @@
     "prompt": "____ allow you to build or set up GitHub Apps which subscribe to certain events on GitHub.com. ____ provide a way for notifications to be delivered to an external web server whenever certain actions occur on a repository or organization. Also called a service hook.",
     "answer": "webhooks",
     "distractors": [
-      "Git",
-      "remote repository",
-      "gist"
+      "transfer",
+      "open source",
+      "contribution guidelines"
+    ],
+    "distractorPool": [
+      "transfer",
+      "open source",
+      "contribution guidelines",
+      "code of conduct",
+      "README",
+      "issue",
+      "mirror",
+      "master"
+    ],
+    "distractorIds": [
+      "gh:term:transfer",
+      "gh:term:open-source",
+      "gh:term:contribution-guidelines",
+      "gh:term:code-of-conduct",
+      "gh:term:readme",
+      "gh:term:issue",
+      "gh:term:mirror",
+      "gh:term:master"
     ],
     "explain": "webhooks: Webhooks allow you to build or set up GitHub Apps which subscribe to certain events on GitHub.com. Webhooks provide a way for notifications to be delivered to an external web server whenever certain actions occur on a repository or organization.",
+    "explainFull": "webhooks: Webhooks allow you to build or set up GitHub Apps which subscribe to certain events on GitHub.com. Webhooks provide a way for notifications to be delivered to an external web server whenever certain actions occur on a repository or organization. Also called a service hook.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#webhooks",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "webhooks",
@@ -1697,11 +3744,34 @@
     "prompt": "During the normal execution of several Git commands, call-outs are made to optional scripts that allow a developer to add functionality or checking. Typically, the ____ allow for a command to be pre-verified and potentially aborted, and allow for a post-notification after the operation is done.",
     "answer": "hook",
     "distractors": [
-      "README",
-      "remote URL",
-      "Markdown"
+      "mirror",
+      "repository",
+      "commit"
+    ],
+    "distractorPool": [
+      "mirror",
+      "repository",
+      "commit",
+      "clone",
+      "push",
+      "pull",
+      "transfer",
+      "master"
+    ],
+    "distractorIds": [
+      "gh:term:mirror",
+      "gh:term:repository",
+      "gh:term:commit",
+      "gh:term:clone",
+      "gh:term:push",
+      "gh:term:pull",
+      "gh:term:transfer",
+      "gh:term:master"
     ],
     "explain": "hook: During the normal execution of several Git commands, call-outs are made to optional scripts that allow a developer to add functionality or checking. Typically, the hooks allow for a command to be pre-verified and potentially aborted, and allow for a post-notification after the operation is done.",
+    "explainFull": "hook: During the normal execution of several Git commands, call-outs are made to optional scripts that allow a developer to add functionality or checking. Typically, the hooks allow for a command to be pre-verified and potentially aborted, and allow for a post-notification after the operation is done.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#hook",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "hook",
@@ -1716,11 +3786,34 @@
     "prompt": "A new copy of a repository.",
     "answer": "mirror",
     "distractors": [
-      "issue",
-      "clean",
-      "GitHub Flavored Markdown"
+      "repository",
+      "commit",
+      "clone"
+    ],
+    "distractorPool": [
+      "repository",
+      "commit",
+      "clone",
+      "push",
+      "pull",
+      "fetch",
+      "transfer",
+      "master"
+    ],
+    "distractorIds": [
+      "gh:term:repository",
+      "gh:term:commit",
+      "gh:term:clone",
+      "gh:term:push",
+      "gh:term:pull",
+      "gh:term:fetch",
+      "gh:term:transfer",
+      "gh:term:master"
     ],
     "explain": "mirror: A new copy of a repository.",
+    "explainFull": "mirror: A new copy of a repository.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#mirror",
+    "topic": "Git basics",
     "source": {
       "doc": "github-glossary",
       "ref": "mirror",
@@ -1735,11 +3828,34 @@
     "prompt": "To ____ a repository means to change the owner of a repository. The new owner will be able to immediately administer the repository's contents, issues, pull requests, releases, and settings.",
     "answer": "transfer",
     "distractors": [
-      "review",
-      "dirty",
-      "fenced code block"
+      "open source",
+      "contribution guidelines",
+      "code of conduct"
+    ],
+    "distractorPool": [
+      "open source",
+      "contribution guidelines",
+      "code of conduct",
+      "README",
+      "issue",
+      "collaborator",
+      "master",
+      "repository"
+    ],
+    "distractorIds": [
+      "gh:term:open-source",
+      "gh:term:contribution-guidelines",
+      "gh:term:code-of-conduct",
+      "gh:term:readme",
+      "gh:term:issue",
+      "gh:term:collaborator",
+      "gh:term:master",
+      "gh:term:repository"
     ],
     "explain": "transfer: To transfer a repository means to change the owner of a repository. The new owner will be able to immediately administer the repository's contents, issues, pull requests, releases, and settings.",
+    "explainFull": "transfer: To transfer a repository means to change the owner of a repository. The new owner will be able to immediately administer the repository's contents, issues, pull requests, releases, and settings.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#transfer",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "transfer",
@@ -1754,11 +3870,34 @@
     "prompt": "The default branch in many Git repositories. By default, when you create a new Git repository on the command line, a branch called `____` is created. Many tools now use an alternative name for the default branch. For example, when you create a new repository on GitHub, the default branch is called `main`.",
     "answer": "master",
     "distractors": [
+      "branch",
+      "pull request",
+      "review"
+    ],
+    "distractorPool": [
+      "branch",
+      "pull request",
+      "review",
       "pull request review",
-      "commit ID",
-      "@mention"
+      "base branch",
+      "head branch",
+      "open source",
+      "contribution guidelines"
+    ],
+    "distractorIds": [
+      "gh:term:branch",
+      "gh:term:pull-request",
+      "gh:term:review",
+      "gh:term:pull-request-review",
+      "gh:term:base-branch",
+      "gh:term:head-branch",
+      "gh:term:open-source",
+      "gh:term:contribution-guidelines"
     ],
     "explain": "master: The default branch in many Git repositories. By default, when you create a new Git repository on the command line, a branch called `master` is created.",
+    "explainFull": "master: The default branch in many Git repositories. By default, when you create a new Git repository on the command line, a branch called `master` is created. Many tools now use an alternative name for the default branch. For example, when you create a new repository on GitHub, the default branch is called `main`.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#master",
+    "topic": "Branches and pull requests",
     "source": {
       "doc": "github-glossary",
       "ref": "master",
@@ -1773,11 +3912,34 @@
     "prompt": "____ software is software that can be freely used, modified, and shared (in both modified and unmodified form) by anyone. Today the concept of \"____\" is often extended beyond software, to represent a philosophy of collaboration in which working materials are made available online for anyone to fork, modify, discuss, and contribute to.",
     "answer": "open source",
     "distractors": [
-      "base branch",
-      "commit author",
-      "line comment"
+      "contribution guidelines",
+      "code of conduct",
+      "README"
+    ],
+    "distractorPool": [
+      "contribution guidelines",
+      "code of conduct",
+      "README",
+      "issue",
+      "collaborator",
+      "contributor",
+      "repository",
+      "commit"
+    ],
+    "distractorIds": [
+      "gh:term:contribution-guidelines",
+      "gh:term:code-of-conduct",
+      "gh:term:readme",
+      "gh:term:issue",
+      "gh:term:collaborator",
+      "gh:term:contributor",
+      "gh:term:repository",
+      "gh:term:commit"
     ],
     "explain": "open source: Open source software is software that can be freely used, modified, and shared (in both modified and unmodified form) by anyone. Today the concept of \"open source\" is often extended beyond software, to represent a philosophy of collaboration in which working materials are made available online for anyone to fork, modify, discuss, and contribute to.",
+    "explainFull": "open source: Open source software is software that can be freely used, modified, and shared (in both modified and unmodified form) by anyone. Today the concept of \"open source\" is often extended beyond software, to represent a philosophy of collaboration in which working materials are made available online for anyone to fork, modify, discuss, and contribute to.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#open-source",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "open source",
@@ -1792,11 +3954,34 @@
     "prompt": "A document explaining how people should contribute to your project.",
     "answer": "contribution guidelines",
     "distractors": [
-      "head branch",
-      "blame",
-      "permalink"
+      "code of conduct",
+      "README",
+      "issue"
+    ],
+    "distractorPool": [
+      "code of conduct",
+      "README",
+      "issue",
+      "collaborator",
+      "contributor",
+      "assignee",
+      "repository",
+      "commit"
+    ],
+    "distractorIds": [
+      "gh:term:code-of-conduct",
+      "gh:term:readme",
+      "gh:term:issue",
+      "gh:term:collaborator",
+      "gh:term:contributor",
+      "gh:term:assignee",
+      "gh:term:repository",
+      "gh:term:commit"
     ],
     "explain": "contribution guidelines: A document explaining how people should contribute to your project.",
+    "explainFull": "contribution guidelines: A document explaining how people should contribute to your project.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#contribution-guidelines",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "contribution guidelines",
@@ -1811,11 +3996,34 @@
     "prompt": "A document that defines standards for how to engage in a community.",
     "answer": "code of conduct",
     "distractors": [
-      "compare branch",
-      "resolve",
-      "timeline"
+      "README",
+      "issue",
+      "collaborator"
+    ],
+    "distractorPool": [
+      "README",
+      "issue",
+      "collaborator",
+      "contributor",
+      "assignee",
+      "label",
+      "repository",
+      "commit"
+    ],
+    "distractorIds": [
+      "gh:term:readme",
+      "gh:term:issue",
+      "gh:term:collaborator",
+      "gh:term:contributor",
+      "gh:term:assignee",
+      "gh:term:label",
+      "gh:term:repository",
+      "gh:term:commit"
     ],
     "explain": "code of conduct: A document that defines standards for how to engage in a community.",
+    "explainFull": "code of conduct: A document that defines standards for how to engage in a community.",
+    "docsUrl": "https://docs.github.com/en/get-started/learning-about-github/github-glossary#code-of-conduct",
+    "topic": "GitHub features",
     "source": {
       "doc": "github-glossary",
       "ref": "code of conduct",

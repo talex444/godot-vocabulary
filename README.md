@@ -26,7 +26,7 @@ A right answer counts as FSRS **Good**, a wrong one as **Again**, at a desired r
 
 ## Where the cards come from
 
-- **Godot API** (886 cards): generated from Godot 4.7's class reference XML.
+- **Godot API** (850 cards): generated from Godot 4.7's class reference XML.
 - **GDScript** (120 cards): written by hand in `data/cards/gdscript.json` from the GDScript pages of the Godot manual. Each card names its source section.
 - **GitHub** (96 cards): generated from the GitHub Docs glossary, filtered by `scripts/github-terms-allowlist.json` to Git and team-workflow terms.
 

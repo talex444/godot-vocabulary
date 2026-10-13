@@ -55,14 +55,119 @@ describe('generated deck', () => {
   });
 });
 
+describe('distractor pools, full descriptions, links and topics (done-criteria 34, 36, 39)', () => {
+  it('gives every card a pool of at least four, six or more for at least 90%', () => {
+    const sizes = new Map<number, number>();
+    for (const c of deck) {
+      const pool = c.distractorPool!;
+      sizes.set(pool.length, (sizes.get(pool.length) ?? 0) + 1);
+      expect(pool.length, c.id).toBeGreaterThanOrEqual(4);
+      expect(pool, c.id).not.toContain(c.answer);
+      expect(new Set(pool).size, c.id).toBe(pool.length);
+      expect(c.distractors, c.id).toEqual(pool.slice(0, 3));
+      expect(c.distractorIds, c.id).toHaveLength(pool.length);
+    }
+    console.log('pool sizes (size: cards)', Object.fromEntries([...sizes].sort((a, b) => a[0] - b[0])));
+    expect(deck.filter((c) => c.distractorPool!.length >= 6).length / deck.length).toBeGreaterThanOrEqual(0.9);
+  });
+
+  it('points pool ids at cards whose answer is that pool entry, where the card exists', () => {
+    for (const c of deck) {
+      c.distractorIds!.forEach((id, i) => {
+        const other = byId.get(id);
+        if (other) expect(other.answer, `${c.id} → ${id}`).toBe(c.distractorPool![i]);
+      });
+    }
+    const flippable = deck.filter((c) => c.kind === 'class' && c.distractorIds!.filter((id) => byId.has(id)).length >= 3);
+    expect(flippable.length).toBeGreaterThan(300);
+  });
+
+  it('has a full description of at most 1,200 characters, ending in "…" when cut, with no raw BBCode', () => {
+    for (const c of deck) {
+      const full = c.explainFull!;
+      expect(full.trim(), c.id).not.toBe('');
+      expect(full.length, c.id).toBeLessThanOrEqual(1200);
+      expect(RAW_TAG_PATTERN.test(full), c.id).toBe(false);
+      expect((full.match(/```/g) ?? []).length % 2, c.id).toBe(0);
+    }
+    expect((api as Card[]).some((c) => c.explainFull!.endsWith('…'))).toBe(true);
+  });
+
+  it('links every card to its official docs page in the verified URL shapes', () => {
+    const godot = 'https://docs.godotengine.org/en/4.7/';
+    for (const c of deck) expect(c.docsUrl, c.id).toMatch(/^https:\/\/docs\.(godotengine\.org\/en\/4\.7|github\.com\/en)\/\S+$/);
+    expect(byId.get('api:class:Timer')!.docsUrl).toBe(`${godot}classes/class_timer.html`);
+    expect(byId.get('api:prop:Timer.one_shot')!.docsUrl).toBe(`${godot}classes/class_timer.html#class-timer-property-one-shot`);
+    expect(byId.get('api:signal:Timer.timeout')!.docsUrl).toBe(`${godot}classes/class_timer.html#class-timer-signal-timeout`);
+    expect(byId.get('api:method:Timer.start')!.docsUrl).toBe(`${godot}classes/class_timer.html#class-timer-method-start`);
+    expect(byId.get('gd:keyword:if')!.docsUrl).toBe(`${godot}tutorials/scripting/gdscript/gdscript_basics.html#if-else-elif`);
+    expect(byId.get('gh:term:pull-request')!.docsUrl).toBe(
+      'https://docs.github.com/en/get-started/learning-about-github/github-glossary#pull-request',
+    );
+  });
+
+  it('gives every card a topic', () => {
+    for (const c of deck) expect(c.topic?.trim(), c.id).toBeTruthy();
+    expect(new Set((github as Card[]).map((c) => c.topic))).toEqual(new Set(['Git basics', 'Branches and pull requests', 'GitHub features']));
+    // The first staged page that mentions the class: step by step comes before the first 2D game.
+    expect(byId.get('api:class:Area2D')!.topic).toBe('Signals');
+    expect(byId.get('api:class:AnimatedSprite2D')!.topic).toBe('Your first 2D game');
+    for (const c of (api as Card[]).filter((c) => c.requires)) expect(c.topic, c.id).toBe(byId.get(c.requires!)!.topic);
+  });
+});
+
+describe('generator rules (done-criteria 38)', () => {
+  const removed = JSON.parse(readFileSync(join(ROOT, 'data/removed-cards.json'), 'utf8')) as Record<string, string[]>;
+  const classes = (api as Card[]).filter((c) => c.kind === 'class');
+  const normalise = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const words = (s: string) => s.split(/\s+/).filter((w) => /[A-Za-z0-9]/.test(w.replace(/_{4}/g, ''))).length;
+
+  it('reports what each rule removed', () => {
+    console.log('removed per rule', Object.fromEntries(Object.entries(removed).map(([k, v]) => [k, v.length])));
+    for (const ids of Object.values(removed)) for (const id of ids) expect(byId.has(id), id).toBe(false);
+  });
+
+  it('(a) keeps no two class cards with the same prompt', () => {
+    const seen = new Map<string, string>();
+    for (const c of classes) {
+      const key = normalise(c.prompt);
+      expect(seen.get(key), `${c.id} repeats ${seen.get(key)}`).toBeUndefined();
+      seen.set(key, c.id);
+    }
+    expect(removed.duplicateBrief).toEqual(expect.arrayContaining(['api:class:CheckBox', 'api:class:CheckButton']));
+  });
+
+  it('(b) has no editor-only class', () => {
+    for (const c of classes) {
+      const xml = join(ROOT, 'data/sources/godot-4.7/classes', `${c.answer}.xml`);
+      if (existsSync(xml)) expect(readFileSync(xml, 'utf8'), c.id).not.toMatch(/<class [^>]*api_type="editor"/);
+    }
+    expect(removed.editor).toContain('api:class:EditorPlugin');
+  });
+
+  it('(c) leaves no API prompt with a blank or two words or fewer', () => {
+    for (const c of api as Card[]) {
+      expect(c.prompt, c.id).not.toContain('____');
+      expect(words(c.prompt.replace(/^\w+: /, '')), c.id).toBeGreaterThan(2);
+    }
+  });
+
+  it('(d) has no member card whose description is four words or fewer', () => {
+    for (const c of (api as Card[]).filter((c) => c.requires)) {
+      expect(words(c.explain.split('\n').slice(1).join(' ')), c.id).toBeGreaterThan(4);
+    }
+  });
+});
+
 describe('API family', () => {
   const classes = (api as Card[]).filter((c) => c.kind === 'class').sort((a, b) => a.rank - b.rank);
   const frequency = JSON.parse(readFileSync(join(ROOT, 'data/class-frequency.json'), 'utf8')) as {
     classes: { name: string; projects: number }[];
   };
 
-  it('has a class card for every used class that has a brief description', () => {
-    const names = new Set(classes.map((c) => c.answer));
+  it('has a class card for every used class that has a brief description, unless a generator rule removed it', () => {
+    const removed = Object.values(JSON.parse(readFileSync(join(ROOT, 'data/removed-cards.json'), 'utf8')) as Record<string, string[]>).flat();
+    const names = new Set([...classes.map((c) => c.answer), ...removed.map((id) => id.replace(/^api:class:/, ''))]);
     const missing = frequency.classes
       .filter((r) => r.projects > 0 && !r.name.startsWith('@'))
       .filter((r) => !names.has(r.name))

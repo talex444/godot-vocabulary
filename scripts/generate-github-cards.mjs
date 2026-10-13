@@ -3,8 +3,10 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { parse } from 'yaml';
-import { firstSentences } from './lib/bbcode.mjs';
+import { capText, firstSentences } from './lib/bbcode.mjs';
+import { glossaryUrl } from './lib/docs.mjs';
 import { ROOT, isMain, writeJson } from './lib/io.mjs';
+import { FULL_MAX, POOL_SIZE } from './generate-api-cards.mjs';
 
 const VERSION = 'github/docs ae648a1d 2026-10-13';
 
@@ -38,7 +40,10 @@ function clean(description) {
 
 export function generateGithubCards() {
   const glossary = parse(readFileSync(join(ROOT, 'data/sources/github/glossary.yml'), 'utf8'));
-  const allow = JSON.parse(readFileSync(join(ROOT, 'scripts/github-terms-allowlist.json'), 'utf8'));
+  const allowList = JSON.parse(readFileSync(join(ROOT, 'scripts/github-terms-allowlist.json'), 'utf8'));
+  const allow = allowList.terms.map(([term]) => term);
+  const groupOf = new Map(allowList.terms);
+  const synonymsOf = (term) => allowList.synonyms.find((set) => set.includes(term)) ?? [term];
   const byTerm = new Map(glossary.map((e) => [String(e.term), String(e.description ?? '')]));
 
   const missing = allow.filter((t) => !byTerm.has(t));
@@ -55,11 +60,13 @@ export function generateGithubCards() {
   }
 
   const terms = entries.map((e) => e.term);
-  const n = terms.length;
   const cards = entries.map(({ term, description }, rank) => {
-    // Spread the distractors across the list so near-synonyms (main/master, fetch/pull) rarely meet.
-    const stride = Math.max(1, Math.floor(n / 4));
-    const distractors = [1, 2, 3].map((k) => terms[(rank + k * stride) % n]);
+    // Terms of the same group first, then the others; each list starts after this term's place so
+    // neighbours differ per card. Synonyms never stand as wrong answers.
+    const after = (list) => [...list.slice(rank + 1), ...list.slice(0, rank)];
+    const allowed = after(terms).filter((t) => !synonymsOf(term).includes(t));
+    const same = allowed.filter((t) => groupOf.get(t) === groupOf.get(term));
+    const pool = [...same.slice(0, POOL_SIZE - 2), ...allowed.filter((t) => !same.includes(t))].slice(0, POOL_SIZE);
     const prompt = description.replace(new RegExp(`\\b${escapeRegExp(term)}(?:s|es)?\\b`, 'gi'), '____');
     return {
       id: `gh:term:${slug(term)}`,
@@ -67,8 +74,13 @@ export function generateGithubCards() {
       kind: 'term',
       prompt,
       answer: term,
-      distractors,
+      distractors: pool.slice(0, 3),
+      distractorPool: pool,
+      distractorIds: pool.map((t) => `gh:term:${slug(t)}`),
       explain: `${term}: ${firstSentences(description, 2)}`,
+      explainFull: `${term}: ${capText(description, FULL_MAX - term.length - 2)}`,
+      docsUrl: glossaryUrl(term),
+      topic: groupOf.get(term),
       source: { doc: 'github-glossary', ref: term, version: VERSION },
       rank,
     };

@@ -1,0 +1,55 @@
+{
+  "duplicateBrief": [
+    "api:class:CheckButton",
+    "api:class:CheckBox",
+    "api:class:TileMapLayer",
+    "api:class:ParallaxBackground",
+    "api:class:TileMap",
+    "api:class:XRPositionalTracker",
+    "api:class:AudioListener3D",
+    "api:class:NavigationMeshSourceGeometryData2D",
+    "api:class:NavigationMeshSourceGeometryData3D"
+  ],
+  "editor": [
+    "api:class:EditorPlugin",
+    "api:class:EditorInterface",
+    "api:class:EditorImportPlugin",
+    "api:class:EditorFileSystem",
+    "api:class:EditorScript",
+    "api:class:EditorSelection"
+  ],
+  "hollow": [
+    "api:class:JSON",
+    "api:class:IP",
+    "api:class:RemoteTransform3D",
+    "api:class:GDExtension",
+    "api:class:GraphFrame",
+    "api:method:Color.hex",
+    "api:method:Transform3D.is_equal_approx",
+    "api:method:Transform3D.is_finite",
+    "api:prop:Environment.adjustment_contrast"
+  ],
+  "shortMember": [
+    "api:prop:AnimatedSprite2D.offset",
+    "api:signal:AnimatedSprite2D.animation_changed",
+    "api:signal:AnimatedSprite2D.frame_changed",
+    "api:signal:AnimatedSprite2D.sprite_frames_changed",
+    "api:prop:Animation.step",
+    "api:prop:VisibleOnScreenNotifier2D.rect",
+    "api:method:CollisionObject2D.get_rid",
+    "api:prop:CanvasLayer.offset",
+    "api:prop:CanvasLayer.scale",
+    "api:prop:CanvasLayer.transform",
+    "api:prop:Label.justification_flags",
+    "api:prop:TextureRect.texture"
+  ],
+  "smallPool": [
+    "api:prop:Vector2.x",
+    "api:prop:Vector2.y",
+    "api:prop:Transform3D.basis",
+    "api:prop:Transform3D.origin",
+    "api:prop:Vector3.x",
+    "api:prop:Vector3.y",
+    "api:prop:Vector3.z"
+  ]
+}

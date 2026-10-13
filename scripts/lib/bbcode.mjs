@@ -80,5 +80,25 @@ export function firstSentences(text, n) {
   return out.join(' ').trim();
 }
 
+/**
+ * Caps `text` at `max` characters, cutting at the last sentence end before the limit and adding "…".
+ * Never cuts inside a fenced block: a cut that would leave a fence open moves to before that fence.
+ */
+export function capText(text, max) {
+  if (text.length <= max) return text;
+  let cut = -1;
+  // Two characters stay free for the " …".
+  for (const m of text.slice(0, max - 2).matchAll(/[.!?](?=\s)|\n\n/g)) cut = m.index + (m[0] === '\n\n' ? 0 : 1);
+  let out = (cut > 0 ? text.slice(0, cut) : text.slice(0, max - 2)).trimEnd();
+  const fences = out.match(/```/g)?.length ?? 0;
+  if (fences % 2 === 1) out = out.slice(0, out.lastIndexOf('```')).trimEnd();
+  return `${out.replace(/[:;,]$/, '')} …`;
+}
+
+/** Word count with `____` blanks and punctuation-only tokens left out. */
+export function wordCount(text) {
+  return text.split(/\s+/).filter((w) => /[A-Za-z0-9]/.test(w.replace(/_{4}/g, ''))).length;
+}
+
 /** Tag names whose raw form must never reach the deck (used by tests). */
 export const RAW_TAG_PATTERN = /\[\/?(?:b|i|u|code|codeblock|codeblocks|gdscript|csharp|member|method|signal|constant|enum|param|annotation|theme_item|operator|constructor|url|br|kbd|lb|rb)(?:[ =\]])/;
