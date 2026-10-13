@@ -1,0 +1,99 @@
+name: Android package
+
+# A version tag (v1.1.0, …) builds the signed APK and attaches it to that tag's GitHub Release
+# (decision 28). A manual run builds and signs it too, as a workflow artifact only.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # No `version` input: the action reads `packageManager` from package.json.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+
+      - name: The tag names package.json's version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          expected="v$(node -p "require('./package.json').version")"
+          if [ "$expected" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json ($expected)."
+            exit 1
+          fi
+
+      # Vite build with the package's relative base, then cap sync into android/.
+      - run: pnpm build:android
+
+      # Capacitor 8's Android library compiles for Java 21.
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      # The keystore goes outside the repository tree; keystore.properties is never committed.
+      - name: Signing from the repository secrets
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          keystore="$RUNNER_TEMP/godot-vocabulary.keystore"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$keystore"
+          {
+            echo "storeFile=$keystore"
+            echo "storePassword=$ANDROID_KEYSTORE_PASSWORD"
+            echo "keyAlias=$ANDROID_KEY_ALIAS"
+            echo "keyPassword=$ANDROID_KEY_PASSWORD"
+          } > android/keystore.properties
+
+      - run: pnpm android:build
+
+      - name: Name and verify the signed APK
+        id: apk
+        run: |
+          name="godot-vocabulary-${GITHUB_REF_NAME}.apk"
+          # Gradle names it app-release-unsigned.apk when signing did not happen; that must fail here.
+          cp android/app/build/outputs/apk/release/app-release.apk "$name"
+          apksigner="$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -n 1)apksigner"
+          "$apksigner" verify --print-certs "$name"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+
+      - name: Forget the signing material
+        if: always()
+        run: rm -f android/keystore.properties "$RUNNER_TEMP/godot-vocabulary.keystore"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.apk.outputs.name }}
+          path: ${{ steps.apk.outputs.name }}
+          if-no-files-found: error
+
+      - name: Attach to the GitHub Release for the tag
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          APK: ${{ steps.apk.outputs.name }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "$APK" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "$APK" --verify-tag --title "Godot Vocabulary $GITHUB_REF_NAME" \
+              --notes "Android app (signed APK). Install: open this page on the phone, download $APK, allow installs from the browser when asked. The web version is unchanged at https://talex444.github.io/godot-vocabulary/."
+          fi

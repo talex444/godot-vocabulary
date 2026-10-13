@@ -1,6 +1,6 @@
 {
   "name": "godot-vocabulary",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Offline PWA that drills Godot 4.7 API, GDScript and Git/GitHub vocabulary as four-choice FSRS cards.",
   "license": "MIT",
