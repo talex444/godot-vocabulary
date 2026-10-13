@@ -1109,9 +1109,290 @@
     {
       "id": "c1-l5",
       "order": 5,
-      "title": "Using signals",
+      "title": "How does one node make code run in another?",
       "page": { "title": "Using signals", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/signals.html" },
-      "planned": true
+      "cardIds": [
+        "api:class:Area2D",
+        "api:signal:Area2D.body_entered",
+        "gd:lifecycle:_ready",
+        "api:method:Node._ready",
+        "api:class:Timer",
+        "api:signal:Timer.timeout",
+        "api:prop:Timer.autostart",
+        "api:class:Button",
+        "api:signal:BaseButton.pressed",
+        "api:method:Node.set_process",
+        "api:method:Node.is_processing",
+        "api:prop:CanvasItem.visible",
+        "gd:operator:not",
+        "gd:keyword:false",
+        "gd:keyword:signal",
+        "gd:concept:connect",
+        "gd:concept:emit",
+        "gd:concept:get_node",
+        "gd:keyword:pass"
+      ],
+      "need": "A button is pressed, a timer runs out, the player's health reaches zero. Each is an event in one node that other nodes care about: the sprite should stop, the screen should show game over.\n\nYou could make every node look at every other one each frame, but then each would have to know where the others are and what they are called. The manual's answer is the signal: a message a node emits when something happens to it. The node that emits does not know who is listening, and the listener's function runs without any line of yours calling it.",
+      "agenda": [
+        "Connecting a `Button`'s `pressed` signal in the editor.",
+        "Connecting a `Timer`'s `timeout` signal in code with `connect()`.",
+        "Your own signals: `signal` and `emit()`."
+      ],
+      "chunks": [
+        {
+          "heading": "Signals",
+          "text": "“In this lesson, we will look at signals. They are messages that nodes emit when something specific happens to them, like a button being pressed. Other nodes can connect to that signal and call a function when the event occurs.”\n\n“Signals are a delegation mechanism built into Godot that allows one game object to react to a change in another without them referencing one another. Using signals limits coupling and keeps your code flexible.”\n\n“For example, you might have a life bar on the screen that represents the player's health. When the player takes damage or uses a healing potion, you want the bar to reflect the change. To do so, in Godot, you would use signals.”\n\n“To add a button to our game, we will create a new scene which will include both a `Button` and the `sprite_2d.tscn` scene we created in the Creating your first script lesson.” The root is a `Node2D`, from the 2D Scene button. Build it below.",
+          "drawing": {
+            "caption": "The new scene in the Scene dock",
+            "nodes": [
+              { "name": "Node2D", "type": "Node2D", "depth": 0 },
+              { "name": "Sprite2D", "type": "Sprite2D", "depth": 1 },
+              { "name": "Button", "type": "Button", "depth": 1 }
+            ]
+          },
+          "check": {
+            "prompt": "With a signal, one node reacts to a change in another. What must the two nodes know about each other?",
+            "choices": [
+              "Nothing: they do not reference one another",
+              "Each other's whole scene tree",
+              "Each other's script file names",
+              "They must share one script"
+            ],
+            "answer": 0,
+            "why": "Signals let “one game object … react to a change in another without them referencing one another.”"
+          }
+        },
+        {
+          "heading": "Connecting a signal in the editor",
+          "text": "“Here, we want to connect the Button's ‘pressed’ signal to our Sprite2D, and we want to call a new function that will toggle its motion on and off.”\n\n“You can connect signals in the Signals dock. Select the Button node and, on the right side of the editor, click on the tab named Signals next to the Inspector.” “Double-click the ‘pressed’ signal to open the node connection window.”\n\n“There, you can connect the signal to the Sprite2D node. The node needs a receiver method, a function that Godot will call when the Button emits the signal. The editor generates one for you. By convention, we name these callback methods ‘_on_node_name_signal_name’. Here, it'll be ‘_on_button_pressed’.”",
+          "image": {
+            "src": "signals_12_node_connection.webp",
+            "alt": "The Connect a Signal to a Method window: From Signal, pressed(); under Connect to Script, Node2D with Sprite2D selected and Button; Receiver Method, _on_button_pressed; Advanced off; Connect and Cancel buttons.",
+            "caption": "Connecting the Button's pressed signal to a method on the Sprite2D.",
+            "width": 418,
+            "height": 524
+          },
+          "check": {
+            "prompt": "The `Button` emits `pressed`. Which function does Godot call?",
+            "choices": [
+              "`_on_button_pressed()` on the Sprite2D, the receiver method",
+              "`_process()` on the `Button`",
+              "`_ready()` on the Sprite2D",
+              "Every function in the scene"
+            ],
+            "answer": 0,
+            "why": "The receiver method is “a function that Godot will call when the Button emits the signal.”"
+          }
+        },
+        {
+          "heading": "Toggling the motion",
+          "text": "The generated method holds only `pass`. The manual replaces it:\n\n“Our Sprite2D moves thanks to code in the `_process()` function. Godot provides a method to toggle processing on and off: `Node.set_process()`. Another method of the Node class, `is_processing()`, returns `true` if idle processing is active. We can use the `not` keyword to invert the value.”\n\n“This function will toggle processing and, in turn, the icon's motion on and off upon pressing the button.” “Run the current scene by pressing F6 (Cmd + R on macOS), and click the button to see the sprite start and stop.”",
+          "code": "func _on_button_pressed():\n\tset_process(not is_processing())",
+          "image": {
+            "src": "signals_13_signals_connection_icon.webp",
+            "alt": "Line 23 of the script, func _on_button_pressed() -> void:, with a green connection icon in the left margin; line 24 reads pass # Replace with function body.",
+            "caption": "The generated method, marked with the connection icon.",
+            "width": 421,
+            "height": 58
+          },
+          "check": {
+            "prompt": "The icon is moving. The player presses the button twice. What is the icon doing after the second press?",
+            "choices": [
+              "Moving again",
+              "Standing still",
+              "Moving twice as fast",
+              "Standing still for good: a connection fires once"
+            ],
+            "answer": 0,
+            "why": "Each press emits `pressed` again and runs the method again: the first press turns processing off, the second turns it back on."
+          }
+        },
+        {
+          "heading": "Connecting a signal via code",
+          "text": "“You can connect signals via code instead of using the editor. This is necessary when you create nodes or instantiate scenes inside of a script.” “Godot has a `Timer` node that's useful to implement skill cooldown times, weapon reloading, and more.” Add one under the Sprite2D and turn on its Autostart property.\n\n“We want to connect the signal when the scene is instantiated, and we can do that using the `Node._ready()` built-in function, which is called automatically by the engine when a node is fully instantiated.” “The function `get_node()` looks at the Sprite2D's children and gets nodes by their name.”\n\n“The line reads like so: we connect the Timer's ‘timeout’ signal to the node to which the script is attached. When the Timer emits `timeout`, we want to call the function `_on_timer_timeout()`, that we need to define.”\n\n“The `visible` property is a boolean that controls the visibility of our node. The line `visible = not visible` toggles the value. If `visible` is `true`, it becomes `false`, and vice-versa.” “If you run the Node2D scene now, you will see that the sprite blinks on and off, at one second intervals.”",
+          "code": "func _ready():\n\tvar timer = get_node(\"Timer\")\n\ttimer.timeout.connect(_on_timer_timeout)\n\n\nfunc _on_timer_timeout():\n\tvisible = not visible",
+          "image": {
+            "src": "signals_15_scene_tree.webp",
+            "alt": "The Scene dock: Node2D at the root, Sprite2D under it with a Timer as its child, then Button, which shows a signal-connection icon.",
+            "caption": "The Timer added as a child of the Sprite2D.",
+            "width": 258,
+            "height": 237
+          },
+          "check": {
+            "prompt": "`_ready()` runs once and makes the connection. When does `_on_timer_timeout()` run?",
+            "choices": [
+              "Each time the `Timer` emits `timeout`",
+              "Once, when `connect()` is called",
+              "Every frame, like `_process()`",
+              "Never: no line of the script calls it"
+            ],
+            "answer": 0,
+            "why": "“When the Timer emits `timeout`, we want to call the function `_on_timer_timeout()`”: the connection says what to call, the signal says when."
+          }
+        },
+        {
+          "heading": "Custom signals",
+          "text": "“You can define custom signals in a script. Say, for example, that you want to show a game over screen when the player's health reaches zero. To do so, you could define a signal named ‘died’ or ‘health_depleted’ when their health reaches 0.” “As signals represent events that just occurred, we generally use an action verb in the past tense in their names.”\n\n“Your signals work the same way as built-in ones: they appear in the Signals tab and you can connect to them like any other.” “To emit a signal in your scripts, call `emit()` on the signal.”\n\n“Any node in Godot emits signals when something specific happens to them, like a button being pressed. Other nodes can connect to individual signals and react to selected events.” “For example, an `Area2D` representing a coin emits a `body_entered` signal whenever the player's physics body enters its collision shape, allowing you to know when the player collected it.”",
+          "code": "extends Node2D\n\nsignal health_depleted\n\nvar health = 10\n\n\nfunc take_damage(amount):\n\thealth -= amount\n\tif health <= 0:\n\t\thealth_depleted.emit()",
+          "image": {
+            "src": "signals_17_custom_signal.webp",
+            "alt": "The Signals tab: under custom_signal.gd, health_depleted(); under CanvasItem, draw() and hidden().",
+            "caption": "A custom signal, listed above the built-in ones.",
+            "width": 298,
+            "height": 195
+          },
+          "check": {
+            "prompt": "`health` is 10, and `take_damage(4)` is called three times. When is `health_depleted` emitted?",
+            "choices": [
+              "On the third call, when `health` drops to -2",
+              "On every call",
+              "On the first call",
+              "Never: only the engine emits signals"
+            ],
+            "answer": 0,
+            "why": "10, 6, 2, then -2: only the third call makes `health <= 0` true and reaches `emit()`."
+          }
+        }
+      ],
+      "compare": {
+        "a": {
+          "title": "Connected in the editor",
+          "text": "The `Button`'s `pressed` signal, joined to `_on_button_pressed()` on the Sprite2D in the Signals dock. The editor wrote the method and marks it with a connection icon.",
+          "code": "func _on_button_pressed():\n\tset_process(not is_processing())"
+        },
+        "b": {
+          "title": "Connected in code",
+          "text": "The `Timer`'s `timeout` signal, joined in `_ready()` with `connect()`. Needed when nodes are made or scenes instanced from a script.",
+          "code": "func _ready():\n\tvar timer = get_node(\"Timer\")\n\ttimer.timeout.connect(_on_timer_timeout)"
+        },
+        "question": {
+          "prompt": "What do the two connections have in common?",
+          "choices": [
+            "Each runs a method on one node whenever another node emits a signal",
+            "Each needs the Signals dock",
+            "Each runs its method once, when the connection is made",
+            "Each makes the `Button` call the `Timer`"
+          ],
+          "answer": 0,
+          "why": "Editor or code, a connection joins a signal to a receiver method, which runs each time the signal is emitted."
+        }
+      },
+      "exercises": [
+        {
+          "type": "predict",
+          "prompt": "You rename the Timer node to BlinkingTimer in the Scene dock and change nothing in the script. What happens when the scene runs?",
+          "code": "func _ready():\n\tvar timer = get_node(\"Timer\")\n\ttimer.timeout.connect(_on_timer_timeout)",
+          "choices": [
+            "`get_node()` finds no node named Timer, so nothing gets connected",
+            "Godot follows the rename by itself",
+            "The sprite blinks as before",
+            "The `Button` blinks instead"
+          ],
+          "answer": 0,
+          "why": "`get_node()` “gets nodes by their name”: after a rename “you would have to change the call to `get_node(\"BlinkingTimer\")`.”"
+        },
+        {
+          "type": "blank",
+          "prompt": "Type the method that joins the signal to the function. GDScript names are case-sensitive.",
+          "code": "func _ready():\n\tvar timer = get_node(\"Timer\")\n\ttimer.timeout.____(_on_timer_timeout)",
+          "answer": "connect",
+          "why": "“To connect to a signal via code, you need to call the `connect()` method of the signal you want to listen to.”"
+        },
+        {
+          "type": "fix",
+          "plain": true,
+          "prompt": "Four notes on the scene's nodes and signals. Which one is wrong?",
+          "lines": [
+            "`Button` is a node; `pressed` is a signal it emits.",
+            "`Timer` is a node; `timeout` is a signal it emits.",
+            "`_on_button_pressed()` is the receiver method on the Sprite2D.",
+            "`pressed` is a node you add under the `Button`."
+          ],
+          "answer": 3,
+          "fixed": "`pressed` is the signal the `Button` emits when it is pressed.",
+          "why": "Nodes are what you add to the tree; signals are the messages nodes “emit when something specific happens to them”."
+        },
+        {
+          "type": "fix",
+          "prompt": "This script should tell its listeners when health runs out, but nothing ever reacts. Which line is the bug?",
+          "lines": [
+            "signal health_depleted",
+            "func take_damage(amount):",
+            "\thealth -= amount",
+            "\thealth_depleted.connect()"
+          ],
+          "answer": 3,
+          "fixed": "\thealth_depleted.emit()",
+          "why": "“To emit a signal in your scripts, call `emit()` on the signal”; `connect()` joins a listener, it sends nothing."
+        },
+        {
+          "type": "predict",
+          "prompt": "The button's method calls `set_process(false)`. What happens to the sprite's `_process(delta)`?",
+          "choices": [
+            "The engine stops calling it, so the icon stops",
+            "It runs once more, then stops",
+            "It keeps running; only `rotation` freezes",
+            "It is removed from the script"
+          ],
+          "answer": 0,
+          "why": "The engine calls `_process()` every frame (lesson 3) only while processing is on; `set_process()` turns it on and off."
+        },
+        {
+          "type": "predict",
+          "prompt": "Two instances of `sprite_2d.tscn` sit under the Node2D, and only the first one's `_on_button_pressed()` is connected to the `Button`. The player presses it. What stops?",
+          "choices": ["Only the first sprite", "Both sprites", "Neither sprite", "The `Button`"],
+          "answer": 0,
+          "why": "Each instance is its own node (lesson 2), and a connection joins the signal to one receiver."
+        }
+      ],
+      "errors": [
+        {
+          "what": "You connect a signal in the Signals dock while writing scripts in an external editor such as VS Code, and no receiver method appears.",
+          "fix": "Connect the signal in code with `connect()`, as in the `Timer` example.",
+          "source": "Godot manual, Using signals, the note under Connecting a signal in the editor: “this automatic code generation might not work. In this case, you need to connect the signal via code.”"
+        },
+        {
+          "what": "“Difficulties understanding the invocation of a method from another method.” In Godot: you expect `_on_timer_timeout()` to run when `timer.timeout.connect(_on_timer_timeout)` runs in `_ready()`.",
+          "fix": "`connect()` only makes the link; the method runs each time the `Timer` emits `timeout`, once a second here.",
+          "source": "Sorva 2012, Table A.1, row 42 (Ragonis & Ben-Ari 2005a)."
+        },
+        {
+          "what": "“A (Java) method must always be invoked on an explicit object.” In Godot: you search the script for the line that calls `_on_button_pressed()`, find none, and decide the method never runs.",
+          "fix": "No line of yours calls a receiver method: Godot calls it on the receiver node each time the `Button` emits `pressed`.",
+          "source": "Sorva 2012, Table A.1, row 136 (Methods)."
+        }
+      ],
+      "exitStem": "One node makes code run in another by …",
+      "table": {
+        "caption": "Course 1's last check: three base nodes, three questions. Answer each cell in your head, then tap it to see the class reference's answer.",
+        "columns": ["draws on screen", "has a position", "lives in which tree"],
+        "rows": [
+          {
+            "head": "Node2D",
+            "cells": [
+              "It can: it is a `CanvasItem`, and “Any CanvasItem can draw.”",
+              "Yes, in 2D: “Has a position, rotation, scale, and skew.”",
+              "The one scene tree, with every other node; it is drawn on the 2D canvas."
+            ]
+          },
+          {
+            "head": "Control",
+            "cells": [
+              "It can: it is a `CanvasItem` too, the base of the interface nodes.",
+              "Yes: it “Adapts its position and size based on its parent control.”",
+              "The same scene tree; it is drawn on the 2D canvas, like `Node2D`."
+            ]
+          },
+          {
+            "head": "Node3D",
+            "cells": [
+              "Not by itself: it is the “Base object in 3D space”; nodes that draw in 3D inherit from VisualInstance3D, the “Parent of all visual 3D nodes.”",
+              "Yes, in 3D: its translation, rotation and scale are “relative to the parent”.",
+              "The same scene tree; it is placed in the 3D world."
+            ]
+          }
+        ]
+      }
     }
   ]
 }
