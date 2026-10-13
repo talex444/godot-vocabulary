@@ -20,6 +20,8 @@ const MAX_PROPERTIES = 8;
 export const POOL_SIZE = 8;
 /** Smallest pool a card may ship with. */
 export const MIN_POOL = 4;
+/** Cards a 2D beginner meets early; one of these short of MIN_POOL keeps a pool of three rather than going. */
+const EARLY_RANK = 60;
 /** `explainFull` cap in characters (done-criteria 36). */
 export const FULL_MAX = 1200;
 
@@ -117,11 +119,22 @@ function pickAround(pool, answer, n, taken = []) {
   return out;
 }
 
-/** Siblings under the same parent, then the nearest ancestor's other children, then rank neighbours. */
+const hasIcon = (name) => existsSync(join(SRC, 'icons', `${name}.svg`));
+
+/**
+ * Siblings under the same parent, then the nearest ancestor's other children, then rank neighbours.
+ * Icon parity: every wrong answer has an icon if the answer has one, and none if it has none,
+ * so a choice row never mixes icons and blanks (which would rule choices out unread).
+ */
 function classPool(classes, rankOf, deckOrder, name, twins = []) {
   const order = (a, b) => (rankOf.get(a) ?? 1e9) - (rankOf.get(b) ?? 1e9) || byName(a, b);
+  const icon = hasIcon(name);
   const candidates = (pred) =>
-    [...classes.values()].filter((c) => choosable(c) && c.name !== name && !twins.includes(c.name) && pred(c)).map((c) => c.name).sort(order);
+    [...classes.values()]
+      .filter((c) => choosable(c) && c.name !== name && !twins.includes(c.name) && hasIcon(c.name) === icon && pred(c))
+      .map((c) => c.name)
+      .sort(order);
+  deckOrder = deckOrder.filter((n) => n === name || hasIcon(n) === icon);
   const self = classes.get(name);
   const lineage = [name, ...ancestors(classes, name)];
   const out = [];
@@ -229,6 +242,7 @@ export function generateApiCards() {
     for (const c of rest) dropTwin.add(c.name);
   }
   const prompts = new Map();
+  const pools = new Map();
   const deckOrder = [];
   for (const name of candidates) {
     const c = classes.get(name);
@@ -246,14 +260,20 @@ export function generateApiCards() {
       removed.hollow.push(`api:class:${name}`);
       continue;
     }
+    const pool = classPool(classes, rankOf, candidates, name, twinsOf.get(name));
+    // An early card (rank under EARLY_RANK) stays with a smaller pool, as long as it has three wrong answers.
+    if (pool.length < MIN_POOL && !(deckOrder.length < EARLY_RANK && pool.length >= 3)) {
+      removed.smallPool.push(`api:class:${name}`);
+      continue;
+    }
     prompts.set(name, prompt);
+    pools.set(name, pool);
     deckOrder.push(name);
   }
 
-  const iconDir = join(SRC, 'icons');
   const classCards = deckOrder.map((name, rank) => {
     const c = classes.get(name);
-    const pool = classPool(classes, rankOf, candidates, name, twinsOf.get(name));
+    const pool = pools.get(name);
     const card = {
       id: `api:class:${name}`,
       family: 'godot-api',
@@ -270,7 +290,7 @@ export function generateApiCards() {
       source: { doc: 'godot-class-reference', ref: name, version: VERSION },
       rank,
     };
-    if (existsSync(join(iconDir, `${name}.svg`))) card.icon = `icons/${name}.svg`;
+    if (hasIcon(name)) card.icon = `icons/${name}.svg`;
     return card;
   });
 
