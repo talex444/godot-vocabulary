@@ -124,7 +124,7 @@ await ready('About');
 await shot('about.png');
 await backToStart();
 
-// Courses: the list, then lesson 0 in three phone-screen views (the page itself is one long scroll).
+// Courses: the list, then lesson 0, 3 and 5 in phone-screen views (each page is one long scroll).
 const view = (name) => page.screenshot({ path: join(out, name) });
 const toTop = (locator) => locator.evaluate((n) => window.scrollTo(0, n.getBoundingClientRect().top + window.scrollY - 8));
 await page.getByRole('button', { name: 'Courses' }).click();
@@ -152,6 +152,33 @@ await page.getByText('Saved on this device.').waitFor();
 // The last error and the whole exit-ticket step, the page's bottom edge on the screen's.
 await page.locator('[data-step="exit"]').evaluate((n) => window.scrollTo(0, n.getBoundingClientRect().bottom + window.scrollY - window.innerHeight + 8));
 await view('lesson-end.png');
+
+// Lesson 3: a code block with its chunk's check under it, and the typed blank inside code.
+const openLesson = async (id) => {
+  await page.getByRole('button', { name: 'Back to courses' }).click();
+  await ready('Courses');
+  await page.locator(`[data-lesson-id="${id}"] button`).click();
+  await page.locator('[data-question="pretest-0"]').waitFor();
+  await page.evaluate(() => document.fonts.ready);
+};
+await openLesson('c1-l3');
+const frame = page.locator('[data-step="chunk-2"]');
+await frame.locator('[data-question="check-2"] .gv-choice').first().click();
+await toTop(frame.locator('pre.gv-code'));
+await view('lesson-code.png');
+const codeBlank = page.locator('[data-kind="blank"]');
+await codeBlank.getByRole('textbox', { name: 'Missing word' }).fill('Rotation');
+await codeBlank.getByRole('button', { name: 'Check' }).click();
+await toTop(codeBlank);
+await view('lesson-blank-code.png');
+
+// Lesson 5's course table with two cells shown.
+await openLesson('c1-l5');
+const table = page.locator('[data-reveal-table]');
+await table.getByRole('button', { name: /draws on screen \(Node3D\)/ }).click();
+await table.getByRole('button', { name: /has a position \(Node3D\)/ }).click();
+await toTop(table.locator('.gv-reveal__row').nth(1));
+await view('course-table.png');
 
 await browser.close();
 console.log(`Screenshots written to ${out}`);
