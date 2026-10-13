@@ -680,9 +680,241 @@
     {
       "id": "c1-l3",
       "order": 3,
-      "title": "Creating your first script",
+      "title": "How does a script make a node move?",
       "page": { "title": "Creating your first script", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/scripting_first_script.html" },
-      "planned": true
+      "cardIds": [
+        "gd:keyword:extends",
+        "gd:keyword:func",
+        "gd:keyword:var",
+        "gd:builtin:print",
+        "gd:lifecycle:_init",
+        "gd:lifecycle:_process",
+        "api:method:Node._process",
+        "gd:concept:delta",
+        "gd:keyword:PI",
+        "gd:operator:plus-assign",
+        "api:prop:Node2D.rotation",
+        "api:prop:Node2D.position",
+        "api:class:Vector2",
+        "api:method:Vector2.rotated",
+        "api:class:CanvasItem"
+      ],
+      "need": "So far every change came from the Inspector: you set a property, and it stays set. A game needs properties that change while it runs, many times a second, and that is what a script is for: a file attached to a node that adds code to it.\n\nThe manual's first script makes the Godot icon turn in circles. In a handful of lines it shows what every later script leans on: which class the script extends, which functions the engine calls without being asked, and how a property is changed a little on every frame.",
+      "agenda": [
+        "`extends`: a script is a class that builds on its node's class.",
+        "`_init()` and `print()`: code the engine runs for you.",
+        "`_process(delta)`: changing `rotation` and `position` every frame."
+      ],
+      "chunks": [
+        {
+          "heading": "Attaching a script",
+          "text": "“To create and attach a new script to our node, right-click on Sprite2D in the Scene dock and select Attach Script.” “Change the Template field from ‘Node: Default’ to ‘Object: Empty’ to start with a clean file. Leave the other options set to their default values and click the Create button to create the script.”\n\n“Every GDScript file is implicitly a class. The `extends` keyword defines the class this script inherits or extends. In this case, it's `Sprite2D`, meaning our script will get access to all the properties and functions of the Sprite2D node, including classes it extends, like `Node2D`, `CanvasItem`, and `Node`.”\n\n“Inherited properties include the ones you can see in the Inspector dock, like our node's `texture`.”",
+          "code": "extends Sprite2D",
+          "image": {
+            "src": "scripting_first_script_attach_node_script.webp",
+            "alt": "The Attach Node Script window: Language GDScript, Inherits Sprite2D, Template Object: Empty (highlighted), Built-in Script off, Path res://sprite_2d.gd, and Create and Cancel buttons.",
+            "caption": "Attaching an empty script to the Sprite2D.",
+            "width": 485,
+            "height": 458
+          },
+          "check": {
+            "prompt": "Your script starts with `extends Sprite2D`. What can it use?",
+            "choices": [
+              "The properties and functions of `Sprite2D`, `Node2D`, `CanvasItem` and `Node`",
+              "Only the lines written in the script",
+              "Only what `Sprite2D` adds, not its parents",
+              "Nothing until a second script is attached"
+            ],
+            "answer": 0,
+            "why": "The script gets “all the properties and functions of the Sprite2D node, including classes it extends”."
+          }
+        },
+        {
+          "heading": "Hello, world!",
+          "text": "“Let's break it down. The `func` keyword defines a new function named `_init`. This is a special name for our class's constructor. The engine calls `_init()` on every object or node upon creating it in memory, if you define this function.”\n\n“GDScript is an indent-based language. The tab at the start of the line that says `print()` is necessary for the code to work.”\n\n“Save the scene as `sprite_2d.tscn` if you haven't already, then press F6 (Cmd + R on macOS) to run it. Look at the Output bottom panel that expands. It should display ‘Hello, world!’.”",
+          "code": "func _init():\n\tprint(\"Hello, world!\")",
+          "image": {
+            "src": "scripting_first_script_print_hello_world.webp",
+            "alt": "The Output panel: the Godot version line, then Hello, world!, then --- Debugging process stopped ---.",
+            "caption": "The Output panel after running the scene.",
+            "width": 238,
+            "height": 112
+          },
+          "check": {
+            "prompt": "No line in your script calls `_init()`. Does “Hello, world!” appear when the scene runs?",
+            "choices": [
+              "Yes: the engine calls `_init()` when it creates the node",
+              "No: a function runs only when your code calls it",
+              "Only after you press F5 a second time",
+              "Only in the editor, not in the game"
+            ],
+            "answer": 0,
+            "why": "“The engine calls `_init()` on every object or node upon creating it in memory, if you define this function.”"
+          }
+        },
+        {
+          "heading": "Every frame",
+          "text": "Delete `_init()` again and add two member variables after the `extends` line.\n\n“Member variables sit near the top of the script, after any ‘extends’ lines, but before functions. Every node instance with this script attached to it will have its own copy of the `speed` and `angular_speed` properties.”\n\n“To move our icon, we need to update its position and rotation every frame in the game loop. We can use the `_process()` virtual function of the `Node` class. If you define it in any class that extends the Node class, like Sprite2D, Godot will call the function every frame and pass it an argument named `delta`, the time elapsed since the last frame.”\n\n“Games work by rendering many images per second, each called a frame, and they do so in a loop.” “The engine and game developers do their best to update the game world and render images at a constant time interval, but there are always small variations in frame render times. That's why the engine provides us with this delta time value, making our motion independent of our framerate.”",
+          "code": "var speed = 400\nvar angular_speed = PI",
+          "check": {
+            "prompt": "Who calls `_process(delta)`, and how often?",
+            "choices": [
+              "The engine, every frame",
+              "Your `_init()`, once",
+              "You, from another function",
+              "The Inspector, when a property changes"
+            ],
+            "answer": 0,
+            "why": "“Godot will call the function every frame and pass it an argument named `delta`.”"
+          }
+        },
+        {
+          "heading": "Turning around",
+          "text": "“The `func` keyword defines a new function. After it, we have to write the function's name and arguments it takes in parentheses. A colon ends the definition, and the indented blocks that follow are the function's content or instructions.”\n\n“The line inside the function, `rotation += angular_speed * delta`, increments our sprite's rotation every frame. Here, `rotation` is a property inherited from the class `Node2D`, which `Sprite2D` extends. It controls the rotation of our node and works with radians.”\n\n“By convention, Godot's virtual functions, that is to say, built-in functions you can override to communicate with the engine, start with an underscore.”",
+          "code": "func _process(delta):\n\trotation += angular_speed * delta",
+          "image": {
+            "src": "scripting_first_script_godot_turning_in_place.gif",
+            "alt": "Animation: the Godot icon turning in place on a grey background.",
+            "caption": "The icon turning in place.",
+            "width": 334,
+            "height": 242
+          },
+          "check": {
+            "prompt": "`angular_speed` is `PI`. Each frame adds `angular_speed * delta` to `rotation`. About how far does the icon turn in one second?",
+            "choices": [
+              "`PI` radians, half a turn",
+              "`PI` radians on every frame",
+              "One `delta`, a tiny fraction of a turn",
+              "It turns once, then stops"
+            ],
+            "answer": 0,
+            "why": "The `delta`s of one second add up to one second, so the icon turns `angular_speed` radians per second, whatever the frame rate."
+          }
+        },
+        {
+          "heading": "Moving forward",
+          "text": "Two more lines go inside `_process()`, under the `rotation` line.\n\n“As we already saw, the `var` keyword defines a new variable. If you put it at the top of the script, it defines a property of the class. Inside a function, it defines a local variable: it only exists within the function's scope.”\n\n“To make the node move forward, we start from the Vector2 class's constant `Vector2.UP`, a vector pointing up, and rotate it by calling the Vector2 method `rotated()`. This expression, `Vector2.UP.rotated(rotation)`, is a vector pointing forward relative to our icon. Multiplied by our `speed` property, it gives us a velocity we can use to move the node forward.”\n\n“We add `velocity * delta` to the node's `position` to move it. The position itself is of type `Vector2`, a built-in type in Godot representing a 2D vector.”",
+          "code": "var velocity = Vector2.UP.rotated(rotation) * speed\n\nposition += velocity * delta",
+          "image": {
+            "src": "scripting_first_script_rotating_godot.gif",
+            "alt": "Animation: the Godot icon running in circles across a grey background.",
+            "caption": "Turning and moving forward: the icon runs in circles.",
+            "width": 370,
+            "height": 328
+          },
+          "check": {
+            "prompt": "Where does the `velocity` variable exist?",
+            "choices": [
+              "Only inside `_process()`, while it runs",
+              "In every function of the script",
+              "In the Inspector, as a property",
+              "In every node of the scene"
+            ],
+            "answer": 0,
+            "why": "Declared with `var` inside a function, it is “a local variable: it only exists within the function's scope.”"
+          }
+        }
+      ],
+      "compare": {
+        "a": {
+          "title": "The constructor, _init()",
+          "text": "The constructor: the engine calls it once, when it creates the node in memory. Here it prints one line to the Output panel.",
+          "code": "func _init():\n\tprint(\"Hello, world!\")"
+        },
+        "b": {
+          "title": "The frame function, _process(delta)",
+          "text": "A virtual function the engine calls on every frame, passing the time since the last one. Here it turns the sprite a little each time.",
+          "code": "func _process(delta):\n\trotation += angular_speed * delta"
+        },
+        "question": {
+          "prompt": "What do `_init()` and `_process(delta)` share, and how do they differ?",
+          "choices": [
+            "The engine calls both; `_init()` once at creation, `_process()` every frame",
+            "Your own code must call both",
+            "Both run once, when the scene is saved",
+            "`_init()` runs every frame; `_process()` once"
+          ],
+          "answer": 0,
+          "why": "Both start with an underscore, the mark of the “built-in functions you can override to communicate with the engine”; only `_process()` repeats each frame."
+        }
+      },
+      "exercises": [
+        {
+          "type": "predict",
+          "prompt": "You change `var angular_speed = PI` to `var angular_speed = PI * 2` and run the scene. What do you see?",
+          "code": "func _process(delta):\n\trotation += angular_speed * delta",
+          "choices": [
+            "The icon turns twice as fast",
+            "It turns one full turn, then stops",
+            "Nothing changes until you restart Godot",
+            "It moves forward instead of turning"
+          ],
+          "answer": 0,
+          "why": "Each frame adds `angular_speed * delta`, so doubling `angular_speed` doubles the turn per second."
+        },
+        {
+          "type": "blank",
+          "prompt": "Type the property that turns the sprite. GDScript names are case-sensitive.",
+          "code": "func _process(delta):\n\t____ += angular_speed * delta",
+          "answer": "rotation",
+          "why": "`rotation` is “a property inherited from the class `Node2D`”, in radians; GDScript properties are snake_case."
+        },
+        {
+          "type": "fix",
+          "prompt": "The script should turn the icon on every frame, but it never turns. Which line is the bug?",
+          "lines": [
+            "extends Sprite2D",
+            "var angular_speed = PI",
+            "func _init(delta):",
+            "\trotation += angular_speed * delta"
+          ],
+          "answer": 2,
+          "fixed": "func _process(delta):",
+          "why": "`_init()` runs once, when the node is created; the engine calls `_process(delta)` every frame and passes it `delta`."
+        },
+        {
+          "type": "predict",
+          "prompt": "You instance the sprite scene three times in another scene and run it. How many copies of `speed` exist?",
+          "choices": [
+            "Three: each instance has its own",
+            "One, shared by all three",
+            "None until `_process()` runs",
+            "Four: one per instance and one in the file"
+          ],
+          "answer": 0,
+          "why": "“Every node instance with this script attached to it will have its own copy of the `speed` and `angular_speed` properties” (instances: lesson 2)."
+        },
+        {
+          "type": "predict",
+          "prompt": "The script is attached to the Sprite2D in `sprite_2d.tscn`. When does the engine start calling its `_process()`?",
+          "choices": [
+            "When the scene runs and the node is in the scene tree",
+            "As soon as you save `sprite_2d.tscn`",
+            "When you select the node in the Scene dock",
+            "When you open the Script workspace"
+          ],
+          "answer": 0,
+          "why": "The saved file is the plan (lesson 1); the engine calls `_process()` on the node in the running game's tree."
+        }
+      ],
+      "errors": [
+        {
+          "what": "The editor highlights a line in red with the error “Indented block expected”.",
+          "fix": "Indent the lines inside the function with a tab: “GDScript is an indent-based language.”",
+          "source": "Godot manual, Creating your first script, the note under Hello, world!: “If you omit it or don't indent a line correctly, the editor will highlight it in red and display the following error message: ‘Indented block expected’.”"
+        },
+        {
+          "what": "“Difficulties distinguishing between actual and formal parameters. Confusion over where parameter values come from.” In Godot: you look for the line that calls `_process(delta)` to see where `delta` comes from, or try to call it yourself.",
+          "fix": "Nobody calls `_process(delta)` by hand: the engine calls it every frame and passes the time since the last frame as `delta`.",
+          "source": "Sorva 2012, Table A.1, row 41 (Hristova et al. 2003)."
+        },
+        {
+          "what": "“Primitive assignment stores equations or unresolved expressions.” In Godot: you read `rotation += angular_speed * delta` as a rule that keeps `rotation` tied to `angular_speed` from then on.",
+          "fix": "The line is worked out each time it runs and adds one number to `rotation`; it only keeps the icon turning because the engine runs it again on every frame.",
+          "source": "Sorva 2012, Table A.1, row 15 (Bayman & Mayer 1983 et al.)."
+        }
+      ],
+      "exitStem": "A script makes a node move by …"
     },
     {
       "id": "c1-l4",

@@ -613,6 +613,8 @@ button.gv-lesson-row:focus-visible {
 
 .gv-choice--code .gv-choice__label {
   font-family: var(--font-code);
+  tab-size: 4;
+  white-space: pre-wrap;
 }
 
 .gv-next {
