@@ -142,3 +142,46 @@ Compared with the existing screenshots: the family switches sat 4 px in from the
 
 ### Left for session 3
 21 (export → fresh install → import e2e), 25, 27 (axe on settings, add-card and about too), 29–31, 26 (README, including the contrast-report link from deviation 1).
+
+## GV-3 — phone end-to-end suite with axe, README, GitHub Pages workflow (2026-10-13)
+
+### Built
+- **Specs** in `tests/e2e/`, all at the `phone` project (360×780, touch). Shared navigation is in `helpers.ts`: `gotoStart`, `open`, `backToStart`, `startSession`, `answer`, `goNext`, `endSession`, `familyStats`, `importFromStart`/`importOnSettings`, `exportFile`/`overdueProgress` (version 1 files built from the real `src/data/*.json` ids), and `walkScreens`, which visits all eight screens in one pass and is reused by the layout, keyboard and axe specs.
+
+  | Spec | Done-criteria | What it checks |
+  |------|---------------|----------------|
+  | `install-offline.spec.ts` | 1, 2, 3 | Manifest linked and parsed (name, short_name, standalone, 192/512 icons); service worker active and controlling. Offline: reload, answer a card, end the session, change a setting, add a card. Close the page and reopen offline: same per-family counts, the setting, the custom card. |
+  | `session.spec.ts` | 4, 5, 6, 8, 12 | Start counts 10/5/5 with due and overdue at 0, and one Start. A card has one prompt and exactly four choices; no explanation or Next before the tap; the first session is 20 new cards. An API class card has an icon (loaded) on every choice. A snippet card's code is in JetBrains Mono, with more than one token colour. One tap disables all four, marks the tapped one, shows exactly one right answer, the explanation and Next; a forced second tap changes nothing. The summary shows seen 2, right + wrong = 2, due tomorrow ≥ 2. |
+  | `overdue.spec.ts` | 11 (+ 21 import) | A crafted file with one Review record for `api:class:Area2D`, due yesterday, imported with Replace. Start shows it as overdue, with the "New cards wait…" note. The queue holds only that card (`aria-valuemax` 1). After it is answered, new cards are appended and one comes within two cards. A fresh install has no overdue and a 20-card queue. |
+  | `data.spec.ts` | 19, 20, 21 | Switch and stepper persist across a reload (it waits until IndexedDB has the value first). Total and projection go 20/200 → 16/160 → 21/210; the warning appears above twenty and survives a reload; retention is not shown. Add a card, answer one card, export (download). A new browser context imports with Replace and gets "Restored 1 card of progress and 1 custom card."; re-exporting there gives identical progress, settings and custom cards. |
+  | `about.spec.ts` | 22 | Every Notice cell in `THIRD_PARTY_NOTICES.md` (URL and aside cut off) appears on About, along with the licence names, the CC links, the unofficial statement, "The Godot logo is not used", and the link `https://github.com/talex444/godot-vocabulary`. |
+  | `layout.spec.ts` | 25, 29, 31 | Every screen at 360×780, 320×780 and 780×360 landscape: `scrollWidth ≤ clientWidth`; every visible `button`, link, input, select, textarea and switch at least 44×44; no text under 16 px; no clipped text; no overlapping controls. At 320 px, twenty random cards (before and after answering) are checked at normal size and at 200%. The 200% test (every screen) is a proxy, stated in the spec: Playwright cannot set browser zoom, so the root font size is set to 200% (the stylesheet is in rem). |
+  | `keyboard.spec.ts` | 30 | Tab from Start's heading reaches Start; Enter starts. Tab reaches the four choices in order, and each one's outline or box-shadow differs from its unfocused look. Space answers, Next takes focus, Enter goes on, Enter answers. On every screen, every Tab stop is `:focus-visible` with a ring, fully in the viewport after `scrollIntoViewIfNeeded`, and on top at its centre (`elementFromPoint`). Stops follow reading order. In Settings, Space flips a switch and Enter steps a number. |
+  | `axe.spec.ts` | 27 | 15 screen states: start, settings, settings with the warning, the import choice, each family's card before and after answering, summary, add card, add card with errors, about. Each runs `AxeBuilder.withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa'])` twice: with `disableRules(['color-contrast'])`, violations must be empty; run normally, the `color-contrast` nodes are written to `docs/axe-contrast.md` (sorted, no timestamps). The card screens are deterministic: an imported file sets each family to one new card a day. |
+
+- **`pnpm e2e`**: 22 tests, about 10 s of Playwright time with 8 workers (about 15 s with the build and the preview server). The layout spec passed `--repeat-each 8` (160 random cards at 200%).
+- **axe findings**: **0 violations** on every rule but contrast. **7 contrast findings**, all one pair: white text on the accent primary button (`#ffffff` on `#579eff`, 2.71:1), on start, the three answered cards, summary, add card and add card with errors. It is already on `docs/contrast-report.md`. axe skips disabled text, so the disabled-text pairs from the contrast report do not show up here.
+- **README.md** (26): what it is and that it is unofficial; Android and iPhone install; offline; the session rules; where cards come from and `pnpm fetch-sources` / `pnpm generate`; add card; export/import; the contrast deviation, linking both reports; licences, linking `THIRD_PARTY_NOTICES.md`; local commands.
+- **`.github/workflows/deploy.yml`**: on push to `main` and manual dispatch; `concurrency: pages` with cancel-in-progress.
+  - `build`: checkout@v5, pnpm/action-setup@v4 (no `version` input, so it reads `packageManager: pnpm@11.9.0`, already in package.json), setup-node@v5 (Node 22, pnpm cache), `pnpm install --frozen-lockfile`, typecheck, test, lint:css, `playwright install --with-deps chromium`, `pnpm e2e`, upload-pages-artifact@v4 with `dist`.
+  - `deploy`: needs build, environment `github-pages`, `pages: write` + `id-token: write`, deploy-pages@v4.
+  - **Chief of Staff:** enable Pages on the repo (Settings → Pages → Source: GitHub Actions) after this lands. Until then the README's URL is not live.
+- **Gates**: `pnpm typecheck`, `pnpm test` (14 files, 83 tests), `pnpm build`, `pnpm lint:css`, `pnpm e2e` (22 tests) green.
+
+### What the e2e found and fixed in the app (separate commit `fix: reflow stat grids…`)
+1. **Horizontal scroll at 200% text** (WCAG 1.4.4/1.4.10):
+   - Start's three stat columns could not fit "Overdue" at 32 px.
+   - On Add card, the native `<select>` widened the whole screen to 510 px.
+   - Long class names (`VisibleOnScreenNotifier2D`) in choices and in "Not quite. It is …" pushed past the edge.
+   The cause was grid tracks sized `auto`, which never shrink below their content's min-content width. Now every single-column grid uses `minmax(0, 1fr)`, the screen sets `overflow-wrap: break-word` (so words still break only when they must), the code line's text column is `minmax(0, 1fr)`, and the stat grids `auto-fit` columns of at least 5.5rem (8rem in the summary). At 16 px on a 360 phone that is still three columns (two in the summary); at 320 px Start shows two.
+2. **Inline code was 15.2 px** (`0.95em`), under the app's 16 px floor. It is now `1em`.
+
+### Deviations and why
+1. **`@axe-core/playwright` was not installed**, although the brief pointed at its README. Added as a dev dependency (4.13.0) in the first commit.
+2. **Playwright's Chromium for the installed version (v1248) was missing** on this machine, so every test failed to launch. I ran `pnpm exec playwright install chromium` once, which downloads to the user's ms-playwright cache.
+3. **Service workers are blocked by default** in `playwright.config.ts` (`serviceWorkers: 'block'`). Only `install-offline.spec.ts` turns them back on, so a cached shell can't leak between specs. The config also sets `forbidOnly` and the `github` reporter on CI.
+4. **Settings save is fire-and-forget** (`void saveSettings(...)`). A reload within milliseconds of a tap lost the last change in the first run of `data.spec.ts`. The spec now waits until IndexedDB holds the value. On a phone the window is a few milliseconds; not changed in the app. Awaiting the save before the UI updates would close it, if wanted.
+5. **Keyboard focus ring on text fields** is drawn on the field box (`:focus-within`, like Godot's LineEdit), not on the `<input>` (outline none). The spec reads the ring from `.gv-field__box` for fields.
+6. **Screenshots were not re-taken** after the CSS fix: `scripts/screenshot.mjs` needs a running preview server, and this session runs nothing in the background. At 360 px the layout is unchanged; the visible differences are inline code at 16 px instead of 15.2 px, and how text reflows at 320 px or 200%.
+7. **axe report rows** add the text and background colours next to the brief's screen, selector, expected and actual, because they make each row checkable against `contrast-report.md`.
+8. **Workflow action majors** (checkout v5, setup-node v5, upload-pages-artifact v4, deploy-pages v4, pnpm/action-setup v4) are the latest majors I know of. Not run on GitHub yet.
