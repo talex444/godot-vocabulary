@@ -1,0 +1,154 @@
+import { FAMILIES } from '../../cards/types';
+import { projectedReviewsPerDay, totalNewPerDay, warningAboveTwenty, type Settings } from '../../settings/load';
+import { getSettings, saveSettings } from '../../store/db';
+import { exportFileName, exportText, importSummary, importText } from '../../store/file';
+import { FAMILY_LABEL, type Nav } from '../app';
+import { button, el, heading, panel, stat, stepper, toggle } from '../kit';
+
+export const WARNING_TEXT =
+  'Above twenty new cards a day the review pile grows to about two hundred a day. It is allowed; it is a lot.';
+
+/** Per-family switches and daily new cards, the load they add up to, then export and import. */
+export async function settingsScreen(nav: Nav): Promise<HTMLElement> {
+  const settings = await getSettings();
+
+  const totals = el('dl', { class: 'gv-stats gv-stats--summary' });
+  const warning = el('p', { class: 'gv-warning' });
+  const load = el('div', { class: 'gv-load', attrs: { role: 'status' } }, [totals, warning]);
+  const showLoad = () => {
+    totals.replaceChildren(stat('New per day', totalNewPerDay(settings)), stat('Reviews per day', `about ${projectedReviewsPerDay(settings)}`));
+    warning.textContent = warningAboveTwenty(settings) ? WARNING_TEXT : '';
+  };
+  const change = () => {
+    showLoad();
+    void saveSettings(settings);
+  };
+
+  const families = el('div', { class: 'gv-stack' });
+  const showFamilies = (current: Settings) => {
+    families.replaceChildren(
+      ...FAMILIES.map((family) =>
+        el('div', { class: 'gv-family', attrs: { role: 'group', 'aria-label': FAMILY_LABEL[family] } }, [
+          toggle(FAMILY_LABEL[family], current.families[family].enabled, (on) => {
+            current.families[family].enabled = on;
+            change();
+          }),
+          stepper('New cards per day', current.families[family].newPerDay, {
+            min: 0,
+            max: 50,
+            onChange: (value) => {
+              current.families[family].newPerDay = value;
+              change();
+            },
+          }),
+        ]),
+      ),
+    );
+  };
+  showFamilies(settings);
+  showLoad();
+
+  const data = dataSection(async () => {
+    Object.assign(settings, await getSettings());
+    showFamilies(settings);
+    showLoad();
+  });
+
+  return el('div', { class: 'gv-screen' }, [
+    panel([heading('Settings'), families, load], { class: 'gv-stack' }),
+    data,
+    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.start() })]),
+  ]);
+}
+
+/** Export as one JSON file; import from one, merging or replacing. */
+function dataSection(afterImport: () => Promise<void>): HTMLElement {
+  const result = el('p', { class: 'gv-result', attrs: { role: 'status' } });
+  const say = (text: string, kind: 'note' | 'error' = 'note') => {
+    result.textContent = text;
+    result.classList.toggle('gv-error', kind === 'error');
+  };
+
+  const exportButton = button('Export', {
+    variant: 'secondary',
+    describedBy: 'export-help',
+    onClick: async () => {
+      const now = new Date();
+      const url = URL.createObjectURL(new Blob([await exportText(now)], { type: 'application/json' }));
+      const link = el('a', { attrs: { href: url, download: exportFileName(now) } });
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      say(`Saved ${exportFileName(now)}.`);
+    },
+  });
+
+  // The native file picker, opened by the Import button; hidden because the button names it.
+  const picker = el('input', { attrs: { type: 'file', accept: '.json,application/json', hidden: '' } });
+  const choice = el('div', { class: 'gv-stack', attrs: { hidden: '' } });
+  let text = '';
+
+  const run = async (mode: 'merge' | 'replace') => {
+    choice.hidden = true;
+    try {
+      say(importSummary(await importText(text, mode)));
+      await afterImport();
+    } catch (error) {
+      say(`Nothing was imported. ${error instanceof Error ? error.message : String(error)}`, 'error');
+    }
+    importButton.focus();
+  };
+
+  const option = (label: string, help: string, mode: 'merge' | 'replace') => {
+    const id = `import-${mode}-help`;
+    return el('div', { class: 'gv-option' }, [
+      button(label, { variant: 'secondary', describedBy: id, onClick: () => void run(mode) }),
+      el('p', { class: 'gv-note', text: help, attrs: { id } }),
+    ]);
+  };
+  const cancel = button('Cancel', {
+    variant: 'flat',
+    onClick: () => {
+      choice.hidden = true;
+      importButton.focus();
+    },
+  });
+  choice.append(
+    el('p', { class: 'gv-label', attrs: { id: 'import-file' } }),
+    option('Merge with this device', 'Keeps your settings here. Adds the file’s custom cards. For each card, keeps whichever progress was reviewed last.', 'merge'),
+    option('Replace everything on this device', 'Deletes the progress and custom cards on this device, then restores the file’s progress, settings and custom cards.', 'replace'),
+    cancel,
+  );
+
+  picker.addEventListener('change', async () => {
+    const file = picker.files?.[0];
+    picker.value = '';
+    if (!file) return;
+    text = await file.text();
+    say('');
+    choice.querySelector('#import-file')!.textContent = `${file.name}: how should it be imported?`;
+    choice.hidden = false;
+    choice.querySelector<HTMLButtonElement>('button')?.focus();
+  });
+
+  const importButton = button('Import', { variant: 'secondary', describedBy: 'import-help', onClick: () => picker.click() });
+
+  return panel(
+    [
+      heading('Data'),
+      el('div', { class: 'gv-option' }, [
+        exportButton,
+        el('p', { class: 'gv-note', text: 'Saves your progress, settings and custom cards as one JSON file in Downloads.', attrs: { id: 'export-help' } }),
+      ]),
+      el('div', { class: 'gv-option' }, [
+        importButton,
+        el('p', { class: 'gv-note', text: 'Restores from a file saved with Export.', attrs: { id: 'import-help' } }),
+        result,
+      ]),
+      picker,
+      choice,
+    ],
+    { class: 'gv-stack' },
+  );
+}

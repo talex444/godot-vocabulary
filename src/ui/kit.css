@@ -58,6 +58,11 @@ body {
   min-height: 100dvh;
 }
 
+/* `hidden` wins over the display a class sets. */
+[hidden] {
+  display: none !important;
+}
+
 .gv-visually-hidden {
   position: absolute;
   width: 1px;

@@ -3,6 +3,7 @@ import { deviceDeps } from '../session/deck';
 import { Session, type SessionResult } from '../session/run';
 import { cardScreen } from './screens/card';
 import { placeholderScreen } from './screens/placeholder';
+import { settingsScreen } from './screens/settings';
 import { startScreen } from './screens/start';
 import { summaryScreen } from './screens/summary';
 
@@ -12,6 +13,9 @@ export interface Nav {
   begin(session: Session): void;
   card(session: Session): void;
   summary(result: SessionResult): void;
+  settings(): void;
+  addCard(): void;
+  about(): void;
   placeholder(title: string): void;
 }
 
@@ -33,13 +37,17 @@ export function mountApp(host: HTMLElement): void {
     }
   };
 
+  const showAsync = (screen: Promise<HTMLElement>) =>
+    screen.then(show, (error: unknown) => show(placeholderScreen(nav, 'Something went wrong', String(error))));
+
   const nav: Nav = {
-    start: () => {
-      startScreen(nav, deviceDeps).then(show, (error: unknown) => show(placeholderScreen(nav, 'Something went wrong', String(error))));
-    },
+    start: () => showAsync(startScreen(nav, deviceDeps)),
     begin: (session) => nav.card(session),
     card: (session) => show(cardScreen(session, nav)),
     summary: (result) => show(summaryScreen(result, nav)),
+    settings: () => showAsync(settingsScreen(nav)),
+    addCard: () => nav.placeholder('Add card'),
+    about: () => nav.placeholder('About'),
     placeholder: (title) => show(placeholderScreen(nav, title)),
   };
   nav.start();

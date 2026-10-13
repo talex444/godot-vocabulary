@@ -42,9 +42,9 @@ export async function startScreen(nav: Nav, deps: RunDeps): Promise<HTMLElement>
       { class: 'gv-stack' },
     ),
     el('nav', { class: 'gv-links', attrs: { 'aria-label': 'More' } }, [
-      button('Settings', { variant: 'flat', onClick: () => nav.placeholder('Settings') }),
-      button('Add card', { variant: 'flat', onClick: () => nav.placeholder('Add card') }),
-      button('About', { variant: 'flat', onClick: () => nav.placeholder('About') }),
+      button('Settings', { variant: 'flat', onClick: () => nav.settings() }),
+      button('Add card', { variant: 'flat', onClick: () => nav.addCard() }),
+      button('About', { variant: 'flat', onClick: () => nav.about() }),
     ]),
   ]);
 }
