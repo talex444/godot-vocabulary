@@ -15,7 +15,8 @@
     "test": "vitest run",
     "e2e": "vite build && playwright test --pass-with-no-tests",
     "generate": "node scripts/generate.mjs",
-    "fetch-sources": "node scripts/fetch-sources.mjs"
+    "fetch-sources": "node scripts/fetch-sources.mjs",
+    "lint:css": "node scripts/lint-css.mjs"
   },
   "dependencies": {
     "idb": "^8.0.4",

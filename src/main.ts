@@ -1,6 +1,5 @@
+import './ui/kit.css';
 import { applyTheme } from './theme/derive';
 
-// Session 2 builds the screens; for now the shell only applies the derived theme.
+// The screens arrive with the session flow; for now the shell applies the theme and the fonts.
 applyTheme(document.documentElement);
-const app = document.querySelector<HTMLElement>('#app');
-if (app) app.textContent = 'Godot Vocabulary';
