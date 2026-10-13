@@ -1,6 +1,7 @@
 import { FAMILIES } from '../../cards/types';
 import { projectedReviewsPerDay, totalNewPerDay, warningAboveTwenty, type Settings } from '../../settings/load';
-import { getSettings, saveSettings } from '../../store/db';
+import { loadCards } from '../../session/deck';
+import { getSettings, listSkipped, saveSettings, unskipCard } from '../../store/db';
 import { exportFileName, exportText, importSummary, importText } from '../../store/file';
 import { FAMILY_LABEL, type Nav } from '../app';
 import { button, el, heading, panel, stat, stepper, toggle } from '../kit';
@@ -48,17 +49,64 @@ export async function settingsScreen(nav: Nav): Promise<HTMLElement> {
   showFamilies(settings);
   showLoad();
 
+  const skipped = el('div', { class: 'gv-stack' });
+  const skippedHeading = heading('Skipped cards');
+  skippedHeading.tabIndex = -1;
+  const showSkipped = async () =>
+    skipped.replaceChildren(
+      ...(await skippedList(async () => {
+        await showSkipped();
+        // The Undo button is gone; keep keyboard focus in this section.
+        (skipped.querySelector<HTMLElement>('button') ?? skippedHeading).focus();
+      })),
+    );
+  await showSkipped();
+
   const data = dataSection(async () => {
     Object.assign(settings, await getSettings());
     showFamilies(settings);
     showLoad();
+    await showSkipped();
   });
 
   return el('div', { class: 'gv-screen' }, [
     panel([heading('Settings'), families, load], { class: 'gv-stack' }),
+    panel([skippedHeading, skipped], { class: 'gv-stack gv-skipped' }),
     data,
     el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.start() })]),
   ]);
+}
+
+/** Cards skipped from a card screen (decision 26), oldest first, each with Undo. */
+async function skippedList(afterUndo: () => Promise<void>): Promise<HTMLElement[]> {
+  const [list, cards] = await Promise.all([listSkipped(), loadCards()]);
+  if (list.length === 0) return [el('p', { class: 'gv-note', text: 'No skipped cards. “Skip this card” on a card puts it here.' })];
+  const byId = new Map(cards.map((c) => [c.id, c]));
+  const items = list.map((s) => {
+    const card = byId.get(s.cardId);
+    const title = card?.answer ?? s.cardId;
+    const undo = button('Undo', {
+      variant: 'secondary',
+      ariaLabel: `Undo skip: ${title}`,
+      onClick: async () => {
+        undo.disabled = true;
+        await unskipCard(s.cardId);
+        await afterUndo();
+      },
+    });
+    return el('li', { class: 'gv-custom gv-skipped__item' }, [
+      el('div', { class: 'gv-skipped__text' }, [
+        el('p', { class: 'gv-custom__answer', text: title }),
+        el('p', { class: 'gv-note', text: `${card ? FAMILY_LABEL[card.family] : 'Unknown card'} · skipped ${s.at.toLocaleDateString()}` }),
+        el('p', { class: 'gv-skipped__reason', text: s.reason ? `“${s.reason}”` : 'No reason given.' }),
+      ]),
+      undo,
+    ]);
+  });
+  return [
+    el('p', { class: 'gv-note', text: 'These cards are left out of every session. Undo puts one back.' }),
+    el('ul', { class: 'gv-custom-list', attrs: { 'aria-label': 'Skipped cards' } }, items),
+  ];
 }
 
 /** Export as one JSON file; import from one, merging or replacing. */
@@ -139,7 +187,7 @@ function dataSection(afterImport: () => Promise<void>): HTMLElement {
       heading('Data'),
       el('div', { class: 'gv-option' }, [
         exportButton,
-        el('p', { class: 'gv-note', text: 'Saves your progress, settings and custom cards as one JSON file in Downloads.', attrs: { id: 'export-help' } }),
+        el('p', { class: 'gv-note', text: 'Saves your progress, settings, custom cards and skipped cards as one JSON file in Downloads.', attrs: { id: 'export-help' } }),
       ]),
       el('div', { class: 'gv-option' }, [
         importButton,
