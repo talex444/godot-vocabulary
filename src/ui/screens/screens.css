@@ -654,6 +654,10 @@ button.gv-lesson-row:focus-visible {
   font-size: 1rem;
 }
 
+.gv-reveal__head code {
+  font: inherit;
+}
+
 .gv-reveal__cell {
   display: grid;
   gap: 4px;
@@ -667,6 +671,11 @@ button.gv-lesson-row:focus-visible {
   gap: 4px 12px;
   width: 100%;
   text-align: start;
+}
+
+/* Right-aligned beside the question, and still on the right when it wraps under it. */
+.gv-reveal__hint {
+  margin-inline-start: auto;
 }
 
 .gv-reveal__cover--shown {
