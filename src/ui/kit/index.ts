@@ -128,6 +128,19 @@ export function textField(options: {
   return { root, input };
 }
 
+/**
+ * A LineEdit sized to sit inside a line of text or code: the gap of a typed blank. Code font, no
+ * autocorrect (GDScript is case-sensitive), named by `label`.
+ */
+export function gapField(label: string, chars: number): HTMLInputElement {
+  const input = el('input', {
+    class: 'gv-gap',
+    attrs: { type: 'text', 'aria-label': label, autocomplete: 'off', autocapitalize: 'off', autocorrect: 'off', spellcheck: 'false' },
+  });
+  input.style.width = `${Math.max(6, chars + 2)}ch`;
+  return input;
+}
+
 /** Godot's OptionButton: a native select in the LineEdit box, with a down-arrow glyph. */
 export function selectField(options: {
   label: string;
@@ -233,15 +246,24 @@ function withBlanks(text: string): Node[] {
   return text.split(/(_{4,})/).filter(Boolean).map((part) => (/^_{4,}$/.test(part) ? blank() : document.createTextNode(part)));
 }
 
-/** GDScript in JetBrains Mono on the script background, with line numbers and editor colours. */
-export function codeBlock(code: string, options: { label?: string } = {}): HTMLElement {
+/**
+ * GDScript in JetBrains Mono on the script background, with line numbers and editor colours. A `gap`
+ * node (a lesson's typed blank) takes the place of the first `____` slot.
+ */
+export function codeBlock(code: string, options: { label?: string; gap?: Node } = {}): HTMLElement {
+  let gap = options.gap;
+  const slot = () => {
+    const node = gap ?? blank();
+    gap = undefined;
+    return node;
+  };
   const lines = tokenize(code.replace(/\n+$/, '')).map((tokens, index) =>
     el('span', { class: 'gv-code__line' }, [
       el('span', { class: 'gv-code__number', text: String(index + 1), attrs: { 'aria-hidden': 'true' } }),
       el(
         'span',
         { class: 'gv-code__text' },
-        tokens.length === 0 ? [' '] : tokens.flatMap((t) => (t.kind === 'blank' ? [blank()] : tokenNodes(t.kind, t.text))),
+        tokens.length === 0 ? [' '] : tokens.flatMap((t) => (t.kind === 'blank' ? [slot()] : tokenNodes(t.kind, t.text))),
       ),
     ]),
   );

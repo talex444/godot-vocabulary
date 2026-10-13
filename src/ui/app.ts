@@ -4,6 +4,8 @@ import { Session, type SessionResult } from '../session/run';
 import { aboutScreen } from './screens/about';
 import { addCardScreen } from './screens/add-card';
 import { cardScreen } from './screens/card';
+import { coursesScreen } from './screens/courses';
+import { lessonScreen } from './screens/lesson';
 import { placeholderScreen } from './screens/placeholder';
 import { settingsScreen } from './screens/settings';
 import { startScreen } from './screens/start';
@@ -18,6 +20,8 @@ export interface Nav {
   settings(): void;
   addCard(): void;
   about(): void;
+  courses(): void;
+  lesson(id: string): void;
   placeholder(title: string): void;
 }
 
@@ -50,6 +54,8 @@ export function mountApp(host: HTMLElement): void {
     settings: () => showAsync(settingsScreen(nav)),
     addCard: () => showAsync(addCardScreen(nav)),
     about: () => showAsync(aboutScreen(nav)),
+    courses: () => showAsync(coursesScreen(nav)),
+    lesson: (id) => showAsync(lessonScreen(nav, id)),
     placeholder: (title) => show(placeholderScreen(nav, title)),
   };
   nav.start();

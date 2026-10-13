@@ -378,3 +378,260 @@
   justify-items: start;
   gap: 4px;
 }
+
+.gv-settings .gv-option .gv-toggle {
+  width: 100%;
+}
+
+/* Courses: lesson rows like the Create New Node tree, a 44 px target each. */
+.gv-lessons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gv-lesson-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--target);
+  padding: 10px 12px;
+  border: 0;
+  border-radius: var(--corner-radius);
+  background: var(--base-color);
+  color: var(--font-color);
+  font: inherit;
+  text-align: start;
+}
+
+button.gv-lesson-row {
+  cursor: pointer;
+}
+
+button.gv-lesson-row:hover {
+  color: var(--font-hover-color);
+  background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
+}
+
+button.gv-lesson-row:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 0;
+  box-shadow: 0 0 0 4px var(--highlight-color);
+}
+
+.gv-lesson-row--planned {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--base-color);
+}
+
+.gv-lesson-row__number {
+  flex: none;
+  width: 2ch;
+  color: var(--font-secondary-color);
+  font-family: var(--font-code);
+  text-align: center;
+}
+
+.gv-lesson-row__text {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+}
+
+.gv-lesson-row__title {
+  color: var(--font-focus-color);
+}
+
+.gv-tick {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--success-color);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Lesson: one scrolling page, one panel per step. */
+.gv-step,
+.gv-question,
+.gv-compare,
+.gv-example,
+.gv-figure,
+.gv-ticket,
+.gv-errors-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.gv-step h3 {
+  scroll-margin-top: 8px;
+}
+
+.gv-lesson__text {
+  line-height: 1.5;
+}
+
+.gv-agenda {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-inline-start: 1.5em;
+}
+
+.gv-ticket {
+  display: grid;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: var(--corner-radius);
+  background: var(--base-color);
+}
+
+.gv-ticket__text {
+  overflow-wrap: anywhere;
+}
+
+.gv-question {
+  display: grid;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--base-color);
+}
+
+.gv-question .gv-label {
+  color: var(--font-secondary-color);
+  font-weight: 400;
+}
+
+.gv-figure {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.gv-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--corner-radius);
+}
+
+.gv-compare {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 12px;
+}
+
+.gv-example {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--corner-radius);
+  background: var(--base-color);
+}
+
+.gv-example h4 {
+  margin: 0;
+}
+
+/* The scene-dock drawing: rows indented by depth, with the dock's guide line. */
+.gv-tree {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 6px 8px;
+  border-radius: var(--corner-radius);
+  background: var(--base-color);
+  list-style: none;
+}
+
+.gv-tree__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  margin-inline-start: calc(var(--depth, 0) * 20px);
+  padding-inline-start: calc(min(var(--depth, 0), 1) * 8px);
+  border-inline-start: calc(min(var(--depth, 0), 1) * 1px) solid var(--contrast-color-1);
+}
+
+.gv-tree__row[hidden] {
+  display: none;
+}
+
+.gv-tree__name {
+  min-width: 0;
+  color: var(--font-focus-color);
+  overflow-wrap: anywhere;
+}
+
+.gv-tree__type {
+  color: var(--font-secondary-color);
+  font-family: var(--font-code);
+  overflow-wrap: anywhere;
+}
+
+/* The typed blank: a LineEdit inside the line, in code font. */
+.gv-blank-line {
+  line-height: 2.9;
+}
+
+.gv-gap {
+  max-width: 100%;
+  min-height: var(--target);
+  margin-inline: 2px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--corner-radius);
+  background: var(--dark-color-1);
+  box-shadow: inset 0 0 0 1px var(--contrast-color-1);
+  color: var(--font-focus-color);
+  font-family: var(--font-code);
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+.gv-gap:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--accent-color);
+}
+
+.gv-gap[aria-invalid='true']:not(:focus) {
+  box-shadow: inset 0 0 0 2px var(--error-color);
+}
+
+.gv-choice--code .gv-choice__label {
+  font-family: var(--font-code);
+}
+
+.gv-next {
+  justify-self: start;
+}
+
+.gv-errors-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gv-error-item {
+  display: grid;
+  gap: 4px;
+  padding: 8px 12px;
+  border-inline-start: 2px solid var(--warning-color);
+  background: var(--base-color);
+  border-radius: var(--corner-radius);
+}
+
+.gv-fix-label {
+  color: var(--font-focus-color);
+}

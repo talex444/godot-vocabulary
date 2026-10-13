@@ -1,4 +1,5 @@
 import { FAMILIES, type Card, type Family } from '../cards/types';
+import { sessionLessons } from '../courses/index';
 import { isOverdue, newProgress, review, startOfDay, type Progress } from '../scheduler/fsrs';
 import type { Settings } from '../settings/load';
 import { planSession, seededRng, type FamilySummary, type Lesson, type Rng } from './build';
@@ -26,7 +27,7 @@ export interface Loaded {
   settings: Settings;
   skipped?: Set<string>;
   lessonsDone?: string[];
-  /** Course lessons; empty until courses exist. */
+  /** The written course lessons, in course order. */
   lessons?: Lesson[];
 }
 
@@ -60,7 +61,7 @@ export async function load(deps: RunDeps): Promise<Loaded> {
     deps.getSkipped?.() ?? new Set<string>(),
     deps.getLessonsDone?.() ?? [],
   ]);
-  return { cards, progress, settings, skipped, lessonsDone, lessons: [] };
+  return { cards, progress, settings, skipped, lessonsDone, lessons: sessionLessons() };
 }
 
 /** Why Start cannot begin, in plain words; `undefined` when there is something to do. */

@@ -42,6 +42,7 @@ export async function startScreen(nav: Nav, deps: RunDeps): Promise<HTMLElement>
       { class: 'gv-stack' },
     ),
     el('nav', { class: 'gv-links', attrs: { 'aria-label': 'More' } }, [
+      button('Courses', { variant: 'flat', onClick: () => nav.courses() }),
       button('Settings', { variant: 'flat', onClick: () => nav.settings() }),
       button('Add card', { variant: 'flat', onClick: () => nav.addCard() }),
       button('About', { variant: 'flat', onClick: () => nav.about() }),

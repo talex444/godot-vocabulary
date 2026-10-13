@@ -45,6 +45,7 @@ export async function settingsScreen(nav: Nav): Promise<HTMLElement> {
           }),
         ]),
       ),
+      courseOption(current, change),
     );
   };
   showFamilies(settings);
@@ -79,6 +80,24 @@ export async function settingsScreen(nav: Nav): Promise<HTMLElement> {
     panel([skippedHeading, skipped], { class: 'gv-stack gv-skipped' }),
     data,
     el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.start() })]),
+  ]);
+}
+
+/** Course mode (decision 36): finished lessons' cards are the next new cards. Switches on by itself. */
+function courseOption(current: Settings, change: () => void): HTMLElement {
+  const id = 'course-mode-help';
+  const control = toggle('Lesson cards first', current.newCardMode === 'course', (on) => {
+    current.newCardMode = on ? 'course' : 'frequency';
+    change();
+  });
+  control.setAttribute('aria-describedby', id);
+  return el('div', { class: 'gv-family gv-option' }, [
+    control,
+    el('p', {
+      class: 'gv-note',
+      text: 'When on, the cards of the lessons you finished are your next new cards. It turns on by itself when you finish your first lesson.',
+      attrs: { id },
+    }),
   ]);
 }
 
