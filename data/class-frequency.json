@@ -1,0 +1,5435 @@
+{
+  "source": "godotengine/godot-demo-projects (MIT), .gd + .tscn files",
+  "godot": "4.7-stable doc/classes names",
+  "generated": "2026-10-13",
+  "fileCount": 857,
+  "projectCount": 140,
+  "classes": [
+    {
+      "name": "Script",
+      "mentions": 494,
+      "files": 305,
+      "projects": 138
+    },
+    {
+      "name": "Color",
+      "mentions": 1611,
+      "files": 303,
+      "projects": 123
+    },
+    {
+      "name": "Vector2",
+      "mentions": 3747,
+      "files": 329,
+      "projects": 103
+    },
+    {
+      "name": "Label",
+      "mentions": 988,
+      "files": 198,
+      "projects": 101
+    },
+    {
+      "name": "float",
+      "mentions": 599,
+      "files": 234,
+      "projects": 98
+    },
+    {
+      "name": "Texture2D",
+      "mentions": 407,
+      "files": 177,
+      "projects": 87
+    },
+    {
+      "name": "int",
+      "mentions": 411,
+      "files": 154,
+      "projects": 80
+    },
+    {
+      "name": "bool",
+      "mentions": 396,
+      "files": 173,
+      "projects": 72
+    },
+    {
+      "name": "Control",
+      "mentions": 519,
+      "files": 162,
+      "projects": 72
+    },
+    {
+      "name": "PackedScene",
+      "mentions": 267,
+      "files": 154,
+      "projects": 71
+    },
+    {
+      "name": "Button",
+      "mentions": 345,
+      "files": 112,
+      "projects": 70
+    },
+    {
+      "name": "Node",
+      "mentions": 217,
+      "files": 159,
+      "projects": 64
+    },
+    {
+      "name": "NodePath",
+      "mentions": 1028,
+      "files": 126,
+      "projects": 63
+    },
+    {
+      "name": "Transform3D",
+      "mentions": 2958,
+      "files": 151,
+      "projects": 62
+    },
+    {
+      "name": "Vector3",
+      "mentions": 1068,
+      "files": 193,
+      "projects": 61
+    },
+    {
+      "name": "Node3D",
+      "mentions": 587,
+      "files": 209,
+      "projects": 60
+    },
+    {
+      "name": "MeshInstance3D",
+      "mentions": 818,
+      "files": 123,
+      "projects": 58
+    },
+    {
+      "name": "String",
+      "mentions": 415,
+      "files": 130,
+      "projects": 56
+    },
+    {
+      "name": "VBoxContainer",
+      "mentions": 1068,
+      "files": 103,
+      "projects": 55
+    },
+    {
+      "name": "Environment",
+      "mentions": 106,
+      "files": 65,
+      "projects": 55
+    },
+    {
+      "name": "WorldEnvironment",
+      "mentions": 170,
+      "files": 75,
+      "projects": 54
+    },
+    {
+      "name": "DirectionalLight3D",
+      "mentions": 185,
+      "files": 71,
+      "projects": 54
+    },
+    {
+      "name": "HBoxContainer",
+      "mentions": 515,
+      "files": 83,
+      "projects": 53
+    },
+    {
+      "name": "StandardMaterial3D",
+      "mentions": 290,
+      "files": 92,
+      "projects": 52
+    },
+    {
+      "name": "InputEvent",
+      "mentions": 85,
+      "files": 79,
+      "projects": 52
+    },
+    {
+      "name": "Sky",
+      "mentions": 65,
+      "files": 54,
+      "projects": 52
+    },
+    {
+      "name": "Input",
+      "mentions": 392,
+      "files": 81,
+      "projects": 50
+    },
+    {
+      "name": "Camera3D",
+      "mentions": 245,
+      "files": 114,
+      "projects": 49
+    },
+    {
+      "name": "PackedFloat32Array",
+      "mentions": 1080,
+      "files": 78,
+      "projects": 48
+    },
+    {
+      "name": "BoxMesh",
+      "mentions": 88,
+      "files": 62,
+      "projects": 46
+    },
+    {
+      "name": "Array",
+      "mentions": 127,
+      "files": 81,
+      "projects": 42
+    },
+    {
+      "name": "Node2D",
+      "mentions": 310,
+      "files": 139,
+      "projects": 39
+    },
+    {
+      "name": "ProceduralSkyMaterial",
+      "mentions": 39,
+      "files": 39,
+      "projects": 39
+    },
+    {
+      "name": "Animation",
+      "mentions": 172,
+      "files": 59,
+      "projects": 36
+    },
+    {
+      "name": "AnimationPlayer",
+      "mentions": 190,
+      "files": 82,
+      "projects": 34
+    },
+    {
+      "name": "AnimationLibrary",
+      "mentions": 64,
+      "files": 54,
+      "projects": 34
+    },
+    {
+      "name": "Gradient",
+      "mentions": 93,
+      "files": 52,
+      "projects": 34
+    },
+    {
+      "name": "InputEventMouseMotion",
+      "mentions": 41,
+      "files": 36,
+      "projects": 33
+    },
+    {
+      "name": "Sprite2D",
+      "mentions": 1384,
+      "files": 108,
+      "projects": 32
+    },
+    {
+      "name": "Panel",
+      "mentions": 326,
+      "files": 69,
+      "projects": 32
+    },
+    {
+      "name": "ColorRect",
+      "mentions": 126,
+      "files": 46,
+      "projects": 32
+    },
+    {
+      "name": "Vector2i",
+      "mentions": 107,
+      "files": 43,
+      "projects": 32
+    },
+    {
+      "name": "PackedColorArray",
+      "mentions": 78,
+      "files": 44,
+      "projects": 31
+    },
+    {
+      "name": "RenderingServer",
+      "mentions": 127,
+      "files": 35,
+      "projects": 31
+    },
+    {
+      "name": "OS",
+      "mentions": 137,
+      "files": 37,
+      "projects": 30
+    },
+    {
+      "name": "Basis",
+      "mentions": 77,
+      "files": 32,
+      "projects": 30
+    },
+    {
+      "name": "Camera2D",
+      "mentions": 60,
+      "files": 32,
+      "projects": 28
+    },
+    {
+      "name": "HSlider",
+      "mentions": 189,
+      "files": 49,
+      "projects": 27
+    },
+    {
+      "name": "PackedVector2Array",
+      "mentions": 244,
+      "files": 46,
+      "projects": 27
+    },
+    {
+      "name": "Engine",
+      "mentions": 104,
+      "files": 46,
+      "projects": 27
+    },
+    {
+      "name": "PlaneMesh",
+      "mentions": 37,
+      "files": 34,
+      "projects": 27
+    },
+    {
+      "name": "TextureRect",
+      "mentions": 252,
+      "files": 40,
+      "projects": 26
+    },
+    {
+      "name": "CollisionShape3D",
+      "mentions": 587,
+      "files": 81,
+      "projects": 25
+    },
+    {
+      "name": "OptionButton",
+      "mentions": 120,
+      "files": 36,
+      "projects": 24
+    },
+    {
+      "name": "DisplayServer",
+      "mentions": 277,
+      "files": 29,
+      "projects": 24
+    },
+    {
+      "name": "SphereMesh",
+      "mentions": 35,
+      "files": 28,
+      "projects": 24
+    },
+    {
+      "name": "ProjectSettings",
+      "mentions": 50,
+      "files": 26,
+      "projects": 24
+    },
+    {
+      "name": "InputEventMouseButton",
+      "mentions": 36,
+      "files": 25,
+      "projects": 24
+    },
+    {
+      "name": "BoxShape3D",
+      "mentions": 73,
+      "files": 52,
+      "projects": 23
+    },
+    {
+      "name": "Dictionary",
+      "mentions": 83,
+      "files": 40,
+      "projects": 23
+    },
+    {
+      "name": "CollisionShape2D",
+      "mentions": 247,
+      "files": 67,
+      "projects": 22
+    },
+    {
+      "name": "Viewport",
+      "mentions": 73,
+      "files": 25,
+      "projects": 22
+    },
+    {
+      "name": "Rect2",
+      "mentions": 437,
+      "files": 33,
+      "projects": 20
+    },
+    {
+      "name": "AudioStreamPlayer",
+      "mentions": 48,
+      "files": 25,
+      "projects": 20
+    },
+    {
+      "name": "StaticBody3D",
+      "mentions": 292,
+      "files": 38,
+      "projects": 19
+    },
+    {
+      "name": "PackedStringArray",
+      "mentions": 65,
+      "files": 37,
+      "projects": 19
+    },
+    {
+      "name": "CenterContainer",
+      "mentions": 157,
+      "files": 31,
+      "projects": 19
+    },
+    {
+      "name": "CanvasLayer",
+      "mentions": 121,
+      "files": 30,
+      "projects": 19
+    },
+    {
+      "name": "ShaderMaterial",
+      "mentions": 103,
+      "files": 36,
+      "projects": 18
+    },
+    {
+      "name": "SubViewport",
+      "mentions": 136,
+      "files": 35,
+      "projects": 18
+    },
+    {
+      "name": "RichTextLabel",
+      "mentions": 83,
+      "files": 31,
+      "projects": 18
+    },
+    {
+      "name": "AudioStream",
+      "mentions": 62,
+      "files": 29,
+      "projects": 18
+    },
+    {
+      "name": "LineEdit",
+      "mentions": 69,
+      "files": 28,
+      "projects": 18
+    },
+    {
+      "name": "Shader",
+      "mentions": 55,
+      "files": 28,
+      "projects": 18
+    },
+    {
+      "name": "Curve",
+      "mentions": 41,
+      "files": 24,
+      "projects": 18
+    },
+    {
+      "name": "GradientTexture2D",
+      "mentions": 38,
+      "files": 23,
+      "projects": 18
+    },
+    {
+      "name": "OmniLight3D",
+      "mentions": 61,
+      "files": 21,
+      "projects": 18
+    },
+    {
+      "name": "Area2D",
+      "mentions": 61,
+      "files": 36,
+      "projects": 17
+    },
+    {
+      "name": "CheckButton",
+      "mentions": 68,
+      "files": 21,
+      "projects": 17
+    },
+    {
+      "name": "Material",
+      "mentions": 93,
+      "files": 34,
+      "projects": 16
+    },
+    {
+      "name": "PackedByteArray",
+      "mentions": 43,
+      "files": 16,
+      "projects": 16
+    },
+    {
+      "name": "CharacterBody3D",
+      "mentions": 90,
+      "files": 40,
+      "projects": 15
+    },
+    {
+      "name": "PackedInt32Array",
+      "mentions": 74,
+      "files": 22,
+      "projects": 15
+    },
+    {
+      "name": "StyleBoxFlat",
+      "mentions": 36,
+      "files": 18,
+      "projects": 15
+    },
+    {
+      "name": "HSeparator",
+      "mentions": 44,
+      "files": 16,
+      "projects": 15
+    },
+    {
+      "name": "Timer",
+      "mentions": 59,
+      "files": 29,
+      "projects": 14
+    },
+    {
+      "name": "Variant",
+      "mentions": 24,
+      "files": 17,
+      "projects": 14
+    },
+    {
+      "name": "CharacterBody2D",
+      "mentions": 71,
+      "files": 40,
+      "projects": 13
+    },
+    {
+      "name": "Time",
+      "mentions": 74,
+      "files": 21,
+      "projects": 13
+    },
+    {
+      "name": "PanelContainer",
+      "mentions": 178,
+      "files": 19,
+      "projects": 13
+    },
+    {
+      "name": "CheckBox",
+      "mentions": 75,
+      "files": 19,
+      "projects": 13
+    },
+    {
+      "name": "GridContainer",
+      "mentions": 139,
+      "files": 18,
+      "projects": 13
+    },
+    {
+      "name": "QuadMesh",
+      "mentions": 23,
+      "files": 18,
+      "projects": 13
+    },
+    {
+      "name": "FontFile",
+      "mentions": 26,
+      "files": 16,
+      "projects": 13
+    },
+    {
+      "name": "RectangleShape2D",
+      "mentions": 50,
+      "files": 31,
+      "projects": 12
+    },
+    {
+      "name": "PhysicsMaterial",
+      "mentions": 52,
+      "files": 22,
+      "projects": 12
+    },
+    {
+      "name": "MarginContainer",
+      "mentions": 204,
+      "files": 16,
+      "projects": 12
+    },
+    {
+      "name": "CircleShape2D",
+      "mentions": 25,
+      "files": 24,
+      "projects": 11
+    },
+    {
+      "name": "XROrigin3D",
+      "mentions": 147,
+      "files": 22,
+      "projects": 11
+    },
+    {
+      "name": "PackedVector3Array",
+      "mentions": 39,
+      "files": 21,
+      "projects": 11
+    },
+    {
+      "name": "XRCamera3D",
+      "mentions": 42,
+      "files": 16,
+      "projects": 11
+    },
+    {
+      "name": "XRServer",
+      "mentions": 21,
+      "files": 16,
+      "projects": 11
+    },
+    {
+      "name": "TileMapLayer",
+      "mentions": 31,
+      "files": 15,
+      "projects": 11
+    },
+    {
+      "name": "CylinderMesh",
+      "mentions": 21,
+      "files": 13,
+      "projects": 11
+    },
+    {
+      "name": "TileSet",
+      "mentions": 16,
+      "files": 12,
+      "projects": 11
+    },
+    {
+      "name": "RigidBody3D",
+      "mentions": 86,
+      "files": 40,
+      "projects": 10
+    },
+    {
+      "name": "CapsuleShape3D",
+      "mentions": 37,
+      "files": 20,
+      "projects": 10
+    },
+    {
+      "name": "Theme",
+      "mentions": 17,
+      "files": 16,
+      "projects": 10
+    },
+    {
+      "name": "Object",
+      "mentions": 18,
+      "files": 12,
+      "projects": 10
+    },
+    {
+      "name": "Plane",
+      "mentions": 15,
+      "files": 10,
+      "projects": 10
+    },
+    {
+      "name": "SphereShape3D",
+      "mentions": 20,
+      "files": 19,
+      "projects": 9
+    },
+    {
+      "name": "Area3D",
+      "mentions": 28,
+      "files": 17,
+      "projects": 9
+    },
+    {
+      "name": "XRController3D",
+      "mentions": 30,
+      "files": 15,
+      "projects": 9
+    },
+    {
+      "name": "SpinBox",
+      "mentions": 31,
+      "files": 14,
+      "projects": 9
+    },
+    {
+      "name": "Marker2D",
+      "mentions": 27,
+      "files": 13,
+      "projects": 9
+    },
+    {
+      "name": "Mesh",
+      "mentions": 19,
+      "files": 12,
+      "projects": 9
+    },
+    {
+      "name": "AudioServer",
+      "mentions": 48,
+      "files": 10,
+      "projects": 9
+    },
+    {
+      "name": "AABB",
+      "mentions": 23,
+      "files": 9,
+      "projects": 9
+    },
+    {
+      "name": "GradientTexture1D",
+      "mentions": 23,
+      "files": 9,
+      "projects": 9
+    },
+    {
+      "name": "StaticBody2D",
+      "mentions": 88,
+      "files": 22,
+      "projects": 8
+    },
+    {
+      "name": "Window",
+      "mentions": 59,
+      "files": 20,
+      "projects": 8
+    },
+    {
+      "name": "CapsuleShape2D",
+      "mentions": 21,
+      "files": 20,
+      "projects": 8
+    },
+    {
+      "name": "Label3D",
+      "mentions": 99,
+      "files": 17,
+      "projects": 8
+    },
+    {
+      "name": "SpriteFrames",
+      "mentions": 15,
+      "files": 13,
+      "projects": 8
+    },
+    {
+      "name": "TextEdit",
+      "mentions": 30,
+      "files": 12,
+      "projects": 8
+    },
+    {
+      "name": "ArrayMesh",
+      "mentions": 19,
+      "files": 12,
+      "projects": 8
+    },
+    {
+      "name": "SpotLight3D",
+      "mentions": 33,
+      "files": 11,
+      "projects": 8
+    },
+    {
+      "name": "CanvasItemMaterial",
+      "mentions": 25,
+      "files": 11,
+      "projects": 8
+    },
+    {
+      "name": "RID",
+      "mentions": 65,
+      "files": 10,
+      "projects": 8
+    },
+    {
+      "name": "ParticleProcessMaterial",
+      "mentions": 35,
+      "files": 8,
+      "projects": 8
+    },
+    {
+      "name": "CollisionPolygon2D",
+      "mentions": 77,
+      "files": 20,
+      "projects": 7
+    },
+    {
+      "name": "AnimatedSprite2D",
+      "mentions": 35,
+      "files": 15,
+      "projects": 7
+    },
+    {
+      "name": "Transform2D",
+      "mentions": 36,
+      "files": 12,
+      "projects": 7
+    },
+    {
+      "name": "Marker3D",
+      "mentions": 18,
+      "files": 11,
+      "projects": 7
+    },
+    {
+      "name": "StringName",
+      "mentions": 13,
+      "files": 11,
+      "projects": 7
+    },
+    {
+      "name": "SubViewportContainer",
+      "mentions": 45,
+      "files": 10,
+      "projects": 7
+    },
+    {
+      "name": "Tween",
+      "mentions": 38,
+      "files": 10,
+      "projects": 7
+    },
+    {
+      "name": "LinkButton",
+      "mentions": 22,
+      "files": 9,
+      "projects": 7
+    },
+    {
+      "name": "WorldBoundaryShape3D",
+      "mentions": 9,
+      "files": 8,
+      "projects": 7
+    },
+    {
+      "name": "GPUParticles3D",
+      "mentions": 45,
+      "files": 7,
+      "projects": 7
+    },
+    {
+      "name": "Image",
+      "mentions": 26,
+      "files": 7,
+      "projects": 7
+    },
+    {
+      "name": "Separator",
+      "mentions": 9,
+      "files": 7,
+      "projects": 7
+    },
+    {
+      "name": "RigidBody2D",
+      "mentions": 84,
+      "files": 36,
+      "projects": 6
+    },
+    {
+      "name": "CylinderShape3D",
+      "mentions": 14,
+      "files": 13,
+      "projects": 6
+    },
+    {
+      "name": "InputEventKey",
+      "mentions": 13,
+      "files": 13,
+      "projects": 6
+    },
+    {
+      "name": "CPUParticles2D",
+      "mentions": 18,
+      "files": 11,
+      "projects": 6
+    },
+    {
+      "name": "Decal",
+      "mentions": 101,
+      "files": 10,
+      "projects": 6
+    },
+    {
+      "name": "ScrollContainer",
+      "mentions": 107,
+      "files": 9,
+      "projects": 6
+    },
+    {
+      "name": "ReflectionProbe",
+      "mentions": 52,
+      "files": 8,
+      "projects": 6
+    },
+    {
+      "name": "Line2D",
+      "mentions": 35,
+      "files": 8,
+      "projects": 6
+    },
+    {
+      "name": "FileAccess",
+      "mentions": 27,
+      "files": 8,
+      "projects": 6
+    },
+    {
+      "name": "ColorPickerButton",
+      "mentions": 24,
+      "files": 8,
+      "projects": 6
+    },
+    {
+      "name": "Polygon2D",
+      "mentions": 70,
+      "files": 7,
+      "projects": 6
+    },
+    {
+      "name": "CurveTexture",
+      "mentions": 18,
+      "files": 6,
+      "projects": 6
+    },
+    {
+      "name": "ViewportTexture",
+      "mentions": 15,
+      "files": 6,
+      "projects": 6
+    },
+    {
+      "name": "ImageTexture",
+      "mentions": 14,
+      "files": 6,
+      "projects": 6
+    },
+    {
+      "name": "InputEventAction",
+      "mentions": 10,
+      "files": 6,
+      "projects": 6
+    },
+    {
+      "name": "Shortcut",
+      "mentions": 10,
+      "files": 6,
+      "projects": 6
+    },
+    {
+      "name": "PhysicsRayQueryParameters3D",
+      "mentions": 8,
+      "files": 6,
+      "projects": 6
+    },
+    {
+      "name": "Tree",
+      "mentions": 35,
+      "files": 9,
+      "projects": 5
+    },
+    {
+      "name": "AcceptDialog",
+      "mentions": 18,
+      "files": 8,
+      "projects": 5
+    },
+    {
+      "name": "ItemList",
+      "mentions": 17,
+      "files": 8,
+      "projects": 5
+    },
+    {
+      "name": "ProgressBar",
+      "mentions": 46,
+      "files": 7,
+      "projects": 5
+    },
+    {
+      "name": "JSON",
+      "mentions": 20,
+      "files": 7,
+      "projects": 5
+    },
+    {
+      "name": "AtlasTexture",
+      "mentions": 326,
+      "files": 6,
+      "projects": 5
+    },
+    {
+      "name": "Path3D",
+      "mentions": 10,
+      "files": 5,
+      "projects": 5
+    },
+    {
+      "name": "CapsuleMesh",
+      "mentions": 6,
+      "files": 5,
+      "projects": 5
+    },
+    {
+      "name": "Curve3D",
+      "mentions": 5,
+      "files": 5,
+      "projects": 5
+    },
+    {
+      "name": "Skeleton3D",
+      "mentions": 129,
+      "files": 12,
+      "projects": 4
+    },
+    {
+      "name": "EditorPlugin",
+      "mentions": 11,
+      "files": 11,
+      "projects": 4
+    },
+    {
+      "name": "FileDialog",
+      "mentions": 35,
+      "files": 9,
+      "projects": 4
+    },
+    {
+      "name": "CPUParticles3D",
+      "mentions": 32,
+      "files": 8,
+      "projects": 4
+    },
+    {
+      "name": "TabContainer",
+      "mentions": 205,
+      "files": 7,
+      "projects": 4
+    },
+    {
+      "name": "TextureButton",
+      "mentions": 16,
+      "files": 7,
+      "projects": 4
+    },
+    {
+      "name": "Texture",
+      "mentions": 7,
+      "files": 7,
+      "projects": 4
+    },
+    {
+      "name": "ResourceLoader",
+      "mentions": 20,
+      "files": 6,
+      "projects": 4
+    },
+    {
+      "name": "ConcavePolygonShape3D",
+      "mentions": 17,
+      "files": 6,
+      "projects": 4
+    },
+    {
+      "name": "Path2D",
+      "mentions": 13,
+      "files": 6,
+      "projects": 4
+    },
+    {
+      "name": "FontVariation",
+      "mentions": 12,
+      "files": 6,
+      "projects": 4
+    },
+    {
+      "name": "HFlowContainer",
+      "mentions": 86,
+      "files": 5,
+      "projects": 4
+    },
+    {
+      "name": "RenderingDevice",
+      "mentions": 32,
+      "files": 5,
+      "projects": 4
+    },
+    {
+      "name": "Light3D",
+      "mentions": 24,
+      "files": 5,
+      "projects": 4
+    },
+    {
+      "name": "Font",
+      "mentions": 21,
+      "files": 5,
+      "projects": 4
+    },
+    {
+      "name": "ButtonGroup",
+      "mentions": 8,
+      "files": 5,
+      "projects": 4
+    },
+    {
+      "name": "TextMesh",
+      "mentions": 23,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "GPUParticles2D",
+      "mentions": 21,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "GeometryInstance3D",
+      "mentions": 17,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "TouchScreenButton",
+      "mentions": 13,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "SceneTree",
+      "mentions": 12,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "Vector4",
+      "mentions": 12,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "VSeparator",
+      "mentions": 10,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "InputEventScreenDrag",
+      "mentions": 7,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "InputEventScreenTouch",
+      "mentions": 7,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "CanvasItem",
+      "mentions": 6,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "PrismMesh",
+      "mentions": 5,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "TorusMesh",
+      "mentions": 5,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "Curve2D",
+      "mentions": 4,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "PhysicalSkyMaterial",
+      "mentions": 4,
+      "files": 4,
+      "projects": 4
+    },
+    {
+      "name": "AudioStreamPlayer2D",
+      "mentions": 18,
+      "files": 12,
+      "projects": 3
+    },
+    {
+      "name": "AnimationTree",
+      "mentions": 25,
+      "files": 8,
+      "projects": 3
+    },
+    {
+      "name": "PopupMenu",
+      "mentions": 25,
+      "files": 8,
+      "projects": 3
+    },
+    {
+      "name": "Shape3D",
+      "mentions": 12,
+      "files": 8,
+      "projects": 3
+    },
+    {
+      "name": "Resource",
+      "mentions": 14,
+      "files": 7,
+      "projects": 3
+    },
+    {
+      "name": "MenuButton",
+      "mentions": 9,
+      "files": 7,
+      "projects": 3
+    },
+    {
+      "name": "Vector3i",
+      "mentions": 92,
+      "files": 6,
+      "projects": 3
+    },
+    {
+      "name": "AudioStreamPlayer3D",
+      "mentions": 15,
+      "files": 6,
+      "projects": 3
+    },
+    {
+      "name": "EditorInterface",
+      "mentions": 11,
+      "files": 6,
+      "projects": 3
+    },
+    {
+      "name": "RayCast3D",
+      "mentions": 10,
+      "files": 6,
+      "projects": 3
+    },
+    {
+      "name": "ParallaxBackground",
+      "mentions": 8,
+      "files": 6,
+      "projects": 3
+    },
+    {
+      "name": "LightOccluder2D",
+      "mentions": 36,
+      "files": 5,
+      "projects": 3
+    },
+    {
+      "name": "OccluderPolygon2D",
+      "mentions": 11,
+      "files": 5,
+      "projects": 3
+    },
+    {
+      "name": "AudioStreamRandomizer",
+      "mentions": 7,
+      "files": 5,
+      "projects": 3
+    },
+    {
+      "name": "PanoramaSkyMaterial",
+      "mentions": 5,
+      "files": 5,
+      "projects": 3
+    },
+    {
+      "name": "HSplitContainer",
+      "mentions": 113,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "PathFollow3D",
+      "mentions": 34,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "PointLight2D",
+      "mentions": 33,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "TranslationServer",
+      "mentions": 29,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "AnimationNodeAnimation",
+      "mentions": 19,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "VisibleOnScreenNotifier2D",
+      "mentions": 9,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "Performance",
+      "mentions": 8,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "RDUniform",
+      "mentions": 7,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "TextureProgressBar",
+      "mentions": 6,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "BaseMaterial3D",
+      "mentions": 5,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "RDShaderSPIRV",
+      "mentions": 4,
+      "files": 4,
+      "projects": 3
+    },
+    {
+      "name": "GPUParticlesCollisionBox3D",
+      "mentions": 18,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "ParallaxLayer",
+      "mentions": 12,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "PathFollow2D",
+      "mentions": 7,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "CompressedTexture3D",
+      "mentions": 4,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "RefCounted",
+      "mentions": 4,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "StyleBoxEmpty",
+      "mentions": 4,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "Callable",
+      "mentions": 3,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "LabelSettings",
+      "mentions": 3,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "TCPServer",
+      "mentions": 3,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "World3D",
+      "mentions": 3,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "ConvexPolygonShape3D",
+      "mentions": 13,
+      "files": 9,
+      "projects": 2
+    },
+    {
+      "name": "PhysicsBody2D",
+      "mentions": 15,
+      "files": 7,
+      "projects": 2
+    },
+    {
+      "name": "RayCast2D",
+      "mentions": 12,
+      "files": 6,
+      "projects": 2
+    },
+    {
+      "name": "ResourceSaver",
+      "mentions": 8,
+      "files": 6,
+      "projects": 2
+    },
+    {
+      "name": "XRPose",
+      "mentions": 10,
+      "files": 4,
+      "projects": 2
+    },
+    {
+      "name": "PhysicsBody3D",
+      "mentions": 7,
+      "files": 4,
+      "projects": 2
+    },
+    {
+      "name": "ShapeCast3D",
+      "mentions": 7,
+      "files": 4,
+      "projects": 2
+    },
+    {
+      "name": "IP",
+      "mentions": 5,
+      "files": 4,
+      "projects": 2
+    },
+    {
+      "name": "SeparationRayShape2D",
+      "mentions": 5,
+      "files": 4,
+      "projects": 2
+    },
+    {
+      "name": "XRControllerTracker",
+      "mentions": 4,
+      "files": 4,
+      "projects": 2
+    },
+    {
+      "name": "Sprite3D",
+      "mentions": 50,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "ConfigFile",
+      "mentions": 12,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "SystemFont",
+      "mentions": 10,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "NavigationServer3D",
+      "mentions": 9,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "LightmapGI",
+      "mentions": 8,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "NavigationAgent2D",
+      "mentions": 7,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "NavigationAgent3D",
+      "mentions": 7,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "LightmapGIData",
+      "mentions": 6,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "Thread",
+      "mentions": 6,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "PinJoint2D",
+      "mentions": 5,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "AnimatableBody3D",
+      "mentions": 4,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "PhysicsDirectBodyState2D",
+      "mentions": 4,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "RandomNumberGenerator",
+      "mentions": 4,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "TextServer",
+      "mentions": 4,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "PhysicsDirectSpaceState2D",
+      "mentions": 3,
+      "files": 3,
+      "projects": 2
+    },
+    {
+      "name": "Quaternion",
+      "mentions": 49,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "VSplitContainer",
+      "mentions": 48,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "PhysicsServer2D",
+      "mentions": 30,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "TreeItem",
+      "mentions": 14,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "FogVolume",
+      "mentions": 13,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "PhysicsServer3D",
+      "mentions": 13,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "SplitContainer",
+      "mentions": 12,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "FogMaterial",
+      "mentions": 10,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "XRInterface",
+      "mentions": 9,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "NavigationMesh",
+      "mentions": 8,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "AudioStreamWAV",
+      "mentions": 7,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "NavigationPolygon",
+      "mentions": 7,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "PinJoint3D",
+      "mentions": 7,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "VisibleOnScreenNotifier3D",
+      "mentions": 6,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "CanvasTexture",
+      "mentions": 5,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "NavigationRegion3D",
+      "mentions": 5,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "StreamPeerTCP",
+      "mentions": 5,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "InputEventJoypadButton",
+      "mentions": 4,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "NavigationRegion2D",
+      "mentions": 4,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "RDTextureFormat",
+      "mentions": 4,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "AnimationNodeTimeScale",
+      "mentions": 3,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "BaseButton",
+      "mentions": 3,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "CanvasModulate",
+      "mentions": 3,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "ImmediateMesh",
+      "mentions": 3,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "MultiplayerAPI",
+      "mentions": 3,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "RDTextureView",
+      "mentions": 3,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "RemoteTransform3D",
+      "mentions": 3,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "AnimationNodeBlendTree",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "GDExtension",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "Generic6DOFJoint3D",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "InputEventMouse",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "MeshLibrary",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "PhysicsDirectBodyState3D",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "PhysicsRayQueryParameters2D",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "Rect2i",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "Slider",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "StreamPeer",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "TileMap",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "TileSetAtlasSource",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "XRPositionalTracker",
+      "mentions": 2,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "EditorImportPlugin",
+      "mentions": 10,
+      "files": 7,
+      "projects": 1
+    },
+    {
+      "name": "VehicleBody3D",
+      "mentions": 8,
+      "files": 6,
+      "projects": 1
+    },
+    {
+      "name": "ResourceFormatLoader",
+      "mentions": 7,
+      "files": 5,
+      "projects": 1
+    },
+    {
+      "name": "Popup",
+      "mentions": 14,
+      "files": 4,
+      "projects": 1
+    },
+    {
+      "name": "SoftBody3D",
+      "mentions": 10,
+      "files": 4,
+      "projects": 1
+    },
+    {
+      "name": "StatusIndicator",
+      "mentions": 6,
+      "files": 4,
+      "projects": 1
+    },
+    {
+      "name": "VehicleWheel3D",
+      "mentions": 20,
+      "files": 3,
+      "projects": 1
+    },
+    {
+      "name": "AnimatedSprite3D",
+      "mentions": 7,
+      "files": 3,
+      "projects": 1
+    },
+    {
+      "name": "ConfirmationDialog",
+      "mentions": 7,
+      "files": 3,
+      "projects": 1
+    },
+    {
+      "name": "AudioListener3D",
+      "mentions": 6,
+      "files": 3,
+      "projects": 1
+    },
+    {
+      "name": "OccluderInstance3D",
+      "mentions": 6,
+      "files": 3,
+      "projects": 1
+    },
+    {
+      "name": "CompositorEffect",
+      "mentions": 5,
+      "files": 3,
+      "projects": 1
+    },
+    {
+      "name": "PopupPanel",
+      "mentions": 5,
+      "files": 3,
+      "projects": 1
+    },
+    {
+      "name": "XRNode3D",
+      "mentions": 5,
+      "files": 3,
+      "projects": 1
+    },
+    {
+      "name": "PhysicsDirectSpaceState3D",
+      "mentions": 3,
+      "files": 3,
+      "projects": 1
+    },
+    {
+      "name": "ResourceImporter",
+      "mentions": 3,
+      "files": 3,
+      "projects": 1
+    },
+    {
+      "name": "AspectRatioContainer",
+      "mentions": 60,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "PhysicalBoneSimulator3D",
+      "mentions": 41,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "PhysicalBone3D",
+      "mentions": 19,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "Container",
+      "mentions": 13,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "VoxelGI",
+      "mentions": 13,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "InputMap",
+      "mentions": 10,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "AnimationNodeStateMachineTransition",
+      "mentions": 9,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "DirectionalLight2D",
+      "mentions": 8,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "AnimationNodeOneShot",
+      "mentions": 6,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "XRHandTracker",
+      "mentions": 6,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "SkeletonIK3D",
+      "mentions": 5,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "DrawableTexture2D",
+      "mentions": 4,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "Shape2D",
+      "mentions": 4,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "Expression",
+      "mentions": 3,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "MeshInstance2D",
+      "mentions": 3,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "PhysicsShapeQueryParameters3D",
+      "mentions": 3,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "ResourceFormatSaver",
+      "mentions": 3,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "SkeletonModifier3D",
+      "mentions": 3,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "VisibleOnScreenEnabler2D",
+      "mentions": 3,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "AnimationNodeStateMachine",
+      "mentions": 2,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "AnimationNodeStateMachinePlayback",
+      "mentions": 2,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "BitMap",
+      "mentions": 2,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "Compositor",
+      "mentions": 2,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "RenderData",
+      "mentions": 2,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "Texture2DRD",
+      "mentions": 2,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "TLSOptions",
+      "mentions": 2,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "Translation",
+      "mentions": 2,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "UniformSetCacheRD",
+      "mentions": 2,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "WorldBoundaryShape2D",
+      "mentions": 2,
+      "files": 2,
+      "projects": 1
+    },
+    {
+      "name": "Skeleton2D",
+      "mentions": 174,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AreaLight3D",
+      "mentions": 19,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "Bone2D",
+      "mentions": 16,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "FoldableContainer",
+      "mentions": 7,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "NavigationServer2D",
+      "mentions": 7,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AnimationNodeBlend2",
+      "mentions": 5,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "GPUParticlesAttractorSphere3D",
+      "mentions": 5,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "GraphEdit",
+      "mentions": 5,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "SurfaceTool",
+      "mentions": 5,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AStarGrid2D",
+      "mentions": 4,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "CodeEdit",
+      "mentions": 4,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "FoldableGroup",
+      "mentions": 4,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "GraphFrame",
+      "mentions": 4,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "StreamPeerTLS",
+      "mentions": 4,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "XRHandModifier3D",
+      "mentions": 4,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "GraphNode",
+      "mentions": 3,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "InputEventJoypadMotion",
+      "mentions": 3,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "InputEventMIDI",
+      "mentions": 3,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "Joint2D",
+      "mentions": 3,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "Joint3D",
+      "mentions": 3,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "NavigationMeshSourceGeometryData2D",
+      "mentions": 3,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "NavigationMeshSourceGeometryData3D",
+      "mentions": 3,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "Tweener",
+      "mentions": 3,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "CameraAttributesPhysical",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "DampedSpringJoint2D",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "DirAccess",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "GPUParticlesCollisionHeightField3D",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "GPUParticlesCollisionSDF3D",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "GPUParticlesCollisionSphere3D",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "GrooveJoint2D",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "MultiplayerPeer",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "PhysicsShapeQueryParameters2D",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "RDSamplerState",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "TextServerManager",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "TubeTrailMesh",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "VSlider",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "WorkerThreadPool",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AnimatableBody2D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AnimationNodeTransition",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "ArrayOccluder3D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AudioEffect",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AudioEffectSpectrumAnalyzerInstance",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AudioStreamGenerator",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AudioStreamMicrophone",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AudioStreamPlayback",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "BoneAttachment3D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "BoxOccluder3D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "CameraAttributes",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "CameraAttributesPractical",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "ClassDB",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "CodeHighlighter",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "CompressedCubemap",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "CompressedTexture2D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "ConcavePolygonShape2D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "ConeTwistJoint3D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "CryptoKey",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "EditorFileSystem",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "EditorScript",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "EditorSelection",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "HingeJoint3D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "HScrollBar",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "JavaScriptBridge",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "JNISingleton",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "KinematicCollision2D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "Logger",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "MultiMesh",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "Mutex",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "NavigationObstacle3D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "ORMMaterial3D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "PlaceholderTexture2D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "Range",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "RDShaderFile",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "RDShaderSource",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "RenderSceneBuffers",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "RenderSceneData",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "ScriptBacktrace",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "Signal",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "SliderJoint3D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "SpringArm3D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "StyleBox",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "StyleBoxLine",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "Texture3D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "TileData",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "VoxelGIData",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "World2D",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "X509Certificate",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "AccessibilityServer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AESContext",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AimModifier3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimatedTexture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationMixer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNode",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNodeAdd2",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNodeAdd3",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNodeBlend3",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNodeBlendSpace1D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNodeBlendSpace2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNodeExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNodeOutput",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNodeSub2",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNodeSync",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationNodeTimeSeek",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AnimationRootNode",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AStar2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AStar3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioBusLayout",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectAmplify",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectBandLimitFilter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectBandPassFilter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectCapture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectChorus",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectCompressor",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectDelay",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectDistortion",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectEQ",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectEQ10",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectEQ21",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectEQ6",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectFilter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectHardLimiter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectHighPassFilter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectHighShelfFilter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectInstance",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectLimiter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectLowPassFilter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectLowShelfFilter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectNotchFilter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectPanner",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectPhaser",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectPitchShift",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectRecord",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectReverb",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectSpectrumAnalyzer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioEffectStereoEnhance",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioListener2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioSample",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioSamplePlayback",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioStreamGeneratorPlayback",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioStreamPlaybackPolyphonic",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioStreamPlaybackResampled",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AudioStreamPolyphonic",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AwaitTweener",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "BackBufferCopy",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "BlitMaterial",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "BoneConstraint3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "BoneMap",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "BoneTwistDisperser3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "BoxContainer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CallbackTweener",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CameraFeed",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CameraServer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CameraTexture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CanvasGroup",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CCDIK3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ChainIK3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CharFXTransform",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CollisionObject2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CollisionObject3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CollisionPolygon3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ColorPalette",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ColorPicker",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CompressedCubemapArray",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CompressedTexture2DArray",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CompressedTextureLayered",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ConvertTransformModifier3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ConvexPolygonShape2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CopyTransformModifier3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Crypto",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Cubemap",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CubemapArray",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "CurveXYZTexture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "DPITexture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "DTLSServer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorCommandPalette",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorContextMenuPlugin",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorDebuggerPlugin",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorDebuggerSession",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorDock",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorExportPlatform",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorExportPlatformAppleEmbedded",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorExportPlatformExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorExportPlatformPC",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorExportPlugin",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorExportPreset",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorFeatureProfile",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorFileDialog",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorFileSystemDirectory",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorFileSystemImportFormatSupportQuery",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorInspector",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorInspectorPlugin",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorNode3DGizmo",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorNode3DGizmoPlugin",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorPaths",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorProperty",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorResourceConversionPlugin",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorResourcePicker",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorResourcePreview",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorResourcePreviewGenerator",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorResourceTooltipPlugin",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorSceneFormatImporter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorScenePostImport",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorScenePostImportPlugin",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorScriptPicker",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorSettings",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorSpinSlider",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorSyntaxHighlighter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorToaster",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorTranslationParserPlugin",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorUndoRedoManager",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EditorVCSInterface",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EncodedObjectAsID",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EngineDebugger",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "EngineProfiler",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ExternalTexture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "FABRIK3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "FileSystemDock",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "FlowContainer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "FramebufferCacheRD",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "GDExtensionManager",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Geometry2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Geometry3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "GodotInstance",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "GPUParticlesAttractor3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "GPUParticlesAttractorBox3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "GPUParticlesAttractorVectorField3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "GPUParticlesCollision3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "GraphElement",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "HashingContext",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "HeightMapShape3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "HMACContext",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "HTTPClient",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "HTTPRequest",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "IKModifier3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ImageFormatLoader",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ImageFormatLoaderExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ImageTexture3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ImageTextureLayered",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ImporterMesh",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ImporterMeshInstance3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "InputEventFromWindow",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "InputEventGesture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "InputEventMagnifyGesture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "InputEventPanGesture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "InputEventShortcut",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "InputEventWithModifiers",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "InstancePlaceholder",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "IntervalTweener",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "IterateIK3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "JacobianIK3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "JavaClass",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "JavaClassWrapper",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "JavaObject",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "JavaScriptObject",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "JointLimitation3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "JointLimitationCone3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "JSONRPC",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "KinematicCollision3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Light2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Lightmapper",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "LightmapperRD",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "LightmapProbe",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "LimitAngularVelocityModifier3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "LookAtModifier3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MainLoop",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Marshalls",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MenuBar",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MeshConvexDecompositionSettings",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MeshDataTool",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MeshTexture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MethodTweener",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MissingNode",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MissingResource",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ModifierBoneTarget3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MovieWriter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MultiMeshInstance2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MultiMeshInstance3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MultiplayerAPIExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "MultiplayerPeerExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NativeMenu",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NavigationLink2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NavigationLink3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NavigationMeshGenerator",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NavigationObstacle2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NavigationPathQueryParameters2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NavigationPathQueryParameters3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NavigationPathQueryResult2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NavigationPathQueryResult3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NavigationServer2DManager",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NavigationServer3DManager",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NinePatchRect",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Node3DGizmo",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Occluder3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "OptimizedTranslation",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PackedDataContainer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PackedDataContainerRef",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PackedFloat64Array",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PackedInt64Array",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PackedVector4Array",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PacketPeer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PacketPeerDTLS",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PacketPeerExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PacketPeerStream",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PacketPeerUDP",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Parallax2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PCKPacker",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicalBone2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsDirectBodyState2DExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsDirectBodyState3DExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsDirectSpaceState2DExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsDirectSpaceState3DExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsPointQueryParameters2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsPointQueryParameters3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsServer2DExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsServer2DManager",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsServer3DExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsServer3DManager",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsServer3DRenderingServerHandler",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsTestMotionParameters2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsTestMotionParameters3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsTestMotionResult2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PhysicsTestMotionResult3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PlaceholderCubemap",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PlaceholderCubemapArray",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PlaceholderMaterial",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PlaceholderMesh",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PlaceholderTexture2DArray",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PlaceholderTexture3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PlaceholderTextureLayered",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PointMesh",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PolygonOccluder3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PolygonPathFinder",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PortableCompressedTexture2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PrimitiveMesh",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Projection",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "PropertyTweener",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "QuadOccluder3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDAccelerationStructureGeometry",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDAccelerationStructureInstance",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDAttachmentFormat",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDFramebufferPass",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDHitGroup",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDPipelineColorBlendState",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDPipelineColorBlendStateAttachment",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDPipelineDepthStencilState",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDPipelineMultisampleState",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDPipelineRasterizationState",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDPipelineShader",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDPipelineSpecializationConstant",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RDVertexAttribute",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ReferenceRect",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RemoteTransform2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RenderDataExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RenderDataRD",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RenderSceneBuffersConfiguration",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RenderSceneBuffersExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RenderSceneBuffersRD",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RenderSceneDataExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RenderSceneDataRD",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterBitMap",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterBMFont",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterCSVTranslation",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterDynamicFont",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterImage",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterImageFont",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterLayeredTexture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterOBJ",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterScene",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterShaderFile",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterSVG",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterTexture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterTextureAtlas",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceImporterWAV",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourcePreloader",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ResourceUID",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RetargetModifier3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RibbonTrailMesh",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RichTextEffect",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "RootMotionView",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SceneState",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SceneTreeTimer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ScriptCreateDialog",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ScriptEditor",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ScriptEditorBase",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ScriptExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ScriptLanguage",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ScriptLanguageExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ScrollBar",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SegmentShape2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Semaphore",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SeparationRayShape3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ShaderGlobalsOverride",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ShaderInclude",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ShaderIncludeDB",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ShapeCast2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonModification2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonModification2DCCDIK",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonModification2DFABRIK",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonModification2DJiggle",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonModification2DLookAt",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonModification2DPhysicalBones",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonModification2DStackHolder",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonModification2DTwoBoneIK",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonModificationStack2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonProfile",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkeletonProfileHumanoid",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Skin",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SkinReference",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SocketServer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SphereOccluder3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SplineIK3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SpringBoneCollision3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SpringBoneCollisionCapsule3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SpringBoneCollisionPlane3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SpringBoneCollisionSphere3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SpringBoneSimulator3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SpriteBase3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "StreamPeerBuffer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "StreamPeerExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "StreamPeerGZIP",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "StreamPeerSocket",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "StreamPeerUDS",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "StyleBoxTexture",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SubtweenTweener",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "SyntaxHighlighter",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TabBar",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TextLine",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TextParagraph",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TextServerDummy",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TextServerExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Texture2DArray",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Texture2DArrayRD",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Texture3DRD",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TextureCubemapArrayRD",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TextureCubemapRD",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TextureLayered",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TextureLayeredRD",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "ThemeDB",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TileMapPattern",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TileSetScenesCollectionSource",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TileSetSource",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TranslationDomain",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TriangleMesh",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "TwoBoneIK3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "UDPServer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "UDSServer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "UndoRedo",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Vector4i",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "VFlowContainer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "VideoStream",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "VideoStreamPlayback",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "VideoStreamPlayer",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "VirtualJoystick",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "VisibleOnScreenEnabler3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "VisualInstance3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "VScrollBar",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "WeakRef",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "XMLParser",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "XRAnchor3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "XRBodyModifier3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "XRBodyTracker",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "XRFaceModifier3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "XRFaceTracker",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "XRInterfaceExtension",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "XRTracker",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "XRVRS",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    }
+  ],
+  "keywords": [
+    {
+      "name": "extends",
+      "mentions": 461,
+      "files": 456,
+      "projects": 132
+    },
+    {
+      "name": "func",
+      "mentions": 2050,
+      "files": 454,
+      "projects": 132
+    },
+    {
+      "name": "void",
+      "mentions": 1658,
+      "files": 398,
+      "projects": 126
+    },
+    {
+      "name": "var",
+      "mentions": 3256,
+      "files": 397,
+      "projects": 124
+    },
+    {
+      "name": "if",
+      "mentions": 2192,
+      "files": 338,
+      "projects": 119
+    },
+    {
+      "name": "_ready",
+      "mentions": 239,
+      "files": 230,
+      "projects": 107
+    },
+    {
+      "name": "and",
+      "mentions": 600,
+      "files": 202,
+      "projects": 102
+    },
+    {
+      "name": "is",
+      "mentions": 721,
+      "files": 201,
+      "projects": 102
+    },
+    {
+      "name": "for",
+      "mentions": 623,
+      "files": 223,
+      "projects": 101
+    },
+    {
+      "name": "in",
+      "mentions": 750,
+      "files": 222,
+      "projects": 101
+    },
+    {
+      "name": "float",
+      "mentions": 568,
+      "files": 227,
+      "projects": 96
+    },
+    {
+      "name": "else",
+      "mentions": 443,
+      "files": 184,
+      "projects": 89
+    },
+    {
+      "name": "not",
+      "mentions": 559,
+      "files": 201,
+      "projects": 88
+    },
+    {
+      "name": "true",
+      "mentions": 598,
+      "files": 187,
+      "projects": 82
+    },
+    {
+      "name": "@onready",
+      "mentions": 447,
+      "files": 141,
+      "projects": 81
+    },
+    {
+      "name": "int",
+      "mentions": 409,
+      "files": 152,
+      "projects": 79
+    },
+    {
+      "name": "false",
+      "mentions": 660,
+      "files": 191,
+      "projects": 78
+    },
+    {
+      "name": "as",
+      "mentions": 356,
+      "files": 138,
+      "projects": 77
+    },
+    {
+      "name": "bool",
+      "mentions": 396,
+      "files": 173,
+      "projects": 72
+    },
+    {
+      "name": "_process",
+      "mentions": 153,
+      "files": 144,
+      "projects": 69
+    },
+    {
+      "name": "return",
+      "mentions": 657,
+      "files": 172,
+      "projects": 67
+    },
+    {
+      "name": "const",
+      "mentions": 394,
+      "files": 131,
+      "projects": 67
+    },
+    {
+      "name": "or",
+      "mentions": 224,
+      "files": 90,
+      "projects": 57
+    },
+    {
+      "name": "when",
+      "mentions": 124,
+      "files": 81,
+      "projects": 55
+    },
+    {
+      "name": "str",
+      "mentions": 186,
+      "files": 71,
+      "projects": 53
+    },
+    {
+      "name": "elif",
+      "mentions": 260,
+      "files": 93,
+      "projects": 52
+    },
+    {
+      "name": "get_tree",
+      "mentions": 168,
+      "files": 77,
+      "projects": 50
+    },
+    {
+      "name": "@export",
+      "mentions": 271,
+      "files": 118,
+      "projects": 48
+    },
+    {
+      "name": "match",
+      "mentions": 96,
+      "files": 71,
+      "projects": 40
+    },
+    {
+      "name": "preload",
+      "mentions": 138,
+      "files": 59,
+      "projects": 37
+    },
+    {
+      "name": "connect",
+      "mentions": 210,
+      "files": 79,
+      "projects": 36
+    },
+    {
+      "name": "null",
+      "mentions": 156,
+      "files": 67,
+      "projects": 36
+    },
+    {
+      "name": "_physics_process",
+      "mentions": 86,
+      "files": 68,
+      "projects": 35
+    },
+    {
+      "name": "instantiate",
+      "mentions": 50,
+      "files": 41,
+      "projects": 29
+    },
+    {
+      "name": "get_node",
+      "mentions": 118,
+      "files": 49,
+      "projects": 28
+    },
+    {
+      "name": "_input",
+      "mentions": 47,
+      "files": 45,
+      "projects": 28
+    },
+    {
+      "name": "print",
+      "mentions": 155,
+      "files": 38,
+      "projects": 27
+    },
+    {
+      "name": "signal",
+      "mentions": 99,
+      "files": 44,
+      "projects": 26
+    },
+    {
+      "name": "range",
+      "mentions": 61,
+      "files": 31,
+      "projects": 26
+    },
+    {
+      "name": "clamp",
+      "mentions": 48,
+      "files": 27,
+      "projects": 26
+    },
+    {
+      "name": "queue_free",
+      "mentions": 82,
+      "files": 53,
+      "projects": 25
+    },
+    {
+      "name": "while",
+      "mentions": 45,
+      "files": 37,
+      "projects": 25
+    },
+    {
+      "name": "_unhandled_input",
+      "mentions": 28,
+      "files": 28,
+      "projects": 25
+    },
+    {
+      "name": "class_name",
+      "mentions": 68,
+      "files": 68,
+      "projects": 24
+    },
+    {
+      "name": "load",
+      "mentions": 47,
+      "files": 31,
+      "projects": 23
+    },
+    {
+      "name": "emit",
+      "mentions": 126,
+      "files": 47,
+      "projects": 22
+    },
+    {
+      "name": "enum",
+      "mentions": 45,
+      "files": 30,
+      "projects": 21
+    },
+    {
+      "name": "@tool",
+      "mentions": 59,
+      "files": 52,
+      "projects": 18
+    },
+    {
+      "name": "deg_to_rad",
+      "mentions": 56,
+      "files": 23,
+      "projects": 17
+    },
+    {
+      "name": "pass",
+      "mentions": 27,
+      "files": 20,
+      "projects": 17
+    },
+    {
+      "name": "max",
+      "mentions": 22,
+      "files": 18,
+      "projects": 17
+    },
+    {
+      "name": "await",
+      "mentions": 171,
+      "files": 30,
+      "projects": 15
+    },
+    {
+      "name": "self",
+      "mentions": 37,
+      "files": 21,
+      "projects": 15
+    },
+    {
+      "name": "@warning_ignore",
+      "mentions": 21,
+      "files": 16,
+      "projects": 14
+    },
+    {
+      "name": "_exit_tree",
+      "mentions": 24,
+      "files": 24,
+      "projects": 13
+    },
+    {
+      "name": "@export_range",
+      "mentions": 30,
+      "files": 19,
+      "projects": 13
+    },
+    {
+      "name": "_init",
+      "mentions": 22,
+      "files": 18,
+      "projects": 13
+    },
+    {
+      "name": "TAU",
+      "mentions": 43,
+      "files": 14,
+      "projects": 13
+    },
+    {
+      "name": "randf",
+      "mentions": 21,
+      "files": 14,
+      "projects": 13
+    },
+    {
+      "name": "min",
+      "mentions": 14,
+      "files": 13,
+      "projects": 13
+    },
+    {
+      "name": "_enter_tree",
+      "mentions": 21,
+      "files": 20,
+      "projects": 12
+    },
+    {
+      "name": "floor",
+      "mentions": 37,
+      "files": 15,
+      "projects": 12
+    },
+    {
+      "name": "assert",
+      "mentions": 26,
+      "files": 15,
+      "projects": 12
+    },
+    {
+      "name": "randf_range",
+      "mentions": 25,
+      "files": 13,
+      "projects": 12
+    },
+    {
+      "name": "_draw",
+      "mentions": 26,
+      "files": 18,
+      "projects": 11
+    },
+    {
+      "name": "abs",
+      "mentions": 19,
+      "files": 13,
+      "projects": 11
+    },
+    {
+      "name": "break",
+      "mentions": 13,
+      "files": 12,
+      "projects": 11
+    },
+    {
+      "name": "class",
+      "mentions": 24,
+      "files": 17,
+      "projects": 10
+    },
+    {
+      "name": "move_toward",
+      "mentions": 18,
+      "files": 11,
+      "projects": 10
+    },
+    {
+      "name": "round",
+      "mentions": 15,
+      "files": 11,
+      "projects": 10
+    },
+    {
+      "name": "continue",
+      "mentions": 18,
+      "files": 10,
+      "projects": 7
+    },
+    {
+      "name": "static",
+      "mentions": 35,
+      "files": 9,
+      "projects": 7
+    },
+    {
+      "name": "PI",
+      "mentions": 16,
+      "files": 9,
+      "projects": 7
+    },
+    {
+      "name": "lerp",
+      "mentions": 12,
+      "files": 8,
+      "projects": 6
+    },
+    {
+      "name": "super",
+      "mentions": 25,
+      "files": 18,
+      "projects": 5
+    },
+    {
+      "name": "pow",
+      "mentions": 12,
+      "files": 6,
+      "projects": 5
+    },
+    {
+      "name": "randi_range",
+      "mentions": 6,
+      "files": 5,
+      "projects": 5
+    },
+    {
+      "name": "randi",
+      "mentions": 5,
+      "files": 5,
+      "projects": 5
+    },
+    {
+      "name": "sqrt",
+      "mentions": 5,
+      "files": 5,
+      "projects": 5
+    },
+    {
+      "name": "@rpc",
+      "mentions": 18,
+      "files": 8,
+      "projects": 4
+    },
+    {
+      "name": "is_instance_valid",
+      "mentions": 6,
+      "files": 5,
+      "projects": 4
+    },
+    {
+      "name": "INF",
+      "mentions": 9,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "@export_file",
+      "mentions": 3,
+      "files": 3,
+      "projects": 3
+    },
+    {
+      "name": "@icon",
+      "mentions": 5,
+      "files": 5,
+      "projects": 2
+    },
+    {
+      "name": "@export_enum",
+      "mentions": 5,
+      "files": 4,
+      "projects": 2
+    },
+    {
+      "name": "rad_to_deg",
+      "mentions": 4,
+      "files": 2,
+      "projects": 2
+    },
+    {
+      "name": "@export_group",
+      "mentions": 3,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "@export_category",
+      "mentions": 2,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "@export_multiline",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "len",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "ceil",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "breakpoint",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "yield",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "NAN",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "sign",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    }
+  ]
+}

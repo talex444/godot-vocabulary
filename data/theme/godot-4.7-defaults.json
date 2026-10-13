@@ -1,0 +1,38 @@
+{
+  "source": "godotengine/godot 4.7-stable, editor/settings/editor_settings.cpp (stock defaults, dark theme). Values are the engine's Color(r,g,b) converted to hex. MIT, Godot Engine contributors.",
+  "interface": {
+    "base_color": "#242424",
+    "accent_color": "#579eff",
+    "contrast": 0.3,
+    "icon_saturation": 2.0,
+    "relationship_line_opacity": 0.1,
+    "border_size": 0,
+    "corner_radius": 4,
+    "derive_like_godot": "dark_color_1/2/3 and contrast_color_1/2 and font colours are derived from base_color + contrast exactly as editor/themes/editor_theme_manager.cpp does (see data/sources/godot-4.7/engine-src/editor_theme_manager.cpp); implement the same lerps in src/theme/derive.ts and unit-test two of them."
+  },
+  "fonts": {
+    "interface": "Inter (thirdparty/fonts/Inter_Regular.woff2, Inter_Bold.woff2; SIL OFL 1.1)",
+    "code": "JetBrains Mono (thirdparty/fonts/JetBrainsMono_Regular.woff2; SIL OFL 1.1)"
+  },
+  "script_editor": {
+    "background_color": "#211f26",
+    "completion_background_color": "#2b2933",
+    "text_color": "#ababab",
+    "line_number_color": "rgba(171,171,171,0.4)",
+    "caret_color": "#ababab",
+    "selection_color": "rgba(105,156,232,0.35)",
+    "current_line_color": "rgba(77,128,204,0.15)",
+    "symbol_color": "#badeff",
+    "keyword_color": "#ffffb3",
+    "control_flow_keyword_color": "#ffd9b3",
+    "base_type_color": "#a3ffd4",
+    "engine_type_color": "#82d4ff",
+    "user_type_color": "#6babed",
+    "comment_color": "#666666",
+    "doc_comment_color": "#8099b3",
+    "string_color": "#f06ebf",
+    "number_color": "#eb9433",
+    "function_color": "#66a3cf",
+    "member_variable_color": "#e64f59"
+  }
+}
