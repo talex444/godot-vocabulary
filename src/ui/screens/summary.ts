@@ -6,6 +6,7 @@ import { button, el, heading, panel, stat } from '../kit';
 export function summaryScreen(result: SessionResult, nav: Nav): HTMLElement {
   const done = button('Done', { variant: 'primary', onClick: () => nav.start() });
   done.classList.add('gv-wide');
+  const learning = result.learned + result.continueTomorrow > 0;
   return el('div', { class: 'gv-screen' }, [
     panel(
       [
@@ -15,14 +16,10 @@ export function summaryScreen(result: SessionResult, nav: Nav): HTMLElement {
           stat('Right', result.right),
           stat('Wrong', result.wrong),
           stat('Due tomorrow', result.dueTomorrow),
+          learning ? stat('Cards learned', result.learned) : null,
+          learning ? stat('Continue tomorrow', result.continueTomorrow) : null,
         ]),
-        result.learned + result.continueTomorrow > 0
-          ? el('dl', { class: 'gv-stats gv-stats--summary' }, [
-              stat('Cards learned', result.learned),
-              stat('Continue tomorrow', result.continueTomorrow),
-            ])
-          : null,
-        result.learned + result.continueTomorrow > 0
+        learning
           ? el('p', {
               class: 'gv-note',
               text: 'A new card counts as learned after three looks with the last one right. The rest carry on at their next review.',

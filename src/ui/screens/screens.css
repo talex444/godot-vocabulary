@@ -91,6 +91,11 @@
   row-gap: 16px;
 }
 
+/* A label that wraps keeps its value level with the one beside it. */
+.gv-stats--summary .gv-stat {
+  align-content: space-between;
+}
+
 /* Card. */
 .gv-progress {
   height: 4px;
@@ -118,7 +123,6 @@
   margin: 0 0 -8px;
   color: var(--font-secondary-color);
   font-size: 1rem;
-  font-style: italic;
 }
 
 .gv-card__prompt {
@@ -128,12 +132,19 @@
 /* A flipped card asks about a name: the class icon beside it, like a row in the scene tree. */
 .gv-card__name {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   font-size: 1.25rem;
   font-weight: 700;
+}
+
+.gv-card__name > * {
+  min-width: 0;
   overflow-wrap: anywhere;
+}
+
+.gv-card__name > .gv-icon {
+  flex: none;
 }
 
 .gv-card__name .gv-inline-code {
