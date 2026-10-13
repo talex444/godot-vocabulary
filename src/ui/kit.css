@@ -204,6 +204,7 @@ body {
 
 .gv-choice__text {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   flex: 1;
   min-width: 0;
 }
@@ -247,6 +248,7 @@ body {
 /* Text field: Godot's LineEdit. */
 .gv-field {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 4px;
 }
 
@@ -430,7 +432,7 @@ body {
   background: var(--code-completion-background-color);
   color: var(--font-focus-color);
   font-family: var(--font-code);
-  font-size: 0.95em;
+  font-size: 1em;
   overflow-wrap: anywhere;
 }
 
@@ -471,7 +473,7 @@ body {
 
 .gv-code__line {
   display: grid;
-  grid-template-columns: 3ch 1fr;
+  grid-template-columns: 3ch minmax(0, 1fr);
   column-gap: 12px;
 }
 
