@@ -76,7 +76,8 @@ describe('live session flow', () => {
     await session.answer('right');
     const result = await session.finish();
     expect(result).toMatchObject({ seen: 2, right: 1, wrong: 1 });
-    expect(result.dueTomorrow).toBeGreaterThanOrEqual(1);
+    // Graded by first answers: the wrong one is due tomorrow, the right one in three days.
+    expect(result.dueTomorrow).toBe(1);
     expect(lastSession()).toBe(localDate(NOW));
   });
 

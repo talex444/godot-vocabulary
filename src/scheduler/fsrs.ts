@@ -13,8 +13,12 @@ export interface Progress extends FsrsCard {
   seenAt: Date;
 }
 
-/** Desired retention 0.9; no fuzz so tests and devices agree on the same intervals. */
-const scheduler = fsrs(generatorParameters({ request_retention: 0.9, enable_fuzz: false }));
+/**
+ * Desired retention 0.9; no fuzz so tests and devices agree on the same intervals. Short-term steps
+ * are off (decision 23): every answer schedules in days, there is no Relearning state, and the app's
+ * own first-session repeats (`src/session/learning.ts`) replace the library's same-day steps.
+ */
+const scheduler = fsrs(generatorParameters({ request_retention: 0.9, enable_fuzz: false, enable_short_term: false }));
 
 /** Progress for a card shown for the first time at `now`: an empty FSRS card, due immediately. */
 export function newProgress(cardId: string, family: Family, now: Date = new Date()): Progress {

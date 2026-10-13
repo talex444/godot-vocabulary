@@ -4,8 +4,9 @@ import { isDue, isOverdue, newProgress, review, startOfDay, State } from '../../
 const MINUTE = 60_000;
 const DAY = 24 * 60 * MINUTE;
 const t0 = new Date(2026, 9, 13, 9, 0); // 13 Oct 2026, 09:00 local
+const days = (from: Date, to: Date) => (to.getTime() - from.getTime()) / DAY;
 
-describe('FSRS adapter (done-criteria 7)', () => {
+describe('FSRS adapter (done-criteria 7, 32)', () => {
   it('starts a new card due immediately, in the New state', () => {
     const p = newProgress('gd:keyword:var', 'gdscript', t0);
     expect(p.state).toBe(State.New);
@@ -16,42 +17,38 @@ describe('FSRS adapter (done-criteria 7)', () => {
   it('pushes due later after a correct answer than after a wrong one', () => {
     const p = newProgress('a', 'gdscript', t0);
     expect(review(p, true, t0).due.getTime()).toBeGreaterThan(review(p, false, t0).due.getTime());
-    const learned = review(review(p, true, t0), true, new Date(t0.getTime() + 10 * MINUTE));
+    const learned = review(p, true, t0);
     const at = learned.due;
     expect(review(learned, true, at).due.getTime()).toBeGreaterThan(review(learned, false, at).due.getTime());
   });
 
-  it('follows the library numbers: 10-minute step, then 2 days, then 11 days', () => {
-    // ts-fsrs defaults: learning steps 1m and 10m, relearning step 10m, short-term scheduling on.
+  it('has no same-day step: a correct first answer is due at least a day later, straight into Review', () => {
+    // ts-fsrs 5.4.2 with enable_short_term: false.
     const first = review(newProgress('a', 'gdscript', t0), true, t0);
-    expect(first.state).toBe(State.Learning);
-    expect(first.due.getTime() - t0.getTime()).toBe(10 * MINUTE);
+    expect(first.state).toBe(State.Review);
+    expect(days(t0, first.due)).toBeGreaterThanOrEqual(1);
+    expect(days(t0, first.due)).toBe(FIRST_GOOD_DAYS);
 
     const second = review(first, true, first.due);
-    expect(second.state).toBe(State.Review);
-    const days = (second.due.getTime() - first.due.getTime()) / DAY;
-    expect(days).toBeGreaterThanOrEqual(1);
-    expect(days).toBeLessThanOrEqual(10);
-    expect(days).toBe(2);
-
-    const third = review(second, true, second.due);
-    expect(Math.round((third.due.getTime() - second.due.getTime()) / DAY)).toBe(11);
+    expect(days(first.due, second.due)).toBe(SECOND_GOOD_DAYS);
+    expect(days(first.due, second.due)).toBeGreaterThan(days(t0, first.due));
   });
 
-  it('sends a wrong answer after correct ones to Relearning and counts a lapse', () => {
+  it('a wrong first answer is due again within about a day', () => {
+    const wrong = review(newProgress('a', 'gdscript', t0), false, t0);
+    expect(days(t0, wrong.due)).toBeLessThan(1.5);
+    expect(days(t0, wrong.due)).toBe(FIRST_AGAIN_DAYS);
+  });
+
+  it('a wrong answer on a Review card shortens the next interval, counts a lapse, and stays in Review', () => {
     const first = review(newProgress('a', 'gdscript', t0), true, t0);
     const second = review(first, true, first.due);
     const lapsed = review(second, false, second.due);
-    expect(lapsed.state).toBe(State.Relearning);
+    expect(lapsed.state).not.toBe(State.Relearning);
     expect(lapsed.lapses).toBe(1);
-    expect(lapsed.due.getTime() - second.due.getTime()).toBe(10 * MINUTE);
+    expect(days(second.due, lapsed.due)).toBeLessThan(days(first.due, second.due));
+    expect(days(second.due, lapsed.due)).toBe(LAPSE_DAYS);
     expect(lapsed.seenAt).toEqual(t0);
-  });
-
-  it('wrong on a brand-new card asks again after one minute', () => {
-    const wrong = review(newProgress('a', 'gdscript', t0), false, t0);
-    expect(wrong.state).toBe(State.Learning);
-    expect(wrong.due.getTime() - t0.getTime()).toBe(MINUTE);
   });
 
   it('isDue compares with now; isOverdue compares with local midnight', () => {
@@ -68,3 +65,9 @@ describe('FSRS adapter (done-criteria 7)', () => {
     expect(startOfDay(new Date(2026, 9, 13, 23, 59, 59))).toEqual(new Date(2026, 9, 13));
   });
 });
+
+// The installed library's numbers, read off one run and pinned so an upgrade that changes them shows.
+const FIRST_GOOD_DAYS = 3;
+const SECOND_GOOD_DAYS = 14;
+const FIRST_AGAIN_DAYS = 1;
+const LAPSE_DAYS = 2;
