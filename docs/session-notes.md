@@ -570,3 +570,104 @@ Decisions 31–42; done-criteria 47–55. Ten commits, none pushed.
 8. **The pretest draw is random** (`Math.random`). It is not seeded per lesson, so the three distractor sets vary between visits, like the card screen.
 9. **`fetch-sources.mjs` was not run** (no network). Checked offline instead: its image rule (every `.. image::`/`.. figure::` in the introduction and step-by-step pages) names exactly the 75 files in `data/sources/godot-docs/img/`. The first-2D-game pages' pictures are not fetched, because today's hand fetch did not have them either.
 10. **`docs/decisions.md` has uncommitted CoS edits** (rows 31–43 and "Noted ideas"). I left them unstaged.
+
+## GV-6b — courses: lessons 1 to 5 and the course-end table (2026-10-13)
+
+Done-criteria 56–59. Eleven commits, none pushed.
+
+### Cards added through the generator
+- **The gap.** The pages' members had no cards. The generator takes only the first 10 methods and 8 properties of a class, in the XML's alphabetical order, and gives members only to the top 40 classes. So `get_node`… was fine (a gd card), but these had no card:
+  - `Node.set_process` and `Node.is_processing`;
+  - `Vector2.rotated`;
+  - `Input.is_action_pressed` (Input is rank 47, past the 40 member classes);
+  - `CanvasItem.visible`;
+  - `BaseButton.pressed`.
+- **Why not the suggested route.** Raising `MEMBER_CLASSES` or pinning a class would not reach them: they sit past the alphabetical caps.
+- **What I did.** `LESSON_MEMBERS` in `scripts/generate-api-cards.mjs` names the members course 1 shows in code. They are carded past the caps, and for classes past the 40, under the same rules (b)–(d).
+- **The result:** 855 → **861 cards** (+6 member cards). `data/removed-cards.json` is **unchanged**, and every deck test passes.
+- **`Sprite2D.texture`** was on the list at first. Rule (d) dropped it ("Texture2D object to draw.", four words), so I took it off. `texture` stays a lower-case name with no card, which the check passes.
+- **Constants have no cards.** The generator has no constant kind, so `Vector2.UP` and `Vector2.ZERO` have none. The check passes them because ALL_CAPS is not a class name. I report this rather than adding a card kind. `PI` has its gd card.
+
+### Per lesson
+| Lesson | Explanation words (per chunk) | Cards | Pretest (3 best ranks) | Pictures | Sorva rows |
+|---|---|---|---|---|---|
+| 1 Nodes and Scenes | 607 (102+185+137+95+88) | 8: `Node2D`, `Control`, `Label`, gd node, scene, root node, main scene, `res://` | `Node2D`, `Control`, `Label` | `nodes_and_scenes_nodes`, `3d_scene_example`, `02_scene_dock`, `06_label_text`, `12_play_button`, `11_final_result` (compare) + Player drawing | 6 |
+| 2 Creating instances | 594 (126+114+109+132+113) | 5: `RigidBody2D`, `PackedScene.instantiate`, gd instance, gd instantiate, `PhysicsMaterial` | `RigidBody2D`, `PackedScene.instantiate`, gd instance | `ball_scene`, `ball_instances_example`, `scene_link_button`, `property_revert_icon`, `diagram_shooter.png`, `main_scene_with_balls` (compare) + Ball drawing | 70, 79 |
+| 3 Your first script | 636 (119+97+180+102+138) | 15: extends, func, var, print, `_init`, `_process` (gd and `Node._process`), delta, PI, `+=`, `Node2D.rotation`, `Node2D.position`, `Vector2`, `Vector2.rotated`, `CanvasItem` | extends, func, var | `attach_node_script`, `print_hello_world`, the two GIFs | 41, 15 |
+| 4 Player input | 556 (108+94+114+100+140) | 5: `Input`, `Input.is_action_pressed`, if, true, `_unhandled_input` | if, true, `Input` | `moving_with_input.gif` (the page's only picture) | 3, 10 |
+| 5 Using signals | 718 (162+114+96+189+157) | 19: `Area2D`, `Area2D.body_entered`, `_ready` (gd and `Node._ready`), `Timer`, `Timer.timeout`, `Timer.autostart`, `Button`, `BaseButton.pressed`, `Node.set_process`, `Node.is_processing`, `CanvasItem.visible`, not, false, signal, connect, emit, get_node, pass | `Area2D`, `Area2D.body_entered`, `_ready` | `12_node_connection`, `13_signals_connection_icon`, `15_scene_tree`, `17_custom_signal` + the Node2D/Sprite2D/Button drawing | 42, 136 |
+
+- **Exercises.** Every lesson follows the same order:
+  - two items on today's idea (a predict, then a typed blank);
+  - the confusable:
+    - lesson 1: `Node2D` / `Control` / `Node3D`;
+    - lesson 2: `RigidBody2D` / `CharacterBody2D`;
+    - lesson 3: `_init` / `_process`, a code fix;
+    - lesson 4: the `Input` singleton / `_unhandled_input`;
+    - lesson 5: the `pressed` signal / the `Button` node, plus `emit` / `connect` as a code fix;
+  - two predicts that reuse an earlier lesson.
+- **Typed blanks.** Lessons 1 and 2 have the blank in a quoted sentence (`Label`, `PackedScene`). Lessons 3–5 have it inside code (`rotation`, `is_action_pressed`, `connect`).
+- **Errors from the pages.**
+  - Lesson 1: the main scene vs current scene note, and the Save Scene As note.
+  - Lesson 2: the PhysicsMaterial "Make Unique" note.
+  - Lesson 3: the "Indented block expected" note.
+  - Lesson 4: the comment-out step ("This will ignore the code that moved…"). It is the page's own sentence, though not a boxed note.
+  - Lesson 5: the external-editor note.
+- **Sorva rows not used:** 91, 7, 1 and 137. Row 132 ("a method only once") is lesson 5's third chunk check rather than an error.
+- **The course-end table** sits in lesson 5's `table` field.
+  - Rows `Node2D`, `Control`, `Node3D`; columns "draws on screen", "has a position", "lives in which tree".
+  - Cells come from the class reference: CanvasItem's "Any CanvasItem can draw.", the Node2D and Control briefs, and Node3D's "Base object in 3D space" with VisualInstance3D's "Parent of all visual 3D nodes."
+  - "Lives in which tree" is the same scene tree for all three. The 2D canvas or 3D world is the difference, which is the lesson 0 idea the table checks.
+
+### The reveal table
+- **State:** `src/courses/reveal.ts` (pure): `coveredTable`, `reveal`, `isShown`, `shownCount`, `allShown`. A tap outside the table, or on a cell already shown, leaves the state as it was.
+- **View:** `src/ui/screens/reveal-table.ts`. There is one Inspector-like block per class: the editor icon and the name in code font. Each cell is a secondary Godot button, the column question plus "Tap to reveal".
+  - Each cell is a disclosure: `aria-expanded`, `aria-controls`, and a visually hidden "(Node3D)" in its name. When opened, the answer shows under it with an accent edge, like a docs quote.
+  - A status line counts "n of 9 cells shown."
+  - It is a list of blocks, not a `<table>`. Three text columns cannot fit 320 px without sideways scroll.
+- **Where it shows:**
+  - in lesson 5's exit step, after the ticket and before Mark done, under "Course 1 in one table";
+  - on the course list once lesson 5 is done. The cells start covered again there: the reveal state is never stored.
+
+### Other changes
+- **Code fix rows** (`.gv-choice--code`) keep their tab indent (`white-space: pre-wrap; tab-size: 4`). Without it, the body line of a fix looked like it sat at the function's level.
+- **`gif` joined the precache globs**, so lesson 3's two animations and lesson 4's work offline. The precache is now 749 entries, 2.87 MB.
+
+### Tests, screenshots and reports
+- **Unit** (141, 18 files):
+  - six written lessons, in page order;
+  - lessons 1–5 each have the three exercise types and sourced errors (`Godot manual, …` or `Sorva 2012, Table A.1, row n`);
+  - lesson 3 has a blank in code and a code fix;
+  - every picture's pixel size, read with sharp, matches the lesson;
+  - the table's content, and the reveal state.
+  - The existing word-budget and term-check tests now cover all six lessons.
+- **e2e** (31 tests, about 18 s):
+  - "47" now checks six written lessons and no table yet;
+  - "56" is lesson 3: chunk 0's code and its check; the blank in code with `Rotation` (case hint), then `rotation`; the code fix (line 3) and its fixed line; Mark done;
+  - "57" is lesson 5: the table sits between the ticket and Mark done; nine covered cells; "has a position (Node3D)" opens; the status reads "1 of 9"; after Mark done the list shows the table, covered.
+  - `axe.spec.ts` also audits "lesson with code" and "lesson with the course table". That makes 12 findings; the 2 new ones are the same Mark done blue. `docs/contrast-report.md` is unchanged.
+- **Screenshots:** new `lesson-code.png` (lesson 3's "Every frame" code and its answered check), `lesson-blank-code.png` (`Rotation` with the case hint, the code fix under it) and `course-table.png` (Control covered, Node3D with two cells shown). All the others were retaken.
+  - Compared with `docs/ui-reference/from-godot-docs/editor_ui_script_editor_coding_area.webp`, the code colours match.
+  - The first take showed two faults, now fixed: the table heads fell back to the browser's monospace, and a wrapped "Tap to reveal" jumped to the left.
+- **Preview server:** started once as `node node_modules/vite/bin/vite.js preview --port 4173 --strictPort` for the screenshots and stopped. The next `pnpm e2e` started its own on the same port.
+
+### Gates
+`pnpm typecheck`, `pnpm test` (141), `pnpm build` (term check included), `pnpm lint:css` and `pnpm e2e` (31/31) are green on the final tree.
+
+### Deviations and why
+1. **`LESSON_MEMBERS` instead of pinning classes or raising `MEMBER_CLASSES`.** Neither of those reaches a member past the alphabetical caps (see above).
+2. **The pretest picks by raw `rank` across families.** GDScript and API ranks are separate scales, so lesson 3's pretest is extends, func, var, and lesson 4's is if, true, `Input`.
+   - To keep `Input` in lesson 4's pretest, `false` is not one of lesson 4's cards. The manual's sentence is quoted up to "returns `true` if the action is pressed …" with an ellipsis, and `false` arrives with lesson 5.
+   - A fix to rank within the API family first (or per-lesson pretest ids) is the CoS's call.
+3. **The manual's "built-in ``Vector`` type"** (a slip on the player-input page; there is no `Vector` class) is quoted in plain text. In code font the term check would fail it as an uncarded class.
+4. **Pictures with the Godot logo.**
+   - Used: the three GIFs, which show the Godot icon, under the CoS's allowance.
+   - Not used: `signals_09_scene_setup`, which shows the logo large. Lesson 5 uses a scene drawing and `signals_15_scene_tree` instead.
+   - `icon.svg` is never copied.
+5. **e2e between commits.** The lesson commits ran typecheck, the unit tests and the term check. `pnpm e2e` was red on "47" (it expected planned rows) from the lesson 1 commit until the e2e commit, and green from there on.
+6. **Ellipses inside quotes:**
+   - lesson 1: "The Godot editor essentially is a scene editor. … A Godot project can contain…";
+   - lesson 2: "a `RigidBody2D` node … which allows…", in a check;
+   - lesson 4: the cut above.
+   These select from the page; they do not paraphrase it.
+7. **The Node2D "draws on screen" cell says "It can"**, not "Yes". A bare `Node2D` draws nothing until it has something to draw. The class reference's sentence is "Any CanvasItem can draw."

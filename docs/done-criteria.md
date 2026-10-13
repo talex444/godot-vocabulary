@@ -78,3 +78,25 @@ Each line is checked twice: by the Chief of Staff driving the built app in a pho
 53. Lesson format and term check: `src/data/courses/*.json` match the typed format (`src/courses/types.ts`); `pnpm build` runs `scripts/check-lessons.mjs`, which fails naming the lesson and the token when a lesson shows in code font an identifier that is not one of its own or an earlier lesson's cards. Explanation chunks total 400–1,000 words. **Done:** unit "course files", "term check (decision 34)" in `tests/unit/courses.test.ts`.
 54. Lesson 0 is written from "Overview of Godot's key concepts" in the manual's own words, with no code, the page's own pictures, a scene-tree drawing built one node at a time from the editor icons, and errors only from the page's notes and Sorva's table. **Done:** unit "lesson 0 has no code, a drawing, every exercise type…"; e2e "49–53" (drawing).
 55. The course list and the lesson page pass the accessibility bar: axe (contrast reported), 44×44 targets, 16 px text, reflow at 320 px, 200% text, landscape, keyboard order and visible, unobscured focus. **Done:** `axe.spec.ts`, `layout.spec.ts`, `keyboard.spec.ts` now walk both screens.
+
+## v1.2 — courses: lessons 1 to 5 and the course-end table (decisions 34, 35, 41, 42, GV-6b)
+56. Lessons 1–5 are written, one per manual page, in the page's order: Nodes and Scenes, Creating instances, Creating your first script, Listening to player input, Using signals. Each one meets these rules:
+    - It quotes the page's own sentences.
+    - It has 400–1,000 words of explanation, one check per chunk, and the page's own pictures at their stated pixel size.
+    - It has at least three cards, at least one predict, one typed blank and one fix.
+    - It has two or three errors, taken only from the page's notes and Sorva's Table A.1.
+    - The term check passes on all six lessons.
+
+    **Done (GV-6b):**
+    - unit, in `tests/unit/courses.test.ts`: "course 1 lists six lessons in order, all written…", "lessons 1–5 each have a predict, a typed blank, a fix…", "every picture exists… at the size the lesson states", "every written lesson keeps its explanation between 400 and 1,000 words", and "passes every course on disk";
+    - e2e "47: the course list shows course 1 with six written lessons".
+57. Lesson 3, the first lesson with code, works end to end on the phone: a chunk's code block and its check, a typed blank inside a code line (a case-only miss, then the right word), a minimal fix in code lines, and Mark done. **Done:** e2e "56: lesson 3, the first with code…"; axe "lesson with code".
+58. The course-end table (decision 41) shows on lesson 5's page, after the exit ticket and before Mark done. Once lesson 5 is done, it also shows on the course list.
+    - Content: `Node2D`, `Control` and `Node3D` against "draws on screen", "has a position" and "lives in which tree", with cells from the class reference.
+    - Behaviour: every cell starts covered, and a tap uncovers that one cell for good. Nothing is typed or stored.
+
+    **Done:**
+    - unit "course-end table (decision 41)" ×2 (content, reveal state);
+    - e2e "57: lesson 5 ends with the course table…";
+    - axe "lesson with the course table".
+59. Every member card a course-1 lesson shows in code has a card, made by the generator (`LESSON_MEMBERS` in `scripts/generate-api-cards.mjs`): `Node.set_process`, `Node.is_processing`, `Vector2.rotated`, `Input.is_action_pressed`, `CanvasItem.visible`, `BaseButton.pressed`. **Done:** `pnpm lint:lessons`; the deck tests still pass (855 → 861 cards; `data/removed-cards.json` unchanged).

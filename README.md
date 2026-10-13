@@ -57,7 +57,16 @@ pnpm generate        # writes src/data/cards.*.json; running it twice gives the 
 
 ## Courses
 
-On the Start screen, tap **Courses**. Course 1 follows the Godot manual's step-by-step pages, one lesson per page. Lesson 0, "What is a Godot game made of when it runs?", is written from the manual's "Overview of Godot's key concepts"; lessons 1 to 5 come in a later version. A lesson is one scrolling page: three of its cards as a pretest, then short explanations in the manual's own words with its pictures, a check after each, a comparison, exercises (four-choice, type the missing word, find the wrong line), the common mistakes with their fixes, and an optional exit ticket you write in your own words. Nothing in a lesson is scored. **Mark done** puts the lesson's cards first among your next new cards; Settings shows this as **Lesson cards first**, which turns on by itself with your first finished lesson.
+On the Start screen, tap **Courses**. Course 1 is six lessons, one per page of the Godot manual, in the manual's order:
+
+0. "What is a Godot game made of when it runs?" (Overview of Godot's key concepts)
+1. "What is a scene made of, and how do you run one?" (Nodes and Scenes)
+2. "How can one scene appear many times in a game?" (Creating instances)
+3. "How does a script make a node move?" (Creating your first script)
+4. "How does a script know which key the player is pressing?" (Listening to player input)
+5. "How does one node make code run in another?" (Using signals)
+
+Lessons 3 to 5 show GDScript from the manual, and some of their exercises put the blank or the wrong line inside the code. The app never runs code. The course ends with a table, `Node2D`, `Control` and `Node3D` against three questions, with every cell covered: guess, then tap to reveal. It stays on the course list once lesson 5 is done. A lesson is one scrolling page: three of its cards as a pretest, then short explanations in the manual's own words with its pictures, a check after each, a comparison, exercises (four-choice, type the missing word, find the wrong line), the common mistakes with their fixes, and an optional exit ticket you write in your own words. Nothing in a lesson is scored. **Mark done** puts the lesson's cards first among your next new cards; Settings shows this as **Lesson cards first**, which turns on by itself with your first finished lesson.
 
 ## Add your own cards
 
