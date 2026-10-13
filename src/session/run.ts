@@ -1,7 +1,9 @@
 import { FAMILIES, type Card, type Family } from '../cards/types';
 import { isOverdue, newProgress, review, startOfDay, type Progress } from '../scheduler/fsrs';
 import type { Settings } from '../settings/load';
-import { buildSession, seededRng, type FamilySummary, type Rng } from './build';
+import { planSession, seededRng, type FamilySummary, type Lesson, type Rng } from './build';
+import { drawChoices, type Draw } from './choices';
+import { answerCurrent, appendCards, currentCard, dropCard, showingIndex, startLearning, type LearningState } from './learning';
 
 /** What the flow needs from the device; `src/session/deck.ts` wires the real store. */
 export interface RunDeps {
@@ -11,12 +13,21 @@ export interface RunDeps {
   saveProgress(progress: Progress): Promise<void>;
   setLastSessionDate(date: string): Promise<void>;
   now(): Date;
+  /** Skipped card ids (decision 26); none when omitted. */
+  getSkipped?(): Promise<Set<string>>;
+  skipCard?(cardId: string, reason?: string): Promise<void>;
+  /** Finished lesson ids (decision 30); none when omitted. */
+  getLessonsDone?(): Promise<string[]>;
 }
 
 export interface Loaded {
   cards: Card[];
   progress: Map<string, Progress>;
   settings: Settings;
+  skipped?: Set<string>;
+  lessonsDone?: string[];
+  /** Course lessons; empty until courses exist. */
+  lessons?: Lesson[];
 }
 
 export interface SessionResult {
@@ -26,9 +37,6 @@ export interface SessionResult {
   /** Cards from enabled families due before the end of tomorrow. */
   dueTomorrow: number;
 }
-
-/** A re-asked card goes back at least this many places later in the queue. */
-export const REASK_GAP = 3;
 
 function addDays(day: Date, days: number): Date {
   return new Date(day.getFullYear(), day.getMonth(), day.getDate() + days);
@@ -41,8 +49,14 @@ export function localDate(now: Date): string {
 }
 
 export async function load(deps: RunDeps): Promise<Loaded> {
-  const [cards, progress, settings] = await Promise.all([deps.loadCards(), deps.getProgress(), deps.getSettings()]);
-  return { cards, progress, settings };
+  const [cards, progress, settings, skipped, lessonsDone] = await Promise.all([
+    deps.loadCards(),
+    deps.getProgress(),
+    deps.getSettings(),
+    deps.getSkipped?.() ?? new Set<string>(),
+    deps.getLessonsDone?.() ?? [],
+  ]);
+  return { cards, progress, settings, skipped, lessonsDone, lessons: [] };
 }
 
 /** Why Start cannot begin, in plain words; `undefined` when there is something to do. */
@@ -52,7 +66,7 @@ export function startBlockedReason(summary: Record<Family, FamilySummary>, loade
   const due = enabled.reduce((n, f) => n + summary[f].due, 0);
   const fresh = enabled.reduce((n, f) => n + summary[f].newAvailable, 0);
   if (due + fresh > 0) return undefined;
-  const unseen = loaded.cards.some((c) => summary[c.family].enabled && !loaded.progress.has(c.id));
+  const unseen = loaded.cards.some((c) => summary[c.family].enabled && !loaded.progress.has(c.id) && !loaded.skipped?.has(c.id));
   return unseen
     ? 'Nothing is due, and today’s new cards are done. Come back tomorrow.'
     : 'Nothing is due, and you have seen every card in the enabled families.';
@@ -68,13 +82,15 @@ export function overdueNote(summary: Record<Family, FamilySummary>): string | un
 /**
  * One live session. Reviews come first: while any enabled card is overdue the builder yields reviews
  * only, and once the last overdue card is answered the builder runs again and its new cards are
- * appended. Every answer is saved at once. A card whose next due time falls before local midnight
- * goes back into the queue (the short-term FSRS steps, session-notes GV-2a deviation 1).
+ * appended. Every answer is saved at once. New cards get first-session learning repeats
+ * (`learning.ts`); only a card's first answer of the session reaches FSRS.
  */
 export class Session {
-  private readonly queue: string[];
+  private learning: LearningState;
   private readonly byId: Map<string, Card>;
-  private readonly firstResult = new Map<string, boolean>();
+  /** Choice sets already shown per card, so no set of four repeats (`choices.ts`). */
+  private readonly shownSets = new Map<string, string[]>();
+  private drawn: { cardId: string; showing: number; draw: Draw } | undefined;
   private answers = 0;
   private waitingOnOverdue: boolean;
   private finished = false;
@@ -87,7 +103,7 @@ export class Session {
     this.byId = new Map(loaded.cards.map((c) => [c.id, c]));
     const now = deps.now();
     this.waitingOnOverdue = this.hasOverdue(now);
-    this.queue = buildSession({ ...loaded, now }, rng);
+    this.learning = startLearning(planSession({ ...loaded, now }, rng));
   }
 
   static async start(deps: RunDeps, loaded?: Loaded, rng: Rng = seededRng(Date.now())): Promise<Session> {
@@ -95,42 +111,73 @@ export class Session {
   }
 
   get current(): Card | undefined {
-    const id = this.queue[0];
+    const id = currentCard(this.learning);
     return id === undefined ? undefined : this.byId.get(id);
   }
 
-  /** Answers given so far (re-asks included). */
+  /** Times the current card was already shown this session (0 = first showing). */
+  get showing(): number {
+    return showingIndex(this.learning);
+  }
+
+  /** Answers given so far (repeats included). */
   get done(): number {
     return this.answers;
   }
 
   get total(): number {
-    return this.answers + this.queue.length;
+    return this.answers + this.learning.queue.length;
   }
 
-  /** Records the answer to the current card and saves its progress before returning. */
+  /** The four choices for the current showing; the same object until the card is answered. */
+  draw(): Draw | undefined {
+    const card = this.current;
+    if (!card) return undefined;
+    if (this.drawn?.cardId !== card.id || this.drawn.showing !== this.showing) {
+      const draw = drawChoices(card, this.showing, this.rng, this.shownSets.get(card.id) ?? [], this.byId);
+      this.shownSets.set(card.id, [...(this.shownSets.get(card.id) ?? []), draw.key]);
+      this.drawn = { cardId: card.id, showing: this.showing, draw };
+    }
+    return this.drawn.draw;
+  }
+
+  /**
+   * Records the answer to the current card. The first answer of the session is graded and saved
+   * before this returns; repeats only move the learning queue. `choice` is the tapped choice's text
+   * (a description when the showing is flipped).
+   */
   async answer(choice: string): Promise<{ correct: boolean; card: Card }> {
     const card = this.current;
     if (!card) throw new Error('No card to answer.');
     const now = this.deps.now();
-    const correct = choice === card.answer;
-    const before = this.loaded.progress.get(card.id) ?? newProgress(card.id, card.family, now);
-    const after = review(before, correct, now);
-    this.loaded.progress.set(card.id, after);
-    await this.deps.saveProgress(after);
-
-    this.queue.shift();
+    const drawn = this.drawn?.cardId === card.id && this.drawn.showing === this.showing ? this.drawn.draw : undefined;
+    const correct = drawn ? drawn.choices.some((c) => c.correct && c.text === choice) : choice === card.answer;
+    const { state, grade } = answerCurrent(this.learning, correct);
+    this.learning = state;
+    this.drawn = undefined;
     this.answers++;
-    if (!this.firstResult.has(card.id)) this.firstResult.set(card.id, correct);
-    if (after.due.getTime() < addDays(startOfDay(now), 1).getTime()) {
-      this.queue.splice(Math.min(REASK_GAP, this.queue.length), 0, card.id);
+    if (grade !== undefined) {
+      const before = this.loaded.progress.get(card.id) ?? newProgress(card.id, card.family, now);
+      const after = review(before, grade, now);
+      this.loaded.progress.set(card.id, after);
+      await this.deps.saveProgress(after);
     }
     if (this.waitingOnOverdue && !this.hasOverdue(now)) {
       this.waitingOnOverdue = false;
-      const queued = new Set(this.queue);
-      for (const id of buildSession({ ...this.loaded, now }, this.rng)) if (!queued.has(id)) this.queue.push(id);
+      const plan = planSession({ ...this.loaded, now }, this.rng);
+      this.learning = appendCards(this.learning, plan.order, plan.newIds);
     }
     return { correct, card };
+  }
+
+  /** Skips the current card: it leaves this session and, through the store, the deck. */
+  async skip(reason?: string): Promise<void> {
+    const card = this.current;
+    if (!card) return;
+    this.loaded.skipped = new Set([...(this.loaded.skipped ?? []), card.id]);
+    this.learning = dropCard(this.learning, card.id);
+    this.drawn = undefined;
+    await this.deps.skipCard?.(card.id, reason);
   }
 
   /** Ends the session (also when the learner stops early) and reports it. */
@@ -140,11 +187,12 @@ export class Session {
       this.finished = true;
       await this.deps.setLastSessionDate(localDate(now));
     }
-    const results = [...this.firstResult.values()];
+    const results = [...this.learning.first.values()];
     const endOfTomorrow = addDays(startOfDay(now), 2).getTime();
     let dueTomorrow = 0;
     for (const p of this.loaded.progress.values()) {
-      if (this.loaded.settings.families[p.family]?.enabled && p.due.getTime() < endOfTomorrow) dueTomorrow++;
+      const counted = this.loaded.settings.families[p.family]?.enabled && !this.loaded.skipped?.has(p.cardId);
+      if (counted && p.due.getTime() < endOfTomorrow) dueTomorrow++;
     }
     return {
       seen: results.length,
@@ -157,7 +205,8 @@ export class Session {
   private hasOverdue(now: Date): boolean {
     const today = startOfDay(now);
     for (const p of this.loaded.progress.values()) {
-      if (this.loaded.settings.families[p.family]?.enabled && this.byId.has(p.cardId) && isOverdue(p, today)) return true;
+      const counted = this.loaded.settings.families[p.family]?.enabled && this.byId.has(p.cardId) && !this.loaded.skipped?.has(p.cardId);
+      if (counted && isOverdue(p, today)) return true;
     }
     return false;
   }

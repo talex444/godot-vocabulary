@@ -4,7 +4,16 @@ import api from '../../src/data/cards.godot-api.json';
 import gdscript from '../../src/data/cards.gdscript.json';
 import github from '../../src/data/cards.github.json';
 import { newProgress, review, type Progress } from '../../src/scheduler/fsrs';
-import { buildSession, interleave, runLimit, seededRng, sessionSummary, type SessionInput } from '../../src/session/build';
+import {
+  buildSession,
+  interleave,
+  planSession,
+  runLimit,
+  seededRng,
+  sessionSummary,
+  type Lesson,
+  type SessionInput,
+} from '../../src/session/build';
 import { DEFAULT_SETTINGS, type Settings } from '../../src/settings/load';
 
 const DAY = 24 * 60 * 60_000;
@@ -188,6 +197,43 @@ describe('interleaving (done-criteria 9)', () => {
     const items = deck.slice(0, 50);
     const out = interleave(items, seededRng(3));
     expect([...out].sort((a, b) => a.id.localeCompare(b.id))).toEqual([...items].sort((a, b) => a.id.localeCompare(b.id)));
+  });
+});
+
+describe('plan, course mode and skips (done-criteria 33, 37, 39)', () => {
+  it('marks the new cards in the plan, not the reviews', () => {
+    const progress = [seen('github:0', 'github', yesterday, new Date(2026, 9, 13, 8, 0))];
+    const plan = planSession(input(progress), seededRng(1));
+    expect(plan.order).toHaveLength(21);
+    expect(plan.newIds).toHaveLength(20);
+    expect(plan.newIds).not.toContain('github:0');
+  });
+
+  it('in course mode puts the unseen cards of finished lessons first, then frequency order', () => {
+    const s = settings((x) => (x.newCardMode = 'course'));
+    const lessons: Lesson[] = [
+      { id: 'l1', title: 'One', topic: 'Signals', cardIds: ['godot-api:20', 'godot-api:25', 'gdscript:9'] },
+      { id: 'l2', title: 'Two', topic: 'UI', cardIds: ['godot-api:28'] },
+    ];
+    const progress = [seen('godot-api:25', 'godot-api', yesterday, new Date(now.getTime() + DAY))];
+    const plan = planSession({ ...input(progress, s), lessons, lessonsDone: ['l1'] }, seededRng(1));
+    const api = plan.newIds.filter((id) => familyOf(id) === 'godot-api');
+    expect(api).toEqual(['godot-api:20', ...Array.from({ length: 9 }, (_, i) => `godot-api:${i}`)]);
+    expect(plan.newIds.filter((id) => familyOf(id) === 'gdscript')[0]).toBe('gdscript:9');
+    expect(plan.newIds).not.toContain('godot-api:28'); // lesson l2 is not done
+    // Frequency mode ignores the lessons.
+    const frequency = planSession({ ...input(progress), lessons, lessonsDone: ['l1'] }, seededRng(1));
+    expect(frequency.newIds).not.toContain('godot-api:20');
+  });
+
+  it('leaves skipped cards out of reviews, new cards and the overdue gate', () => {
+    const overdue = [seen('gdscript:0', 'gdscript', yesterday, new Date(2026, 9, 12, 23, 0))];
+    const skipped = new Set(['gdscript:0', 'godot-api:0', 'github:3']);
+    const plan = planSession({ ...input(overdue), skipped }, seededRng(1));
+    expect(plan.order).toHaveLength(20);
+    for (const id of skipped) expect(plan.order).not.toContain(id);
+    expect(plan.order).toContain('godot-api:10');
+    expect(sessionSummary({ ...input(overdue), skipped }).gdscript.overdue).toBe(0);
   });
 });
 

@@ -17,12 +17,32 @@ export function seededRng(seed: number): Rng {
   };
 }
 
+/** A course lesson (decision 29); none exist yet, the builder only needs which cards it teaches. */
+export interface Lesson {
+  id: string;
+  title: string;
+  topic: string;
+  cardIds: readonly string[];
+}
+
 export interface SessionInput {
   /** Every card: the three generated families plus the learner's custom cards. */
   cards: readonly Card[];
   progress: ReadonlyMap<string, Progress>;
   settings: Settings;
   now: Date;
+  /** Cards the learner skipped (decision 26): never asked, never counted. */
+  skipped?: ReadonlySet<string>;
+  /** Ids of finished lessons; in course mode their unseen cards come first. */
+  lessonsDone?: readonly string[];
+  lessons?: readonly Lesson[];
+}
+
+/** One session: the first showing of every card in order, and which of them are new today. */
+export interface SessionPlan {
+  order: string[];
+  /** New cards get first-session learning repeats (`src/session/learning.ts`); reviews are asked once. */
+  newIds: string[];
 }
 
 export interface FamilySummary {
@@ -41,9 +61,10 @@ interface Plan {
   overdue: Card[];
 }
 
-function plan({ cards, progress, settings, now }: SessionInput): Plan {
+function plan({ cards, progress, settings, now, skipped, lessonsDone = [], lessons = [] }: SessionInput): Plan {
   const today = startOfDay(now);
-  const enabled = cards.filter((c) => settings.families[c.family]?.enabled);
+  const enabled = cards.filter((c) => settings.families[c.family]?.enabled && !skipped?.has(c.id));
+  const first = settings.newCardMode === 'course' ? courseFirst(lessonsDone, lessons) : new Map<string, number>();
   const reviews: Card[] = [];
   const overdue: Card[] = [];
   for (const card of enabled) {
@@ -53,17 +74,32 @@ function plan({ cards, progress, settings, now }: SessionInput): Plan {
     if (isOverdue(p, today)) overdue.push(card);
   }
   // Overdue reviews come first: no new cards until they are cleared (decision 21).
-  const fresh = overdue.length > 0 ? [] : FAMILIES.flatMap((family) => newCards(family, enabled, progress, settings, today));
+  const fresh = overdue.length > 0 ? [] : FAMILIES.flatMap((family) => newCards(family, enabled, progress, settings, today, first));
   return { reviews, fresh, overdue };
 }
 
-/** The first unseen cards of one family by rank, within what is left of today's budget. */
+/** Course mode: card id → its place among the finished lessons' cards (lesson order, then card order). */
+function courseFirst(lessonsDone: readonly string[], lessons: readonly Lesson[]): Map<string, number> {
+  const done = new Set(lessonsDone);
+  const out = new Map<string, number>();
+  for (const lesson of lessons) {
+    if (!done.has(lesson.id)) continue;
+    for (const id of lesson.cardIds) if (!out.has(id)) out.set(id, out.size);
+  }
+  return out;
+}
+
+/**
+ * The first unseen cards of one family within what is left of today's budget: cards of finished
+ * lessons first (course mode; `first` is empty otherwise), then by rank.
+ */
 function newCards(
   family: Family,
   cards: readonly Card[],
   progress: ReadonlyMap<string, Progress>,
   settings: Settings,
   today: Date,
+  first: ReadonlyMap<string, number>,
 ): Card[] {
   const budget = settings.families[family];
   if (!budget?.enabled) return [];
@@ -75,14 +111,24 @@ function newCards(
     .filter((c) => c.family === family && !progress.has(c.id))
     // A member card waits until its class card has been seen in an earlier session.
     .filter((c) => !c.requires || progress.has(c.requires))
-    .sort((a, b) => a.rank - b.rank || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+    .sort(
+      (a, b) =>
+        (first.get(a.id) ?? Infinity) - (first.get(b.id) ?? Infinity) ||
+        a.rank - b.rank ||
+        (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+    )
     .slice(0, left);
 }
 
 /** Today's session: due reviews and new cards from every enabled family, shuffled together. */
-export function buildSession(input: SessionInput, rng: Rng): string[] {
+export function planSession(input: SessionInput, rng: Rng): SessionPlan {
   const { reviews, fresh } = plan(input);
-  return interleave([...reviews, ...fresh], rng).map((c) => c.id);
+  return { order: interleave([...reviews, ...fresh], rng).map((c) => c.id), newIds: fresh.map((c) => c.id) };
+}
+
+/** The plan's order alone (first showings only). */
+export function buildSession(input: SessionInput, rng: Rng): string[] {
+  return planSession(input, rng).order;
 }
 
 /** Counts per family for the start screen. */

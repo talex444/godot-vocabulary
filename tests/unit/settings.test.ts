@@ -16,6 +16,7 @@ function settings(api: number, gd: number, gh: number, enabled = [true, true, tr
       github: { enabled: enabled[2]!, newPerDay: gh },
     },
     retention: 0.9,
+    newCardMode: 'frequency',
   };
 }
 

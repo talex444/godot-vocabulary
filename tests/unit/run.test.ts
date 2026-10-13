@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import type { Card, Family } from '../../src/cards/types';
 import { newProgress, type Progress } from '../../src/scheduler/fsrs';
 import { seededRng } from '../../src/session/build';
-import { REASK_GAP, Session, localDate, type RunDeps } from '../../src/session/run';
+import { GAP } from '../../src/session/learning';
+import { Session, localDate, type RunDeps } from '../../src/session/run';
 import { withDefaults } from '../../src/settings/load';
 
 const NOW = new Date(2026, 9, 13, 12, 0, 0);
@@ -43,7 +44,7 @@ function fakeDeps(cards: Card[], progress: Progress[] = []) {
 const deck = (['godot-api', 'gdscript', 'github'] as Family[]).flatMap((f) => [0, 1, 2, 3, 4].map((i) => card(f, i)));
 
 describe('live session flow', () => {
-  it('saves every answer at once and re-asks a card due again today', async () => {
+  it('saves the first answer at once, repeats a new card GAP places on, and never saves a repeat', async () => {
     const { deps, saved } = fakeDeps(deck);
     const session = await Session.start(deps, undefined, seededRng(1));
     expect(session.total).toBe(9);
@@ -51,27 +52,58 @@ describe('live session flow', () => {
     await session.answer('right');
     expect(saved).toHaveLength(1);
     expect(saved[0]!.cardId).toBe(first.id);
-    // Correct on a new card → Learning, due in 10 minutes → back in the queue, REASK_GAP places on.
-    expect(saved[0]!.due.getTime()).toBeLessThan(new Date(2026, 9, 14).getTime());
+    // A new card comes back for its second showing, after the eight other cards (GAP = 8).
     expect(session.total).toBe(10);
     const order: string[] = [];
-    for (let i = 0; i <= REASK_GAP; i++) {
-      order.push(session.current!.id);
-      await session.answer('w1');
+    while (session.current && session.current.id !== first.id) {
+      order.push(session.current.id);
+      await session.answer('right');
     }
-    expect(order.indexOf(first.id)).toBe(REASK_GAP);
+    expect(order).toHaveLength(GAP);
+    const savesBefore = saved.length;
+    expect(session.showing).toBe(1);
+    await session.answer('w1');
+    expect(saved).toHaveLength(savesBefore);
   });
 
-  it('counts a re-asked card once and records the session date', async () => {
-    const { deps, lastSession } = fakeDeps([card('github', 0)]);
+  it('counts a repeated card once by its first answer and records the session date', async () => {
+    const { deps, lastSession } = fakeDeps([card('github', 0), card('github', 1)]);
     const session = await Session.start(deps, undefined, seededRng(2));
-    await session.answer('w1'); // wrong → due in a minute → asked again
-    expect(session.current?.id).toBe('github:0');
+    const firstId = session.current!.id;
+    await session.answer('w1');
+    await session.answer('right');
+    expect(session.current?.id).toBe(firstId); // the other card sat between: never adjacent
     await session.answer('right');
     const result = await session.finish();
-    expect(result).toMatchObject({ seen: 1, right: 0, wrong: 1 });
-    expect(result.dueTomorrow).toBe(1);
+    expect(result).toMatchObject({ seen: 2, right: 1, wrong: 1 });
+    expect(result.dueTomorrow).toBeGreaterThanOrEqual(1);
     expect(lastSession()).toBe(localDate(NOW));
+  });
+
+  it('checks a flipped showing against its description and leaves skipped cards out', async () => {
+    const cards = [0, 1, 2, 3, 4].map((i) => ({
+      ...card('github', i),
+      answer: `a${i}`,
+      prompt: `description ${i}`,
+      distractorPool: [0, 1, 2, 3, 4].filter((j) => j !== i).map((j) => `a${j}`),
+      distractorIds: [0, 1, 2, 3, 4].filter((j) => j !== i).map((j) => `github:${j}`),
+    }));
+    const skipped: string[] = [];
+    const { deps } = fakeDeps(cards);
+    deps.skipCard = async (id) => void skipped.push(id);
+    const session = await Session.start(deps, undefined, seededRng(4));
+    await session.skip('wrong docs');
+    expect(skipped).toHaveLength(1);
+    const seen = new Set<string>();
+    while (session.current) {
+      const c = session.current;
+      const draw = session.draw()!;
+      expect(c.id).not.toBe(skipped[0]);
+      if (session.showing === 1) expect(draw.direction).toBe('flipped');
+      seen.add(c.id);
+      await session.answer(draw.choices.find((x) => x.correct)!.text);
+    }
+    expect(seen.size).toBe(2); // newPerDay 3, one of them skipped
   });
 
   it('asks overdue reviews first and appends new cards once they are cleared', async () => {
