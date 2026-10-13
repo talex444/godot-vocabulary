@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { apiClassTopics, generateApiCards, POOL_SIZE } from './generate-api-cards.mjs';
 import { generateGithubCards } from './generate-github-cards.mjs';
 import { generateIcons } from './generate-icons.mjs';
+import { copyLessonImages } from './lesson-images.mjs';
 import { classUrl, manualUrl, memberUrl, sphinxId } from './lib/docs.mjs';
 import { ROOT, writeJson } from './lib/io.mjs';
 import { pageTopic, TOPICS } from './lib/topics.mjs';
@@ -22,6 +23,7 @@ console.log(`gdscript: ${language.length} cards${existsSync(gdscript) ? '' : ' (
 writeJson('data/removed-cards.json', removed);
 
 await generateIcons();
+copyLessonImages();
 
 /** Pool = the hand-written wrong answers, then other answers of the same kind and form, then the kind. */
 function enrichLanguageCard(card, all) {

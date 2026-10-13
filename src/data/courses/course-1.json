@@ -1,0 +1,242 @@
+{
+  "id": "course-1",
+  "title": "Step by step",
+  "lessons": [
+    {
+      "id": "c1-l0",
+      "order": 0,
+      "title": "What is a Godot game made of when it runs?",
+      "page": {
+        "title": "Overview of Godot's key concepts",
+        "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/key_concepts_overview.html"
+      },
+      "cardIds": [
+        "api:class:Node",
+        "api:class:PackedScene",
+        "api:class:SceneTree",
+        "api:class:Signal",
+        "api:class:CharacterBody2D",
+        "api:class:Camera2D",
+        "api:class:Sprite2D",
+        "api:class:CollisionShape2D",
+        "api:class:Node3D"
+      ],
+      "need": "Open Godot for the first time and you see a Scene panel, a big view in the middle, and a list of several hundred node types. Before any script of yours runs, Godot has already decided what a game is made of and how its parts fit together. Every script in the later lessons is attached to one of those parts and runs because the part is in the game. So the question comes first: when you press Play, what is actually there? The manual answers it with four words, and this lesson takes them one at a time.",
+      "agenda": [
+        "Scenes and nodes: what a game is built from.",
+        "The scene tree: where every part comes together when the game runs.",
+        "Signals: how one node tells others that something happened."
+      ],
+      "chunks": [
+        {
+          "heading": "Scenes",
+          "text": "The manual starts with one sentence that holds the whole lesson: “In Godot, a game is a tree of nodes that you group together into scenes. You can then wire these nodes so they can communicate using signals.”\n\n“In Godot, you break down your game into reusable scenes. A scene can be a character, a weapon, a menu in the user interface, a single house, an entire level, or anything you can think of. Godot's scenes are flexible; they fill the role of both prefabs and scenes in some other game engines.”\n\n“You can also nest scenes. For example, you can put your character in a level, and drag and drop a scene as a child of it.”",
+          "image": {
+            "src": "key_concepts_scene_example.webp",
+            "alt": "The Scene dock: Game at the top, Level under it, Player under Level and Hook under Player. Level, Player and Hook each carry the clapperboard icon of a nested scene. Beside the dock, the character holds a hook in the 2D view.",
+            "caption": "A character scene nested in a level, nested in the game."
+          },
+          "check": {
+            "prompt": "Which of these can a Godot scene be?",
+            "choices": [
+              "Only a whole level",
+              "Only a character the player controls",
+              "A character, a weapon, a menu or a whole level",
+              "Only something drawn on the screen"
+            ],
+            "answer": 2,
+            "why": "The manual: a scene can be “a character, a weapon, a menu in the user interface, a single house, an entire level, or anything you can think of.”"
+          }
+        },
+        {
+          "heading": "Nodes",
+          "text": "“A scene is composed of one or more nodes. Nodes are your game's smallest building blocks that you arrange into trees. Here's an example of a character's nodes.”\n\n“It is made of a `CharacterBody2D` node named \"Player\", a `Camera2D`, a `Sprite2D`, and a `CollisionShape2D`.” Build it below, one node at a time.\n\n“The node names end with \"2D\" because this is a 2D scene. Their 3D counterparts have names that end with \"3D\".” The 3D base node is `Node3D`.\n\n“Notice how nodes and scenes look the same in the editor. When you save a tree of nodes as a scene, it then shows as a single node, with its internal structure hidden in the editor.”\n\nIn the class reference, `Node` is the “Base class for all scene objects”, and a saved scene is a `PackedScene`: “An abstraction of a serialized scene.”",
+          "drawing": {
+            "caption": "The Player scene in the Scene dock",
+            "nodes": [
+              { "name": "Player", "type": "CharacterBody2D", "depth": 0 },
+              { "name": "Camera2D", "type": "Camera2D", "depth": 1 },
+              { "name": "Sprite2D", "type": "Sprite2D", "depth": 1 },
+              { "name": "CollisionShape2D", "type": "CollisionShape2D", "depth": 1 }
+            ]
+          },
+          "image": {
+            "src": "key_concepts_character_nodes.webp",
+            "alt": "The Scene dock with Player at the top and Camera2D, Sprite2D and CollisionShape2D under it; beside it, the 2D view shows a green square sprite.",
+            "caption": "The same scene in the editor, from the manual."
+          },
+          "check": {
+            "prompt": "You save the Player tree as a scene and add it to a level. How does it show in the level's Scene dock?",
+            "choices": [
+              "As a single node, its insides hidden",
+              "As four separate nodes at the top of the level",
+              "As a file name with no icon",
+              "It does not show until the game runs"
+            ],
+            "answer": 0,
+            "why": "“When you save a tree of nodes as a scene, it then shows as a single node, with its internal structure hidden in the editor.”"
+          }
+        },
+        {
+          "heading": "The scene tree",
+          "text": "“All your game's scenes come together in the scene tree, literally a tree of scenes. And as scenes are trees of nodes, the scene tree also is a tree of nodes. But it's easier to think of your game in terms of scenes as they can represent characters, weapons, doors, or your user interface.”\n\nIn the class reference, the `SceneTree` “Manages the game loop via a hierarchy of nodes.” That is the answer to this lesson's question: when the game runs, Godot runs one tree, and every scene you made is a branch of it.",
+          "image": {
+            "src": "key_concepts_scene_tree.webp",
+            "alt": "The Scene dock of a level: Level01 at the root with BackgroundLayer, InterfaceLayer, a TileMap, a CharacterBody2D, Portal2D, Coins and Enemies under it. UserInterface, CharacterBody2D and Portal2D carry the clapperboard icon of a nested scene.",
+            "caption": "A level: other scenes nested as branches of one tree."
+          },
+          "check": {
+            "prompt": "The scene tree is a tree of scenes. What else is it, in the manual's words?",
+            "choices": [
+              "A tree of nodes",
+              "A list of saved files",
+              "A tree of signals",
+              "A list of scripts"
+            ],
+            "answer": 0,
+            "why": "“As scenes are trees of nodes, the scene tree also is a tree of nodes.”"
+          }
+        },
+        {
+          "heading": "Signals",
+          "text": "“Nodes emit signals when some event occurs. This feature allows you to make nodes communicate without hard-wiring them in code. It gives you a lot of flexibility in how you structure your scenes.”\n\n“For example, buttons emit a signal when pressed. You can connect a piece of code to this signal which will run in reaction to this event, like starting the game or opening a menu.”\n\n“Other built-in signals can tell you when two objects collided, when a character or monster entered a given area, and much more. You can also define new signals tailored to your game.” In the class reference, a signal is a `Signal`.",
+          "image": {
+            "src": "key_concepts_signals.webp",
+            "alt": "The Node dock's Signals tab for an Area2D: area_entered, area_exited, body_entered and more. body_entered has a connection under it to a function named _on_area_2d_body_entered.",
+            "caption": "The signals one node can emit, one of them connected."
+          },
+          "check": {
+            "prompt": "A button in your menu is pressed. What does the button do, in the manual's words?",
+            "choices": [
+              "It emits a signal",
+              "It calls every script in the tree",
+              "It restarts the scene",
+              "It saves the scene to disk"
+            ],
+            "answer": 0,
+            "why": "“Buttons emit a signal when pressed”, and code connected to that signal runs in reaction."
+          }
+        }
+      ],
+      "compare": {
+        "a": {
+          "title": "A character",
+          "text": "The Player scene: a `CharacterBody2D` named Player with a `Camera2D`, a `Sprite2D` and a `CollisionShape2D` as its children. It moves, it is seen through its camera, it bumps into things.",
+          "image": {
+            "src": "key_concepts_character_nodes.webp",
+            "alt": "The Scene dock with Player at the top and Camera2D, Sprite2D and CollisionShape2D under it.",
+            "caption": "The Player scene."
+          }
+        },
+        "b": {
+          "title": "A menu",
+          "text": "The manual's MainMenu scene: a menu in the user interface. Its tree holds a Background, a Context with texts, and a picture for each gamepad's start button. Nothing in it moves or collides.",
+          "image": {
+            "src": "key_concepts_main_menu.webp",
+            "alt": "The Godot editor with a scene called MainMenu open: the Scene dock lists Background, MainScreen, Context, Texts, an HBoxContainer and pictures named XboxA, PlaystationX and NintendoB; the 2D view shows a title screen reading Harvester Game, Press enter to start.",
+            "caption": "The MainMenu scene."
+          }
+        },
+        "question": {
+          "prompt": "One is a character, the other a menu. What do the two share?",
+          "choices": [
+            "Each is a tree of nodes saved as a scene",
+            "Each must have a camera to be seen",
+            "Each can only be used once in a game",
+            "Neither can be nested in another scene"
+          ],
+          "answer": 0,
+          "why": "A scene can be “a character, a weapon, a menu in the user interface”, and either way “a scene is composed of one or more nodes.”"
+        }
+      },
+      "exercises": [
+        {
+          "type": "predict",
+          "prompt": "You put your Player scene into the Level scene as a child, then press Play. What does the scene tree hold?",
+          "choices": [
+            "The Level's nodes, with the Player's nodes as one branch",
+            "Only the Level's nodes; the Player stays in its own file",
+            "Two separate trees, one for each scene",
+            "Only the Player's nodes"
+          ],
+          "answer": 0,
+          "why": "“All your game's scenes come together in the scene tree”, so a nested scene is a branch of the one tree."
+        },
+        {
+          "type": "blank",
+          "prompt": "Type the missing class name. Godot's names are case-sensitive.",
+          "text": "The manual's character “is made of a ____ node named \"Player\", a `Camera2D`, a `Sprite2D`, and a `CollisionShape2D`.”",
+          "answer": "CharacterBody2D",
+          "why": "Player is a `CharacterBody2D`, the root of the character's tree."
+        },
+        {
+          "type": "fix",
+          "plain": true,
+          "prompt": "Four notes on the Player scene. Which one is wrong?",
+          "lines": [
+            "A scene is composed of one or more nodes.",
+            "Player, `Camera2D`, `Sprite2D` and `CollisionShape2D` form one tree.",
+            "Saved as a scene, Player shows as a single node in a level.",
+            "Nodes can only talk to each other through code wired between them."
+          ],
+          "answer": 3,
+          "fixed": "Nodes emit signals, so they can communicate without hard-wiring them in code.",
+          "why": "Signals exist so that nodes can “communicate without hard-wiring them in code.”"
+        }
+      ],
+      "errors": [
+        {
+          "what": "An older tutorial tells you to add a “Spatial” node, and the Create New Node list has none.",
+          "fix": "Add a `Node3D`: “\"Spatial\" Nodes are now called \"Node3D\" starting with Godot 4.”",
+          "source": "Godot manual, Overview of Godot's key concepts, the note under Nodes."
+        },
+        {
+          "what": "“Confusion between a class and its instance.” In Godot: you treat the saved Player scene on disk and the Player in the running game as one and the same thing.",
+          "fix": "The saved scene is the plan; each time it is put in the tree, a new set of nodes is made from it, and those nodes are what runs.",
+          "source": "Sorva 2012, Table A.1, row 79 (Holland et al. 1997)."
+        },
+        {
+          "what": "“Objects are created by themselves, without explicit instructions to create them.” In Godot: you save a scene, press Play, and it is not in the game.",
+          "fix": "A node exists in the game only once it is in the tree, so nest the scene in your main scene (or instance it) before you run.",
+          "source": "Sorva 2012, Table A.1, row 91 (Détienne 1997; Ragonis & Ben-Ari 2005a)."
+        }
+      ],
+      "exitStem": "When a Godot game runs, it is made of …"
+    },
+    {
+      "id": "c1-l1",
+      "order": 1,
+      "title": "Nodes and Scenes",
+      "page": { "title": "Nodes and Scenes", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/nodes_and_scenes.html" },
+      "planned": true
+    },
+    {
+      "id": "c1-l2",
+      "order": 2,
+      "title": "Creating instances",
+      "page": { "title": "Creating instances", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/instancing.html" },
+      "planned": true
+    },
+    {
+      "id": "c1-l3",
+      "order": 3,
+      "title": "Creating your first script",
+      "page": { "title": "Creating your first script", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/scripting_first_script.html" },
+      "planned": true
+    },
+    {
+      "id": "c1-l4",
+      "order": 4,
+      "title": "Listening to player input",
+      "page": { "title": "Listening to player input", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/scripting_player_input.html" },
+      "planned": true
+    },
+    {
+      "id": "c1-l5",
+      "order": 5,
+      "title": "Using signals",
+      "page": { "title": "Using signals", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/signals.html" },
+      "planned": true
+    }
+  ]
+}
