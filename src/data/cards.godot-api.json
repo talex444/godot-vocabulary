@@ -15829,25 +15829,6 @@
     "rank": 339
   },
   {
-    "id": "api:class:Texture2DRD",
-    "family": "godot-api",
-    "kind": "class",
-    "prompt": "Texture for 2D that is bound to a texture created on the `RenderingDevice`.",
-    "answer": "Texture2DRD",
-    "distractors": [
-      "GradientTexture2D",
-      "GradientTexture1D",
-      "CurveTexture"
-    ],
-    "explain": "This texture class allows you to use a 2D texture created directly on the `RenderingDevice` as a texture for materials, meshes, etc. Note: `Texture2DRD` is intended for low-level usage with `RenderingDevice`. For most use cases, use `Texture2D` instead.",
-    "source": {
-      "doc": "godot-class-reference",
-      "ref": "Texture2DRD",
-      "version": "4.7-stable"
-    },
-    "rank": 340
-  },
-  {
     "id": "api:class:TLSOptions",
     "family": "godot-api",
     "kind": "class",
@@ -15862,6 +15843,25 @@
     "source": {
       "doc": "godot-class-reference",
       "ref": "TLSOptions",
+      "version": "4.7-stable"
+    },
+    "rank": 340
+  },
+  {
+    "id": "api:class:Texture2DRD",
+    "family": "godot-api",
+    "kind": "class",
+    "prompt": "Texture for 2D that is bound to a texture created on the `RenderingDevice`.",
+    "answer": "Texture2DRD",
+    "distractors": [
+      "GradientTexture2D",
+      "GradientTexture1D",
+      "CurveTexture"
+    ],
+    "explain": "This texture class allows you to use a 2D texture created directly on the `RenderingDevice` as a texture for materials, meshes, etc. Note: `Texture2DRD` is intended for low-level usage with `RenderingDevice`. For most use cases, use `Texture2D` instead.",
+    "source": {
+      "doc": "godot-class-reference",
+      "ref": "Texture2DRD",
       "version": "4.7-stable"
     },
     "rank": 341
@@ -17081,26 +17081,6 @@
     "rank": 403
   },
   {
-    "id": "api:class:HingeJoint3D",
-    "family": "godot-api",
-    "kind": "class",
-    "prompt": "A physics joint that restricts the rotation of a 3D physics body around an axis relative to another physics body.",
-    "answer": "HingeJoint3D",
-    "distractors": [
-      "PinJoint3D",
-      "Generic6DOFJoint3D",
-      "ConeTwistJoint3D"
-    ],
-    "explain": "A physics joint that restricts the rotation of a 3D physics body around an axis relative to another physics body. For example, Body A can be a `StaticBody3D` representing a door hinge that a `RigidBody3D` rotates around.",
-    "source": {
-      "doc": "godot-class-reference",
-      "ref": "HingeJoint3D",
-      "version": "4.7-stable"
-    },
-    "rank": 404,
-    "icon": "icons/HingeJoint3D.svg"
-  },
-  {
     "id": "api:class:HScrollBar",
     "family": "godot-api",
     "kind": "class",
@@ -17117,27 +17097,28 @@
       "ref": "HScrollBar",
       "version": "4.7-stable"
     },
-    "rank": 405,
+    "rank": 404,
     "icon": "icons/HScrollBar.svg"
   },
   {
-    "id": "api:class:JavaScriptBridge",
+    "id": "api:class:HingeJoint3D",
     "family": "godot-api",
     "kind": "class",
-    "prompt": "Singleton that connects the engine with the browser's JavaScript context in Web export.",
-    "answer": "JavaScriptBridge",
+    "prompt": "A physics joint that restricts the rotation of a 3D physics body around an axis relative to another physics body.",
+    "answer": "HingeJoint3D",
     "distractors": [
-      "Node",
-      "Input",
-      "RenderingServer"
+      "PinJoint3D",
+      "Generic6DOFJoint3D",
+      "ConeTwistJoint3D"
     ],
-    "explain": "The JavaScriptBridge singleton is implemented only in the Web export. It's used to access the browser's JavaScript context.",
+    "explain": "A physics joint that restricts the rotation of a 3D physics body around an axis relative to another physics body. For example, Body A can be a `StaticBody3D` representing a door hinge that a `RigidBody3D` rotates around.",
     "source": {
       "doc": "godot-class-reference",
-      "ref": "JavaScriptBridge",
+      "ref": "HingeJoint3D",
       "version": "4.7-stable"
     },
-    "rank": 406
+    "rank": 405,
+    "icon": "icons/HingeJoint3D.svg"
   },
   {
     "id": "api:class:JNISingleton",
@@ -17154,6 +17135,25 @@
     "source": {
       "doc": "godot-class-reference",
       "ref": "JNISingleton",
+      "version": "4.7-stable"
+    },
+    "rank": 406
+  },
+  {
+    "id": "api:class:JavaScriptBridge",
+    "family": "godot-api",
+    "kind": "class",
+    "prompt": "Singleton that connects the engine with the browser's JavaScript context in Web export.",
+    "answer": "JavaScriptBridge",
+    "distractors": [
+      "Node",
+      "Input",
+      "RenderingServer"
+    ],
+    "explain": "The JavaScriptBridge singleton is implemented only in the Web export. It's used to access the browser's JavaScript context.",
+    "source": {
+      "doc": "godot-class-reference",
+      "ref": "JavaScriptBridge",
       "version": "4.7-stable"
     },
     "rank": 407
@@ -17297,26 +17297,6 @@
     "icon": "icons/PlaceholderTexture2D.svg"
   },
   {
-    "id": "api:class:Range",
-    "family": "godot-api",
-    "kind": "class",
-    "prompt": "Abstract base class for controls that represent a number within a range.",
-    "answer": "Range",
-    "distractors": [
-      "Label",
-      "ColorRect",
-      "TextureRect"
-    ],
-    "explain": "Range is an abstract base class for controls that represent a number within a range, using a configured `step` and `page` size. See e.g. `ScrollBar` and `Slider` for examples of higher-level nodes using Range.",
-    "source": {
-      "doc": "godot-class-reference",
-      "ref": "Range",
-      "version": "4.7-stable"
-    },
-    "rank": 415,
-    "icon": "icons/Range.svg"
-  },
-  {
     "id": "api:class:RDShaderFile",
     "family": "godot-api",
     "kind": "class",
@@ -17333,7 +17313,7 @@
       "ref": "RDShaderFile",
       "version": "4.7-stable"
     },
-    "rank": 416,
+    "rank": 415,
     "icon": "icons/RDShaderFile.svg"
   },
   {
@@ -17353,7 +17333,27 @@
       "ref": "RDShaderSource",
       "version": "4.7-stable"
     },
-    "rank": 417
+    "rank": 416
+  },
+  {
+    "id": "api:class:Range",
+    "family": "godot-api",
+    "kind": "class",
+    "prompt": "Abstract base class for controls that represent a number within a range.",
+    "answer": "Range",
+    "distractors": [
+      "Label",
+      "ColorRect",
+      "TextureRect"
+    ],
+    "explain": "Range is an abstract base class for controls that represent a number within a range, using a configured `step` and `page` size. See e.g. `ScrollBar` and `Slider` for examples of higher-level nodes using Range.",
+    "source": {
+      "doc": "godot-class-reference",
+      "ref": "Range",
+      "version": "4.7-stable"
+    },
+    "rank": 417,
+    "icon": "icons/Range.svg"
   },
   {
     "id": "api:class:RenderSceneBuffers",

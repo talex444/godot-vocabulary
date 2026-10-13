@@ -2,14 +2,14 @@
   "source": "godotengine/godot-demo-projects (MIT), .gd + .tscn files",
   "godot": "4.7-stable doc/classes names",
   "generated": "2026-10-13",
-  "fileCount": 857,
-  "projectCount": 140,
+  "fileCount": 855,
+  "projectCount": 139,
   "classes": [
     {
       "name": "Script",
       "mentions": 494,
       "files": 305,
-      "projects": 138
+      "projects": 137
     },
     {
       "name": "Color",
@@ -19,8 +19,8 @@
     },
     {
       "name": "Vector2",
-      "mentions": 3747,
-      "files": 329,
+      "mentions": 3735,
+      "files": 328,
       "projects": 103
     },
     {
@@ -75,7 +75,7 @@
       "name": "Node",
       "mentions": 217,
       "files": 159,
-      "projects": 64
+      "projects": 63
     },
     {
       "name": "NodePath",
@@ -91,8 +91,8 @@
     },
     {
       "name": "Vector3",
-      "mentions": 1068,
-      "files": 193,
+      "mentions": 1066,
+      "files": 192,
       "projects": 61
     },
     {
@@ -105,7 +105,7 @@
       "name": "MeshInstance3D",
       "mentions": 818,
       "files": 123,
-      "projects": 58
+      "projects": 57
     },
     {
       "name": "String",
@@ -192,16 +192,16 @@
       "projects": 42
     },
     {
-      "name": "Node2D",
-      "mentions": 310,
-      "files": 139,
-      "projects": 39
-    },
-    {
       "name": "ProceduralSkyMaterial",
       "mentions": 39,
       "files": 39,
       "projects": 39
+    },
+    {
+      "name": "Node2D",
+      "mentions": 310,
+      "files": 139,
+      "projects": 38
     },
     {
       "name": "Animation",
@@ -799,8 +799,8 @@
     },
     {
       "name": "Transform2D",
-      "mentions": 36,
-      "files": 12,
+      "mentions": 35,
+      "files": 11,
       "projects": 7
     },
     {
@@ -2040,13 +2040,13 @@
       "projects": 1
     },
     {
-      "name": "Texture2DRD",
+      "name": "TLSOptions",
       "mentions": 2,
       "files": 2,
       "projects": 1
     },
     {
-      "name": "TLSOptions",
+      "name": "Texture2DRD",
       "mentions": 2,
       "files": 2,
       "projects": 1
@@ -2424,25 +2424,25 @@
       "projects": 1
     },
     {
-      "name": "HingeJoint3D",
-      "mentions": 1,
-      "files": 1,
-      "projects": 1
-    },
-    {
       "name": "HScrollBar",
       "mentions": 1,
       "files": 1,
       "projects": 1
     },
     {
-      "name": "JavaScriptBridge",
+      "name": "HingeJoint3D",
       "mentions": 1,
       "files": 1,
       "projects": 1
     },
     {
       "name": "JNISingleton",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "JavaScriptBridge",
       "mentions": 1,
       "files": 1,
       "projects": 1
@@ -2490,12 +2490,6 @@
       "projects": 1
     },
     {
-      "name": "Range",
-      "mentions": 1,
-      "files": 1,
-      "projects": 1
-    },
-    {
       "name": "RDShaderFile",
       "mentions": 1,
       "files": 1,
@@ -2503,6 +2497,12 @@
     },
     {
       "name": "RDShaderSource",
+      "mentions": 1,
+      "files": 1,
+      "projects": 1
+    },
+    {
+      "name": "Range",
       "mentions": 1,
       "files": 1,
       "projects": 1
@@ -2586,13 +2586,31 @@
       "projects": 1
     },
     {
-      "name": "AccessibilityServer",
+      "name": "@GlobalScope",
       "mentions": 0,
       "files": 0,
       "projects": 0
     },
     {
       "name": "AESContext",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AStar2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AStar3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "AccessibilityServer",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -2683,18 +2701,6 @@
     },
     {
       "name": "AnimationRootNode",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "AStar2D",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "AStar3D",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -2958,6 +2964,12 @@
       "projects": 0
     },
     {
+      "name": "CCDIK3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
       "name": "CallbackTweener",
       "mentions": 0,
       "files": 0,
@@ -2983,12 +2995,6 @@
     },
     {
       "name": "CanvasGroup",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "CCDIK3D",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -3384,24 +3390,6 @@
       "projects": 0
     },
     {
-      "name": "Geometry2D",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "Geometry3D",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "GodotInstance",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
       "name": "GPUParticlesAttractor3D",
       "mentions": 0,
       "files": 0,
@@ -3426,19 +3414,25 @@
       "projects": 0
     },
     {
+      "name": "Geometry2D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Geometry3D",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "GodotInstance",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
       "name": "GraphElement",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "HashingContext",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "HeightMapShape3D",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -3457,6 +3451,18 @@
     },
     {
       "name": "HTTPRequest",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "HashingContext",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "HeightMapShape3D",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -3558,6 +3564,12 @@
       "projects": 0
     },
     {
+      "name": "JSONRPC",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
       "name": "JacobianIK3D",
       "mentions": 0,
       "files": 0,
@@ -3600,12 +3612,6 @@
       "projects": 0
     },
     {
-      "name": "JSONRPC",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
       "name": "KinematicCollision3D",
       "mentions": 0,
       "files": 0,
@@ -3618,6 +3624,12 @@
       "projects": 0
     },
     {
+      "name": "LightmapProbe",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
       "name": "Lightmapper",
       "mentions": 0,
       "files": 0,
@@ -3625,12 +3637,6 @@
     },
     {
       "name": "LightmapperRD",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "LightmapProbe",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -3828,6 +3834,12 @@
       "projects": 0
     },
     {
+      "name": "PCKPacker",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
       "name": "PackedDataContainer",
       "mentions": 0,
       "files": 0,
@@ -3889,12 +3901,6 @@
     },
     {
       "name": "Parallax2D",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "PCKPacker",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -4218,13 +4224,13 @@
       "projects": 0
     },
     {
-      "name": "ResourceImporterBitMap",
+      "name": "ResourceImporterBMFont",
       "mentions": 0,
       "files": 0,
       "projects": 0
     },
     {
-      "name": "ResourceImporterBMFont",
+      "name": "ResourceImporterBitMap",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -4266,6 +4272,12 @@
       "projects": 0
     },
     {
+      "name": "ResourceImporterSVG",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
       "name": "ResourceImporterScene",
       "mentions": 0,
       "files": 0,
@@ -4273,12 +4285,6 @@
     },
     {
       "name": "ResourceImporterShaderFile",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "ResourceImporterSVG",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -4746,13 +4752,19 @@
       "projects": 0
     },
     {
-      "name": "Vector4i",
+      "name": "VFlowContainer",
       "mentions": 0,
       "files": 0,
       "projects": 0
     },
     {
-      "name": "VFlowContainer",
+      "name": "VScrollBar",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
+    },
+    {
+      "name": "Vector4i",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -4789,12 +4801,6 @@
     },
     {
       "name": "VisualInstance3D",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "VScrollBar",
       "mentions": 0,
       "files": 0,
       "projects": 0
@@ -4869,8 +4875,8 @@
     },
     {
       "name": "func",
-      "mentions": 2050,
-      "files": 454,
+      "mentions": 2038,
+      "files": 452,
       "projects": 132
     },
     {
@@ -4881,8 +4887,8 @@
     },
     {
       "name": "var",
-      "mentions": 3256,
-      "files": 397,
+      "mentions": 3245,
+      "files": 395,
       "projects": 124
     },
     {
@@ -4892,40 +4898,28 @@
       "projects": 119
     },
     {
-      "name": "_ready",
-      "mentions": 239,
-      "files": 230,
-      "projects": 107
-    },
-    {
-      "name": "and",
-      "mentions": 600,
-      "files": 202,
+      "name": "is",
+      "mentions": 717,
+      "files": 200,
       "projects": 102
     },
     {
-      "name": "is",
-      "mentions": 721,
-      "files": 201,
+      "name": "and",
+      "mentions": 596,
+      "files": 200,
       "projects": 102
     },
     {
       "name": "for",
-      "mentions": 623,
-      "files": 223,
-      "projects": 101
-    },
-    {
-      "name": "in",
-      "mentions": 750,
+      "mentions": 622,
       "files": 222,
       "projects": 101
     },
     {
-      "name": "float",
-      "mentions": 568,
-      "files": 227,
-      "projects": 96
+      "name": "in",
+      "mentions": 748,
+      "files": 221,
+      "projects": 101
     },
     {
       "name": "else",
@@ -4946,18 +4940,6 @@
       "projects": 82
     },
     {
-      "name": "@onready",
-      "mentions": 447,
-      "files": 141,
-      "projects": 81
-    },
-    {
-      "name": "int",
-      "mentions": 409,
-      "files": 152,
-      "projects": 79
-    },
-    {
       "name": "false",
       "mentions": 660,
       "files": 191,
@@ -4965,26 +4947,14 @@
     },
     {
       "name": "as",
-      "mentions": 356,
-      "files": 138,
+      "mentions": 355,
+      "files": 137,
       "projects": 77
     },
     {
-      "name": "bool",
-      "mentions": 396,
-      "files": 173,
-      "projects": 72
-    },
-    {
-      "name": "_process",
-      "mentions": 153,
-      "files": 144,
-      "projects": 69
-    },
-    {
       "name": "return",
-      "mentions": 657,
-      "files": 172,
+      "mentions": 647,
+      "files": 170,
       "projects": 67
     },
     {
@@ -4995,8 +4965,8 @@
     },
     {
       "name": "or",
-      "mentions": 224,
-      "files": 90,
+      "mentions": 223,
+      "files": 89,
       "projects": 57
     },
     {
@@ -5006,28 +4976,10 @@
       "projects": 55
     },
     {
-      "name": "str",
-      "mentions": 186,
-      "files": 71,
-      "projects": 53
-    },
-    {
       "name": "elif",
       "mentions": 260,
       "files": 93,
       "projects": 52
-    },
-    {
-      "name": "get_tree",
-      "mentions": 168,
-      "files": 77,
-      "projects": 50
-    },
-    {
-      "name": "@export",
-      "mentions": 271,
-      "files": 118,
-      "projects": 48
     },
     {
       "name": "match",
@@ -5042,46 +4994,10 @@
       "projects": 37
     },
     {
-      "name": "connect",
-      "mentions": 210,
-      "files": 79,
-      "projects": 36
-    },
-    {
       "name": "null",
       "mentions": 156,
       "files": 67,
       "projects": 36
-    },
-    {
-      "name": "_physics_process",
-      "mentions": 86,
-      "files": 68,
-      "projects": 35
-    },
-    {
-      "name": "instantiate",
-      "mentions": 50,
-      "files": 41,
-      "projects": 29
-    },
-    {
-      "name": "get_node",
-      "mentions": 118,
-      "files": 49,
-      "projects": 28
-    },
-    {
-      "name": "_input",
-      "mentions": 47,
-      "files": 45,
-      "projects": 28
-    },
-    {
-      "name": "print",
-      "mentions": 155,
-      "files": 38,
-      "projects": 27
     },
     {
       "name": "signal",
@@ -5090,52 +5006,16 @@
       "projects": 26
     },
     {
-      "name": "range",
-      "mentions": 61,
-      "files": 31,
-      "projects": 26
-    },
-    {
-      "name": "clamp",
-      "mentions": 48,
-      "files": 27,
-      "projects": 26
-    },
-    {
-      "name": "queue_free",
-      "mentions": 82,
-      "files": 53,
-      "projects": 25
-    },
-    {
       "name": "while",
       "mentions": 45,
       "files": 37,
       "projects": 25
     },
     {
-      "name": "_unhandled_input",
-      "mentions": 28,
-      "files": 28,
-      "projects": 25
-    },
-    {
       "name": "class_name",
-      "mentions": 68,
-      "files": 68,
+      "mentions": 66,
+      "files": 66,
       "projects": 24
-    },
-    {
-      "name": "load",
-      "mentions": 47,
-      "files": 31,
-      "projects": 23
-    },
-    {
-      "name": "emit",
-      "mentions": 126,
-      "files": 47,
-      "projects": 22
     },
     {
       "name": "enum",
@@ -5144,27 +5024,9 @@
       "projects": 21
     },
     {
-      "name": "@tool",
-      "mentions": 59,
-      "files": 52,
-      "projects": 18
-    },
-    {
-      "name": "deg_to_rad",
-      "mentions": 56,
-      "files": 23,
-      "projects": 17
-    },
-    {
       "name": "pass",
       "mentions": 27,
       "files": 20,
-      "projects": 17
-    },
-    {
-      "name": "max",
-      "mentions": 22,
-      "files": 18,
       "projects": 17
     },
     {
@@ -5180,82 +5042,16 @@
       "projects": 15
     },
     {
-      "name": "@warning_ignore",
-      "mentions": 21,
-      "files": 16,
-      "projects": 14
-    },
-    {
-      "name": "_exit_tree",
-      "mentions": 24,
-      "files": 24,
-      "projects": 13
-    },
-    {
-      "name": "@export_range",
-      "mentions": 30,
-      "files": 19,
-      "projects": 13
-    },
-    {
-      "name": "_init",
-      "mentions": 22,
-      "files": 18,
-      "projects": 13
-    },
-    {
       "name": "TAU",
       "mentions": 43,
       "files": 14,
       "projects": 13
     },
     {
-      "name": "randf",
-      "mentions": 21,
-      "files": 14,
-      "projects": 13
-    },
-    {
-      "name": "min",
-      "mentions": 14,
-      "files": 13,
-      "projects": 13
-    },
-    {
-      "name": "_enter_tree",
-      "mentions": 21,
-      "files": 20,
-      "projects": 12
-    },
-    {
-      "name": "floor",
-      "mentions": 37,
-      "files": 15,
-      "projects": 12
-    },
-    {
       "name": "assert",
       "mentions": 26,
       "files": 15,
       "projects": 12
-    },
-    {
-      "name": "randf_range",
-      "mentions": 25,
-      "files": 13,
-      "projects": 12
-    },
-    {
-      "name": "_draw",
-      "mentions": 26,
-      "files": 18,
-      "projects": 11
-    },
-    {
-      "name": "abs",
-      "mentions": 19,
-      "files": 13,
-      "projects": 11
     },
     {
       "name": "break",
@@ -5270,27 +5066,9 @@
       "projects": 10
     },
     {
-      "name": "move_toward",
-      "mentions": 18,
-      "files": 11,
-      "projects": 10
-    },
-    {
-      "name": "round",
-      "mentions": 15,
-      "files": 11,
-      "projects": 10
-    },
-    {
       "name": "continue",
       "mentions": 18,
       "files": 10,
-      "projects": 7
-    },
-    {
-      "name": "static",
-      "mentions": 35,
-      "files": 9,
       "projects": 7
     },
     {
@@ -5300,10 +5078,10 @@
       "projects": 7
     },
     {
-      "name": "lerp",
-      "mentions": 12,
+      "name": "static",
+      "mentions": 27,
       "files": 8,
-      "projects": 6
+      "projects": 7
     },
     {
       "name": "super",
@@ -5312,100 +5090,16 @@
       "projects": 5
     },
     {
-      "name": "pow",
-      "mentions": 12,
-      "files": 6,
-      "projects": 5
-    },
-    {
-      "name": "randi_range",
-      "mentions": 6,
-      "files": 5,
-      "projects": 5
-    },
-    {
-      "name": "randi",
-      "mentions": 5,
-      "files": 5,
-      "projects": 5
-    },
-    {
-      "name": "sqrt",
-      "mentions": 5,
-      "files": 5,
-      "projects": 5
-    },
-    {
-      "name": "@rpc",
-      "mentions": 18,
-      "files": 8,
-      "projects": 4
-    },
-    {
-      "name": "is_instance_valid",
-      "mentions": 6,
-      "files": 5,
-      "projects": 4
-    },
-    {
       "name": "INF",
       "mentions": 9,
       "files": 3,
       "projects": 3
     },
     {
-      "name": "@export_file",
-      "mentions": 3,
-      "files": 3,
-      "projects": 3
-    },
-    {
-      "name": "@icon",
-      "mentions": 5,
-      "files": 5,
-      "projects": 2
-    },
-    {
-      "name": "@export_enum",
-      "mentions": 5,
-      "files": 4,
-      "projects": 2
-    },
-    {
-      "name": "rad_to_deg",
-      "mentions": 4,
-      "files": 2,
-      "projects": 2
-    },
-    {
-      "name": "@export_group",
-      "mentions": 3,
-      "files": 1,
-      "projects": 1
-    },
-    {
-      "name": "@export_category",
-      "mentions": 2,
-      "files": 1,
-      "projects": 1
-    },
-    {
-      "name": "@export_multiline",
-      "mentions": 1,
-      "files": 1,
-      "projects": 1
-    },
-    {
-      "name": "len",
-      "mentions": 1,
-      "files": 1,
-      "projects": 1
-    },
-    {
-      "name": "ceil",
-      "mentions": 1,
-      "files": 1,
-      "projects": 1
+      "name": "NAN",
+      "mentions": 0,
+      "files": 0,
+      "projects": 0
     },
     {
       "name": "breakpoint",
@@ -5415,18 +5109,6 @@
     },
     {
       "name": "yield",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "NAN",
-      "mentions": 0,
-      "files": 0,
-      "projects": 0
-    },
-    {
-      "name": "sign",
       "mentions": 0,
       "files": 0,
       "projects": 0
