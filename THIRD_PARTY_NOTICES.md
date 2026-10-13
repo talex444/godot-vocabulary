@@ -10,6 +10,7 @@ The app's own code is MIT-licensed (see `LICENSE`). It ships or derives content 
 |------|----------|---------|--------|
 | Godot Engine 4.7-stable (`5b4e0cb0`): class reference XML (`doc/classes`), editor class icons (`editor/icons`), editor theme defaults and derivation | API cards, class icons beside choices, interface colours | MIT | Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur. |
 | Godot documentation, branch 4.7 (GDScript manual pages, first-2D-game tutorial) | Language cards, tutorial class order | CC BY 3.0 | Juan Linietsky, Ariel Manzur and the Godot community. https://creativecommons.org/licenses/by/3.0/ — text adapted into question form. |
+| Godot documentation, branch 4.7 (getting-started pages and their screenshots) | Course lessons (`src/data/courses/`, `public/courses/img/`) | CC BY 3.0 | Juan Linietsky, Ariel Manzur and the Godot community. https://creativecommons.org/licenses/by/3.0/ — sentences quoted with framing text and questions added; screenshots unchanged. |
 | GitHub Docs glossary (`data/glossaries/external.yml`, github/docs `ae648a1d`) | GitHub cards | CC BY 4.0 | © GitHub, Inc. https://creativecommons.org/licenses/by/4.0/ — terms filtered by an allow-list, product tokens resolved, text adapted into question form. |
 | Godot demo projects (`godotengine/godot-demo-projects`) | Class frequency counts that order the API cards (no demo code is shipped) | MIT | Copyright (c) Godot Engine contributors. |
 

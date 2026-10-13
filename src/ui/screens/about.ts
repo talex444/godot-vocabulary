@@ -24,6 +24,10 @@ export const ATTRIBUTIONS: readonly [work: string, notice: string][] = [
     'Juan Linietsky, Ariel Manzur and the Godot community. https://creativecommons.org/licenses/by/3.0/ — text adapted into question form.',
   ],
   [
+    'Godot documentation, branch 4.7 (getting-started pages and their screenshots, in the courses), CC BY 3.0',
+    'Juan Linietsky, Ariel Manzur and the Godot community. https://creativecommons.org/licenses/by/3.0/ — sentences quoted with framing text and questions added; screenshots unchanged.',
+  ],
+  [
     'GitHub Docs glossary, CC BY 4.0',
     '© GitHub, Inc. https://creativecommons.org/licenses/by/4.0/ — terms filtered by an allow-list and adapted into question form.',
   ],
@@ -53,6 +57,18 @@ export async function aboutScreen(nav: Nav): Promise<HTMLElement> {
         el('p', { text: 'It is free, works offline, and keeps everything on this device: no accounts, no tracking.' }),
         el('p', { class: 'gv-label', text: 'An unofficial community project. Not affiliated with or endorsed by the Godot Foundation or GitHub.' }),
         el('p', { class: 'gv-note', text: 'The Godot logo is not used; the app icon is its own glyph.' }),
+      ],
+      { class: 'gv-stack' },
+    ),
+    panel(
+      [
+        heading('Lessons and cards', 3),
+        el('p', {
+          text: 'Learning a word takes two paths. One is understanding: what a scene or a signal is, how the parts fit, why it works that way. The other is recall: the name coming to mind the moment you need it. The course lessons teach the first; they explain one idea at a time in the manual’s own words. The cards teach the second; they bring each name back until it comes without effort.',
+        }),
+        el('p', {
+          text: 'Why memorise when the docs are a click away? Looking something up breaks the thread of what you were building. And the words you know pick the right meaning for the context you are in; a search cannot do that for you.',
+        }),
       ],
       { class: 'gv-stack' },
     ),
