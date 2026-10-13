@@ -75,6 +75,7 @@ async function fetchAll() {
     'getting_started/first_2d_game/05.the_main_game_scene.rst',
     'getting_started/first_2d_game/06.heads_up_display.rst',
     'getting_started/first_2d_game/07.finishing-up.rst',
+    'getting_started/introduction/key_concepts_overview.rst',
     'getting_started/step_by_step/instancing.rst',
     'getting_started/step_by_step/nodes_and_scenes.rst',
     'getting_started/step_by_step/scripting_first_script.rst',
@@ -88,6 +89,15 @@ async function fetchAll() {
   ];
   for (const page of pages) await download(raw + page, join(docs, page.replace(/\//g, '_')));
   await download(raw + 'LICENSE.txt', join(docs, 'LICENSE.txt'));
+
+  // The pictures of the pages the courses are written from (introduction and step-by-step), flat in
+  // godot-docs/img/; `pnpm generate` copies the ones a lesson names to public/courses/img.
+  for (const page of pages.filter((p) => /^getting_started\/(introduction|step_by_step)\//.test(p))) {
+    const text = readFileSync(join(docs, page.replace(/\//g, '_')), 'utf8');
+    const dir = page.slice(0, page.lastIndexOf('/') + 1);
+    const images = new Set([...text.matchAll(/^\s*\.\. (?:image|figure):: (img\/[^\s]+)/gm)].map((m) => m[1]));
+    for (const image of [...images].sort(byName)) await download(raw + dir + image, join(docs, image));
+  }
 
   // GitHub glossary (CC BY 4.0).
   const gh = 'https://raw.githubusercontent.com/github/docs/main/';
