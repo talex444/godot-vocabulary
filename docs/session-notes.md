@@ -440,3 +440,31 @@ Decisions 25, 27 and 28; done-criteria 41 to 45. Seven commits, none pushed, no 
 7. **Version bumped to 1.1.0** in the workflow commit, so the CI tag check passes for `v1.1.0`.
 8. **`THIRD_PARTY_NOTICES.md` and the About list went into the setup commit**, not the notes commit. `tests/unit/about.test.ts` requires every runtime dependency to be named in both, so the setup commit would fail its own gate without them. AndroidX (Apache 2.0) is named too, because it is inside the APK.
 9. **Capacitor's sample `splash.png` files and the default `drawable-v24/ic_launcher_foreground.xml` are committed but unused.** Deleting tracked generated files needs `git rm`, which this session does not use. They can go in a cleanup.
+
+## GV-5b — class choice rows show either four icons or none (2026-10-13)
+
+### The rule
+- `classPool` in `scripts/generate-api-cards.mjs` now keeps icon parity. A class card's pool holds only classes that match the answer: either all have `data/sources/godot-4.7/icons/<Name>.svg`, or none do.
+- The filter applies to every candidate before the pool is cut: siblings, ancestors' children and the rank-neighbour fallback. Ordering and twin exclusion are unchanged.
+- This fixes the flaky e2e test noted in GV-5. It also removes a leak: before, a learner could rule out an icon-less choice without reading it.
+- A class card whose parity pool is under `MIN_POOL` (4) now goes to `removed.smallPool`, which until now held only member cards. The exception is a card under rank 60 (`EARLY_RANK`): it stays as long as its pool still has 3 names.
+- `copyAssets` is unchanged.
+
+### Counts
+- Before: 416 class cards. 316 have an icon and 100 do not. 117 icon cards had an icon-less name in their pool, and 94 icon-less cards had an icon name in theirs (CoS figures).
+- After: still **416 class cards** and 439 member cards. Mixed pools: **0**. Every class pool still has 8 names.
+- **No class card was removed because of parity.** `data/removed-cards.json` is byte-for-byte unchanged, and `smallPool` is still the 7 member cards it was before. No early card (rank under 60) needed the 3-name exception.
+
+### Tests
+- `tests/unit/deck.test.ts` has two new tests:
+  - "gives every class card a pool with the icon parity of its answer (done-criteria 46)". The answer's icon-ness agrees with `card.icon`, and every pool name's icon file in `public/icons` matches the answer's.
+  - "keeps no class card with a pool under MIN_POOL; parity shortfalls go to the removed list". `MIN_POOL` is imported from the generator.
+- In `tests/e2e/session.spec.ts`, "5: an API class card shows the class icon beside every choice" now looks for a forward class card whose row shows icons. Without that change, an icon-less answer such as `Input` would correctly show four blanks and fail the test. The existing four-icons assertion now doubles as the parity check for icon rows.
+
+### Gates
+- `pnpm typecheck`, `pnpm test` (122 tests), `pnpm build`, `pnpm lint:css`: all green.
+- `pnpm e2e`: 26/26, run twice, both green.
+
+### Deviations
+1. **The new test has not been seen failing on the old deck.** `git stash` needs approval in headless mode, so it was not run. The CoS counts (117 + 94 mixed pools on the old deck) show the test would have failed there.
+2. **The e2e test now chooses an icon card**, as described under Tests. Icon-less rows have no e2e test of their own. The unit parity test covers them.

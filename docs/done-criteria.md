@@ -64,3 +64,6 @@ Each line is checked twice: by the Chief of Staff driving the built app in a pho
 43. A daily reminder: time set in Settings (Android only), scheduled with Capacitor Local Notifications, re-scheduled on launch; notification permission asked once from that setting; the "exact time" switch requests the exact-alarm setting and the plain sentence says the default is "about that time".
 44. "Check for updates" in About opens the Releases page in the browser; the app itself makes no request.
 45. Export and import work inside the package; progress moved from the web app by one export and one import (human check on the S24).
+
+## v1.1 — choice rows (GV-5b)
+46. A class card's four choices show either four icons or none. **Done (GV-5b):** unit tests "gives every class card a pool with the icon parity of its answer (done-criteria 46)" and "keeps no class card with a pool under MIN_POOL; parity shortfalls go to the removed list" in `tests/unit/deck.test.ts`; e2e "5: an API class card shows the class icon beside every choice" in `tests/e2e/session.spec.ts`.
