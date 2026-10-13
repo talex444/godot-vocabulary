@@ -16,7 +16,10 @@
     "e2e": "vite build && playwright test --pass-with-no-tests",
     "generate": "node scripts/generate.mjs",
     "fetch-sources": "node scripts/fetch-sources.mjs",
-    "lint:css": "node scripts/lint-css.mjs"
+    "lint:css": "node scripts/lint-css.mjs",
+    "build:android": "tsc --noEmit && vite build --mode android && cap sync android",
+    "android:debug": "node scripts/gradle.mjs assembleDebug",
+    "android:build": "node scripts/gradle.mjs assembleRelease"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.3",
