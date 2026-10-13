@@ -31,6 +31,9 @@ export const ATTRIBUTIONS: readonly [work: string, notice: string][] = [
   ['ts-fsrs, MIT licence', 'Copyright (c) 2026 Open Spaced Repetition.'],
   ['idb, ISC licence', 'Copyright (c) 2016, Jake Archibald.'],
   ['Workbox (the offline service worker), MIT licence', 'Copyright Google LLC.'],
+  ['Capacitor: @capacitor/core and @capacitor/android (the Android app), MIT licence', 'Copyright (c) 2017-present Drifty Co.'],
+  ['@capacitor/local-notifications (the Android app’s daily reminder), MIT licence', 'Copyright 2020-present Ionic.'],
+  ['AndroidX libraries (the Android app), Apache License 2.0', 'Copyright The Android Open Source Project.'],
 ];
 
 /** What the app is, who made what it is built from, and where its code lives. */

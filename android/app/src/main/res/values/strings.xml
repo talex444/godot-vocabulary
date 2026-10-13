@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Godot Vocabulary</string>
+    <string name="title_activity_main">Godot Vocabulary</string>
+    <string name="package_name">io.github.talex444.godotvocabulary</string>
+    <string name="custom_url_scheme">io.github.talex444.godotvocabulary</string>
+</resources>

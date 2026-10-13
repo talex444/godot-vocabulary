@@ -6,3 +6,11 @@ data/sources/
 playwright-report/
 test-results/
 dev-dist/
+# Android package: build outputs, machine paths and signing material never go in the repo.
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+*.keystore
+*.jks
+keystore.properties
