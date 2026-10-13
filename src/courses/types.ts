@@ -44,7 +44,7 @@ export interface CourseLesson {
   errors: LessonError[];
   /** The focus question asked back with a sentence stem (decision 39). */
   exitStem: string;
-  /** The course-end tap-to-reveal table (decision 41); stored, not rendered yet. */
+  /** The course-end tap-to-reveal table (decision 41), shown after the exit ticket and on the course list once done. */
   table?: RevealTable;
 }
 

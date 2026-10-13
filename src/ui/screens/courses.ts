@@ -1,8 +1,9 @@
 import { COURSES } from '../../courses/index';
-import { isPlanned } from '../../courses/types';
+import { isPlanned, type CourseLesson } from '../../courses/types';
 import { getLessonsDoneIds } from '../../store/db';
 import type { Nav } from '../app';
 import { button, el, heading, panel } from '../kit';
+import { revealTable } from './reveal-table';
 
 /** The course list (decision 37): each course's lessons in order, a tick on the done ones, any reopenable. */
 export async function coursesScreen(nav: Nav): Promise<HTMLElement> {
@@ -40,6 +41,10 @@ export async function coursesScreen(nav: Nav): Promise<HTMLElement> {
             return el('li', { attrs: { 'data-lesson-id': lesson.id, 'data-done': String(finished) } }, [row]);
           }),
         ),
+        // Once the lesson that ends the course is done, its table stays on the list (decision 41).
+        ...course.lessons
+          .filter((lesson): lesson is CourseLesson => !isPlanned(lesson) && Boolean(lesson.table) && done.has(lesson.id))
+          .flatMap((lesson) => [el('h4', { class: 'gv-family__name', text: `Course ${index + 1} in one table` }), revealTable(lesson.table!)]),
       ],
       { class: 'gv-stack' },
     ),

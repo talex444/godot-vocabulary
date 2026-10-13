@@ -621,6 +621,65 @@ button.gv-lesson-row:focus-visible {
   justify-self: start;
 }
 
+/* The course-end table (decision 41): one Inspector-like block per class, each cell a covered button. */
+.gv-reveal__rows,
+.gv-reveal__cells {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gv-reveal__rows {
+  gap: 12px;
+}
+
+.gv-reveal__row {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--corner-radius);
+  background: var(--base-color);
+}
+
+.gv-reveal__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--font-focus-color);
+  font-family: var(--font-code);
+  font-size: 1rem;
+}
+
+.gv-reveal__cell {
+  display: grid;
+  gap: 4px;
+}
+
+.gv-reveal__cover {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px 12px;
+  width: 100%;
+  text-align: start;
+}
+
+.gv-reveal__cover--shown {
+  background-color: var(--dark-color-1);
+}
+
+.gv-reveal__answer {
+  margin: 0;
+  padding: 8px 12px;
+  border-inline-start: 2px solid var(--accent-color);
+  overflow-wrap: anywhere;
+}
+
 .gv-errors-list {
   display: grid;
   gap: 12px;

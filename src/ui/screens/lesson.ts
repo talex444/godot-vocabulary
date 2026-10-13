@@ -7,6 +7,7 @@ import { loadCards } from '../../session/deck';
 import { getExitTicket, getSettings, markLessonDone, saveExitTicket, saveSettings } from '../../store/db';
 import type { Nav } from '../app';
 import { asset, button, choiceRow, codeBlock, el, gapField, heading, icon, inlineRich, panel, setChoiceState, textField } from '../kit';
+import { revealTable } from './reveal-table';
 
 /**
  * One lesson as one scrolling page (decision 37): question, pretest, the need, agenda, explanation
@@ -147,6 +148,9 @@ export async function lessonScreen(nav: Nav, lessonId: string): Promise<HTMLElem
       ticketField.root,
       el('div', { class: 'gv-row' }, [saveTicket]),
       ticketStatus,
+      // The course-end table (decision 41) sits after the exit ticket, before Mark done.
+      lesson.table ? el('h4', { class: 'gv-family__name', text: `Course ${courseNumber} in one table` }) : null,
+      lesson.table ? revealTable(lesson.table) : null,
       markDone,
     ]),
     el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back to courses', { variant: 'secondary', onClick: () => nav.courses() })]),
