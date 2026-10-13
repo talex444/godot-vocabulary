@@ -2,7 +2,16 @@ import type { Card } from '../cards/types';
 import api from '../data/cards.godot-api.json';
 import gdscript from '../data/cards.gdscript.json';
 import github from '../data/cards.github.json';
-import { getProgress, getSettings, listCustomCards, saveProgress, setLastSessionDate } from '../store/db';
+import {
+  getLessonsDoneIds,
+  getProgress,
+  getSettings,
+  getSkippedIds,
+  listCustomCards,
+  saveProgress,
+  setLastSessionDate,
+  skipCard,
+} from '../store/db';
 import type { RunDeps } from './run';
 
 /** The three generated decks plus the learner's own cards. */
@@ -18,4 +27,7 @@ export const deviceDeps: RunDeps = {
   saveProgress,
   setLastSessionDate,
   now: () => new Date(),
+  getSkipped: getSkippedIds,
+  skipCard: (cardId, reason) => skipCard(cardId, reason),
+  getLessonsDone: getLessonsDoneIds,
 };
