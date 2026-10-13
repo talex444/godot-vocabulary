@@ -58,7 +58,9 @@ test('5: an API class card shows the class icon beside every choice', async ({ p
     async () =>
       (await page.locator('.gv-card__family').textContent()) === FAMILY_LABEL['godot-api'] &&
       (await page.locator('.gv-card .gv-heading').textContent()) === 'Class' &&
-      (await page.locator('.gv-card').getAttribute('data-direction')) === 'forward',
+      (await page.locator('.gv-card').getAttribute('data-direction')) === 'forward' &&
+      // Icon-less classes (Input, OS, Resource…) show four choices with no icon (done-criteria 46).
+      (await page.locator('.gv-choice img.gv-icon').count()) > 0,
   );
   const choices = page.locator('.gv-choice');
   await expect(choices).toHaveCount(4);

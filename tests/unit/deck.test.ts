@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { MIN_POOL } from '../../scripts/generate-api-cards.mjs';
 import { RAW_TAG_PATTERN } from '../../scripts/lib/bbcode.mjs';
 import type { Card } from '../../src/cards/types';
 import api from '../../src/data/cards.godot-api.json';
@@ -163,6 +164,20 @@ describe('generator rules (done-criteria 38)', () => {
       expect(c.prompt, c.id).not.toContain('____');
       expect(words(c.prompt.replace(/^\w+: /, '')), c.id).toBeGreaterThan(2);
     }
+  });
+
+  it('gives every class card a pool with the icon parity of its answer (done-criteria 46)', () => {
+    const icon = (name: string) => existsSync(join(ROOT, 'public/icons', `${name}.svg`));
+    for (const c of classes) {
+      expect(icon(c.answer), c.id).toBe(Boolean(c.icon));
+      const odd = c.distractorPool!.filter((n) => icon(n) !== icon(c.answer));
+      expect(odd, `${c.id} (${c.icon ? 'icon' : 'no icon'})`).toEqual([]);
+    }
+  });
+
+  it('keeps no class card with a pool under MIN_POOL; parity shortfalls go to the removed list', () => {
+    for (const c of classes) expect(c.distractorPool!.length, c.id).toBeGreaterThanOrEqual(MIN_POOL);
+    for (const id of removed.smallPool ?? []) expect(byId.has(id), id).toBe(false);
   });
 
   it('(d) has no member card whose description is four words or fewer', () => {
