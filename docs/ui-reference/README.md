@@ -2,17 +2,9 @@
 
 What the app should feel like: Godot's own editor, stock 4.7 dark theme. The agent compares its Playwright screenshots against these before marking a UI item done (see `docs/done-criteria.md`, Look section).
 
-## Tyler's screenshots (authoritative, Godot 4.7 on his PC)
+## The reference set: Godot's own docs screenshots (`from-godot-docs/`)
 
-Drop them in this folder with these names when taken:
-
-- `create-new-node.png` — the Create New Node dialog (Scene dock → + → search, tree with icons, description at the bottom).
-- `script-editor.png` — a script open in the script editor (JetBrains Mono, syntax colours).
-- `help-panel.png` — the editor help for one class (Search Help → e.g. Timer).
-
-## From the Godot docs (`from-godot-docs/`)
-
-Downloaded 2026-10-13 from `godotengine/godot-docs`, branch `4.7`, under CC BY 3.0, attributed to "Juan Linietsky, Ariel Manzur and the Godot community". These are the docs' own editor screenshots; some were taken on earlier 4.x editors, so Tyler's screenshots win where they differ.
+Downloaded 2026-10-13 from `godotengine/godot-docs`, branch `4.7`, under CC BY 3.0, attributed to "Juan Linietsky, Ariel Manzur and the Godot community". They cover all three surfaces the app borrows from; use them as the reference. (Optional: a screenshot from Tyler's own 4.7 editor can be dropped here as `create-new-node.png`, `script-editor.png` or `help-panel.png` if one of the docs images ever turns out to be from an older editor; none is required.)
 
 - **Create New Node dialog:** `nodes_and_scenes_03_create_node_window.webp` (the best one: search field, tree with class icons, "Class Node < Object" description panel), `nodes_and_scenes_04_create_label_window.webp`, `add_node.webp`, `key_concepts_node_menu.webp`.
 - **Class help panel:** `editor_intro_help_class_animated_sprite.webp` (stock dark theme: "Class:" + icon + name, "Inherits:" chain with icons, bold brief description, accent-blue "Description" heading, inline code in monospace). Also `editor_intro_search_help.webp` for the Search Help dialog.
