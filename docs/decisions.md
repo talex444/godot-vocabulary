@@ -24,6 +24,7 @@ The learning-science basis is Benedict Carey, *How We Learn* (2014): pretesting 
 | 18 | How far | Colours, fonts, icons, Godot's wording and control styles. One panel. No imitation of the editor layout. "I just need it to feel familiar." |
 | 19 | GitHub terms | Yes, a third family from GitHub's glossary (CC BY 4.0), filtered to Git and team-workflow terms. |
 | 20 | Family switches | Per-family on/off; everything enabled still shuffles together. |
+| 22 | Accessibility standard | WCAG 2.2 Level AA, plus the AAA 44×44 px target size, as the bar for buttons, text and contrast ("since this is designed for mobile, we should use WCAG"). **Godot wins over WCAG contrast when they conflict** ("to feel like godot id rather godot wins where they disagree"): colours are never altered; failing pairs are measured and disclosed in `docs/contrast-report.md`. Every other WCAG criterion is a hard gate, checked by axe-core in Playwright. |
 | 21 | Per-family budgets vs cap | Each family has its own new-cards-per-day (defaults 10/5/5). Settings show the total and projected review load (~10 reviews per new card). Above 20 total: a plain-words warning, not a hard stop. No new cards while reviews are overdue. |
 
 Calls made by the Chief of Staff, open to veto: the app icon is not the Godot logo; the app states it is unofficial; distractors for API cards are siblings (same parent class / same class), for GitHub cards other glossary terms.

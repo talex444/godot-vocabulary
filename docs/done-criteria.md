@@ -37,5 +37,12 @@ Each line is checked twice: by the Chief of Staff driving the built app in a pho
 24. Inter for interface text, JetBrains Mono for code, both bundled with their OFL licence files.
 25. Fits 360×780 with a 16 px gutter, no horizontal scroll, touch targets ≥ 44 px (Playwright assertions).
 
+## Accessibility (WCAG 2.2 AA + AAA target size; Tyler 2026-10-13)
+27. axe-core (`@axe-core/playwright`, tags `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`) reports zero violations on every screen (start, card before and after answering, summary, settings, add-card, about) for every rule except `color-contrast`, whose findings are written to the report in item 28 rather than failing the run.
+28. Godot's colours are never altered to pass a ratio (Tyler, 2026-10-13). A unit test computes the contrast of every text/background and control/background pair in the derived theme against 1.4.3 (4.5:1; 3:1 large text) and 1.4.11 (3:1) and writes the pairs that fall short to `docs/contrast-report.md`; the README names that file as a known deviation from WCAG.
+29. Every tap target is at least 44×44 CSS px (2.5.5 AAA; 2.5.8 AA needs 24); Playwright measures each button and choice.
+30. The whole app is usable with the keyboard only: tab order follows reading order, focus is always visible (2.4.7) and never obscured (2.4.11), choices and controls are native `<button>`s with accessible names (4.1.2), Enter/Space activate.
+31. Reflow at 320 CSS px wide with no horizontal scrolling (1.4.10); browser text zoom at 200% loses nothing (1.4.4); portrait and landscape both work (1.3.4). Body text is never below 16 px (the app's own floor; WCAG sets none).
+
 ## Quality gates
 26. `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm e2e` all green; the README explains install, add-card, export/import, licences.

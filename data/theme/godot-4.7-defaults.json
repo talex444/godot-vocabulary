@@ -57,7 +57,7 @@
     "contrast_color_1": "#6f6f6f",
     "contrast_color_2": "#959595",
     "highlight_color": "rgba(87,158,255,0.275)",
-    "highlight_disabled_color": "rgba(44,79,128,0.6375)",
+    "highlight_disabled_color": "rgba(43,79,128,0.6375)",
     "selection_color": "rgba(87,158,255,0.4)",
     "font_color": "rgba(255,255,255,0.75)",
     "font_secondary_color": "rgba(255,255,255,0.55)",
