@@ -6,6 +6,7 @@ import {
   answerShowing,
   backToStart,
   cardPanel,
+  COURSE1,
   endSession,
   exportFile,
   goNext,
@@ -170,6 +171,21 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async
   await page.locator('[data-kind="fix"] .gv-choice').first().click();
   await page.getByText('Check the case.').waitFor();
   await audit(page, 'lesson answered');
+
+  // Lesson 3's code (a blank inside code, code fix lines) and lesson 5's course table, two cells shown.
+  await page.getByRole('button', { name: 'Back to courses' }).click();
+  await screenReady(page, 'Courses');
+  await page.locator('[data-lesson-id="c1-l3"] button').click();
+  await screenReady(page, COURSE1.lessons[3]!.title);
+  await page.locator('[data-kind="fix"] .gv-choice').first().click();
+  await audit(page, 'lesson with code');
+  await page.getByRole('button', { name: 'Back to courses' }).click();
+  await screenReady(page, 'Courses');
+  await page.locator('[data-lesson-id="c1-l5"] button').click();
+  await screenReady(page, COURSE1.lessons[5]!.title);
+  await page.locator('.gv-reveal__cover').nth(0).click();
+  await page.locator('.gv-reveal__cover').nth(4).click();
+  await audit(page, 'lesson with the course table');
 
   // Fixed order for the report: the card screens by family name.
   const fixed = ['Godot API', 'GDScript', 'GitHub'];
