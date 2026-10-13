@@ -51,6 +51,7 @@ function loadClasses() {
       inherits: c.inherits ?? null,
       editor: c.api_type === 'editor',
       flagged: flagged(c),
+      deprecated: c.deprecated !== undefined,
       brief: bbcodeToText(text(c.brief_description)),
       description: bbcodeToText(text(c.description)),
       methods: entries(c.methods?.method),
@@ -117,10 +118,10 @@ function pickAround(pool, answer, n, taken = []) {
 }
 
 /** Siblings under the same parent, then the nearest ancestor's other children, then rank neighbours. */
-function classPool(classes, rankOf, deckOrder, name) {
+function classPool(classes, rankOf, deckOrder, name, twins = []) {
   const order = (a, b) => (rankOf.get(a) ?? 1e9) - (rankOf.get(b) ?? 1e9) || byName(a, b);
   const candidates = (pred) =>
-    [...classes.values()].filter((c) => choosable(c) && c.name !== name && pred(c)).map((c) => c.name).sort(order);
+    [...classes.values()].filter((c) => choosable(c) && c.name !== name && !twins.includes(c.name) && pred(c)).map((c) => c.name).sort(order);
   const self = classes.get(name);
   const lineage = [name, ...ancestors(classes, name)];
   const out = [];
@@ -129,7 +130,7 @@ function classPool(classes, rankOf, deckOrder, name) {
     if (out.length >= POOL_SIZE) break;
     out.push(...pickAround(candidates((c) => c.inherits === classes.get(anc).inherits && !lineage.includes(c.name)), name, POOL_SIZE - out.length, out));
   }
-  if (out.length < POOL_SIZE) out.push(...pickAround(deckOrder, name, POOL_SIZE - out.length, out));
+  if (out.length < POOL_SIZE) out.push(...pickAround(deckOrder, name, POOL_SIZE - out.length, [...out, ...twins]));
   return out.slice(0, POOL_SIZE);
 }
 
@@ -214,8 +215,19 @@ export function generateApiCards() {
 
   // Generator rules (decision 26, done-criteria 38). A dropped class still serves as a wrong answer.
   const removed = { duplicateBrief: [], editor: [], hollow: [], shortMember: [], smallPool: [] };
-  const briefCount = new Map();
-  for (const c of classes.values()) if (choosable(c)) briefCount.set(normalise(c.brief), (briefCount.get(normalise(c.brief)) ?? 0) + 1);
+  // Rule (a): classes sharing a brief keep one card, the one not deprecated, else the more frequent.
+  const byBrief = new Map();
+  for (const c of classes.values()) if (choosable(c)) byBrief.set(normalise(c.brief), [...(byBrief.get(normalise(c.brief)) ?? []), c]);
+  const twinsOf = new Map();
+  const dropTwin = new Set();
+  for (const group of byBrief.values()) {
+    if (group.length < 2) continue;
+    const [keep, ...rest] = group
+      .slice()
+      .sort((a, b) => a.deprecated - b.deprecated || (rankOf.get(a.name) ?? 1e9) - (rankOf.get(b.name) ?? 1e9) || byName(a.name, b.name));
+    twinsOf.set(keep.name, rest.map((c) => c.name));
+    for (const c of rest) dropTwin.add(c.name);
+  }
   const prompts = new Map();
   const deckOrder = [];
   for (const name of candidates) {
@@ -224,7 +236,7 @@ export function generateApiCards() {
       removed.editor.push(`api:class:${name}`);
       continue;
     }
-    if (briefCount.get(normalise(c.brief)) > 1) {
+    if (dropTwin.has(name)) {
       removed.duplicateBrief.push(`api:class:${name}`);
       continue;
     }
@@ -241,7 +253,7 @@ export function generateApiCards() {
   const iconDir = join(SRC, 'icons');
   const classCards = deckOrder.map((name, rank) => {
     const c = classes.get(name);
-    const pool = classPool(classes, rankOf, candidates, name);
+    const pool = classPool(classes, rankOf, candidates, name, twinsOf.get(name));
     const card = {
       id: `api:class:${name}`,
       family: 'godot-api',
@@ -276,7 +288,7 @@ export function generateApiCards() {
   copyAssets(cards);
   console.log(`godot-api: ${classCards.length} class cards (${tutorial.length} tutorial classes pinned), ${members.length} member cards`);
   const rules = [
-    ['duplicateBrief', 'class brief identical to another class'],
+    ['duplicateBrief', 'class brief identical to another class (the kept twin is not deprecated, or more frequent)'],
     ['editor', 'editor-only class (api_type="editor")'],
     ['hollow', 'prompt left with ____ or two words or fewer'],
     ['shortMember', 'member description of four words or fewer'],

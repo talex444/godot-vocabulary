@@ -1,13 +1,8 @@
 {
   "duplicateBrief": [
-    "api:class:CheckButton",
     "api:class:CheckBox",
-    "api:class:TileMapLayer",
     "api:class:ParallaxBackground",
     "api:class:TileMap",
-    "api:class:XRPositionalTracker",
-    "api:class:AudioListener3D",
-    "api:class:NavigationMeshSourceGeometryData2D",
     "api:class:NavigationMeshSourceGeometryData3D"
   ],
   "editor": [

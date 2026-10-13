@@ -22747,6 +22747,49 @@
     "icon": "icons/OmniLight3D.svg"
   },
   {
+    "id": "api:class:CheckButton",
+    "family": "godot-api",
+    "kind": "class",
+    "prompt": "A button that represents a binary choice.",
+    "answer": "CheckButton",
+    "distractors": [
+      "OptionButton",
+      "ColorPickerButton",
+      "MenuButton"
+    ],
+    "distractorPool": [
+      "OptionButton",
+      "ColorPickerButton",
+      "MenuButton",
+      "LinkButton",
+      "TextureButton",
+      "Label",
+      "ColorRect",
+      "TextureRect"
+    ],
+    "distractorIds": [
+      "api:class:OptionButton",
+      "api:class:ColorPickerButton",
+      "api:class:MenuButton",
+      "api:class:LinkButton",
+      "api:class:TextureButton",
+      "api:class:Label",
+      "api:class:ColorRect",
+      "api:class:TextureRect"
+    ],
+    "explain": "`CheckButton` is a toggle button displayed as a check field. It's similar to `CheckBox` in functionality, but it has a different appearance.",
+    "explainFull": "`CheckButton` is a toggle button displayed as a check field. It's similar to `CheckBox` in functionality, but it has a different appearance. To follow established UX patterns, it's recommended to use `CheckButton` when toggling it has an immediate effect on something. For example, it can be used when pressing it shows or hides advanced settings, without asking the user to confirm this action.\nSee also `BaseButton` which contains common properties and methods associated with this node.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_checkbutton.html",
+    "topic": "UI",
+    "source": {
+      "doc": "godot-class-reference",
+      "ref": "CheckButton",
+      "version": "4.7-stable"
+    },
+    "rank": 91,
+    "icon": "icons/CheckButton.svg"
+  },
+  {
     "id": "api:class:Material",
     "family": "godot-api",
     "kind": "class",
@@ -22786,7 +22829,7 @@
       "ref": "Material",
       "version": "4.7-stable"
     },
-    "rank": 91
+    "rank": 92
   },
   {
     "id": "api:class:PackedByteArray",
@@ -22828,7 +22871,7 @@
       "ref": "PackedByteArray",
       "version": "4.7-stable"
     },
-    "rank": 92,
+    "rank": 93,
     "icon": "icons/PackedByteArray.svg"
   },
   {
@@ -22871,7 +22914,7 @@
       "ref": "CharacterBody3D",
       "version": "4.7-stable"
     },
-    "rank": 93,
+    "rank": 94,
     "icon": "icons/CharacterBody3D.svg"
   },
   {
@@ -22914,7 +22957,7 @@
       "ref": "PackedInt32Array",
       "version": "4.7-stable"
     },
-    "rank": 94,
+    "rank": 95,
     "icon": "icons/PackedInt32Array.svg"
   },
   {
@@ -22957,7 +23000,7 @@
       "ref": "StyleBoxFlat",
       "version": "4.7-stable"
     },
-    "rank": 95,
+    "rank": 96,
     "icon": "icons/StyleBoxFlat.svg"
   },
   {
@@ -23000,7 +23043,7 @@
       "ref": "HSeparator",
       "version": "4.7-stable"
     },
-    "rank": 96,
+    "rank": 97,
     "icon": "icons/HSeparator.svg"
   },
   {
@@ -23043,7 +23086,7 @@
       "ref": "Variant",
       "version": "4.7-stable"
     },
-    "rank": 97,
+    "rank": 98,
     "icon": "icons/Variant.svg"
   },
   {
@@ -23086,7 +23129,7 @@
       "ref": "Time",
       "version": "4.7-stable"
     },
-    "rank": 98,
+    "rank": 99,
     "icon": "icons/Time.svg"
   },
   {
@@ -23129,7 +23172,7 @@
       "ref": "PanelContainer",
       "version": "4.7-stable"
     },
-    "rank": 99,
+    "rank": 100,
     "icon": "icons/PanelContainer.svg"
   },
   {
@@ -23172,7 +23215,7 @@
       "ref": "GridContainer",
       "version": "4.7-stable"
     },
-    "rank": 100,
+    "rank": 101,
     "icon": "icons/GridContainer.svg"
   },
   {
@@ -23215,7 +23258,7 @@
       "ref": "QuadMesh",
       "version": "4.7-stable"
     },
-    "rank": 101,
+    "rank": 102,
     "icon": "icons/QuadMesh.svg"
   },
   {
@@ -23258,7 +23301,7 @@
       "ref": "FontFile",
       "version": "4.7-stable"
     },
-    "rank": 102,
+    "rank": 103,
     "icon": "icons/FontFile.svg"
   },
   {
@@ -23301,7 +23344,7 @@
       "ref": "RectangleShape2D",
       "version": "4.7-stable"
     },
-    "rank": 103,
+    "rank": 104,
     "icon": "icons/RectangleShape2D.svg"
   },
   {
@@ -23344,7 +23387,7 @@
       "ref": "PhysicsMaterial",
       "version": "4.7-stable"
     },
-    "rank": 104,
+    "rank": 105,
     "icon": "icons/PhysicsMaterial.svg"
   },
   {
@@ -23387,7 +23430,7 @@
       "ref": "MarginContainer",
       "version": "4.7-stable"
     },
-    "rank": 105,
+    "rank": 106,
     "icon": "icons/MarginContainer.svg"
   },
   {
@@ -23430,7 +23473,7 @@
       "ref": "CircleShape2D",
       "version": "4.7-stable"
     },
-    "rank": 106,
+    "rank": 107,
     "icon": "icons/CircleShape2D.svg"
   },
   {
@@ -23473,7 +23516,7 @@
       "ref": "XROrigin3D",
       "version": "4.7-stable"
     },
-    "rank": 107,
+    "rank": 108,
     "icon": "icons/XROrigin3D.svg"
   },
   {
@@ -23516,7 +23559,7 @@
       "ref": "PackedVector3Array",
       "version": "4.7-stable"
     },
-    "rank": 108,
+    "rank": 109,
     "icon": "icons/PackedVector3Array.svg"
   },
   {
@@ -23559,7 +23602,7 @@
       "ref": "XRCamera3D",
       "version": "4.7-stable"
     },
-    "rank": 109,
+    "rank": 110,
     "icon": "icons/XRCamera3D.svg"
   },
   {
@@ -23602,7 +23645,50 @@
       "ref": "XRServer",
       "version": "4.7-stable"
     },
-    "rank": 110
+    "rank": 111
+  },
+  {
+    "id": "api:class:TileMapLayer",
+    "family": "godot-api",
+    "kind": "class",
+    "prompt": "Node for 2D tile-based maps.",
+    "answer": "TileMapLayer",
+    "distractors": [
+      "AnimatedSprite2D",
+      "CollisionShape2D",
+      "VisibleOnScreenNotifier2D"
+    ],
+    "distractorPool": [
+      "AnimatedSprite2D",
+      "CollisionShape2D",
+      "VisibleOnScreenNotifier2D",
+      "CollisionObject2D",
+      "Marker2D",
+      "Path2D",
+      "PathFollow2D",
+      "Sprite2D"
+    ],
+    "distractorIds": [
+      "api:class:AnimatedSprite2D",
+      "api:class:CollisionShape2D",
+      "api:class:VisibleOnScreenNotifier2D",
+      "api:class:CollisionObject2D",
+      "api:class:Marker2D",
+      "api:class:Path2D",
+      "api:class:PathFollow2D",
+      "api:class:Sprite2D"
+    ],
+    "explain": "Node for 2D tile-based maps. A `TileMapLayer` uses a `TileSet` which contain a list of tiles which are used to create grid-based maps.",
+    "explainFull": "Node for 2D tile-based maps. A `TileMapLayer` uses a `TileSet` which contain a list of tiles which are used to create grid-based maps. Unlike the `TileMap` node, which is deprecated, `TileMapLayer` has only one layer of tiles. You can use several `TileMapLayer` to achieve the same result as a `TileMap` node.\nFor performance reasons, all TileMap updates are batched at the end of a frame. Notably, this means that scene tiles from a `TileSetScenesCollectionSource` are initialized after their parent. This is only queued when inside the scene tree.\nTo force an update earlier on, call `update_internals()`.\nNote: For performance and compatibility reasons, the coordinates serialized by `TileMapLayer` are limited to 16-bit signed integers, i.e. the range for X and Y coordinates is from `-32768` to `32767`. When saving tile data, tiles outside this range are wrapped.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_tilemaplayer.html",
+    "topic": "2D nodes",
+    "source": {
+      "doc": "godot-class-reference",
+      "ref": "TileMapLayer",
+      "version": "4.7-stable"
+    },
+    "rank": 112,
+    "icon": "icons/TileMapLayer.svg"
   },
   {
     "id": "api:class:CylinderMesh",
@@ -23644,7 +23730,7 @@
       "ref": "CylinderMesh",
       "version": "4.7-stable"
     },
-    "rank": 111,
+    "rank": 113,
     "icon": "icons/CylinderMesh.svg"
   },
   {
@@ -23687,7 +23773,7 @@
       "ref": "TileSet",
       "version": "4.7-stable"
     },
-    "rank": 112,
+    "rank": 114,
     "icon": "icons/TileSet.svg"
   },
   {
@@ -23730,7 +23816,7 @@
       "ref": "RigidBody3D",
       "version": "4.7-stable"
     },
-    "rank": 113,
+    "rank": 115,
     "icon": "icons/RigidBody3D.svg"
   },
   {
@@ -23773,7 +23859,7 @@
       "ref": "CapsuleShape3D",
       "version": "4.7-stable"
     },
-    "rank": 114,
+    "rank": 116,
     "icon": "icons/CapsuleShape3D.svg"
   },
   {
@@ -23816,7 +23902,7 @@
       "ref": "Theme",
       "version": "4.7-stable"
     },
-    "rank": 115,
+    "rank": 117,
     "icon": "icons/Theme.svg"
   },
   {
@@ -23859,7 +23945,7 @@
       "ref": "Object",
       "version": "4.7-stable"
     },
-    "rank": 116,
+    "rank": 118,
     "icon": "icons/Object.svg"
   },
   {
@@ -23902,7 +23988,7 @@
       "ref": "Plane",
       "version": "4.7-stable"
     },
-    "rank": 117,
+    "rank": 119,
     "icon": "icons/Plane.svg"
   },
   {
@@ -23945,7 +24031,7 @@
       "ref": "SphereShape3D",
       "version": "4.7-stable"
     },
-    "rank": 118,
+    "rank": 120,
     "icon": "icons/SphereShape3D.svg"
   },
   {
@@ -23988,7 +24074,7 @@
       "ref": "Area3D",
       "version": "4.7-stable"
     },
-    "rank": 119,
+    "rank": 121,
     "icon": "icons/Area3D.svg"
   },
   {
@@ -24031,7 +24117,7 @@
       "ref": "XRController3D",
       "version": "4.7-stable"
     },
-    "rank": 120,
+    "rank": 122,
     "icon": "icons/XRController3D.svg"
   },
   {
@@ -24074,7 +24160,7 @@
       "ref": "SpinBox",
       "version": "4.7-stable"
     },
-    "rank": 121,
+    "rank": 123,
     "icon": "icons/SpinBox.svg"
   },
   {
@@ -24117,7 +24203,7 @@
       "ref": "Mesh",
       "version": "4.7-stable"
     },
-    "rank": 122,
+    "rank": 124,
     "icon": "icons/Mesh.svg"
   },
   {
@@ -24160,7 +24246,7 @@
       "ref": "AudioServer",
       "version": "4.7-stable"
     },
-    "rank": 123
+    "rank": 125
   },
   {
     "id": "api:class:AABB",
@@ -24202,7 +24288,7 @@
       "ref": "AABB",
       "version": "4.7-stable"
     },
-    "rank": 124,
+    "rank": 126,
     "icon": "icons/AABB.svg"
   },
   {
@@ -24245,7 +24331,7 @@
       "ref": "GradientTexture1D",
       "version": "4.7-stable"
     },
-    "rank": 125,
+    "rank": 127,
     "icon": "icons/GradientTexture1D.svg"
   },
   {
@@ -24288,7 +24374,7 @@
       "ref": "StaticBody2D",
       "version": "4.7-stable"
     },
-    "rank": 126,
+    "rank": 128,
     "icon": "icons/StaticBody2D.svg"
   },
   {
@@ -24331,7 +24417,7 @@
       "ref": "Window",
       "version": "4.7-stable"
     },
-    "rank": 127,
+    "rank": 129,
     "icon": "icons/Window.svg"
   },
   {
@@ -24374,7 +24460,7 @@
       "ref": "Label3D",
       "version": "4.7-stable"
     },
-    "rank": 128,
+    "rank": 130,
     "icon": "icons/Label3D.svg"
   },
   {
@@ -24417,7 +24503,7 @@
       "ref": "TextEdit",
       "version": "4.7-stable"
     },
-    "rank": 129,
+    "rank": 131,
     "icon": "icons/TextEdit.svg"
   },
   {
@@ -24460,7 +24546,7 @@
       "ref": "ArrayMesh",
       "version": "4.7-stable"
     },
-    "rank": 130,
+    "rank": 132,
     "icon": "icons/ArrayMesh.svg"
   },
   {
@@ -24503,7 +24589,7 @@
       "ref": "SpotLight3D",
       "version": "4.7-stable"
     },
-    "rank": 131,
+    "rank": 133,
     "icon": "icons/SpotLight3D.svg"
   },
   {
@@ -24546,7 +24632,7 @@
       "ref": "CanvasItemMaterial",
       "version": "4.7-stable"
     },
-    "rank": 132,
+    "rank": 134,
     "icon": "icons/CanvasItemMaterial.svg"
   },
   {
@@ -24589,7 +24675,7 @@
       "ref": "RID",
       "version": "4.7-stable"
     },
-    "rank": 133,
+    "rank": 135,
     "icon": "icons/RID.svg"
   },
   {
@@ -24632,7 +24718,7 @@
       "ref": "ParticleProcessMaterial",
       "version": "4.7-stable"
     },
-    "rank": 134,
+    "rank": 136,
     "icon": "icons/ParticleProcessMaterial.svg"
   },
   {
@@ -24675,7 +24761,7 @@
       "ref": "CollisionPolygon2D",
       "version": "4.7-stable"
     },
-    "rank": 135,
+    "rank": 137,
     "icon": "icons/CollisionPolygon2D.svg"
   },
   {
@@ -24718,7 +24804,7 @@
       "ref": "Transform2D",
       "version": "4.7-stable"
     },
-    "rank": 136,
+    "rank": 138,
     "icon": "icons/Transform2D.svg"
   },
   {
@@ -24761,7 +24847,7 @@
       "ref": "Marker3D",
       "version": "4.7-stable"
     },
-    "rank": 137,
+    "rank": 139,
     "icon": "icons/Marker3D.svg"
   },
   {
@@ -24804,7 +24890,7 @@
       "ref": "StringName",
       "version": "4.7-stable"
     },
-    "rank": 138,
+    "rank": 140,
     "icon": "icons/StringName.svg"
   },
   {
@@ -24847,7 +24933,7 @@
       "ref": "SubViewportContainer",
       "version": "4.7-stable"
     },
-    "rank": 139,
+    "rank": 141,
     "icon": "icons/SubViewportContainer.svg"
   },
   {
@@ -24890,7 +24976,7 @@
       "ref": "Tween",
       "version": "4.7-stable"
     },
-    "rank": 140,
+    "rank": 142,
     "icon": "icons/Tween.svg"
   },
   {
@@ -24933,7 +25019,7 @@
       "ref": "LinkButton",
       "version": "4.7-stable"
     },
-    "rank": 141,
+    "rank": 143,
     "icon": "icons/LinkButton.svg"
   },
   {
@@ -24976,7 +25062,7 @@
       "ref": "WorldBoundaryShape3D",
       "version": "4.7-stable"
     },
-    "rank": 142,
+    "rank": 144,
     "icon": "icons/WorldBoundaryShape3D.svg"
   },
   {
@@ -25019,7 +25105,7 @@
       "ref": "GPUParticles3D",
       "version": "4.7-stable"
     },
-    "rank": 143,
+    "rank": 145,
     "icon": "icons/GPUParticles3D.svg"
   },
   {
@@ -25062,7 +25148,7 @@
       "ref": "Image",
       "version": "4.7-stable"
     },
-    "rank": 144,
+    "rank": 146,
     "icon": "icons/Image.svg"
   },
   {
@@ -25105,7 +25191,7 @@
       "ref": "Separator",
       "version": "4.7-stable"
     },
-    "rank": 145
+    "rank": 147
   },
   {
     "id": "api:class:CylinderShape3D",
@@ -25147,7 +25233,7 @@
       "ref": "CylinderShape3D",
       "version": "4.7-stable"
     },
-    "rank": 146,
+    "rank": 148,
     "icon": "icons/CylinderShape3D.svg"
   },
   {
@@ -25190,7 +25276,7 @@
       "ref": "InputEventKey",
       "version": "4.7-stable"
     },
-    "rank": 147,
+    "rank": 149,
     "icon": "icons/InputEventKey.svg"
   },
   {
@@ -25233,7 +25319,7 @@
       "ref": "CPUParticles2D",
       "version": "4.7-stable"
     },
-    "rank": 148,
+    "rank": 150,
     "icon": "icons/CPUParticles2D.svg"
   },
   {
@@ -25276,7 +25362,7 @@
       "ref": "Decal",
       "version": "4.7-stable"
     },
-    "rank": 149,
+    "rank": 151,
     "icon": "icons/Decal.svg"
   },
   {
@@ -25319,7 +25405,7 @@
       "ref": "ScrollContainer",
       "version": "4.7-stable"
     },
-    "rank": 150,
+    "rank": 152,
     "icon": "icons/ScrollContainer.svg"
   },
   {
@@ -25362,7 +25448,7 @@
       "ref": "ReflectionProbe",
       "version": "4.7-stable"
     },
-    "rank": 151,
+    "rank": 153,
     "icon": "icons/ReflectionProbe.svg"
   },
   {
@@ -25405,7 +25491,7 @@
       "ref": "Line2D",
       "version": "4.7-stable"
     },
-    "rank": 152,
+    "rank": 154,
     "icon": "icons/Line2D.svg"
   },
   {
@@ -25448,7 +25534,7 @@
       "ref": "FileAccess",
       "version": "4.7-stable"
     },
-    "rank": 153,
+    "rank": 155,
     "icon": "icons/FileAccess.svg"
   },
   {
@@ -25491,7 +25577,7 @@
       "ref": "ColorPickerButton",
       "version": "4.7-stable"
     },
-    "rank": 154,
+    "rank": 156,
     "icon": "icons/ColorPickerButton.svg"
   },
   {
@@ -25534,7 +25620,7 @@
       "ref": "Polygon2D",
       "version": "4.7-stable"
     },
-    "rank": 155,
+    "rank": 157,
     "icon": "icons/Polygon2D.svg"
   },
   {
@@ -25577,7 +25663,7 @@
       "ref": "CurveTexture",
       "version": "4.7-stable"
     },
-    "rank": 156,
+    "rank": 158,
     "icon": "icons/CurveTexture.svg"
   },
   {
@@ -25620,7 +25706,7 @@
       "ref": "ViewportTexture",
       "version": "4.7-stable"
     },
-    "rank": 157,
+    "rank": 159,
     "icon": "icons/ViewportTexture.svg"
   },
   {
@@ -25663,7 +25749,7 @@
       "ref": "ImageTexture",
       "version": "4.7-stable"
     },
-    "rank": 158,
+    "rank": 160,
     "icon": "icons/ImageTexture.svg"
   },
   {
@@ -25706,7 +25792,7 @@
       "ref": "PhysicsRayQueryParameters3D",
       "version": "4.7-stable"
     },
-    "rank": 159
+    "rank": 161
   },
   {
     "id": "api:class:Tree",
@@ -25748,7 +25834,7 @@
       "ref": "Tree",
       "version": "4.7-stable"
     },
-    "rank": 160,
+    "rank": 162,
     "icon": "icons/Tree.svg"
   },
   {
@@ -25791,7 +25877,7 @@
       "ref": "AcceptDialog",
       "version": "4.7-stable"
     },
-    "rank": 161,
+    "rank": 163,
     "icon": "icons/AcceptDialog.svg"
   },
   {
@@ -25834,7 +25920,7 @@
       "ref": "ItemList",
       "version": "4.7-stable"
     },
-    "rank": 162,
+    "rank": 164,
     "icon": "icons/ItemList.svg"
   },
   {
@@ -25877,7 +25963,7 @@
       "ref": "ProgressBar",
       "version": "4.7-stable"
     },
-    "rank": 163,
+    "rank": 165,
     "icon": "icons/ProgressBar.svg"
   },
   {
@@ -25920,7 +26006,7 @@
       "ref": "AtlasTexture",
       "version": "4.7-stable"
     },
-    "rank": 164,
+    "rank": 166,
     "icon": "icons/AtlasTexture.svg"
   },
   {
@@ -25963,7 +26049,7 @@
       "ref": "Path3D",
       "version": "4.7-stable"
     },
-    "rank": 165,
+    "rank": 167,
     "icon": "icons/Path3D.svg"
   },
   {
@@ -26006,7 +26092,7 @@
       "ref": "CapsuleMesh",
       "version": "4.7-stable"
     },
-    "rank": 166,
+    "rank": 168,
     "icon": "icons/CapsuleMesh.svg"
   },
   {
@@ -26049,7 +26135,7 @@
       "ref": "Curve3D",
       "version": "4.7-stable"
     },
-    "rank": 167,
+    "rank": 169,
     "icon": "icons/Curve3D.svg"
   },
   {
@@ -26092,7 +26178,7 @@
       "ref": "Skeleton3D",
       "version": "4.7-stable"
     },
-    "rank": 168,
+    "rank": 170,
     "icon": "icons/Skeleton3D.svg"
   },
   {
@@ -26135,7 +26221,7 @@
       "ref": "FileDialog",
       "version": "4.7-stable"
     },
-    "rank": 169,
+    "rank": 171,
     "icon": "icons/FileDialog.svg"
   },
   {
@@ -26178,7 +26264,7 @@
       "ref": "CPUParticles3D",
       "version": "4.7-stable"
     },
-    "rank": 170,
+    "rank": 172,
     "icon": "icons/CPUParticles3D.svg"
   },
   {
@@ -26221,7 +26307,7 @@
       "ref": "TabContainer",
       "version": "4.7-stable"
     },
-    "rank": 171,
+    "rank": 173,
     "icon": "icons/TabContainer.svg"
   },
   {
@@ -26264,7 +26350,7 @@
       "ref": "TextureButton",
       "version": "4.7-stable"
     },
-    "rank": 172,
+    "rank": 174,
     "icon": "icons/TextureButton.svg"
   },
   {
@@ -26307,7 +26393,7 @@
       "ref": "Texture",
       "version": "4.7-stable"
     },
-    "rank": 173
+    "rank": 175
   },
   {
     "id": "api:class:ResourceLoader",
@@ -26349,7 +26435,7 @@
       "ref": "ResourceLoader",
       "version": "4.7-stable"
     },
-    "rank": 174
+    "rank": 176
   },
   {
     "id": "api:class:ConcavePolygonShape3D",
@@ -26391,7 +26477,7 @@
       "ref": "ConcavePolygonShape3D",
       "version": "4.7-stable"
     },
-    "rank": 175,
+    "rank": 177,
     "icon": "icons/ConcavePolygonShape3D.svg"
   },
   {
@@ -26434,7 +26520,7 @@
       "ref": "FontVariation",
       "version": "4.7-stable"
     },
-    "rank": 176,
+    "rank": 178,
     "icon": "icons/FontVariation.svg"
   },
   {
@@ -26477,7 +26563,7 @@
       "ref": "HFlowContainer",
       "version": "4.7-stable"
     },
-    "rank": 177,
+    "rank": 179,
     "icon": "icons/HFlowContainer.svg"
   },
   {
@@ -26520,7 +26606,7 @@
       "ref": "RenderingDevice",
       "version": "4.7-stable"
     },
-    "rank": 178
+    "rank": 180
   },
   {
     "id": "api:class:Light3D",
@@ -26562,7 +26648,7 @@
       "ref": "Light3D",
       "version": "4.7-stable"
     },
-    "rank": 179
+    "rank": 181
   },
   {
     "id": "api:class:Font",
@@ -26604,7 +26690,7 @@
       "ref": "Font",
       "version": "4.7-stable"
     },
-    "rank": 180,
+    "rank": 182,
     "icon": "icons/Font.svg"
   },
   {
@@ -26647,7 +26733,7 @@
       "ref": "ButtonGroup",
       "version": "4.7-stable"
     },
-    "rank": 181,
+    "rank": 183,
     "icon": "icons/ButtonGroup.svg"
   },
   {
@@ -26690,7 +26776,7 @@
       "ref": "TextMesh",
       "version": "4.7-stable"
     },
-    "rank": 182,
+    "rank": 184,
     "icon": "icons/TextMesh.svg"
   },
   {
@@ -26733,7 +26819,7 @@
       "ref": "GPUParticles2D",
       "version": "4.7-stable"
     },
-    "rank": 183,
+    "rank": 185,
     "icon": "icons/GPUParticles2D.svg"
   },
   {
@@ -26776,7 +26862,7 @@
       "ref": "GeometryInstance3D",
       "version": "4.7-stable"
     },
-    "rank": 184,
+    "rank": 186,
     "icon": "icons/GeometryInstance3D.svg"
   },
   {
@@ -26819,7 +26905,7 @@
       "ref": "TouchScreenButton",
       "version": "4.7-stable"
     },
-    "rank": 185,
+    "rank": 187,
     "icon": "icons/TouchScreenButton.svg"
   },
   {
@@ -26862,7 +26948,7 @@
       "ref": "SceneTree",
       "version": "4.7-stable"
     },
-    "rank": 186
+    "rank": 188
   },
   {
     "id": "api:class:Vector4",
@@ -26904,7 +26990,7 @@
       "ref": "Vector4",
       "version": "4.7-stable"
     },
-    "rank": 187,
+    "rank": 189,
     "icon": "icons/Vector4.svg"
   },
   {
@@ -26947,7 +27033,7 @@
       "ref": "VSeparator",
       "version": "4.7-stable"
     },
-    "rank": 188,
+    "rank": 190,
     "icon": "icons/VSeparator.svg"
   },
   {
@@ -26990,7 +27076,7 @@
       "ref": "InputEventScreenDrag",
       "version": "4.7-stable"
     },
-    "rank": 189,
+    "rank": 191,
     "icon": "icons/InputEventScreenDrag.svg"
   },
   {
@@ -27033,7 +27119,7 @@
       "ref": "InputEventScreenTouch",
       "version": "4.7-stable"
     },
-    "rank": 190,
+    "rank": 192,
     "icon": "icons/InputEventScreenTouch.svg"
   },
   {
@@ -27076,7 +27162,7 @@
       "ref": "CanvasItem",
       "version": "4.7-stable"
     },
-    "rank": 191,
+    "rank": 193,
     "icon": "icons/CanvasItem.svg"
   },
   {
@@ -27119,7 +27205,7 @@
       "ref": "PrismMesh",
       "version": "4.7-stable"
     },
-    "rank": 192,
+    "rank": 194,
     "icon": "icons/PrismMesh.svg"
   },
   {
@@ -27162,7 +27248,7 @@
       "ref": "TorusMesh",
       "version": "4.7-stable"
     },
-    "rank": 193,
+    "rank": 195,
     "icon": "icons/TorusMesh.svg"
   },
   {
@@ -27205,7 +27291,7 @@
       "ref": "Curve2D",
       "version": "4.7-stable"
     },
-    "rank": 194,
+    "rank": 196,
     "icon": "icons/Curve2D.svg"
   },
   {
@@ -27248,7 +27334,7 @@
       "ref": "PhysicalSkyMaterial",
       "version": "4.7-stable"
     },
-    "rank": 195,
+    "rank": 197,
     "icon": "icons/PhysicalSkyMaterial.svg"
   },
   {
@@ -27291,7 +27377,7 @@
       "ref": "AudioStreamPlayer2D",
       "version": "4.7-stable"
     },
-    "rank": 196,
+    "rank": 198,
     "icon": "icons/AudioStreamPlayer2D.svg"
   },
   {
@@ -27334,7 +27420,7 @@
       "ref": "AnimationTree",
       "version": "4.7-stable"
     },
-    "rank": 197,
+    "rank": 199,
     "icon": "icons/AnimationTree.svg"
   },
   {
@@ -27377,7 +27463,7 @@
       "ref": "PopupMenu",
       "version": "4.7-stable"
     },
-    "rank": 198,
+    "rank": 200,
     "icon": "icons/PopupMenu.svg"
   },
   {
@@ -27420,7 +27506,7 @@
       "ref": "Shape3D",
       "version": "4.7-stable"
     },
-    "rank": 199,
+    "rank": 201,
     "icon": "icons/Shape3D.svg"
   },
   {
@@ -27463,7 +27549,7 @@
       "ref": "Resource",
       "version": "4.7-stable"
     },
-    "rank": 200
+    "rank": 202
   },
   {
     "id": "api:class:MenuButton",
@@ -27505,7 +27591,7 @@
       "ref": "MenuButton",
       "version": "4.7-stable"
     },
-    "rank": 201,
+    "rank": 203,
     "icon": "icons/MenuButton.svg"
   },
   {
@@ -27548,7 +27634,7 @@
       "ref": "Vector3i",
       "version": "4.7-stable"
     },
-    "rank": 202,
+    "rank": 204,
     "icon": "icons/Vector3i.svg"
   },
   {
@@ -27591,7 +27677,7 @@
       "ref": "AudioStreamPlayer3D",
       "version": "4.7-stable"
     },
-    "rank": 203,
+    "rank": 205,
     "icon": "icons/AudioStreamPlayer3D.svg"
   },
   {
@@ -27634,7 +27720,7 @@
       "ref": "RayCast3D",
       "version": "4.7-stable"
     },
-    "rank": 204,
+    "rank": 206,
     "icon": "icons/RayCast3D.svg"
   },
   {
@@ -27677,7 +27763,7 @@
       "ref": "LightOccluder2D",
       "version": "4.7-stable"
     },
-    "rank": 205,
+    "rank": 207,
     "icon": "icons/LightOccluder2D.svg"
   },
   {
@@ -27720,7 +27806,7 @@
       "ref": "OccluderPolygon2D",
       "version": "4.7-stable"
     },
-    "rank": 206,
+    "rank": 208,
     "icon": "icons/OccluderPolygon2D.svg"
   },
   {
@@ -27763,7 +27849,7 @@
       "ref": "AudioStreamRandomizer",
       "version": "4.7-stable"
     },
-    "rank": 207,
+    "rank": 209,
     "icon": "icons/AudioStreamRandomizer.svg"
   },
   {
@@ -27806,7 +27892,7 @@
       "ref": "PanoramaSkyMaterial",
       "version": "4.7-stable"
     },
-    "rank": 208,
+    "rank": 210,
     "icon": "icons/PanoramaSkyMaterial.svg"
   },
   {
@@ -27849,7 +27935,7 @@
       "ref": "HSplitContainer",
       "version": "4.7-stable"
     },
-    "rank": 209,
+    "rank": 211,
     "icon": "icons/HSplitContainer.svg"
   },
   {
@@ -27892,7 +27978,7 @@
       "ref": "PathFollow3D",
       "version": "4.7-stable"
     },
-    "rank": 210,
+    "rank": 212,
     "icon": "icons/PathFollow3D.svg"
   },
   {
@@ -27935,7 +28021,7 @@
       "ref": "PointLight2D",
       "version": "4.7-stable"
     },
-    "rank": 211,
+    "rank": 213,
     "icon": "icons/PointLight2D.svg"
   },
   {
@@ -27978,7 +28064,7 @@
       "ref": "TranslationServer",
       "version": "4.7-stable"
     },
-    "rank": 212
+    "rank": 214
   },
   {
     "id": "api:class:AnimationNodeAnimation",
@@ -28020,7 +28106,7 @@
       "ref": "AnimationNodeAnimation",
       "version": "4.7-stable"
     },
-    "rank": 213
+    "rank": 215
   },
   {
     "id": "api:class:Performance",
@@ -28062,7 +28148,7 @@
       "ref": "Performance",
       "version": "4.7-stable"
     },
-    "rank": 214,
+    "rank": 216,
     "icon": "icons/Performance.svg"
   },
   {
@@ -28105,7 +28191,7 @@
       "ref": "RDUniform",
       "version": "4.7-stable"
     },
-    "rank": 215
+    "rank": 217
   },
   {
     "id": "api:class:TextureProgressBar",
@@ -28147,7 +28233,7 @@
       "ref": "TextureProgressBar",
       "version": "4.7-stable"
     },
-    "rank": 216,
+    "rank": 218,
     "icon": "icons/TextureProgressBar.svg"
   },
   {
@@ -28190,7 +28276,7 @@
       "ref": "BaseMaterial3D",
       "version": "4.7-stable"
     },
-    "rank": 217
+    "rank": 219
   },
   {
     "id": "api:class:RDShaderSPIRV",
@@ -28232,7 +28318,7 @@
       "ref": "RDShaderSPIRV",
       "version": "4.7-stable"
     },
-    "rank": 218
+    "rank": 220
   },
   {
     "id": "api:class:GPUParticlesCollisionBox3D",
@@ -28274,7 +28360,7 @@
       "ref": "GPUParticlesCollisionBox3D",
       "version": "4.7-stable"
     },
-    "rank": 219,
+    "rank": 221,
     "icon": "icons/GPUParticlesCollisionBox3D.svg"
   },
   {
@@ -28317,7 +28403,7 @@
       "ref": "ParallaxLayer",
       "version": "4.7-stable"
     },
-    "rank": 220,
+    "rank": 222,
     "icon": "icons/ParallaxLayer.svg"
   },
   {
@@ -28360,7 +28446,7 @@
       "ref": "CompressedTexture3D",
       "version": "4.7-stable"
     },
-    "rank": 221,
+    "rank": 223,
     "icon": "icons/CompressedTexture3D.svg"
   },
   {
@@ -28403,7 +28489,7 @@
       "ref": "RefCounted",
       "version": "4.7-stable"
     },
-    "rank": 222
+    "rank": 224
   },
   {
     "id": "api:class:StyleBoxEmpty",
@@ -28445,7 +28531,7 @@
       "ref": "StyleBoxEmpty",
       "version": "4.7-stable"
     },
-    "rank": 223,
+    "rank": 225,
     "icon": "icons/StyleBoxEmpty.svg"
   },
   {
@@ -28488,7 +28574,7 @@
       "ref": "Callable",
       "version": "4.7-stable"
     },
-    "rank": 224,
+    "rank": 226,
     "icon": "icons/Callable.svg"
   },
   {
@@ -28531,7 +28617,7 @@
       "ref": "LabelSettings",
       "version": "4.7-stable"
     },
-    "rank": 225,
+    "rank": 227,
     "icon": "icons/LabelSettings.svg"
   },
   {
@@ -28574,7 +28660,7 @@
       "ref": "TCPServer",
       "version": "4.7-stable"
     },
-    "rank": 226
+    "rank": 228
   },
   {
     "id": "api:class:World3D",
@@ -28616,7 +28702,7 @@
       "ref": "World3D",
       "version": "4.7-stable"
     },
-    "rank": 227,
+    "rank": 229,
     "icon": "icons/World3D.svg"
   },
   {
@@ -28659,7 +28745,7 @@
       "ref": "ConvexPolygonShape3D",
       "version": "4.7-stable"
     },
-    "rank": 228,
+    "rank": 230,
     "icon": "icons/ConvexPolygonShape3D.svg"
   },
   {
@@ -28702,7 +28788,7 @@
       "ref": "PhysicsBody2D",
       "version": "4.7-stable"
     },
-    "rank": 229,
+    "rank": 231,
     "icon": "icons/PhysicsBody2D.svg"
   },
   {
@@ -28745,7 +28831,7 @@
       "ref": "RayCast2D",
       "version": "4.7-stable"
     },
-    "rank": 230,
+    "rank": 232,
     "icon": "icons/RayCast2D.svg"
   },
   {
@@ -28788,7 +28874,7 @@
       "ref": "ResourceSaver",
       "version": "4.7-stable"
     },
-    "rank": 231
+    "rank": 233
   },
   {
     "id": "api:class:XRPose",
@@ -28830,7 +28916,7 @@
       "ref": "XRPose",
       "version": "4.7-stable"
     },
-    "rank": 232
+    "rank": 234
   },
   {
     "id": "api:class:PhysicsBody3D",
@@ -28872,7 +28958,7 @@
       "ref": "PhysicsBody3D",
       "version": "4.7-stable"
     },
-    "rank": 233,
+    "rank": 235,
     "icon": "icons/PhysicsBody3D.svg"
   },
   {
@@ -28915,7 +29001,7 @@
       "ref": "ShapeCast3D",
       "version": "4.7-stable"
     },
-    "rank": 234,
+    "rank": 236,
     "icon": "icons/ShapeCast3D.svg"
   },
   {
@@ -28958,7 +29044,7 @@
       "ref": "SeparationRayShape2D",
       "version": "4.7-stable"
     },
-    "rank": 235,
+    "rank": 237,
     "icon": "icons/SeparationRayShape2D.svg"
   },
   {
@@ -29001,7 +29087,7 @@
       "ref": "XRControllerTracker",
       "version": "4.7-stable"
     },
-    "rank": 236
+    "rank": 238
   },
   {
     "id": "api:class:Sprite3D",
@@ -29043,7 +29129,7 @@
       "ref": "Sprite3D",
       "version": "4.7-stable"
     },
-    "rank": 237,
+    "rank": 239,
     "icon": "icons/Sprite3D.svg"
   },
   {
@@ -29086,7 +29172,7 @@
       "ref": "ConfigFile",
       "version": "4.7-stable"
     },
-    "rank": 238
+    "rank": 240
   },
   {
     "id": "api:class:SystemFont",
@@ -29128,7 +29214,7 @@
       "ref": "SystemFont",
       "version": "4.7-stable"
     },
-    "rank": 239,
+    "rank": 241,
     "icon": "icons/SystemFont.svg"
   },
   {
@@ -29171,7 +29257,7 @@
       "ref": "NavigationServer3D",
       "version": "4.7-stable"
     },
-    "rank": 240
+    "rank": 242
   },
   {
     "id": "api:class:LightmapGI",
@@ -29213,7 +29299,7 @@
       "ref": "LightmapGI",
       "version": "4.7-stable"
     },
-    "rank": 241,
+    "rank": 243,
     "icon": "icons/LightmapGI.svg"
   },
   {
@@ -29256,7 +29342,7 @@
       "ref": "NavigationAgent2D",
       "version": "4.7-stable"
     },
-    "rank": 242,
+    "rank": 244,
     "icon": "icons/NavigationAgent2D.svg"
   },
   {
@@ -29299,7 +29385,7 @@
       "ref": "NavigationAgent3D",
       "version": "4.7-stable"
     },
-    "rank": 243,
+    "rank": 245,
     "icon": "icons/NavigationAgent3D.svg"
   },
   {
@@ -29342,7 +29428,7 @@
       "ref": "LightmapGIData",
       "version": "4.7-stable"
     },
-    "rank": 244,
+    "rank": 246,
     "icon": "icons/LightmapGIData.svg"
   },
   {
@@ -29385,7 +29471,7 @@
       "ref": "Thread",
       "version": "4.7-stable"
     },
-    "rank": 245
+    "rank": 247
   },
   {
     "id": "api:class:PinJoint2D",
@@ -29427,7 +29513,7 @@
       "ref": "PinJoint2D",
       "version": "4.7-stable"
     },
-    "rank": 246,
+    "rank": 248,
     "icon": "icons/PinJoint2D.svg"
   },
   {
@@ -29470,7 +29556,7 @@
       "ref": "AnimatableBody3D",
       "version": "4.7-stable"
     },
-    "rank": 247,
+    "rank": 249,
     "icon": "icons/AnimatableBody3D.svg"
   },
   {
@@ -29513,7 +29599,7 @@
       "ref": "PhysicsDirectBodyState2D",
       "version": "4.7-stable"
     },
-    "rank": 248
+    "rank": 250
   },
   {
     "id": "api:class:RandomNumberGenerator",
@@ -29555,7 +29641,7 @@
       "ref": "RandomNumberGenerator",
       "version": "4.7-stable"
     },
-    "rank": 249,
+    "rank": 251,
     "icon": "icons/RandomNumberGenerator.svg"
   },
   {
@@ -29598,7 +29684,7 @@
       "ref": "TextServer",
       "version": "4.7-stable"
     },
-    "rank": 250
+    "rank": 252
   },
   {
     "id": "api:class:PhysicsDirectSpaceState2D",
@@ -29640,7 +29726,7 @@
       "ref": "PhysicsDirectSpaceState2D",
       "version": "4.7-stable"
     },
-    "rank": 251
+    "rank": 253
   },
   {
     "id": "api:class:Quaternion",
@@ -29682,7 +29768,7 @@
       "ref": "Quaternion",
       "version": "4.7-stable"
     },
-    "rank": 252,
+    "rank": 254,
     "icon": "icons/Quaternion.svg"
   },
   {
@@ -29725,7 +29811,7 @@
       "ref": "VSplitContainer",
       "version": "4.7-stable"
     },
-    "rank": 253,
+    "rank": 255,
     "icon": "icons/VSplitContainer.svg"
   },
   {
@@ -29768,7 +29854,7 @@
       "ref": "PhysicsServer2D",
       "version": "4.7-stable"
     },
-    "rank": 254
+    "rank": 256
   },
   {
     "id": "api:class:TreeItem",
@@ -29810,7 +29896,7 @@
       "ref": "TreeItem",
       "version": "4.7-stable"
     },
-    "rank": 255
+    "rank": 257
   },
   {
     "id": "api:class:FogVolume",
@@ -29852,7 +29938,7 @@
       "ref": "FogVolume",
       "version": "4.7-stable"
     },
-    "rank": 256,
+    "rank": 258,
     "icon": "icons/FogVolume.svg"
   },
   {
@@ -29895,7 +29981,7 @@
       "ref": "PhysicsServer3D",
       "version": "4.7-stable"
     },
-    "rank": 257
+    "rank": 259
   },
   {
     "id": "api:class:SplitContainer",
@@ -29937,7 +30023,7 @@
       "ref": "SplitContainer",
       "version": "4.7-stable"
     },
-    "rank": 258,
+    "rank": 260,
     "icon": "icons/SplitContainer.svg"
   },
   {
@@ -29980,7 +30066,7 @@
       "ref": "FogMaterial",
       "version": "4.7-stable"
     },
-    "rank": 259,
+    "rank": 261,
     "icon": "icons/FogMaterial.svg"
   },
   {
@@ -30023,7 +30109,7 @@
       "ref": "XRInterface",
       "version": "4.7-stable"
     },
-    "rank": 260
+    "rank": 262
   },
   {
     "id": "api:class:NavigationMesh",
@@ -30065,7 +30151,7 @@
       "ref": "NavigationMesh",
       "version": "4.7-stable"
     },
-    "rank": 261,
+    "rank": 263,
     "icon": "icons/NavigationMesh.svg"
   },
   {
@@ -30108,7 +30194,7 @@
       "ref": "AudioStreamWAV",
       "version": "4.7-stable"
     },
-    "rank": 262,
+    "rank": 264,
     "icon": "icons/AudioStreamWAV.svg"
   },
   {
@@ -30151,7 +30237,7 @@
       "ref": "NavigationPolygon",
       "version": "4.7-stable"
     },
-    "rank": 263,
+    "rank": 265,
     "icon": "icons/NavigationPolygon.svg"
   },
   {
@@ -30194,7 +30280,7 @@
       "ref": "PinJoint3D",
       "version": "4.7-stable"
     },
-    "rank": 264,
+    "rank": 266,
     "icon": "icons/PinJoint3D.svg"
   },
   {
@@ -30237,7 +30323,7 @@
       "ref": "VisibleOnScreenNotifier3D",
       "version": "4.7-stable"
     },
-    "rank": 265,
+    "rank": 267,
     "icon": "icons/VisibleOnScreenNotifier3D.svg"
   },
   {
@@ -30280,7 +30366,7 @@
       "ref": "CanvasTexture",
       "version": "4.7-stable"
     },
-    "rank": 266,
+    "rank": 268,
     "icon": "icons/CanvasTexture.svg"
   },
   {
@@ -30323,7 +30409,7 @@
       "ref": "NavigationRegion3D",
       "version": "4.7-stable"
     },
-    "rank": 267,
+    "rank": 269,
     "icon": "icons/NavigationRegion3D.svg"
   },
   {
@@ -30366,7 +30452,7 @@
       "ref": "StreamPeerTCP",
       "version": "4.7-stable"
     },
-    "rank": 268
+    "rank": 270
   },
   {
     "id": "api:class:InputEventJoypadButton",
@@ -30408,7 +30494,7 @@
       "ref": "InputEventJoypadButton",
       "version": "4.7-stable"
     },
-    "rank": 269,
+    "rank": 271,
     "icon": "icons/InputEventJoypadButton.svg"
   },
   {
@@ -30451,7 +30537,7 @@
       "ref": "NavigationRegion2D",
       "version": "4.7-stable"
     },
-    "rank": 270,
+    "rank": 272,
     "icon": "icons/NavigationRegion2D.svg"
   },
   {
@@ -30494,7 +30580,7 @@
       "ref": "RDTextureFormat",
       "version": "4.7-stable"
     },
-    "rank": 271
+    "rank": 273
   },
   {
     "id": "api:class:AnimationNodeTimeScale",
@@ -30536,7 +30622,7 @@
       "ref": "AnimationNodeTimeScale",
       "version": "4.7-stable"
     },
-    "rank": 272
+    "rank": 274
   },
   {
     "id": "api:class:BaseButton",
@@ -30578,7 +30664,7 @@
       "ref": "BaseButton",
       "version": "4.7-stable"
     },
-    "rank": 273,
+    "rank": 275,
     "icon": "icons/BaseButton.svg"
   },
   {
@@ -30621,7 +30707,7 @@
       "ref": "CanvasModulate",
       "version": "4.7-stable"
     },
-    "rank": 274,
+    "rank": 276,
     "icon": "icons/CanvasModulate.svg"
   },
   {
@@ -30664,7 +30750,7 @@
       "ref": "ImmediateMesh",
       "version": "4.7-stable"
     },
-    "rank": 275,
+    "rank": 277,
     "icon": "icons/ImmediateMesh.svg"
   },
   {
@@ -30707,7 +30793,7 @@
       "ref": "MultiplayerAPI",
       "version": "4.7-stable"
     },
-    "rank": 276
+    "rank": 278
   },
   {
     "id": "api:class:RDTextureView",
@@ -30749,7 +30835,7 @@
       "ref": "RDTextureView",
       "version": "4.7-stable"
     },
-    "rank": 277
+    "rank": 279
   },
   {
     "id": "api:class:AnimationNodeBlendTree",
@@ -30791,7 +30877,7 @@
       "ref": "AnimationNodeBlendTree",
       "version": "4.7-stable"
     },
-    "rank": 278
+    "rank": 280
   },
   {
     "id": "api:class:Generic6DOFJoint3D",
@@ -30833,7 +30919,7 @@
       "ref": "Generic6DOFJoint3D",
       "version": "4.7-stable"
     },
-    "rank": 279,
+    "rank": 281,
     "icon": "icons/Generic6DOFJoint3D.svg"
   },
   {
@@ -30876,7 +30962,7 @@
       "ref": "InputEventMouse",
       "version": "4.7-stable"
     },
-    "rank": 280
+    "rank": 282
   },
   {
     "id": "api:class:MeshLibrary",
@@ -30918,7 +31004,7 @@
       "ref": "MeshLibrary",
       "version": "4.7-stable"
     },
-    "rank": 281,
+    "rank": 283,
     "icon": "icons/MeshLibrary.svg"
   },
   {
@@ -30961,7 +31047,7 @@
       "ref": "PhysicsDirectBodyState3D",
       "version": "4.7-stable"
     },
-    "rank": 282
+    "rank": 284
   },
   {
     "id": "api:class:PhysicsRayQueryParameters2D",
@@ -31003,7 +31089,7 @@
       "ref": "PhysicsRayQueryParameters2D",
       "version": "4.7-stable"
     },
-    "rank": 283
+    "rank": 285
   },
   {
     "id": "api:class:Rect2i",
@@ -31045,7 +31131,7 @@
       "ref": "Rect2i",
       "version": "4.7-stable"
     },
-    "rank": 284,
+    "rank": 286,
     "icon": "icons/Rect2i.svg"
   },
   {
@@ -31088,7 +31174,7 @@
       "ref": "Slider",
       "version": "4.7-stable"
     },
-    "rank": 285
+    "rank": 287
   },
   {
     "id": "api:class:StreamPeer",
@@ -31130,7 +31216,7 @@
       "ref": "StreamPeer",
       "version": "4.7-stable"
     },
-    "rank": 286
+    "rank": 288
   },
   {
     "id": "api:class:TileSetAtlasSource",
@@ -31172,7 +31258,49 @@
       "ref": "TileSetAtlasSource",
       "version": "4.7-stable"
     },
-    "rank": 287
+    "rank": 289
+  },
+  {
+    "id": "api:class:XRPositionalTracker",
+    "family": "godot-api",
+    "kind": "class",
+    "prompt": "A tracked object.",
+    "answer": "XRPositionalTracker",
+    "distractors": [
+      "XRFaceTracker",
+      "Tween",
+      "FileAccess"
+    ],
+    "distractorPool": [
+      "XRFaceTracker",
+      "Tween",
+      "FileAccess",
+      "PhysicsRayQueryParameters3D",
+      "Resource",
+      "RDUniform",
+      "XRPose",
+      "ConfigFile"
+    ],
+    "distractorIds": [
+      "api:class:XRFaceTracker",
+      "api:class:Tween",
+      "api:class:FileAccess",
+      "api:class:PhysicsRayQueryParameters3D",
+      "api:class:Resource",
+      "api:class:RDUniform",
+      "api:class:XRPose",
+      "api:class:ConfigFile"
+    ],
+    "explain": "An instance of this object represents a device that is tracked, such as a controller or anchor point. HMDs aren't represented here as they are handled internally.",
+    "explainFull": "An instance of this object represents a device that is tracked, such as a controller or anchor point. HMDs aren't represented here as they are handled internally.\nAs controllers are turned on and the `XRInterface` detects them, instances of this object are automatically added to this list of active tracking objects accessible through the `XRServer`.\nThe `XRNode3D` and `XRAnchor3D` both consume objects of this type and should be used in your project. The positional trackers are just under-the-hood objects that make this all work. These are mostly exposed so that GDExtension-based interfaces can interact with them.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_xrpositionaltracker.html",
+    "topic": "Core",
+    "source": {
+      "doc": "godot-class-reference",
+      "ref": "XRPositionalTracker",
+      "version": "4.7-stable"
+    },
+    "rank": 290
   },
   {
     "id": "api:class:VehicleBody3D",
@@ -31214,7 +31342,7 @@
       "ref": "VehicleBody3D",
       "version": "4.7-stable"
     },
-    "rank": 288,
+    "rank": 291,
     "icon": "icons/VehicleBody3D.svg"
   },
   {
@@ -31257,7 +31385,7 @@
       "ref": "ResourceFormatLoader",
       "version": "4.7-stable"
     },
-    "rank": 289
+    "rank": 292
   },
   {
     "id": "api:class:Popup",
@@ -31299,7 +31427,7 @@
       "ref": "Popup",
       "version": "4.7-stable"
     },
-    "rank": 290,
+    "rank": 293,
     "icon": "icons/Popup.svg"
   },
   {
@@ -31342,7 +31470,7 @@
       "ref": "SoftBody3D",
       "version": "4.7-stable"
     },
-    "rank": 291,
+    "rank": 294,
     "icon": "icons/SoftBody3D.svg"
   },
   {
@@ -31385,7 +31513,7 @@
       "ref": "StatusIndicator",
       "version": "4.7-stable"
     },
-    "rank": 292,
+    "rank": 295,
     "icon": "icons/StatusIndicator.svg"
   },
   {
@@ -31428,7 +31556,7 @@
       "ref": "VehicleWheel3D",
       "version": "4.7-stable"
     },
-    "rank": 293,
+    "rank": 296,
     "icon": "icons/VehicleWheel3D.svg"
   },
   {
@@ -31471,7 +31599,7 @@
       "ref": "AnimatedSprite3D",
       "version": "4.7-stable"
     },
-    "rank": 294,
+    "rank": 297,
     "icon": "icons/AnimatedSprite3D.svg"
   },
   {
@@ -31514,8 +31642,51 @@
       "ref": "ConfirmationDialog",
       "version": "4.7-stable"
     },
-    "rank": 295,
+    "rank": 298,
     "icon": "icons/ConfirmationDialog.svg"
+  },
+  {
+    "id": "api:class:AudioListener3D",
+    "family": "godot-api",
+    "kind": "class",
+    "prompt": "Overrides the location sounds are heard from.",
+    "answer": "AudioListener3D",
+    "distractors": [
+      "Camera3D",
+      "CollisionShape3D",
+      "XROrigin3D"
+    ],
+    "distractorPool": [
+      "Camera3D",
+      "CollisionShape3D",
+      "XROrigin3D",
+      "Marker3D",
+      "Path3D",
+      "Skeleton3D",
+      "AudioStreamPlayer3D",
+      "RayCast3D"
+    ],
+    "distractorIds": [
+      "api:class:Camera3D",
+      "api:class:CollisionShape3D",
+      "api:class:XROrigin3D",
+      "api:class:Marker3D",
+      "api:class:Path3D",
+      "api:class:Skeleton3D",
+      "api:class:AudioStreamPlayer3D",
+      "api:class:RayCast3D"
+    ],
+    "explain": "Once added to the scene tree and enabled using `make_current()`, this node will override the location sounds are heard from. This can be used to listen from a location different from the `Camera3D`.",
+    "explainFull": "Once added to the scene tree and enabled using `make_current()`, this node will override the location sounds are heard from. This can be used to listen from a location different from the `Camera3D`.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_audiolistener3d.html",
+    "topic": "3D nodes",
+    "source": {
+      "doc": "godot-class-reference",
+      "ref": "AudioListener3D",
+      "version": "4.7-stable"
+    },
+    "rank": 299,
+    "icon": "icons/AudioListener3D.svg"
   },
   {
     "id": "api:class:OccluderInstance3D",
@@ -31557,7 +31728,7 @@
       "ref": "OccluderInstance3D",
       "version": "4.7-stable"
     },
-    "rank": 296,
+    "rank": 300,
     "icon": "icons/OccluderInstance3D.svg"
   },
   {
@@ -31600,7 +31771,7 @@
       "ref": "CompositorEffect",
       "version": "4.7-stable"
     },
-    "rank": 297
+    "rank": 301
   },
   {
     "id": "api:class:PopupPanel",
@@ -31642,7 +31813,7 @@
       "ref": "PopupPanel",
       "version": "4.7-stable"
     },
-    "rank": 298,
+    "rank": 302,
     "icon": "icons/PopupPanel.svg"
   },
   {
@@ -31685,7 +31856,7 @@
       "ref": "XRNode3D",
       "version": "4.7-stable"
     },
-    "rank": 299,
+    "rank": 303,
     "icon": "icons/XRNode3D.svg"
   },
   {
@@ -31728,7 +31899,7 @@
       "ref": "PhysicsDirectSpaceState3D",
       "version": "4.7-stable"
     },
-    "rank": 300
+    "rank": 304
   },
   {
     "id": "api:class:ResourceImporter",
@@ -31770,7 +31941,7 @@
       "ref": "ResourceImporter",
       "version": "4.7-stable"
     },
-    "rank": 301
+    "rank": 305
   },
   {
     "id": "api:class:AspectRatioContainer",
@@ -31812,7 +31983,7 @@
       "ref": "AspectRatioContainer",
       "version": "4.7-stable"
     },
-    "rank": 302,
+    "rank": 306,
     "icon": "icons/AspectRatioContainer.svg"
   },
   {
@@ -31855,7 +32026,7 @@
       "ref": "PhysicalBoneSimulator3D",
       "version": "4.7-stable"
     },
-    "rank": 303,
+    "rank": 307,
     "icon": "icons/PhysicalBoneSimulator3D.svg"
   },
   {
@@ -31898,7 +32069,7 @@
       "ref": "PhysicalBone3D",
       "version": "4.7-stable"
     },
-    "rank": 304,
+    "rank": 308,
     "icon": "icons/PhysicalBone3D.svg"
   },
   {
@@ -31941,7 +32112,7 @@
       "ref": "Container",
       "version": "4.7-stable"
     },
-    "rank": 305,
+    "rank": 309,
     "icon": "icons/Container.svg"
   },
   {
@@ -31984,7 +32155,7 @@
       "ref": "VoxelGI",
       "version": "4.7-stable"
     },
-    "rank": 306,
+    "rank": 310,
     "icon": "icons/VoxelGI.svg"
   },
   {
@@ -32027,7 +32198,7 @@
       "ref": "InputMap",
       "version": "4.7-stable"
     },
-    "rank": 307
+    "rank": 311
   },
   {
     "id": "api:class:AnimationNodeStateMachineTransition",
@@ -32069,7 +32240,7 @@
       "ref": "AnimationNodeStateMachineTransition",
       "version": "4.7-stable"
     },
-    "rank": 308
+    "rank": 312
   },
   {
     "id": "api:class:DirectionalLight2D",
@@ -32111,7 +32282,7 @@
       "ref": "DirectionalLight2D",
       "version": "4.7-stable"
     },
-    "rank": 309,
+    "rank": 313,
     "icon": "icons/DirectionalLight2D.svg"
   },
   {
@@ -32154,7 +32325,7 @@
       "ref": "AnimationNodeOneShot",
       "version": "4.7-stable"
     },
-    "rank": 310
+    "rank": 314
   },
   {
     "id": "api:class:XRHandTracker",
@@ -32196,7 +32367,7 @@
       "ref": "XRHandTracker",
       "version": "4.7-stable"
     },
-    "rank": 311
+    "rank": 315
   },
   {
     "id": "api:class:SkeletonIK3D",
@@ -32238,7 +32409,7 @@
       "ref": "SkeletonIK3D",
       "version": "4.7-stable"
     },
-    "rank": 312,
+    "rank": 316,
     "icon": "icons/SkeletonIK3D.svg"
   },
   {
@@ -32281,7 +32452,7 @@
       "ref": "DrawableTexture2D",
       "version": "4.7-stable"
     },
-    "rank": 313,
+    "rank": 317,
     "icon": "icons/DrawableTexture2D.svg"
   },
   {
@@ -32324,7 +32495,7 @@
       "ref": "Shape2D",
       "version": "4.7-stable"
     },
-    "rank": 314,
+    "rank": 318,
     "icon": "icons/Shape2D.svg"
   },
   {
@@ -32367,7 +32538,7 @@
       "ref": "Expression",
       "version": "4.7-stable"
     },
-    "rank": 315
+    "rank": 319
   },
   {
     "id": "api:class:MeshInstance2D",
@@ -32409,7 +32580,7 @@
       "ref": "MeshInstance2D",
       "version": "4.7-stable"
     },
-    "rank": 316,
+    "rank": 320,
     "icon": "icons/MeshInstance2D.svg"
   },
   {
@@ -32452,7 +32623,7 @@
       "ref": "PhysicsShapeQueryParameters3D",
       "version": "4.7-stable"
     },
-    "rank": 317
+    "rank": 321
   },
   {
     "id": "api:class:ResourceFormatSaver",
@@ -32494,7 +32665,7 @@
       "ref": "ResourceFormatSaver",
       "version": "4.7-stable"
     },
-    "rank": 318
+    "rank": 322
   },
   {
     "id": "api:class:SkeletonModifier3D",
@@ -32536,7 +32707,7 @@
       "ref": "SkeletonModifier3D",
       "version": "4.7-stable"
     },
-    "rank": 319,
+    "rank": 323,
     "icon": "icons/SkeletonModifier3D.svg"
   },
   {
@@ -32579,7 +32750,7 @@
       "ref": "VisibleOnScreenEnabler2D",
       "version": "4.7-stable"
     },
-    "rank": 320,
+    "rank": 324,
     "icon": "icons/VisibleOnScreenEnabler2D.svg"
   },
   {
@@ -32622,7 +32793,7 @@
       "ref": "AnimationNodeStateMachine",
       "version": "4.7-stable"
     },
-    "rank": 321
+    "rank": 325
   },
   {
     "id": "api:class:AnimationNodeStateMachinePlayback",
@@ -32664,7 +32835,7 @@
       "ref": "AnimationNodeStateMachinePlayback",
       "version": "4.7-stable"
     },
-    "rank": 322
+    "rank": 326
   },
   {
     "id": "api:class:BitMap",
@@ -32706,7 +32877,7 @@
       "ref": "BitMap",
       "version": "4.7-stable"
     },
-    "rank": 323,
+    "rank": 327,
     "icon": "icons/BitMap.svg"
   },
   {
@@ -32749,7 +32920,7 @@
       "ref": "Compositor",
       "version": "4.7-stable"
     },
-    "rank": 324
+    "rank": 328
   },
   {
     "id": "api:class:RenderData",
@@ -32791,7 +32962,7 @@
       "ref": "RenderData",
       "version": "4.7-stable"
     },
-    "rank": 325
+    "rank": 329
   },
   {
     "id": "api:class:TLSOptions",
@@ -32833,7 +33004,7 @@
       "ref": "TLSOptions",
       "version": "4.7-stable"
     },
-    "rank": 326
+    "rank": 330
   },
   {
     "id": "api:class:Texture2DRD",
@@ -32875,7 +33046,7 @@
       "ref": "Texture2DRD",
       "version": "4.7-stable"
     },
-    "rank": 327
+    "rank": 331
   },
   {
     "id": "api:class:Translation",
@@ -32917,7 +33088,7 @@
       "ref": "Translation",
       "version": "4.7-stable"
     },
-    "rank": 328,
+    "rank": 332,
     "icon": "icons/Translation.svg"
   },
   {
@@ -32960,7 +33131,7 @@
       "ref": "UniformSetCacheRD",
       "version": "4.7-stable"
     },
-    "rank": 329
+    "rank": 333
   },
   {
     "id": "api:class:WorldBoundaryShape2D",
@@ -33002,7 +33173,7 @@
       "ref": "WorldBoundaryShape2D",
       "version": "4.7-stable"
     },
-    "rank": 330,
+    "rank": 334,
     "icon": "icons/WorldBoundaryShape2D.svg"
   },
   {
@@ -33045,7 +33216,7 @@
       "ref": "Skeleton2D",
       "version": "4.7-stable"
     },
-    "rank": 331,
+    "rank": 335,
     "icon": "icons/Skeleton2D.svg"
   },
   {
@@ -33088,7 +33259,7 @@
       "ref": "AreaLight3D",
       "version": "4.7-stable"
     },
-    "rank": 332,
+    "rank": 336,
     "icon": "icons/AreaLight3D.svg"
   },
   {
@@ -33131,7 +33302,7 @@
       "ref": "Bone2D",
       "version": "4.7-stable"
     },
-    "rank": 333,
+    "rank": 337,
     "icon": "icons/Bone2D.svg"
   },
   {
@@ -33174,7 +33345,7 @@
       "ref": "FoldableContainer",
       "version": "4.7-stable"
     },
-    "rank": 334,
+    "rank": 338,
     "icon": "icons/FoldableContainer.svg"
   },
   {
@@ -33217,7 +33388,7 @@
       "ref": "NavigationServer2D",
       "version": "4.7-stable"
     },
-    "rank": 335
+    "rank": 339
   },
   {
     "id": "api:class:AnimationNodeBlend2",
@@ -33259,7 +33430,7 @@
       "ref": "AnimationNodeBlend2",
       "version": "4.7-stable"
     },
-    "rank": 336
+    "rank": 340
   },
   {
     "id": "api:class:GPUParticlesAttractorSphere3D",
@@ -33301,7 +33472,7 @@
       "ref": "GPUParticlesAttractorSphere3D",
       "version": "4.7-stable"
     },
-    "rank": 337,
+    "rank": 341,
     "icon": "icons/GPUParticlesAttractorSphere3D.svg"
   },
   {
@@ -33344,7 +33515,7 @@
       "ref": "GraphEdit",
       "version": "4.7-stable"
     },
-    "rank": 338,
+    "rank": 342,
     "icon": "icons/GraphEdit.svg"
   },
   {
@@ -33387,7 +33558,7 @@
       "ref": "SurfaceTool",
       "version": "4.7-stable"
     },
-    "rank": 339
+    "rank": 343
   },
   {
     "id": "api:class:AStarGrid2D",
@@ -33429,7 +33600,7 @@
       "ref": "AStarGrid2D",
       "version": "4.7-stable"
     },
-    "rank": 340
+    "rank": 344
   },
   {
     "id": "api:class:CodeEdit",
@@ -33471,7 +33642,7 @@
       "ref": "CodeEdit",
       "version": "4.7-stable"
     },
-    "rank": 341,
+    "rank": 345,
     "icon": "icons/CodeEdit.svg"
   },
   {
@@ -33514,7 +33685,7 @@
       "ref": "FoldableGroup",
       "version": "4.7-stable"
     },
-    "rank": 342
+    "rank": 346
   },
   {
     "id": "api:class:StreamPeerTLS",
@@ -33556,7 +33727,7 @@
       "ref": "StreamPeerTLS",
       "version": "4.7-stable"
     },
-    "rank": 343
+    "rank": 347
   },
   {
     "id": "api:class:XRHandModifier3D",
@@ -33598,7 +33769,7 @@
       "ref": "XRHandModifier3D",
       "version": "4.7-stable"
     },
-    "rank": 344,
+    "rank": 348,
     "icon": "icons/XRHandModifier3D.svg"
   },
   {
@@ -33641,7 +33812,7 @@
       "ref": "GraphNode",
       "version": "4.7-stable"
     },
-    "rank": 345,
+    "rank": 349,
     "icon": "icons/GraphNode.svg"
   },
   {
@@ -33684,7 +33855,7 @@
       "ref": "InputEventJoypadMotion",
       "version": "4.7-stable"
     },
-    "rank": 346,
+    "rank": 350,
     "icon": "icons/InputEventJoypadMotion.svg"
   },
   {
@@ -33727,7 +33898,7 @@
       "ref": "InputEventMIDI",
       "version": "4.7-stable"
     },
-    "rank": 347,
+    "rank": 351,
     "icon": "icons/InputEventMIDI.svg"
   },
   {
@@ -33770,7 +33941,7 @@
       "ref": "Joint2D",
       "version": "4.7-stable"
     },
-    "rank": 348
+    "rank": 352
   },
   {
     "id": "api:class:Joint3D",
@@ -33812,7 +33983,49 @@
       "ref": "Joint3D",
       "version": "4.7-stable"
     },
-    "rank": 349
+    "rank": 353
+  },
+  {
+    "id": "api:class:NavigationMeshSourceGeometryData2D",
+    "family": "godot-api",
+    "kind": "class",
+    "prompt": "Container for parsed source geometry data used in navigation mesh baking.",
+    "answer": "NavigationMeshSourceGeometryData2D",
+    "distractors": [
+      "SpriteFrames",
+      "Animation",
+      "Shortcut"
+    ],
+    "distractorPool": [
+      "SpriteFrames",
+      "Animation",
+      "Shortcut",
+      "Script",
+      "PackedScene",
+      "Environment",
+      "InputEvent",
+      "Sky"
+    ],
+    "distractorIds": [
+      "api:class:SpriteFrames",
+      "api:class:Animation",
+      "api:class:Shortcut",
+      "api:class:Script",
+      "api:class:PackedScene",
+      "api:class:Environment",
+      "api:class:InputEvent",
+      "api:class:Sky"
+    ],
+    "explain": "Container for parsed source geometry data used in navigation mesh baking.",
+    "explainFull": "Container for parsed source geometry data used in navigation mesh baking.",
+    "docsUrl": "https://docs.godotengine.org/en/4.7/classes/class_navigationmeshsourcegeometrydata2d.html",
+    "topic": "Resources",
+    "source": {
+      "doc": "godot-class-reference",
+      "ref": "NavigationMeshSourceGeometryData2D",
+      "version": "4.7-stable"
+    },
+    "rank": 354
   },
   {
     "id": "api:class:Tweener",
@@ -33854,7 +34067,7 @@
       "ref": "Tweener",
       "version": "4.7-stable"
     },
-    "rank": 350
+    "rank": 355
   },
   {
     "id": "api:class:CameraAttributesPhysical",
@@ -33896,7 +34109,7 @@
       "ref": "CameraAttributesPhysical",
       "version": "4.7-stable"
     },
-    "rank": 351,
+    "rank": 356,
     "icon": "icons/CameraAttributesPhysical.svg"
   },
   {
@@ -33939,7 +34152,7 @@
       "ref": "DampedSpringJoint2D",
       "version": "4.7-stable"
     },
-    "rank": 352,
+    "rank": 357,
     "icon": "icons/DampedSpringJoint2D.svg"
   },
   {
@@ -33982,7 +34195,7 @@
       "ref": "DirAccess",
       "version": "4.7-stable"
     },
-    "rank": 353,
+    "rank": 358,
     "icon": "icons/DirAccess.svg"
   },
   {
@@ -34025,7 +34238,7 @@
       "ref": "GPUParticlesCollisionHeightField3D",
       "version": "4.7-stable"
     },
-    "rank": 354,
+    "rank": 359,
     "icon": "icons/GPUParticlesCollisionHeightField3D.svg"
   },
   {
@@ -34068,7 +34281,7 @@
       "ref": "GPUParticlesCollisionSDF3D",
       "version": "4.7-stable"
     },
-    "rank": 355,
+    "rank": 360,
     "icon": "icons/GPUParticlesCollisionSDF3D.svg"
   },
   {
@@ -34111,7 +34324,7 @@
       "ref": "GPUParticlesCollisionSphere3D",
       "version": "4.7-stable"
     },
-    "rank": 356,
+    "rank": 361,
     "icon": "icons/GPUParticlesCollisionSphere3D.svg"
   },
   {
@@ -34154,7 +34367,7 @@
       "ref": "GrooveJoint2D",
       "version": "4.7-stable"
     },
-    "rank": 357,
+    "rank": 362,
     "icon": "icons/GrooveJoint2D.svg"
   },
   {
@@ -34197,7 +34410,7 @@
       "ref": "MultiplayerPeer",
       "version": "4.7-stable"
     },
-    "rank": 358
+    "rank": 363
   },
   {
     "id": "api:class:PhysicsShapeQueryParameters2D",
@@ -34239,7 +34452,7 @@
       "ref": "PhysicsShapeQueryParameters2D",
       "version": "4.7-stable"
     },
-    "rank": 359
+    "rank": 364
   },
   {
     "id": "api:class:RDSamplerState",
@@ -34281,7 +34494,7 @@
       "ref": "RDSamplerState",
       "version": "4.7-stable"
     },
-    "rank": 360
+    "rank": 365
   },
   {
     "id": "api:class:TextServerManager",
@@ -34323,7 +34536,7 @@
       "ref": "TextServerManager",
       "version": "4.7-stable"
     },
-    "rank": 361
+    "rank": 366
   },
   {
     "id": "api:class:TubeTrailMesh",
@@ -34365,7 +34578,7 @@
       "ref": "TubeTrailMesh",
       "version": "4.7-stable"
     },
-    "rank": 362,
+    "rank": 367,
     "icon": "icons/TubeTrailMesh.svg"
   },
   {
@@ -34408,7 +34621,7 @@
       "ref": "VSlider",
       "version": "4.7-stable"
     },
-    "rank": 363,
+    "rank": 368,
     "icon": "icons/VSlider.svg"
   },
   {
@@ -34451,7 +34664,7 @@
       "ref": "WorkerThreadPool",
       "version": "4.7-stable"
     },
-    "rank": 364
+    "rank": 369
   },
   {
     "id": "api:class:AnimatableBody2D",
@@ -34493,7 +34706,7 @@
       "ref": "AnimatableBody2D",
       "version": "4.7-stable"
     },
-    "rank": 365,
+    "rank": 370,
     "icon": "icons/AnimatableBody2D.svg"
   },
   {
@@ -34536,7 +34749,7 @@
       "ref": "AnimationNodeTransition",
       "version": "4.7-stable"
     },
-    "rank": 366
+    "rank": 371
   },
   {
     "id": "api:class:ArrayOccluder3D",
@@ -34578,7 +34791,7 @@
       "ref": "ArrayOccluder3D",
       "version": "4.7-stable"
     },
-    "rank": 367,
+    "rank": 372,
     "icon": "icons/ArrayOccluder3D.svg"
   },
   {
@@ -34621,7 +34834,7 @@
       "ref": "AudioEffect",
       "version": "4.7-stable"
     },
-    "rank": 368
+    "rank": 373
   },
   {
     "id": "api:class:AudioEffectSpectrumAnalyzerInstance",
@@ -34663,7 +34876,7 @@
       "ref": "AudioEffectSpectrumAnalyzerInstance",
       "version": "4.7-stable"
     },
-    "rank": 369
+    "rank": 374
   },
   {
     "id": "api:class:AudioStreamGenerator",
@@ -34705,7 +34918,7 @@
       "ref": "AudioStreamGenerator",
       "version": "4.7-stable"
     },
-    "rank": 370,
+    "rank": 375,
     "icon": "icons/AudioStreamGenerator.svg"
   },
   {
@@ -34748,7 +34961,7 @@
       "ref": "AudioStreamMicrophone",
       "version": "4.7-stable"
     },
-    "rank": 371,
+    "rank": 376,
     "icon": "icons/AudioStreamMicrophone.svg"
   },
   {
@@ -34791,7 +35004,7 @@
       "ref": "AudioStreamPlayback",
       "version": "4.7-stable"
     },
-    "rank": 372
+    "rank": 377
   },
   {
     "id": "api:class:BoneAttachment3D",
@@ -34833,7 +35046,7 @@
       "ref": "BoneAttachment3D",
       "version": "4.7-stable"
     },
-    "rank": 373,
+    "rank": 378,
     "icon": "icons/BoneAttachment3D.svg"
   },
   {
@@ -34876,7 +35089,7 @@
       "ref": "BoxOccluder3D",
       "version": "4.7-stable"
     },
-    "rank": 374,
+    "rank": 379,
     "icon": "icons/BoxOccluder3D.svg"
   },
   {
@@ -34919,7 +35132,7 @@
       "ref": "CameraAttributes",
       "version": "4.7-stable"
     },
-    "rank": 375,
+    "rank": 380,
     "icon": "icons/CameraAttributes.svg"
   },
   {
@@ -34962,7 +35175,7 @@
       "ref": "CameraAttributesPractical",
       "version": "4.7-stable"
     },
-    "rank": 376,
+    "rank": 381,
     "icon": "icons/CameraAttributesPractical.svg"
   },
   {
@@ -35005,7 +35218,7 @@
       "ref": "ClassDB",
       "version": "4.7-stable"
     },
-    "rank": 377
+    "rank": 382
   },
   {
     "id": "api:class:CodeHighlighter",
@@ -35047,7 +35260,7 @@
       "ref": "CodeHighlighter",
       "version": "4.7-stable"
     },
-    "rank": 378,
+    "rank": 383,
     "icon": "icons/CodeHighlighter.svg"
   },
   {
@@ -35090,7 +35303,7 @@
       "ref": "CompressedCubemap",
       "version": "4.7-stable"
     },
-    "rank": 379
+    "rank": 384
   },
   {
     "id": "api:class:CompressedTexture2D",
@@ -35132,7 +35345,7 @@
       "ref": "CompressedTexture2D",
       "version": "4.7-stable"
     },
-    "rank": 380,
+    "rank": 385,
     "icon": "icons/CompressedTexture2D.svg"
   },
   {
@@ -35175,7 +35388,7 @@
       "ref": "ConcavePolygonShape2D",
       "version": "4.7-stable"
     },
-    "rank": 381,
+    "rank": 386,
     "icon": "icons/ConcavePolygonShape2D.svg"
   },
   {
@@ -35218,7 +35431,7 @@
       "ref": "ConeTwistJoint3D",
       "version": "4.7-stable"
     },
-    "rank": 382,
+    "rank": 387,
     "icon": "icons/ConeTwistJoint3D.svg"
   },
   {
@@ -35261,7 +35474,7 @@
       "ref": "CryptoKey",
       "version": "4.7-stable"
     },
-    "rank": 383,
+    "rank": 388,
     "icon": "icons/CryptoKey.svg"
   },
   {
@@ -35304,7 +35517,7 @@
       "ref": "HScrollBar",
       "version": "4.7-stable"
     },
-    "rank": 384,
+    "rank": 389,
     "icon": "icons/HScrollBar.svg"
   },
   {
@@ -35347,7 +35560,7 @@
       "ref": "HingeJoint3D",
       "version": "4.7-stable"
     },
-    "rank": 385,
+    "rank": 390,
     "icon": "icons/HingeJoint3D.svg"
   },
   {
@@ -35390,7 +35603,7 @@
       "ref": "JNISingleton",
       "version": "4.7-stable"
     },
-    "rank": 386
+    "rank": 391
   },
   {
     "id": "api:class:JavaScriptBridge",
@@ -35432,7 +35645,7 @@
       "ref": "JavaScriptBridge",
       "version": "4.7-stable"
     },
-    "rank": 387
+    "rank": 392
   },
   {
     "id": "api:class:KinematicCollision2D",
@@ -35474,7 +35687,7 @@
       "ref": "KinematicCollision2D",
       "version": "4.7-stable"
     },
-    "rank": 388,
+    "rank": 393,
     "icon": "icons/KinematicCollision2D.svg"
   },
   {
@@ -35517,7 +35730,7 @@
       "ref": "Logger",
       "version": "4.7-stable"
     },
-    "rank": 389
+    "rank": 394
   },
   {
     "id": "api:class:MultiMesh",
@@ -35559,7 +35772,7 @@
       "ref": "MultiMesh",
       "version": "4.7-stable"
     },
-    "rank": 390,
+    "rank": 395,
     "icon": "icons/MultiMesh.svg"
   },
   {
@@ -35602,7 +35815,7 @@
       "ref": "Mutex",
       "version": "4.7-stable"
     },
-    "rank": 391
+    "rank": 396
   },
   {
     "id": "api:class:NavigationObstacle3D",
@@ -35644,7 +35857,7 @@
       "ref": "NavigationObstacle3D",
       "version": "4.7-stable"
     },
-    "rank": 392,
+    "rank": 397,
     "icon": "icons/NavigationObstacle3D.svg"
   },
   {
@@ -35687,7 +35900,7 @@
       "ref": "ORMMaterial3D",
       "version": "4.7-stable"
     },
-    "rank": 393,
+    "rank": 398,
     "icon": "icons/ORMMaterial3D.svg"
   },
   {
@@ -35730,7 +35943,7 @@
       "ref": "PlaceholderTexture2D",
       "version": "4.7-stable"
     },
-    "rank": 394,
+    "rank": 399,
     "icon": "icons/PlaceholderTexture2D.svg"
   },
   {
@@ -35773,7 +35986,7 @@
       "ref": "RDShaderFile",
       "version": "4.7-stable"
     },
-    "rank": 395,
+    "rank": 400,
     "icon": "icons/RDShaderFile.svg"
   },
   {
@@ -35816,7 +36029,7 @@
       "ref": "RDShaderSource",
       "version": "4.7-stable"
     },
-    "rank": 396
+    "rank": 401
   },
   {
     "id": "api:class:Range",
@@ -35858,7 +36071,7 @@
       "ref": "Range",
       "version": "4.7-stable"
     },
-    "rank": 397,
+    "rank": 402,
     "icon": "icons/Range.svg"
   },
   {
@@ -35901,7 +36114,7 @@
       "ref": "RenderSceneBuffers",
       "version": "4.7-stable"
     },
-    "rank": 398
+    "rank": 403
   },
   {
     "id": "api:class:RenderSceneData",
@@ -35943,7 +36156,7 @@
       "ref": "RenderSceneData",
       "version": "4.7-stable"
     },
-    "rank": 399
+    "rank": 404
   },
   {
     "id": "api:class:ScriptBacktrace",
@@ -35985,7 +36198,7 @@
       "ref": "ScriptBacktrace",
       "version": "4.7-stable"
     },
-    "rank": 400
+    "rank": 405
   },
   {
     "id": "api:class:Signal",
@@ -36027,7 +36240,7 @@
       "ref": "Signal",
       "version": "4.7-stable"
     },
-    "rank": 401,
+    "rank": 406,
     "icon": "icons/Signal.svg"
   },
   {
@@ -36070,7 +36283,7 @@
       "ref": "SliderJoint3D",
       "version": "4.7-stable"
     },
-    "rank": 402,
+    "rank": 407,
     "icon": "icons/SliderJoint3D.svg"
   },
   {
@@ -36113,7 +36326,7 @@
       "ref": "SpringArm3D",
       "version": "4.7-stable"
     },
-    "rank": 403,
+    "rank": 408,
     "icon": "icons/SpringArm3D.svg"
   },
   {
@@ -36156,7 +36369,7 @@
       "ref": "StyleBox",
       "version": "4.7-stable"
     },
-    "rank": 404
+    "rank": 409
   },
   {
     "id": "api:class:StyleBoxLine",
@@ -36198,7 +36411,7 @@
       "ref": "StyleBoxLine",
       "version": "4.7-stable"
     },
-    "rank": 405,
+    "rank": 410,
     "icon": "icons/StyleBoxLine.svg"
   },
   {
@@ -36241,7 +36454,7 @@
       "ref": "Texture3D",
       "version": "4.7-stable"
     },
-    "rank": 406,
+    "rank": 411,
     "icon": "icons/Texture3D.svg"
   },
   {
@@ -36284,7 +36497,7 @@
       "ref": "TileData",
       "version": "4.7-stable"
     },
-    "rank": 407
+    "rank": 412
   },
   {
     "id": "api:class:VoxelGIData",
@@ -36326,7 +36539,7 @@
       "ref": "VoxelGIData",
       "version": "4.7-stable"
     },
-    "rank": 408,
+    "rank": 413,
     "icon": "icons/VoxelGIData.svg"
   },
   {
@@ -36369,7 +36582,7 @@
       "ref": "World2D",
       "version": "4.7-stable"
     },
-    "rank": 409,
+    "rank": 414,
     "icon": "icons/World2D.svg"
   },
   {
@@ -36412,7 +36625,7 @@
       "ref": "X509Certificate",
       "version": "4.7-stable"
     },
-    "rank": 410,
+    "rank": 415,
     "icon": "icons/X509Certificate.svg"
   }
 ]

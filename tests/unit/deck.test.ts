@@ -134,7 +134,20 @@ describe('generator rules (done-criteria 38)', () => {
       expect(seen.get(key), `${c.id} repeats ${seen.get(key)}`).toBeUndefined();
       seen.set(key, c.id);
     }
-    expect(removed.duplicateBrief).toEqual(expect.arrayContaining(['api:class:CheckBox', 'api:class:CheckButton']));
+    // Keep one of each pair: the twin that is not deprecated, else the more frequent one (CoS ruling, GV-4b).
+    const pairs = [
+      ['TileMapLayer', 'TileMap'],
+      ['CheckButton', 'CheckBox'],
+      ['NavigationMeshSourceGeometryData2D', 'NavigationMeshSourceGeometryData3D'],
+    ];
+    for (const [kept, dropped] of pairs) {
+      expect(removed.duplicateBrief).toContain(`api:class:${dropped}`);
+      expect(removed.duplicateBrief).not.toContain(`api:class:${kept}`);
+      const card = byId.get(`api:class:${kept}`);
+      expect(card, kept).toBeDefined();
+      expect(card!.distractorPool, kept).not.toContain(dropped);
+    }
+    expect(removed.duplicateBrief).toHaveLength(4);
   });
 
   it('(b) has no editor-only class', () => {
