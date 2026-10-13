@@ -3,3 +3,6 @@ dist/
 data/sources/
 .DS_Store
 *.log
+playwright-report/
+test-results/
+dev-dist/

@@ -1,0 +1,35 @@
+{
+  "name": "godot-vocabulary",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Offline PWA that drills Godot 4.7 API, GDScript and Git/GitHub vocabulary as four-choice FSRS cards.",
+  "license": "MIT",
+  "author": "Tyler Alex (talex444)",
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "e2e": "vite build && playwright test --pass-with-no-tests",
+    "generate": "node scripts/generate.mjs",
+    "fetch-sources": "node scripts/fetch-sources.mjs"
+  },
+  "dependencies": {
+    "idb": "^8.0.4",
+    "ts-fsrs": "^5.4.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^26.6.5",
+    "fast-xml-parser": "^5.11.2",
+    "sharp": "^0.35.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vite-plugin-pwa": "^2.0.0",
+    "vitest": "^5.0.4",
+    "yaml": "^2.9.1"
+  }
+}
