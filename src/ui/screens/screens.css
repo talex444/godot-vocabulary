@@ -1,10 +1,21 @@
 /* Screen layout: one panel that fills a phone screen, 16 px gutter. Colours only from the theme properties. */
 
+/*
+ * Safe areas: the Android package draws edge to edge (target SDK 36), so the shell keeps out of the
+ * status bar, cutout and navigation bar. Chromium ≥ 140 puts the insets in env(); Capacitor's SystemBars
+ * (insetsHandling 'css') also injects them as --safe-area-inset-*, equal to env() or 0 when it pads the
+ * WebView itself, so the larger of the two never pads twice. A browser tab reports 0 for both.
+ */
 #app {
+  --safe-top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px));
+  --safe-right: max(env(safe-area-inset-right, 0px), var(--safe-area-inset-right, 0px));
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
+  --safe-left: max(env(safe-area-inset-left, 0px), var(--safe-area-inset-left, 0px));
   width: 100%;
   max-width: 640px;
   margin: 0 auto;
-  padding: 8px var(--gutter) calc(var(--gutter) + env(safe-area-inset-bottom));
+  padding: calc(8px + var(--safe-top)) calc(var(--gutter) + var(--safe-right)) calc(var(--gutter) + var(--safe-bottom))
+    calc(var(--gutter) + var(--safe-left));
 }
 
 .gv-app-name {
