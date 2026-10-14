@@ -2,11 +2,13 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { AREAS } from '../../src/areas/registry';
 import { parseColor, toHex, type Rgba } from '../../src/theme/derive';
+import { homeTokens } from '../../src/theme/home';
 import type { ThemeTokens } from '../../src/theme/tokens';
 
 /*
- * Done-criteria 28, 66 / decisions 22, 54: inside an area the tool's colours win on every pair, so no
- * ratio ever fails this test. It measures every pair the kit draws, in every area's token map (text
+ * Done-criteria 28, 66, 70 / decisions 22, 49, 54: the home page's theme must pass every pair it draws
+ * (a hard gate). Inside an area the tool's colours win on every pair, so no area ratio ever fails this
+ * test. It measures every pair the kit draws, in every area's token map (text
  * pairs and non-text pairs: control edges, focus and selection), writes docs/contrast-report.md with
  * one section per area, and fails only when the committed report differs from what it computed (then
  * it has just rewritten the file: review and commit it).
@@ -113,6 +115,48 @@ function pairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
   return { text, nonText };
 }
 
+/**
+ * Every pair the home page and the screens it opens in its theme (About, the error screen) draw
+ * (decisions 49, 54): text in its three roles on every surface, headings, links, the secondary
+ * button, the tiles' borders at rest, hovered and pressed, and focus. No accent fills, so no primary
+ * button pairs. These must all pass.
+ */
+function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
+  const t = (key: string): Colour => {
+    const value = tokens[`--${key.replace(/_/g, '-')}`];
+    if (value === undefined) throw new Error(`No token for ${key}`);
+    return [key, parseColor(value)];
+  };
+  const surfaces: Colour[] = [
+    t('base_color'),
+    t('dark_color_1'),
+    ['dark_color_3 (hovered tile)', t('dark_color_3')[1]],
+    ['highlight_disabled_color (pressed or loading tile)', t('highlight_disabled_color')[1]],
+  ];
+  const text: Pair[] = [
+    ...surfaces.flatMap((bg) => [
+      { pair: 'primary text', fg: t('font_color'), bg, need: TEXT as Need },
+      { pair: 'secondary text', fg: t('font_secondary_color'), bg, need: TEXT as Need },
+      { pair: 'tertiary text', fg: t('font_disabled_color'), bg, need: TEXT as Need },
+    ]),
+    ...[t('base_color'), t('dark_color_1')].flatMap((bg) => [
+      { pair: 'heading (accent_color is the primary grey)', fg: t('accent_color'), bg, need: TEXT as Need },
+      { pair: 'link text', fg: t('accent_color'), bg, need: TEXT as Need },
+      { pair: 'hovered or pressed button text', fg: t('font_hover_color'), bg, need: TEXT as Need },
+    ]),
+    { pair: 'secondary button text (Back)', fg: t('font_focus_color'), bg: t('contrast_color_1'), need: TEXT },
+  ];
+  const nonText: Pair[] = [
+    ...surfaces.map((bg) => ({ pair: 'tile border', fg: t('contrast_color_2'), bg, need: LARGE as Need })),
+    ...[t('base_color'), t('dark_color_1')].flatMap((bg) => [
+      { pair: 'focus ring', fg: t('accent_color'), bg, need: LARGE as Need },
+      { pair: 'focus halo', fg: t('highlight_color'), bg, need: LARGE as Need },
+      { pair: 'secondary button edge', fg: t('contrast_color_1'), bg, need: LARGE as Need },
+    ]),
+  ];
+  return { text, nonText };
+}
+
 interface Measured extends Pair {
   ratio: number;
   pass: boolean;
@@ -150,6 +194,30 @@ function report(): { markdown: string; short: Record<string, { text: number; non
     '',
     'Ratios are WCAG 2.x relative-luminance contrast. Translucent colours are composited onto their background (and translucent backgrounds onto the area’s `base_color`) and rounded to 8 bits, as the browser paints them.',
   ];
+  // The home page's own theme comes first, and here no pair may fall short (decisions 49 and 54).
+  const home = homeTokens();
+  const homePage = parseColor(home['--base-color']!);
+  const homeText = measure(homePairs(home).text, homePage);
+  const homeNonText = measure(homePairs(home).nonText, homePage);
+  short.home = { text: homeText.filter((r) => !r.pass).length, nonText: homeNonText.filter((r) => !r.pass).length };
+  lines.push(
+    '',
+    '## Home',
+    '',
+    'From the home page’s own neutral theme (`src/theme/home.ts`): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.',
+    '',
+    '### Text',
+    '',
+    `**${short.home.text} of ${homeText.length} pairs fall short.**`,
+    '',
+    ...table(homeText),
+    '',
+    '### Non-text: tile borders (at rest, hovered, pressed), focus and the secondary button (WCAG 1.4.11, 3:1)',
+    '',
+    `**${short.home.nonText} of ${homeNonText.length} pairs fall short.**`,
+    '',
+    ...table(homeNonText),
+  );
   for (const area of AREAS) {
     const tokens = area.theme;
     const page = parseColor(tokens['--base-color']!);
@@ -181,7 +249,7 @@ function report(): { markdown: string; short: Record<string, { text: number; non
   return { markdown: lines.join('\n'), short };
 }
 
-describe('contrast report (never fails on a ratio)', () => {
+describe('contrast report (never fails on an area’s ratio; fails on any home ratio)', () => {
   it('computes WCAG ratios', () => {
     const black: Rgba = [0, 0, 0, 1];
     expect(contrast([1, 1, 1, 1], black, black)).toBeCloseTo(21, 5);
@@ -196,6 +264,11 @@ describe('contrast report (never fails on a ratio)', () => {
     const accentOnBase = measure(pairs(github).text, page).find((r) => r.pair === 'accent link text' && r.bg[0] === 'base_color')!;
     expect(accentOnBase.ratio).toBeCloseTo(2.7, 1);
     expect(accentOnBase.pass).toBe(false);
+  });
+
+  it('the home page: zero pairs short, text and non-text (a hard gate, unlike the areas)', () => {
+    const { short } = report();
+    expect(short.home).toEqual({ text: 0, nonText: 0 });
   });
 
   it('matches the committed docs/contrast-report.md', () => {

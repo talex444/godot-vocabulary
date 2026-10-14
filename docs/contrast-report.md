@@ -6,6 +6,53 @@ Inside an area the tool’s colours are never altered to pass a ratio (decisions
 
 Ratios are WCAG 2.x relative-luminance contrast. Translucent colours are composited onto their background (and translucent backgrounds onto the area’s `base_color`) and rounded to 8 bits, as the browser paints them.
 
+## Home
+
+From the home page’s own neutral theme (`src/theme/home.ts`): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.
+
+### Text
+
+**0 of 19 pairs fall short.**
+
+| Pair | Foreground | Background | Ratio | Needs | Result |
+|------|------------|------------|------:|------:|--------|
+| primary text | font_color `#e6e6e6` | base_color `#161616` | 14.50:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#b8b8b8` | base_color `#161616` | 9.12:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#a6a6a6` | base_color `#161616` | 7.43:1 | 4.5:1 | pass |
+| primary text | font_color `#e6e6e6` | dark_color_1 `#1f1f1f` | 13.21:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#b8b8b8` | dark_color_1 `#1f1f1f` | 8.31:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#a6a6a6` | dark_color_1 `#1f1f1f` | 6.77:1 | 4.5:1 | pass |
+| primary text | font_color `#e6e6e6` | dark_color_3 (hovered tile) `#2a2a2a` | 11.50:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#b8b8b8` | dark_color_3 (hovered tile) `#2a2a2a` | 7.24:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#a6a6a6` | dark_color_3 (hovered tile) `#2a2a2a` | 5.90:1 | 4.5:1 | pass |
+| primary text | font_color `#e6e6e6` | highlight_disabled_color (pressed or loading tile) `#3a3a3a` | 9.11:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#b8b8b8` | highlight_disabled_color (pressed or loading tile) `#3a3a3a` | 5.73:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#a6a6a6` | highlight_disabled_color (pressed or loading tile) `#3a3a3a` | 4.67:1 | 4.5:1 | pass |
+| heading (accent_color is the primary grey) | accent_color `#e6e6e6` | base_color `#161616` | 14.50:1 | 4.5:1 | pass |
+| link text | accent_color `#e6e6e6` | base_color `#161616` | 14.50:1 | 4.5:1 | pass |
+| hovered or pressed button text | font_hover_color `#ffffff` | base_color `#161616` | 18.10:1 | 4.5:1 | pass |
+| heading (accent_color is the primary grey) | accent_color `#e6e6e6` | dark_color_1 `#1f1f1f` | 13.21:1 | 4.5:1 | pass |
+| link text | accent_color `#e6e6e6` | dark_color_1 `#1f1f1f` | 13.21:1 | 4.5:1 | pass |
+| hovered or pressed button text | font_hover_color `#ffffff` | dark_color_1 `#1f1f1f` | 16.48:1 | 4.5:1 | pass |
+| secondary button text (Back) | font_focus_color `#ffffff` | contrast_color_1 `#767676` | 4.54:1 | 4.5:1 | pass |
+
+### Non-text: tile borders (at rest, hovered, pressed), focus and the secondary button (WCAG 1.4.11, 3:1)
+
+**0 of 10 pairs fall short.**
+
+| Pair | Foreground | Background | Ratio | Needs | Result |
+|------|------------|------------|------:|------:|--------|
+| tile border | contrast_color_2 `#a6a6a6` | base_color `#161616` | 7.43:1 | 3:1 | pass |
+| tile border | contrast_color_2 `#a6a6a6` | dark_color_1 `#1f1f1f` | 6.77:1 | 3:1 | pass |
+| tile border | contrast_color_2 `#a6a6a6` | dark_color_3 (hovered tile) `#2a2a2a` | 5.90:1 | 3:1 | pass |
+| tile border | contrast_color_2 `#a6a6a6` | highlight_disabled_color (pressed or loading tile) `#3a3a3a` | 4.67:1 | 3:1 | pass |
+| focus ring | accent_color `#e6e6e6` | base_color `#161616` | 14.50:1 | 3:1 | pass |
+| focus halo | highlight_color `#8c8c8c` | base_color `#161616` | 5.38:1 | 3:1 | pass |
+| secondary button edge | contrast_color_1 `#767676` | base_color `#161616` | 3.98:1 | 3:1 | pass |
+| focus ring | accent_color `#e6e6e6` | dark_color_1 `#1f1f1f` | 13.21:1 | 3:1 | pass |
+| focus halo | highlight_color `#8c8c8c` | dark_color_1 `#1f1f1f` | 4.90:1 | 3:1 | pass |
+| secondary button edge | contrast_color_1 `#767676` | dark_color_1 `#1f1f1f` | 3.63:1 | 3:1 | pass |
+
 ## Godot
 
 From the derived Godot 4.7 dark theme (`src/theme/derive.ts`, `data/theme/godot-4.7-defaults.json`, through `godotTokens()` in `src/theme/tokens.ts`).

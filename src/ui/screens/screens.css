@@ -95,7 +95,8 @@
   border: 0;
   border-radius: var(--corner-radius);
   background: var(--dark-color-1);
-  box-shadow: inset 0 0 0 1px var(--contrast-color-1);
+  /* The home's grey 6: at least 3:1 against the page, the tile and the pressed tile. */
+  box-shadow: inset 0 0 0 1px var(--contrast-color-2);
   color: var(--font-color);
   font: inherit;
   text-align: start;

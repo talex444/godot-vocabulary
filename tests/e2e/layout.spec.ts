@@ -1,9 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
-import { answer, endSession, goNext, gotoStart, open, openArea, startSession, walkScreens, type ScreenName } from './helpers';
+import { answer, backToStart, endSession, goNext, gotoHome, gotoStart, open, openArea, screenReady, startSession, walkScreens, type ScreenName } from './helpers';
 
-// Done-criteria 25, 29, 31, 66: no horizontal scroll at 360 and 320 CSS px, landscape works, every tap
-// target is at least 44×44, body text is at least 16 px, text at 200% and WCAG text spacing lose
-// nothing; in the Godot area and in the Git & GitHub area's own theme.
+// Done-criteria 25, 29, 31, 66, 70: no horizontal scroll at 360 and 320 CSS px, landscape works, every
+// tap target is at least 44×44, body text is at least 16 px, text at 200% and WCAG text spacing lose
+// nothing; on the home page, in the Godot area and in the Git & GitHub area's own theme.
 
 const TARGETS = 'button, a[href], input:not([type="hidden"]), select, textarea, [role="switch"]';
 
@@ -141,7 +141,35 @@ async function checkGithubArea(page: Page, options: { targets?: boolean; text?: 
   await page.getByRole('button', { name: 'Done' }).click();
   await open(page, 'Courses');
   await check('github courses');
+  for (const screen of ['Settings', 'Add card', 'About'] as const) {
+    await backToStart(page);
+    await open(page, screen);
+    await check(`github ${screen.toLowerCase()}`);
+  }
 }
+
+/** The home page and About opened from it, in the home theme (decisions 49, 54). */
+async function checkHome(page: Page, options: { targets?: boolean; text?: boolean; afterLoad?: () => Promise<void> } = {}) {
+  await gotoHome(page);
+  if (options.afterLoad) await options.afterLoad();
+  const check = async (name: string) => {
+    expect(await page.evaluate(() => document.documentElement.dataset.theme), name).toBe('home');
+    const m = await measure(page);
+    expect(m.scrollWidth, `${name}: horizontal scroll from ${m.wide.join(', ')}`).toBeLessThanOrEqual(m.clientWidth);
+    expect(m.clipped, `${name}: clipped text`).toEqual([]);
+    expect(m.overlapping, `${name}: overlapping controls`).toEqual([]);
+    if (options.targets !== false) expect(m.small, `${name}: targets under 44×44`).toEqual([]);
+    if (options.text !== false) expect(m.tinyText, `${name}: text under 16 px`).toEqual([]);
+  };
+  await check('home');
+  await page.getByRole('button', { name: 'About', exact: true }).click();
+  await screenReady(page, 'About');
+  await check('about from the home page');
+}
+
+test('360×780 portrait, the home page: the same', async ({ page }) => {
+  await checkHome(page);
+});
 
 test('360×780 portrait: no horizontal scroll, every target 44×44, text at least 16 px', async ({ page }) => {
   await checkEveryScreen(page);
@@ -162,6 +190,12 @@ test.describe('320 CSS px wide (WCAG 1.4.10 reflow)', () => {
   test('Git & GitHub area at 200% text', async ({ page }) => {
     await checkGithubArea(page, { targets: false, text: false, afterLoad: textAt200(page) });
   });
+  test('the home page: no horizontal scroll, every target 44×44', async ({ page }) => {
+    await checkHome(page);
+  });
+  test('the home page at 200% text', async ({ page }) => {
+    await checkHome(page, { targets: false, text: false, afterLoad: textAt200(page) });
+  });
   test('twenty cards fit, with targets and text at size', async ({ page }) => {
     await checkManyCards(page, { strict: true });
   });
@@ -178,6 +212,9 @@ test.describe('landscape 780×360 (WCAG 1.3.4)', () => {
   test('Git & GitHub area works and fits the width', async ({ page }) => {
     await checkGithubArea(page);
   });
+  test('the home page works and fits the width', async ({ page }) => {
+    await checkHome(page);
+  });
 });
 
 // WCAG 1.4.12: line height 1.5, paragraph spacing 2 em, letter spacing 0.12 em, word spacing 0.16 em,
@@ -188,6 +225,9 @@ test.describe('text spacing (WCAG 1.4.12)', () => {
   });
   test('Git & GitHub area', async ({ page }) => {
     await checkGithubArea(page, { targets: false, text: false, afterLoad: textSpacing(page) });
+  });
+  test('the home page', async ({ page }) => {
+    await checkHome(page, { targets: false, text: false, afterLoad: textSpacing(page) });
   });
 });
 

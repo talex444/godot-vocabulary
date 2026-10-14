@@ -16,7 +16,7 @@
     "e2e": "vite build && playwright test --pass-with-no-tests",
     "generate": "node scripts/generate.mjs",
     "fetch-sources": "node scripts/fetch-sources.mjs",
-    "lint:css": "node scripts/lint-css.mjs",
+    "lint:css": "node scripts/lint-css.mjs && node scripts/lint-dom.mjs",
     "lint:lessons": "node scripts/check-lessons.mjs",
     "build:android": "tsc --noEmit && vite build --mode android && cap sync android",
     "android:debug": "node scripts/gradle.mjs assembleDebug",

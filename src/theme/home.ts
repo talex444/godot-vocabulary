@@ -13,9 +13,9 @@ import type { ThemeTokens } from './tokens';
  * | 1 | #1f1f1f | panels and tiles (`--dark-color-1`), code background |
  * | 2 | #2a2a2a | a hovered tile; the disabled secondary button |
  * | 3 | #3a3a3a | a pressed tile; inline code chips |
- * | 4 | #767676 | edges: tile borders, fields, switches; the secondary button's fill |
+ * | 4 | #767676 | edges of fields and switches; the secondary button's fill |
  * | 5 | #8c8c8c | the focus halo |
- * | 6 | #a6a6a6 | tertiary text (disabled, readonly) |
+ * | 6 | #a6a6a6 | tertiary text (disabled, readonly); tile borders |
  * | 7 | #b8b8b8 | secondary text |
  * | 8 | #e6e6e6 | primary text; headings, links and the focus ring (in place of an accent) |
  * | 9 | #ffffff | text on the secondary button, field input, hover and pressed text |

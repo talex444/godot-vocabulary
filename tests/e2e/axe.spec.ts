@@ -8,9 +8,11 @@ import {
   cardPanel,
   COURSE1,
   endSession,
+  enterArea,
   exportFile,
   goNext,
-  gotoStart,
+  gotoHome,
+  homeReady,
   LESSON0_TITLE,
   open,
   openArea,
@@ -21,10 +23,10 @@ import {
   startSession,
 } from './helpers';
 
-// Done-criteria 27, 66: axe-core with the WCAG 2.2 AA tags on every screen, in each area's theme.
-// Every rule but `color-contrast` must pass. Contrast is reported, not failed (decisions 22 and 54:
-// inside an area the tool's colours win): its findings go to docs/axe-contrast.md, one section per
-// area, which this spec rewrites.
+// Done-criteria 27, 66, 70: axe-core with the WCAG 2.2 AA tags on every screen, in each area's theme
+// and the home page's. On the home page every rule passes, contrast included. Inside an area every
+// rule but `color-contrast` must pass; contrast is reported, not failed (decisions 22 and 54: the
+// tool's colours win): findings go to docs/axe-contrast.md, one section per theme, which this spec rewrites.
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
@@ -37,23 +39,32 @@ interface Finding {
   actual: string;
 }
 
-/** Screens and findings per area, in the order audited. */
-const runs: Record<AreaLabel, { screens: string[]; findings: Finding[] }> = {
+type Theme = 'Home' | AreaLabel;
+
+/** Screens and findings per theme, in the order audited. */
+const runs: Record<Theme, { screens: string[]; findings: Finding[] }> = {
+  Home: { screens: [], findings: [] },
   Godot: { screens: [], findings: [] },
   'Git & GitHub': { screens: [], findings: [] },
 };
-/** The area whose theme the page wears now. */
-let area: AreaLabel = 'Godot';
+/** The theme the page wears now. */
+let area: Theme = 'Home';
 
 async function enter(page: Page, label: AreaLabel): Promise<void> {
   await openArea(page, label);
   area = label;
 }
 
+/**
+ * Every WCAG 2.2 AA rule must pass. In an area `color-contrast` is reported, not failed (the tool's
+ * colours win); on the home page and the screens it opens in its theme it fails like every other rule.
+ */
 async function audit(page: Page, screen: string): Promise<void> {
   const { screens, findings } = runs[area];
   screens.push(screen);
-  const strict = await new AxeBuilder({ page }).withTags(TAGS).disableRules(['color-contrast']).analyze();
+  const builder = new AxeBuilder({ page }).withTags(TAGS);
+  if (area !== 'Home') builder.disableRules(['color-contrast']);
+  const strict = await builder.analyze();
   const problems = strict.violations.map((v) => `${v.id} (${v.help}): ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`);
   expect(problems, `${screen}: axe violations`).toEqual([]);
 
@@ -81,17 +92,18 @@ function writeReport(): void {
     'Written by `tests/e2e/axe.spec.ts` on every `pnpm e2e` run; do not edit by hand.',
     '',
     'axe-core runs with the tags `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa` on every screen at 360×780,',
-    'in the theme of the area the screen belongs to. Every rule except `color-contrast` must pass. The',
-    '`color-contrast` findings below are reported, not failed: they come from the tool’s own colours (Godot 4.7’s',
-    'editor theme in the Godot area, GitHub Desktop’s dark theme in Git & GitHub), which the app never alters',
-    'to pass a ratio (decisions 22 and 54). They are a known deviation from WCAG 1.4.3; see also',
-    '[`contrast-report.md`](contrast-report.md), which measures every theme pair directly.',
+    'in the theme of the area the screen belongs to. On the home page (and About opened from it, in the home',
+    'theme) every rule must pass, `color-contrast` included, so the Home section below must stay empty. Inside an',
+    'area every rule except `color-contrast` must pass; its findings are reported, not failed: they come from the',
+    'tool’s own colours (Godot 4.7’s editor theme in the Godot area, GitHub Desktop’s dark theme in Git & GitHub),',
+    'which the app never alters to pass a ratio (decisions 22 and 54). They are a known deviation from WCAG 1.4.3;',
+    'see also [`contrast-report.md`](contrast-report.md), which measures every theme pair directly.',
     '',
     'The card screens show the first new card of each family (daily budgets set to one each), so the run is repeatable;',
     'the flipped card is the Godot API card’s second look, and the skip field opens on the card after it. The',
     'GitHub card is answered right, so its feedback is the same on every run.',
   ];
-  for (const label of Object.keys(runs) as AreaLabel[]) {
+  for (const label of Object.keys(runs) as Theme[]) {
     const { screens, findings } = runs[label];
     const order = (s: string) => screens.indexOf(s);
     const rows = [...findings].sort((a, b) => order(a.screen) - order(b.screen) || a.selector.localeCompare(b.selector));
@@ -112,9 +124,18 @@ function writeReport(): void {
   writeFileSync('docs/axe-contrast.md', lines.join('\n'));
 }
 
-test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async ({ page }) => {
+test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast inside the areas', async ({ page }) => {
   test.setTimeout(120_000);
-  await gotoStart(page);
+  // The home page and About opened from it: every rule, contrast included.
+  await gotoHome(page);
+  await audit(page, 'home');
+  await page.getByRole('button', { name: 'About', exact: true }).click();
+  await screenReady(page, 'About');
+  await audit(page, 'about');
+  await page.getByRole('button', { name: 'Back', exact: true }).click();
+  await homeReady(page);
+  await enterArea(page, 'Godot');
+  area = 'Godot';
   await audit(page, 'start');
 
   await open(page, 'Settings');
@@ -181,6 +202,15 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async
   await open(page, 'Courses');
   await audit(page, 'courses');
   await backToStart(page);
+  await open(page, 'Settings');
+  await audit(page, 'settings');
+  await backToStart(page);
+  await open(page, 'Add card');
+  await audit(page, 'add card');
+  await backToStart(page);
+  await open(page, 'About');
+  await audit(page, 'about');
+  await backToStart(page);
   await enter(page, 'Godot');
 
   await open(page, 'Settings');
@@ -239,4 +269,7 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async
   others.splice(firstCard, 0, ...sortedCards);
   screens.splice(0, screens.length, ...others);
   writeReport();
+  // Done-criteria 70: the home theme's section of the report is empty.
+  expect(runs.Home.screens).toEqual(['home', 'about']);
+  expect(runs.Home.findings).toEqual([]);
 });
