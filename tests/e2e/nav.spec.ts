@@ -9,7 +9,7 @@ const themeColor = (page: Page) => page.locator('meta[name="theme-color"]').getA
 
 test('home → Git & GitHub → All areas → home; titles, themes and the status-bar colour follow', async ({ page }) => {
   await gotoHome(page);
-  expect(await themeColor(page)).toBe('#161616');
+  expect(await themeColor(page)).toBe('#171513');
   await enterArea(page, 'Git & GitHub');
   await expect(page.getByRole('heading', { level: 2 })).toHaveText('Git & GitHub');
   expect(await page.title()).toBe('Git & GitHub · Godot Vocabulary');
@@ -22,7 +22,7 @@ test('home → Git & GitHub → All areas → home; titles, themes and the statu
   await homeReady(page);
   expect(await page.title()).toBe('Areas · Godot Vocabulary');
   expect(await theme(page)).toBe('home');
-  expect(await themeColor(page)).toBe('#161616');
+  expect(await themeColor(page)).toBe('#171513');
   // All areas stepped back rather than adding an entry: Back now leaves the app's first screen.
   expect(await page.evaluate(() => (history.state as { index: number }).index)).toBe(0);
 });

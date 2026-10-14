@@ -24,10 +24,17 @@ export function applyTokens(root: TokenRoot, tokens: ThemeTokens, name: string):
   root.setAttribute('data-theme', name);
 }
 
+/**
+ * The home page's own roles, which no area draws: an area's map writes them as `unset`, so the key
+ * sets stay identical and the home's value never lingers inside an area.
+ */
+export const HOME_ONLY: ThemeTokens = { '--home-action-color': 'unset' };
+
 /** The Godot area: the derived 4.7 dark theme, Inter and JetBrains Mono, dark form controls. */
 export function godotTokens(): ThemeTokens {
   return {
     ...themeProperties(),
+    ...HOME_ONLY,
     '--font-ui': "'Inter', system-ui, sans-serif",
     '--font-code': "'JetBrains Mono', ui-monospace, monospace",
     'color-scheme': 'dark',

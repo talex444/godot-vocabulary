@@ -18,7 +18,7 @@ const look = (page: Page) =>
 
 test('the app opens the home page: a tile per area with its figures, no last-used tag on a fresh install', async ({ page }) => {
   await gotoHome(page);
-  expect(await look(page)).toEqual({ theme: 'home', base: '#161616', font: 'system-ui, sans-serif', scheme: 'dark', title: 'Areas · Godot Vocabulary' });
+  expect(await look(page)).toEqual({ theme: 'home', base: '#171513', font: 'system-ui, sans-serif', scheme: 'dark', title: 'Areas · Godot Vocabulary' });
   await expect(page.locator('.gv-tile')).toHaveCount(2);
   await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Nothing due, 0 of 6 lessons');
   await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, Nothing due, No courses yet');

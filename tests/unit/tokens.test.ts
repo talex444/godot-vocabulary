@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { AREAS } from '../../src/areas/registry';
 import { githubTokens } from '../../src/theme/github-desktop';
-import { HOME_GREYS, homeTokens } from '../../src/theme/home';
+import { HOME_ACTION, HOME_GREYS, homeTokens } from '../../src/theme/home';
 import { applyTokens, godotTokens, type ThemeTokens, type TokenRoot } from '../../src/theme/tokens';
 
 // Done-criteria 61: one flat map per area, applied as one unit.
@@ -111,15 +111,27 @@ describe('theme token maps', () => {
     expect(gh['--contrast-color-1']).toBe(sassLightness('#6a737d', 3)); // --box-border-contrast-color
   });
 
-  it('the home theme: dark, one ramp of ten greys and nothing else, system font, 4 px corners', () => {
+  it('the home theme: dark, one ramp of ten warm greys and one action colour, system font, 6 px corners', () => {
     const tokens = homeTokens();
     expect(HOME_GREYS).toHaveLength(10);
-    for (const grey of HOME_GREYS) expect(grey).toMatch(/^#([0-9a-f]{2})\1\1$/);
-    const colours = Object.entries(tokens).filter(([k]) => k.endsWith('-color')).map(([, v]) => v);
-    expect(colours.filter((c) => !HOME_GREYS.includes(c))).toEqual([]);
+    const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    for (const [i, grey] of HOME_GREYS.entries()) {
+      const [r, g, b] = rgb(grey) as [number, number, number];
+      // A slight warm tint: red over blue by a few steps at most, never a hue you would name.
+      expect(r >= g && g >= b && r - b <= 6, grey).toBe(true);
+      if (i > 0) expect(r, `${grey} is lighter than the grey before it`).toBeGreaterThan(rgb(HOME_GREYS[i - 1]!)[0]!);
+    }
+    const colours = Object.entries(tokens).filter(([k]) => k.endsWith('-color')).map(([k, v]) => [k, v] as const);
+    expect(colours.filter(([, c]) => !HOME_GREYS.includes(c))).toEqual([['--home-action-color', HOME_ACTION]]);
+    // The one colour is not the accent: the heading, links and focus ring stay grey (decision 64).
+    expect(tokens['--accent-color']).toBe(HOME_GREYS[8]);
     expect(tokens['--font-ui']).toBe('system-ui, sans-serif');
-    expect(tokens['--corner-radius']).toBe('4px');
+    expect(tokens['--corner-radius']).toBe('6px');
     expect(tokens['color-scheme']).toBe('dark');
+  });
+
+  it('the areas write the home-only roles as unset', () => {
+    for (const area of AREAS) expect(area.theme['--home-action-color'], area.id).toBe('unset');
   });
 
   it('the web manifest’s theme colour and index.html’s theme-color are the home page’s base colour', () => {

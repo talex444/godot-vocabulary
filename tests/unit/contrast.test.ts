@@ -117,9 +117,9 @@ function pairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
 
 /**
  * Every pair the home page and the screens it opens in its theme (About, the error screen) draw
- * (decisions 49, 54): text in its three roles on every surface, headings, links, the secondary
- * button, the tiles' borders at rest, hovered and pressed, and focus. No accent fills, so no primary
- * button pairs. These must all pass.
+ * (decisions 49, 54, 64): text in its three roles and the one action colour on every surface,
+ * headings, links, the secondary button, the tiles' borders and chevrons at rest, hovered and
+ * pressed, and focus. No accent fills, so no primary button pairs. These must all pass.
  */
 function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
   const t = (key: string): Colour => {
@@ -138,6 +138,7 @@ function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
       { pair: 'primary text', fg: t('font_color'), bg, need: TEXT as Need },
       { pair: 'secondary text', fg: t('font_secondary_color'), bg, need: TEXT as Need },
       { pair: 'tertiary text', fg: t('font_disabled_color'), bg, need: TEXT as Need },
+      { pair: 'action text: the due figure or the Next line (the one colour)', fg: t('home_action_color'), bg, need: TEXT as Need },
     ]),
     ...[t('base_color'), t('dark_color_1')].flatMap((bg) => [
       { pair: 'heading (accent_color is the primary grey)', fg: t('accent_color'), bg, need: TEXT as Need },
@@ -147,7 +148,10 @@ function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
     { pair: 'secondary button text (Back)', fg: t('font_focus_color'), bg: t('contrast_color_1'), need: TEXT },
   ];
   const nonText: Pair[] = [
-    ...surfaces.map((bg) => ({ pair: 'tile border', fg: t('contrast_color_2'), bg, need: LARGE as Need })),
+    ...surfaces.flatMap((bg) => [
+      { pair: 'tile border', fg: t('contrast_color_2'), bg, need: LARGE as Need },
+      { pair: 'tile chevron (secondary grey)', fg: t('font_secondary_color'), bg, need: LARGE as Need },
+    ]),
     ...[t('base_color'), t('dark_color_1')].flatMap((bg) => [
       { pair: 'focus ring', fg: t('accent_color'), bg, need: LARGE as Need },
       { pair: 'focus halo', fg: t('highlight_color'), bg, need: LARGE as Need },
@@ -204,7 +208,7 @@ function report(): { markdown: string; short: Record<string, { text: number; non
     '',
     '## Home',
     '',
-    'From the home page’s own neutral theme (`src/theme/home.ts`): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.',
+    'From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one action colour): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.',
     '',
     '### Text',
     '',
@@ -212,7 +216,7 @@ function report(): { markdown: string; short: Record<string, { text: number; non
     '',
     ...table(homeText),
     '',
-    '### Non-text: tile borders (at rest, hovered, pressed), focus and the secondary button (WCAG 1.4.11, 3:1)',
+    '### Non-text: tile borders and chevrons (at rest, hovered, pressed), focus and the secondary button (WCAG 1.4.11, 3:1)',
     '',
     `**${short.home.nonText} of ${homeNonText.length} pairs fall short.**`,
     '',

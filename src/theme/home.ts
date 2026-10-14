@@ -1,30 +1,42 @@
 import type { ThemeTokens } from './tokens';
 
 /**
- * The home page's own neutral theme (decision 49): dark, one grey ramp, no accent fills, the system
- * font (so the home needs no font file) and a 4 px corner like Godot's. Unlike the areas, it meets
- * WCAG 2.2 AA in full: `tests/unit/contrast.test.ts` fails the build if any pair it draws falls short.
+ * The home page's own theme (decisions 49, 64): dark, one grey ramp with one warm colour, no accent
+ * fills, the system font (so the home needs no font file) and a 6 px corner. Unlike the areas, it
+ * meets WCAG 2.2 AA in full: `tests/unit/contrast.test.ts` fails the build if any pair it draws falls
+ * short.
  *
- * Ten greys, darkest first; every token below is one of them.
+ * Ten greys, darkest first, in CIELAB LCh with a slight warm tint toward the action colour's hue
+ * (chroma 1.6, hue 70°). The four surfaces step evenly by 5.5 L* from L* 7, the six inks by 10.4 L*
+ * from L* 48 up to white; the gap between them is where the roles need it (tertiary text holds 4.5:1
+ * on the pressed tile, white holds 4.5:1 on the secondary button). Every grey token is one of them.
  *
- * | Grey | Hex | Role |
- * |------|-----|------|
- * | 0 | #161616 | the page (`--base-color`) |
- * | 1 | #1f1f1f | panels and tiles (`--dark-color-1`), code background |
- * | 2 | #2a2a2a | a hovered tile; the disabled secondary button |
- * | 3 | #3a3a3a | a pressed tile; inline code chips |
- * | 4 | #767676 | edges of fields and switches; the secondary button's fill |
- * | 5 | #8c8c8c | the focus halo |
- * | 6 | #a6a6a6 | tertiary text (disabled, readonly); tile borders |
- * | 7 | #b8b8b8 | secondary text |
- * | 8 | #e6e6e6 | primary text; headings, links and the focus ring (in place of an accent) |
- * | 9 | #ffffff | text on the secondary button, field input, hover and pressed text |
+ * | Grey | Hex | L* | Role |
+ * |------|-----|---:|------|
+ * | 0 | #171513 | 6.9 | the page (`--base-color`) |
+ * | 1 | #22201e | 12.4 | panels and tiles (`--dark-color-1`), code background |
+ * | 2 | #2e2c2a | 18.1 | a hovered tile; the disabled secondary button |
+ * | 3 | #3a3836 | 23.7 | a pressed tile; inline code chips |
+ * | 4 | #74726f | 48.1 | edges of fields and switches; the secondary button's fill |
+ * | 5 | #8f8c8a | 58.4 | the focus halo |
+ * | 6 | #aaa7a5 | 68.7 | tertiary text (disabled, readonly); tile borders |
+ * | 7 | #c6c4c1 | 79.2 | secondary text; the tile icons and chevron |
+ * | 8 | #e4e1de | 89.7 | primary text; headings, links and the focus ring (in place of an accent) |
+ * | 9 | #ffffff | 100 | text on the secondary button, field input, hover and pressed text |
+ *
+ * The one colour, `--home-action-color` #d59526 (HSL 38° 70% 49%), means "do this next" and nothing
+ * else (decision 64). It is the darkest amber at that hue and saturation that holds 4.5:1 as text on
+ * all four surfaces: 7.07:1 on the page, 6.31:1 on a tile, 5.40:1 on a hovered tile, 4.53:1 on a
+ * pressed one.
  */
 
-const G = ['#161616', '#1f1f1f', '#2a2a2a', '#3a3a3a', '#767676', '#8c8c8c', '#a6a6a6', '#b8b8b8', '#e6e6e6', '#ffffff'] as const;
+const G = ['#171513', '#22201e', '#2e2c2a', '#3a3836', '#74726f', '#8f8c8a', '#aaa7a5', '#c6c4c1', '#e4e1de', '#ffffff'] as const;
 
 /** The greys, darkest first (the contrast test reads them). */
 export const HOME_GREYS: readonly string[] = G;
+
+/** The home's one colour: "do this next" (decision 64). */
+export const HOME_ACTION = '#d59526';
 
 const [g0, g1, g2, g3, g4, g5, g6, g7, g8, g9] = G;
 
@@ -82,7 +94,8 @@ export function homeTokens(): ThemeTokens {
     '--code-bookmark-color': PRIMARY,
     '--code-executing-line-color': PRIMARY,
     '--code-breakpoint-color': PRIMARY,
-    '--corner-radius': '4px',
+    '--home-action-color': HOME_ACTION,
+    '--corner-radius': '6px',
     '--font-ui': 'system-ui, sans-serif',
     '--font-code': 'ui-monospace, monospace',
     'color-scheme': 'dark',

@@ -1,4 +1,4 @@
-import type { ThemeTokens } from './tokens';
+import { HOME_ONLY, type ThemeTokens } from './tokens';
 
 /**
  * The Git & GitHub area: GitHub Desktop's dark theme (decision 47), its colours used as they are
@@ -120,6 +120,7 @@ export function githubTokens(): ThemeTokens {
     '--code-bookmark-color': '#0366d6',
     '--code-executing-line-color': '#dbab09',
     '--code-breakpoint-color': '#d73a49',
+    ...HOME_ONLY,
     '--corner-radius': '6px',
     '--font-ui': `system-ui, sans-serif, ${EMOJI}`,
     '--font-code': `SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace, ${EMOJI}`,
