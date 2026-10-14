@@ -1,17 +1,17 @@
 import { version } from '../../../package.json';
-import { FAMILIES, type Card, type Family } from '../../cards/types';
-import api from '../../data/cards.godot-api.json';
-import gdscript from '../../data/cards.gdscript.json';
-import github from '../../data/cards.github.json';
+import { familyLabel } from '../../areas/registry';
+import { FAMILIES, type Family } from '../../cards/types';
+import deckCounts from '../../data/deck-counts.json';
 import { listCustomCards } from '../../store/db';
-import { FAMILY_LABEL, type Nav } from '../app';
+import type { Nav } from '../app';
 import { button, el, heading, panel, stat } from '../kit';
 
 export const REPO_URL = 'https://github.com/talex444/godot-vocabulary';
 /** New Android packages are published here (decision 28); the app itself never checks. */
 export const RELEASES_URL = `${REPO_URL}/releases`;
 
-const DECKS: Record<Family, readonly Card[]> = { 'godot-api': api as Card[], gdscript: gdscript as Card[], github: github as Card[] };
+/** Cards per generated deck, written by `pnpm generate` so About never loads a deck. */
+const DECK_COUNTS = deckCounts as Record<Family, number>;
 
 /** Every notice in THIRD_PARTY_NOTICES.md, as the learner reads it. */
 export const ATTRIBUTIONS: readonly [work: string, notice: string][] = [
@@ -45,7 +45,7 @@ export const ATTRIBUTIONS: readonly [work: string, notice: string][] = [
 /** What the app is, who made what it is built from, and where its code lives. */
 export async function aboutScreen(nav: Nav): Promise<HTMLElement> {
   const custom = await listCustomCards();
-  const counts = FAMILIES.map((family) => stat(FAMILY_LABEL[family], DECKS[family].length));
+  const counts = FAMILIES.map((family) => stat(familyLabel(family), DECK_COUNTS[family] ?? 0));
 
   return el('div', { class: 'gv-screen' }, [
     panel(

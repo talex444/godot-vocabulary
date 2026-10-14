@@ -1,8 +1,9 @@
+import { familyLabel } from '../../areas/registry';
 import { draftToCard, validateDraft, type CustomDraft } from '../../cards/custom';
 import { FAMILIES, type Family } from '../../cards/types';
 import { loadCards } from '../../session/deck';
 import { addCustomCard, deleteCustomCard, listCustomCards, type CustomCard } from '../../store/db';
-import { FAMILY_LABEL, type Nav } from '../app';
+import type { Nav } from '../app';
 import { button, el, heading, panel, selectField, textField } from '../kit';
 
 /** Write your own four-choice card; it joins its family as the next new card. Your cards are listed below. */
@@ -27,7 +28,7 @@ export async function addCardScreen(nav: Nav): Promise<HTMLElement> {
     );
   };
 
-  const showForm = (family: Family = 'godot-api') => {
+  const showForm = (family: Family = FAMILIES[0]!) => {
     formPanel.replaceChildren(form(family, async (card) => {
       await showList();
       showSaved(card);
@@ -42,7 +43,7 @@ export async function addCardScreen(nav: Nav): Promise<HTMLElement> {
           heading('Card saved'),
           el('p', { attrs: { role: 'status' } }, [
             el('strong', { text: card.answer }),
-            ` is now a new ${FAMILY_LABEL[card.family]} card. It comes up after the cards already waiting in that family.`,
+            ` is now a new ${familyLabel(card.family)} card. It comes up after the cards already waiting in that family.`,
           ]),
           el('div', { class: 'gv-row' }, [again, button('Back', { variant: 'secondary', onClick: () => nav.start() })]),
         ],
@@ -62,7 +63,7 @@ export async function addCardScreen(nav: Nav): Promise<HTMLElement> {
 }
 
 function form(family: Family, onSaved: (card: CustomCard) => Promise<void>): HTMLElement {
-  const familyField = selectField({ label: 'Family', choices: FAMILIES.map((f) => ({ value: f, label: FAMILY_LABEL[f] })), value: family });
+  const familyField = selectField({ label: 'Family', choices: FAMILIES.map((f) => ({ value: f, label: familyLabel(f) })), value: family });
   const prompt = textField({ label: 'Question', multiline: true });
   const answer = textField({ label: 'Right answer' });
   const wrong = [1, 2, 3].map((n) => textField({ label: `Wrong answer ${n}` }));
@@ -151,7 +152,7 @@ function customRow(card: CustomCard, refresh: () => Promise<void>): HTMLElement 
   showDelete();
   return el('li', { class: 'gv-custom' }, [
     el('p', { class: 'gv-custom__answer', text: card.answer }),
-    el('p', { class: 'gv-note', text: `${FAMILY_LABEL[card.family]} · ${card.prompt}` }),
+    el('p', { class: 'gv-note', text: `${familyLabel(card.family)} · ${card.prompt}` }),
     actions,
   ]);
 }

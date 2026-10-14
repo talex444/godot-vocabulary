@@ -1,6 +1,9 @@
+import { AREAS } from '../areas/registry';
+
 export type Family = 'godot-api' | 'gdscript' | 'github';
 
-export const FAMILIES: readonly Family[] = ['godot-api', 'gdscript', 'github'];
+/** Every family, area by area (`src/areas/registry.ts` is where a family is added). */
+export const FAMILIES: readonly Family[] = AREAS.flatMap((area) => area.families);
 
 /** What the answer names: a class, one of its members, a glossary term, or a language item. */
 export type CardKind = 'class' | 'method' | 'property' | 'signal' | 'term' | (string & {});

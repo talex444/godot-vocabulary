@@ -1,3 +1,4 @@
+import { AREAS } from '../areas/registry';
 import { FAMILIES, type Family } from '../cards/types';
 
 export interface FamilySettings {
@@ -19,11 +20,9 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-  families: {
-    'godot-api': { enabled: true, newPerDay: 10 },
-    gdscript: { enabled: true, newPerDay: 5 },
-    github: { enabled: true, newPerDay: 5 },
-  },
+  families: Object.fromEntries(
+    AREAS.flatMap((area) => area.families.map((family) => [family, { enabled: true, newPerDay: area.newPerDay[family] ?? 0 }])),
+  ) as Record<Family, FamilySettings>,
   retention: 0.9,
   newCardMode: 'frequency',
 };

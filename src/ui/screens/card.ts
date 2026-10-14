@@ -1,7 +1,8 @@
+import { areaOf, familyLabel, familyTraits } from '../../areas/registry';
 import type { Card } from '../../cards/types';
 import type { Choice } from '../../session/choices';
 import type { Session } from '../../session/run';
-import { FAMILY_LABEL, type Nav } from '../app';
+import type { Nav } from '../app';
 import { button, choiceRow, codeBlock, el, heading, icon, panel, richText, setChoiceState, textField } from '../kit';
 
 const KIND_LABEL: Record<string, string> = {
@@ -40,10 +41,11 @@ function choiceText(card: Card, choice: Choice): string {
 /** The name a flipped card asks about: a class with its icon, a member or keyword in code font, or a term. */
 function flippedPrompt(card: Card): HTMLElement {
   const owner = card.requires?.replace(/^api:class:/, '');
-  if (card.family === 'godot-api' && card.kind === 'class') {
+  const traits = familyTraits(card.family);
+  if (traits.classIcons && card.kind === 'class') {
     return el('p', { class: 'gv-card__prompt gv-card__name' }, [icon(`icons/${card.answer}.svg`), el('span', { text: card.answer })]);
   }
-  if (card.family === 'github') return el('p', { class: 'gv-card__prompt gv-card__name', text: card.answer });
+  if (traits.plainNames) return el('p', { class: 'gv-card__prompt gv-card__name', text: card.answer });
   const name = owner && MEMBER_KINDS.has(card.kind) ? `${owner}.${card.answer}` : card.answer;
   return el('p', { class: 'gv-card__prompt gv-card__name' }, [el('code', { class: 'gv-inline-code', text: name })]);
 }
@@ -70,7 +72,7 @@ export function cardScreen(session: Session, nav: Nav): HTMLElement {
   showProgress();
 
   const flipped = draw.direction === 'flipped';
-  const withIcons = !flipped && card.family === 'godot-api' && card.kind === 'class';
+  const withIcons = !flipped && familyTraits(card.family).classIcons && card.kind === 'class';
   const feedback = el('div', { class: 'gv-feedback', attrs: { role: 'status' } });
   const after = el('div', { class: 'gv-after' });
   const rows = draw.choices.map((choice) => {
@@ -118,7 +120,7 @@ export function cardScreen(session: Session, nav: Nav): HTMLElement {
   const look = lookLabel(session.showing);
   const body = panel(
     [
-      el('p', { class: 'gv-card__family', text: FAMILY_LABEL[card.family] }),
+      el('p', { class: 'gv-card__family', text: familyLabel(card.family) }),
       look ? el('p', { class: 'gv-card__look', text: look }) : null,
       heading(kindLabel(String(card.kind))),
       flipped ? flippedPrompt(card) : richText(card.prompt, 'p', { class: 'gv-card__prompt' }),
@@ -142,7 +144,7 @@ export function cardScreen(session: Session, nav: Nav): HTMLElement {
 
 /** The official page for the card, opened by the browser; the app itself requests nothing. */
 function docsLink(card: Card): HTMLAnchorElement {
-  const label = card.family === 'github' ? 'Open on GitHub Docs' : 'Open in the Godot docs';
+  const label = areaOf(card.family).docsLabel;
   return el('a', { class: 'gv-link gv-docs-link', attrs: { href: card.docsUrl!, target: '_blank', rel: 'noopener' } }, [
     label,
     el('span', { class: 'gv-visually-hidden', text: ' (opens in a new tab)' }),

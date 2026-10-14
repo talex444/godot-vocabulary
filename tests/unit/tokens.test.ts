@@ -1,11 +1,12 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { AREAS } from '../../src/areas/registry';
 import { applyTokens, godotTokens, type ThemeTokens, type TokenRoot } from '../../src/theme/tokens';
 
 // Done-criteria 61: one flat map per area, applied as one unit.
 
-const MAPS: [string, ThemeTokens][] = [['godot', godotTokens()]];
+const MAPS: [string, ThemeTokens][] = AREAS.map((area) => [area.id, area.theme]);
 
 const SRC = join(import.meta.dirname, '..', '..', 'src');
 

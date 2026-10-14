@@ -1,4 +1,3 @@
-import type { Family } from '../cards/types';
 import { deviceDeps } from '../session/deck';
 import { Session, type SessionResult } from '../session/run';
 import { aboutScreen } from './screens/about';
@@ -24,12 +23,6 @@ export interface Nav {
   lesson(id: string): void;
   placeholder(title: string): void;
 }
-
-export const FAMILY_LABEL: Record<Family, string> = {
-  'godot-api': 'Godot API',
-  gdscript: 'GDScript',
-  github: 'GitHub',
-};
 
 export function mountApp(host: HTMLElement): void {
   const show = (screen: HTMLElement) => {

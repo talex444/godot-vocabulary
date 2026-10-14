@@ -1,10 +1,11 @@
+import { familyLabel } from '../../areas/registry';
 import { FAMILIES } from '../../cards/types';
 import { REMINDER_SENTENCE, isNativeApp, parseTime } from '../../reminder/reminder';
 import { projectedReviewsPerDay, totalNewPerDay, warningAboveTwenty, type Settings } from '../../settings/load';
 import { loadCards } from '../../session/deck';
 import { getReminder, getSettings, listSkipped, saveReminder, saveSettings, unskipCard } from '../../store/db';
 import { exportFileName, exportText, importSummary, importText } from '../../store/file';
-import { FAMILY_LABEL, type Nav } from '../app';
+import type { Nav } from '../app';
 import { button, el, heading, panel, stat, stepper, textField, toggle } from '../kit';
 
 export const WARNING_TEXT =
@@ -30,8 +31,8 @@ export async function settingsScreen(nav: Nav): Promise<HTMLElement> {
   const showFamilies = (current: Settings) => {
     families.replaceChildren(
       ...FAMILIES.map((family) =>
-        el('div', { class: 'gv-family', attrs: { role: 'group', 'aria-label': FAMILY_LABEL[family] } }, [
-          toggle(FAMILY_LABEL[family], current.families[family].enabled, (on) => {
+        el('div', { class: 'gv-family', attrs: { role: 'group', 'aria-label': familyLabel(family) } }, [
+          toggle(familyLabel(family),current.families[family].enabled, (on) => {
             current.families[family].enabled = on;
             change();
           }),
@@ -174,7 +175,7 @@ async function skippedList(afterUndo: () => Promise<void>): Promise<HTMLElement[
     return el('li', { class: 'gv-custom gv-skipped__item' }, [
       el('div', { class: 'gv-skipped__text' }, [
         el('p', { class: 'gv-custom__answer', text: title }),
-        el('p', { class: 'gv-note', text: `${card ? FAMILY_LABEL[card.family] : 'Unknown card'} · skipped ${s.at.toLocaleDateString()}` }),
+        el('p', { class: 'gv-note', text: `${card ? familyLabel(card.family) : 'Unknown card'} · skipped ${s.at.toLocaleDateString()}` }),
         el('p', { class: 'gv-skipped__reason', text: s.reason ? `“${s.reason}”` : 'No reason given.' }),
       ]),
       undo,

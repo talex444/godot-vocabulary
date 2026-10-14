@@ -22,6 +22,13 @@ console.log(`gdscript: ${language.length} cards${existsSync(gdscript) ? '' : ' (
 // What the generator rules removed, for the deck test and the session notes.
 writeJson('data/removed-cards.json', removed);
 
+// Cards per family for the About screen, so About never loads a deck (decision 55).
+const counts = {};
+for (const family of ['godot-api', 'gdscript', 'github']) {
+  counts[family] = JSON.parse(readFileSync(join(ROOT, `src/data/cards.${family}.json`), 'utf8')).length;
+}
+writeJson('src/data/deck-counts.json', counts);
+
 await generateIcons();
 copyLessonImages();
 

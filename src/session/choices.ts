@@ -1,3 +1,4 @@
+import { familyTraits } from '../areas/registry';
 import type { Card } from '../cards/types';
 import type { Rng } from './build';
 
@@ -32,7 +33,7 @@ const DESCRIPTION_KINDS = new Set(['class', 'method', 'property', 'signal', 'ter
 /** Whether a card may be shown flipped (a description card, not a snippet or custom card). */
 export function canFlip(card: Card): boolean {
   if (card.code) return false;
-  return DESCRIPTION_KINDS.has(card.kind) || (card.family === 'gdscript' && LANGUAGE_DESCRIPTION_KINDS.has(card.kind));
+  return DESCRIPTION_KINDS.has(card.kind) || (familyTraits(card.family).languageItems && LANGUAGE_DESCRIPTION_KINDS.has(card.kind));
 }
 
 const keyOf = (texts: readonly string[]) => [...texts].sort().join('\u0001');

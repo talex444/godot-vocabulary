@@ -1,7 +1,8 @@
+import { familyLabel } from '../../areas/registry';
 import { FAMILIES } from '../../cards/types';
 import { sessionSummary } from '../../session/build';
 import { Session, load, overdueNote, startBlockedReason, type RunDeps } from '../../session/run';
-import { FAMILY_LABEL, type Nav } from '../app';
+import type { Nav } from '../app';
 import { button, el, heading, panel, stat } from '../kit';
 
 /** Today at a glance: per enabled family the reviews due, new cards and overdue reviews, then Start. */
@@ -14,7 +15,7 @@ export async function startScreen(nav: Nav, deps: RunDeps): Promise<HTMLElement>
   const rows = FAMILIES.filter((f) => summary[f].enabled).map((family) => {
     const s = summary[family];
     return el('div', { class: 'gv-family' }, [
-      el('h3', { class: 'gv-family__name', text: FAMILY_LABEL[family] }),
+      el('h3', { class: 'gv-family__name', text: familyLabel(family) }),
       el('dl', { class: 'gv-stats' }, [stat('Due', s.due), stat('New today', s.newAvailable), stat('Overdue', s.overdue)]),
     ]);
   });
