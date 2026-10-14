@@ -671,3 +671,32 @@ Done-criteria 56–59. Eleven commits, none pushed.
    - lesson 4: the cut above.
    These select from the page; they do not paraphrase it.
 7. **The Node2D "draws on screen" cell says "It can"**, not "Yes". A bare `Node2D` draws nothing until it has something to draw. The class reference's sentence is "Any CanvasItem can draw."
+
+## GV-7 — v1.2.1: safe areas in the Android app (2026-10-13)
+
+Done-criteria 60. Five commits, none pushed, no tag.
+
+### Cause
+- Tyler's S24 (Android 15, gesture navigation): content under the camera cutout / status bar and under the navigation bar. The web version in Chrome was fine.
+- `android/variables.gradle` targets SDK 36, and Android 15+ draws apps targeting 35+ edge to edge. `index.html` already had `viewport-fit=cover`, so the WebView filled the screen, but `#app` padded only the bottom by the inset and the top by a fixed 8px.
+
+### The CSS (`src/ui/screens/screens.css`, `#app`)
+- Four properties, one per edge: `--safe-top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px))`, likewise right, bottom, left.
+- Padding: top `8px + --safe-top`, right/left `--gutter + --safe-right/left` (landscape puts the cutout on a side), bottom `--gutter + --safe-bottom` (as before, plus the var).
+- No element in `src/` is `position: fixed` or `sticky`, so the shell is the only thing to pad.
+- With zero insets every value is what it was (8px / 16px), so the web build is unchanged.
+
+### The config (`capacitor.config.ts`)
+- `plugins.SystemBars: { insetsHandling: 'css', initialViewportFitValueHint: 'cover' }`, citing `node_modules/@capacitor/cli/dist/declarations.d.ts`. `'css'` is already the default; it is now explicit. `pnpm build:android` wrote both into `android/app/src/main/assets/capacitor.config.json`.
+
+### Proven here, and what only the phone can prove
+- e2e "safe areas: zero insets keep the shell as it was, injected insets pad every edge" (`tests/e2e/layout.spec.ts`): the shell's padding is 8/16/16/16 px with no insets. With `--safe-area-inset-*` set to 48/24/34/24 px on `:root` (what Capacitor injects), it becomes 56/40/50/40 px, and the app name moves down 48 px and right 24 px. The landscape, 320 px and 200 % layout tests still pass with zero insets.
+- `pnpm build:android` and `pnpm android:debug` succeed: **`app-debug.apk`, 5,638,880 bytes** (12 s build).
+- **Not proven:** that the S24's WebView reports the real insets and the content clears the cutout, status bar and gesture bar in portrait and landscape. That is the human check on the phone.
+
+### Gates
+`pnpm typecheck`, `pnpm test` (141), `pnpm build`, `pnpm lint:css` and `pnpm e2e` (32/32) green on the final tree.
+
+### Deviations and why
+1. **`max(env(…), var(…))` instead of `env(…, var(…))`.** Chromium always defines `env(safe-area-inset-*)` (as 0 in a browser), so a fallback inside `env()` is never used, and a browser test could not reach it. Capacitor 8.5.3's `SystemBars.java` injects the vars with the same values it passes to the WebView's insets, and sets both to 0 when it pads the WebView itself (Chromium < 140), so the larger of the two never pads twice.
+2. **Top is `8px + inset`, not `max(8px, inset)`.** This keeps the app name 8px clear of the status bar instead of touching it, and the test then checks a move of the full inset.
