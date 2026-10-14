@@ -15,14 +15,16 @@ import {
   open,
   openArea,
   screenReady,
+  type AreaLabel,
   settings,
   startReady,
   startSession,
 } from './helpers';
 
-// Done-criteria 27: axe-core with the WCAG 2.2 AA tags on every screen. Every rule but
-// `color-contrast` must pass. Contrast is reported, not failed (decision #22: where a Godot colour
-// falls short, Godot wins): its findings go to docs/axe-contrast.md, which this spec rewrites.
+// Done-criteria 27, 66: axe-core with the WCAG 2.2 AA tags on every screen, in each area's theme.
+// Every rule but `color-contrast` must pass. Contrast is reported, not failed (decisions 22 and 54:
+// inside an area the tool's colours win): its findings go to docs/axe-contrast.md, one section per
+// area, which this spec rewrites.
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
@@ -35,10 +37,21 @@ interface Finding {
   actual: string;
 }
 
-const findings: Finding[] = [];
-const screens: string[] = [];
+/** Screens and findings per area, in the order audited. */
+const runs: Record<AreaLabel, { screens: string[]; findings: Finding[] }> = {
+  Godot: { screens: [], findings: [] },
+  'Git & GitHub': { screens: [], findings: [] },
+};
+/** The area whose theme the page wears now. */
+let area: AreaLabel = 'Godot';
+
+async function enter(page: Page, label: AreaLabel): Promise<void> {
+  await openArea(page, label);
+  area = label;
+}
 
 async function audit(page: Page, screen: string): Promise<void> {
+  const { screens, findings } = runs[area];
   screens.push(screen);
   const strict = await new AxeBuilder({ page }).withTags(TAGS).disableRules(['color-contrast']).analyze();
   const problems = strict.violations.map((v) => `${v.id} (${v.help}): ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`);
@@ -61,32 +74,41 @@ async function audit(page: Page, screen: string): Promise<void> {
 }
 
 function writeReport(): void {
-  const order = (s: string) => screens.indexOf(s);
-  const rows = [...findings].sort((a, b) => order(a.screen) - order(b.screen) || a.selector.localeCompare(b.selector));
   const cell = (s: string) => s.replace(/\|/g, '\\|');
   const lines = [
     '# axe colour-contrast findings',
     '',
     'Written by `tests/e2e/axe.spec.ts` on every `pnpm e2e` run; do not edit by hand.',
     '',
-    'axe-core runs with the tags `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa` on every screen at 360×780.',
-    'Every rule except `color-contrast` must pass. The `color-contrast` findings below are reported, not failed:',
-    'they come from Godot 4.7’s own editor colours, which the app never alters to pass a ratio',
-    '(decision #22, Tyler, 2026-10-13). They are a known deviation from WCAG 1.4.3; see also',
+    'axe-core runs with the tags `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa` on every screen at 360×780,',
+    'in the theme of the area the screen belongs to. Every rule except `color-contrast` must pass. The',
+    '`color-contrast` findings below are reported, not failed: they come from the tool’s own colours (Godot 4.7’s',
+    'editor theme in the Godot area, GitHub Desktop’s dark theme in Git & GitHub), which the app never alters',
+    'to pass a ratio (decisions 22 and 54). They are a known deviation from WCAG 1.4.3; see also',
     '[`contrast-report.md`](contrast-report.md), which measures every theme pair directly.',
     '',
     'The card screens show the first new card of each family (daily budgets set to one each), so the run is repeatable;',
-    'the flipped card is the Godot API card’s second look, and the skip field opens on the card after it.',
-    '',
-    `Screens audited: ${screens.join(', ')}.`,
-    '',
-    `Findings: ${rows.length}.`,
-    '',
-    '| Screen | Selector | Text | Background | Expected | Actual |',
-    '|--------|----------|------|------------|----------|--------|',
-    ...rows.map((r) => `| ${cell(r.screen)} | \`${cell(r.selector)}\` | ${r.foreground} | ${r.background} | ${r.expected} | ${r.actual} |`),
-    '',
+    'the flipped card is the Godot API card’s second look, and the skip field opens on the card after it. The',
+    'GitHub card is answered right, so its feedback is the same on every run.',
   ];
+  for (const label of Object.keys(runs) as AreaLabel[]) {
+    const { screens, findings } = runs[label];
+    const order = (s: string) => screens.indexOf(s);
+    const rows = [...findings].sort((a, b) => order(a.screen) - order(b.screen) || a.selector.localeCompare(b.selector));
+    lines.push(
+      '',
+      `## ${label}`,
+      '',
+      `Screens audited: ${screens.join(', ')}.`,
+      '',
+      `Findings: ${rows.length}.`,
+      '',
+      '| Screen | Selector | Text | Background | Expected | Actual |',
+      '|--------|----------|------|------------|----------|--------|',
+      ...rows.map((r) => `| ${cell(r.screen)} | \`${cell(r.selector)}\` | ${r.foreground} | ${r.background} | ${r.expected} | ${r.actual} |`),
+    );
+  }
+  lines.push('');
   writeFileSync('docs/axe-contrast.md', lines.join('\n'));
 }
 
@@ -145,16 +167,21 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async
   await page.getByRole('button', { name: 'Done' }).click();
   await startReady(page);
 
-  // The Git & GitHub area's session: its one GitHub card.
-  await openArea(page, 'Git & GitHub');
+  // The Git & GitHub area in its own theme: start, its one GitHub card (answered right), summary, courses.
+  await enter(page, 'Git & GitHub');
+  await audit(page, 'start');
   await startSession(page);
   await audit(page, 'card (GitHub)');
-  await answer(page, 0);
+  await answerShowing(page);
   await audit(page, 'card answered (GitHub)');
   await endSession(page);
+  await audit(page, 'summary');
   await page.getByRole('button', { name: 'Done' }).click();
-  await startReady(page);
-  await openArea(page, 'Godot');
+  await startReady(page, 'Git & GitHub');
+  await open(page, 'Courses');
+  await audit(page, 'courses');
+  await backToStart(page);
+  await enter(page, 'Godot');
 
   await open(page, 'Settings');
   await audit(page, 'settings (skipped cards)');
@@ -201,8 +228,9 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async
   await page.locator('.gv-reveal__cover').nth(4).click();
   await audit(page, 'lesson with the course table');
 
-  // Fixed order for the report: the card screens by family name.
-  const fixed = ['Godot API', 'GDScript', 'GitHub'];
+  // Fixed order for the report: the Godot card screens by family name.
+  const { screens } = runs.Godot;
+  const fixed = ['Godot API', 'GDScript'];
   const cardScreens = screens.filter((s) => s.startsWith('card'));
   const rank = (s: string) => fixed.findIndex((f) => s.endsWith(`(${f})`)) * 2 + (s.startsWith('card answered') ? 1 : 0);
   const sortedCards = [...cardScreens].sort((a, b) => rank(a) - rank(b));
