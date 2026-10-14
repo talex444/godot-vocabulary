@@ -122,6 +122,12 @@ describe('theme token maps', () => {
     expect(tokens['color-scheme']).toBe('dark');
   });
 
+  it('the web manifest’s theme colour and index.html’s theme-color are the home page’s base colour', () => {
+    const base = homeTokens()['--base-color'];
+    expect(readFileSync(join(SRC, '..', 'vite.config.ts'), 'utf8')).toContain(`HOME_BASE_COLOR = '${base}'`);
+    expect(readFileSync(join(SRC, '..', 'index.html'), 'utf8')).toContain(`<meta name="theme-color" content="${base}" />`);
+  });
+
   it('keeps the Godot look: Inter, JetBrains Mono, dark controls', () => {
     const tokens = godotTokens();
     expect(tokens['--font-ui']).toBe("'Inter', system-ui, sans-serif");

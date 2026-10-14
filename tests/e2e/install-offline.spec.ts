@@ -14,7 +14,9 @@ test('installs, runs offline and keeps progress, settings and custom cards acros
   const manifestHref = await page.locator('link[rel="manifest"]').getAttribute('href');
   expect(manifestHref).toBeTruthy();
   const manifest = await (await page.request.get(new URL(manifestHref!, page.url()).href)).json();
-  expect(manifest).toMatchObject({ name: 'Godot Vocabulary', short_name: 'GodotVocab', display: 'standalone' });
+  expect(manifest).toMatchObject({ name: 'Godot Vocabulary', short_name: 'GodotVocab', display: 'standalone', theme_color: '#161616' });
+  // 1.3.0: the description names both areas; the bars wear the home page's base colour.
+  expect(manifest.description).toMatch(/Godot.*Git & GitHub/);
   expect(manifest.icons.map((i: { sizes: string }) => i.sizes)).toEqual(expect.arrayContaining(['192x192', '512x512']));
   expect(await page.evaluate(async () => !!(await navigator.serviceWorker.ready).active)).toBe(true);
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null);

@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import theme from './data/theme/godot-4.7-defaults.json' with { type: 'json' };
-
-const baseColor = theme.interface.base_color;
+// The app opens on the home page, so the installed app's bars and splash wear its base colour
+// (src/theme/home.ts, grey 0; tests/unit/tokens.test.ts keeps the two equal).
+export const HOME_BASE_COLOR = '#161616';
+const baseColor = HOME_BASE_COLOR;
 
 // `vite build --mode android` (pnpm build:android) builds for the Capacitor package: its WebView serves
 // the files from the root, so paths are relative, and the package needs no service worker or web manifest.
@@ -21,7 +22,7 @@ export default defineConfig(({ mode }) => {
         manifest: {
           name: 'Godot Vocabulary',
           short_name: 'GodotVocab',
-          description: 'Four-choice drills for Godot 4.7 API, GDScript and Git/GitHub vocabulary. Unofficial community project.',
+          description: 'Four-choice drills in two areas: Godot (the 4.7 API and GDScript) and Git & GitHub. Unofficial community project.',
           display: 'standalone',
           start_url: '/godot-vocabulary/',
           scope: '/godot-vocabulary/',
