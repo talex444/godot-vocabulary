@@ -2,6 +2,8 @@
 
 Godot Vocabulary is a small app for your phone that drills the words of the Godot 4.7 API, GDScript and Git/GitHub as four-choice cards. A spaced-repetition scheduler (FSRS) brings each card back just before you would forget it. It is free, works offline, and keeps everything on your device.
 
+The app has two **areas**, one per tool: **Godot** (the Godot API and GDScript cards, and the courses) and **Git & GitHub** (the GitHub cards). Each area wears its tool's look: the Godot area uses Godot 4.7's editor colours, and the Git & GitHub area follows GitHub Desktop's dark theme and your device's system font.
+
 It is an **unofficial community project**. It is not affiliated with or endorsed by the Godot Foundation, the Godot Engine project or GitHub. The Godot logo is not used; the app icon is its own glyph.
 
 The app lives at **https://talex444.github.io/godot-vocabulary/**.
@@ -33,9 +35,9 @@ The web version keeps working as before for everyone else, on any phone. The And
 
 - **Four choices, instant feedback.** Each card asks one question with four answers. Tap one: it is marked right or wrong, the correct answer is highlighted, the full description appears, and **Next** moves on. There is no second guess.
 - **Asked before taught.** A new card is a question the first time you see it, not a page to read. Guessing first and then seeing the answer helps it stick.
-- **Reviews first.** Cards that are due come back in the same session. If any review is **overdue** (it was due before today), no new cards appear until the overdue ones are answered.
+- **Reviews first.** Cards that are due come back in the same session. If any review in an area is **overdue** (it was due before today), that area shows no new cards until its overdue ones are answered. Overdue reviews in one area do not hold back new cards in the other.
 - **Daily new cards per family.** Godot API 10, GDScript 5, GitHub 5 by default. Change them in **Settings**, which shows the total and the review load it leads to (about ten reviews a day for each new card a day). Above twenty a day, Settings warns you in plain words, and still lets you do it.
-- **Mixed together.** Due reviews and new cards from every family that is switched on are shuffled into one session. You can switch a family off in Settings.
+- **One area at a time, its families mixed together.** A session belongs to one area. The due reviews and new cards of that area's families that are switched on are shuffled into one session: in the Godot area, Godot API and GDScript cards come mixed. You can switch a family off in Settings.
 - **New cards in a sensible order.** API cards follow how often each class appears in Godot's demo projects, with the classes from the "Your first 2D game" tutorial first. You always meet a class before its methods, properties and signals.
 
 A new card is asked up to three times on its first day, spread out and never twice in a row; a wrong answer brings it back until you get it right. Each time, the three wrong answers are drawn fresh, and on the second and third look a description card turns around: it shows the name (with its class icon) and asks you to pick the right description out of four. After every answer the panel shows the full description and a link to the official Godot or GitHub docs page. The summary counts **cards learned** (three looks, the last one right) and the ones to **continue tomorrow**. If a card is wrong or confusing, **Skip this card** (under the choices) takes it out of your deck, with an optional reason. **Settings → Skipped cards** lists them with an **Undo** each.
@@ -44,7 +46,7 @@ Only the first answer of the day is graded: right counts as FSRS **Good**, wrong
 
 ## Where the cards come from
 
-- **Godot API** (855 cards): generated from Godot 4.7's class reference XML.
+- **Godot API** (861 cards): generated from Godot 4.7's class reference XML.
 - **GDScript** (120 cards): written by hand in `data/cards/gdscript.json` from the GDScript pages of the Godot manual. Each card names its source section.
 - **GitHub** (96 cards): generated from the GitHub Docs glossary, filtered by `scripts/github-terms-allowlist.json` to Git and team-workflow terms.
 
@@ -78,7 +80,7 @@ Your cards stay on your phone. They are never added to this repository.
 
 In **Settings → Data**:
 
-- **Export** saves one JSON file (`godot-vocabulary-YYYY-MM-DD.json`) with your progress, your settings, your own cards, your skipped cards, your finished lessons and your exit tickets. Files from older versions still import.
+- **Export** saves one JSON file (`godot-vocabulary-YYYY-MM-DD.json`, version 4) with your progress, your settings (including each area's own **Lesson cards first** setting), your own cards, your skipped cards, your finished lessons and your exit tickets. The reminder stays a setting of the phone and is not in the file. Files from older versions still import: their single **Lesson cards first** setting goes to the Godot area. A file made by a newer version of the app is refused with a message asking you to update the app first.
 - **Import** reads such a file and offers two choices:
   - **Merge with this device** keeps your settings here, adds the file's cards and, for each card, keeps whichever progress was reviewed last.
   - **Replace everything on this device** wipes this device and restores the file's progress, settings and cards.
@@ -87,12 +89,12 @@ Use it to back up, or to move to a new phone. The file only goes where you put i
 
 ## Accessibility, and one known deviation
 
-The bar is WCAG 2.2 Level AA, plus the AAA target size: every tap target is at least 44×44 CSS px. Every screen works at 320 CSS px wide, in portrait and landscape, with text at 200%, and by keyboard alone. axe-core checks every screen on every test run.
+The bar is WCAG 2.2 Level AA, plus the AAA target size: every tap target is at least 44×44 CSS px. Every screen works at 320 CSS px wide, in portrait and landscape, with text at 200%, with WCAG's text-spacing values, and by keyboard alone, in each area's theme. axe-core checks every screen on every test run.
 
-**Known deviation from WCAG 1.4.3 / 1.4.11 (contrast):** the app uses Godot 4.7's own editor colours and never changes them to pass a ratio. A few pairs fall short, most visibly white text on the blue accent button (2.71:1). They are measured and listed, not hidden:
+**Known deviation from WCAG 1.4.3 / 1.4.11 (contrast):** inside an area the app uses the tool's own colours (Godot 4.7's editor theme; GitHub Desktop's dark theme) and never changes them to pass a ratio. Some pairs fall short: text pairs, and non-text pairs such as focus rings, control edges and selection. The most visible are white text on Godot's blue accent button (2.71:1) and GitHub Desktop's blue accent on its dark background (about 2.7:1). They are measured and listed per area, not hidden:
 
-- [`docs/contrast-report.md`](docs/contrast-report.md): every text/background and control/background pair in the theme, with the ones below 4.5:1 (text) or 3:1 (controls).
-- [`docs/axe-contrast.md`](docs/axe-contrast.md): what axe-core's `color-contrast` rule finds on each screen.
+- [`docs/contrast-report.md`](docs/contrast-report.md): one section per area, with every text/background pair and every non-text pair (control edges, focus, selection), and the ones below 4.5:1 (text) or 3:1 (large text and controls).
+- [`docs/axe-contrast.md`](docs/axe-contrast.md): what axe-core's `color-contrast` rule finds on each screen, one section per area.
 
 ## Licences and attributions
 
@@ -101,6 +103,7 @@ The app's code is MIT-licensed (see [`LICENSE`](LICENSE)). It is built from:
 - Godot Engine 4.7: class reference, class icons and editor theme colours (MIT, © Godot Engine contributors, Juan Linietsky, Ariel Manzur).
 - Godot documentation: "Juan Linietsky, Ariel Manzur and the Godot community" (CC BY 3.0), including the sentences and screenshots quoted in the course lessons.
 - GitHub Docs glossary (CC BY 4.0, © GitHub, Inc.).
+- The Git & GitHub area's colours: GitHub Desktop's dark theme and the Primer colour palette it uses (both MIT, © GitHub, Inc.). No GitHub logo is used.
 - Inter and JetBrains Mono fonts (SIL Open Font License 1.1).
 - ts-fsrs (MIT), idb (ISC) and Workbox (MIT).
 - The Android app also contains Capacitor and its Local Notifications plugin (MIT) and the AndroidX libraries (Apache 2.0).

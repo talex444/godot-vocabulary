@@ -32,6 +32,8 @@ export const ATTRIBUTIONS: readonly [work: string, notice: string][] = [
     '© GitHub, Inc. https://creativecommons.org/licenses/by/4.0/ — terms filtered by an allow-list and adapted into question form.',
   ],
   ['Godot demo projects, MIT licence (class frequency counts only; no demo code is shipped)', 'Copyright (c) Godot Engine contributors.'],
+  ['GitHub Desktop (the dark theme’s colours, corner radius and font stacks, in the Git & GitHub area), MIT licence', 'Copyright (c) GitHub, Inc.'],
+  ['Primer CSS colour system (the palette GitHub Desktop’s dark theme uses), MIT licence', 'Copyright (c) 2018 GitHub Inc.'],
   ['Inter, SIL Open Font License 1.1', 'Copyright (c) 2016 The Inter Project Authors.'],
   ['JetBrains Mono, SIL Open Font License 1.1', 'Copyright 2020, The JetBrains Mono Project Authors.'],
   ['ts-fsrs, MIT licence', 'Copyright (c) 2026 Open Spaced Repetition.'],
