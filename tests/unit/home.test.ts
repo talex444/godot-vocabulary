@@ -72,6 +72,8 @@ describe('home tiles', () => {
 
 /** Every element of a tile with its words, and which carry the action colour. */
 const coloured = (view: TileView) => [view.figure, ...view.lines].filter((t) => t.action).map((t) => t.text);
+/** A zero figure is quiet (the lessons line's size and tertiary grey), a count above zero large and bold. */
+const quiet = (view: TileView) => view.figure.quiet;
 const texts = (view: TileView) => [view.label, view.figure.text, ...view.lines.map((l) => l.text), view.tag].filter(Boolean);
 
 describe('the home’s words and its one colour (decisions 63, 64)', () => {
@@ -88,6 +90,7 @@ describe('the home’s words and its one colour (decisions 63, 64)', () => {
     expect(coloured(g!)).toEqual(['Next: Lesson 0']);
     expect(texts(h!)).toEqual(['Git & GitHub', '0 due', 'No courses yet']);
     expect(coloured(h!)).toEqual([]);
+    expect([quiet(g!), quiet(h!)]).toEqual([true, true]);
     expect(todayText(tiles)).toBe('Nothing due today. Next: Godot, Lesson 0.');
   });
 
@@ -100,6 +103,7 @@ describe('the home’s words and its one colour (decisions 63, 64)', () => {
     expect(coloured(g!)).toEqual(['Next: Lesson 2']);
     expect(texts(h!)).toEqual(['Git & GitHub', '3 due', 'No courses yet', 'Last used']);
     expect(coloured(h!)).toEqual(['3 due']);
+    expect([quiet(g!), quiet(h!)]).toEqual([true, false]);
     expect(todayText(tiles)).toBe('3 due in Git & GitHub.');
   });
 
@@ -112,6 +116,7 @@ describe('the home’s words and its one colour (decisions 63, 64)', () => {
     expect(texts(g!)).toEqual(['Godot', '12 due', '0 of 6 lessons']);
     expect(coloured(g!)).toEqual(['12 due']);
     expect(coloured(h!)).toEqual(['3 due']);
+    expect([quiet(g!), quiet(h!)]).toEqual([false, false]);
     expect(todayText(tiles)).toBe('12 due in Godot. 3 due in Git & GitHub.');
   });
 
@@ -121,6 +126,7 @@ describe('the home’s words and its one colour (decisions 63, 64)', () => {
       { area: github, figures: fig(0, null, 0) },
     ];
     for (const t of tiles) expect(coloured(tileView(t.area, t.figures, false))).toEqual([]);
+    for (const t of tiles) expect(quiet(tileView(t.area, t.figures, false))).toBe(true);
     expect(todayText(tiles)).toBe('Nothing due today.');
   });
 

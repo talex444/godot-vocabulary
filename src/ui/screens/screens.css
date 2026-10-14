@@ -184,6 +184,13 @@
   white-space: nowrap;
 }
 
+/* "0 due" is no call to act: the lessons line's size, weight and tertiary grey, so "Next" outranks it. */
+.gv-tile__figure--quiet {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: inherit;
+}
+
 .gv-tile__tag {
   grid-area: 2 / 3;
   justify-self: end;

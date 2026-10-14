@@ -87,6 +87,18 @@ test('nothing due: one plain line names the next step; only the Next line is col
   await expect(page.locator('.gv-today')).toHaveText('Nothing due today. Next: Godot, Lesson 0.');
   await expect(page.locator('.gv-tile__figure')).toHaveText(['0 due', '0 due']);
   expect(await coloured(page)).toEqual([['Next: Lesson 0'], []]);
+  // A zero figure is quiet: drawn like the lessons line (size, weight, grey), so "Next" outranks it.
+  const quiet = await page.locator('.gv-tile').evaluateAll((tiles) =>
+    tiles.map((t) => {
+      const style = (n: Element) => {
+        const c = getComputedStyle(n);
+        return [c.fontSize, c.fontWeight, c.color].join(' ');
+      };
+      const lessons = [...t.querySelectorAll('.gv-tile__line')].at(-1)!;
+      return style(t.querySelector('.gv-tile__figure')!) === style(lessons);
+    }),
+  );
+  expect(quiet).toEqual([true, true]);
   // The heading, the today line, the unofficial line and About stay grey.
   const grey = await page.evaluate(
     (action) => ['.gv-heading', '.gv-today', '.gv-unofficial', '.gv-links button'].every((s) => getComputedStyle(document.querySelector(s)!).color !== action),

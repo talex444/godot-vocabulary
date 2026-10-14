@@ -52,8 +52,8 @@ export interface TileText {
 /** What a tile shows, in DOM order. */
 export interface TileView {
   label: string;
-  /** The right-hand figure, "N due". */
-  figure: TileText;
+  /** The right-hand figure, "N due"; `quiet` (zero) draws it at the lessons line's size and grey. */
+  figure: TileText & { quiet: boolean };
   /** Under the label: the next step (when nothing is due and the area has courses), then the lessons line. */
   lines: TileText[];
   tag: string | undefined;
@@ -73,7 +73,7 @@ export function tileView(area: Area, figures: TileFigures, lastUsed: boolean): T
   lines.push({ text: lessonsText(figures), action: false });
   return {
     label: area.label,
-    figure: { text: `${figures.due} due`, action: figures.due > 0 },
+    figure: { text: `${figures.due} due`, action: figures.due > 0, quiet: figures.due === 0 },
     lines,
     tag: lastUsed ? 'Last used' : undefined,
     name: tileName(area, figures, lastUsed),
@@ -130,6 +130,7 @@ function glyph(className: string, path: string): HTMLSpanElement {
 }
 
 const ACTION = ' gv-action';
+const QUIET = ' gv-tile__figure--quiet';
 
 function tile(area: Area, view: TileView, nav: Nav): HTMLButtonElement {
   // The DOM keeps 1.3.0's order (label, then the lines); the grid in screens.css places the due
@@ -137,7 +138,7 @@ function tile(area: Area, view: TileView, nav: Nav): HTMLButtonElement {
   const node = el('button', { class: 'gv-tile', attrs: { type: 'button', 'data-area': area.id, 'aria-label': view.name } }, [
     el('span', { class: 'gv-tile__text' }, [
       el('span', { class: 'gv-tile__label', text: view.label }),
-      el('span', { class: `gv-tile__figure${view.figure.action ? ACTION : ''}`, text: view.figure.text }),
+      el('span', { class: `gv-tile__figure${view.figure.action ? ACTION : ''}${view.figure.quiet ? QUIET : ''}`, text: view.figure.text }),
       ...view.lines.map((line) => el('span', { class: `gv-tile__line${line.action ? ACTION : ''}`, text: line.text })),
       view.tag !== undefined && el('span', { class: 'gv-tile__tag', text: view.tag }),
     ]),
