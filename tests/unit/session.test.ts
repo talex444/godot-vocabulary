@@ -270,7 +270,7 @@ describe('plan, course mode and skips (done-criteria 33, 37, 39)', () => {
   });
 
   it('in course mode puts the unseen cards of finished lessons first, then frequency order', () => {
-    const s = settings((x) => (x.newCardMode = 'course'));
+    const s = settings((x) => (x.areas.godot.newCardMode = 'course'));
     const lessons: Lesson[] = [
       { id: 'l1', title: 'One', topic: 'Signals', cardIds: ['godot-api:20', 'godot-api:25', 'gdscript:9'] },
       { id: 'l2', title: 'Two', topic: 'UI', cardIds: ['godot-api:28'] },

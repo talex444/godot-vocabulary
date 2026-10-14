@@ -1,7 +1,8 @@
 import { deleteDB, openDB, type DBSchema, type IDBPDatabase } from 'idb';
+import { getArea, type AreaId } from '../areas/registry';
 import { FAMILIES, type Card } from '../cards/types';
 import type { Progress } from '../scheduler/fsrs';
-import { withDefaults, type Settings } from '../settings/load';
+import { withDefaults, type Settings, type StoredSettings } from '../settings/load';
 
 export const DB_NAME = 'godot-vocabulary';
 const DB_VERSION = 3;
@@ -53,12 +54,18 @@ export type ExportedSkip = Omit<SkippedCard, 'at'> & { at: string };
 export type ExportedLesson = Omit<LessonDone, 'at'> & { at: string };
 export type ExportedTicket = Omit<ExitTicket, 'date'> & { date: string };
 
+/** The newest export version this app writes and reads. */
+export const EXPORT_VERSION = 4;
+
+export const NEWER_FILE_MESSAGE = 'This file was made by a newer version of the app. Update the app, then import it.';
+
 /**
- * Version 3 adds `exitTickets`; version 2 added `skipped` and `lessonsDone`. Version 1 and 2 files
- * (without them) still import.
+ * Version 4 moves `newCardMode` into `settings.areas` (one per area); version 3 added `exitTickets`;
+ * version 2 added `skipped` and `lessonsDone`. Version 1–3 files still import. The last-used area
+ * and the reminder are settings of this device and are never exported.
  */
 export interface ExportFile {
-  version: 3;
+  version: 4;
   exportedAt: string;
   progress: ExportedProgress[];
   settings: Settings;
@@ -107,6 +114,13 @@ export async function getSettings(): Promise<Settings> {
 
 export async function saveSettings(settings: Settings): Promise<void> {
   await (await db()).put('settings', withDefaults(settings), SETTINGS_KEY);
+}
+
+/** Mark done on a lesson: course mode on for the lesson's course's area, the other areas left as they are. */
+export async function markDoneSettings(area: AreaId): Promise<void> {
+  const settings = await getSettings();
+  if (settings.areas[area].newCardMode === 'course') return;
+  await saveSettings({ ...settings, areas: { ...settings.areas, [area]: { newCardMode: 'course' } } });
 }
 
 /** Progress records by card id: the given ids that have one, or every record when `ids` is omitted. */
@@ -236,7 +250,7 @@ export async function exportAll(now: Date = new Date()): Promise<ExportFile> {
     listExitTickets(),
   ]);
   return {
-    version: 3,
+    version: EXPORT_VERSION,
     exportedAt: now.toISOString(),
     progress: [...progress.values()].map(toExported),
     settings,
@@ -248,7 +262,7 @@ export async function exportAll(now: Date = new Date()): Promise<ExportFile> {
 }
 
 /**
- * Restore an export (version 1, 2 or 3). `replace` wipes this device first; `merge` keeps this
+ * Restore an export (version 1 to 4). `replace` wipes this device first; `merge` keeps this
  * device's settings, adds the file's custom cards, skips, finished lessons and exit tickets (this
  * device's entry wins on the same id), and per card keeps whichever progress record was reviewed more recently.
  */
@@ -286,7 +300,7 @@ export async function importAll(json: unknown, mode: 'merge' | 'replace'): Promi
     for (const l of lessons) if (!(await lessonStore.get(l.lessonId))) writes.push(lessonStore.put(l));
     for (const t of tickets) if (!(await ticketStore.get(t.lessonId))) writes.push(ticketStore.put(t));
   }
-  writes.push(...file.customCards.map((c) => tx.objectStore('customCards').put({ ...c, custom: true })));
+  writes.push(...file.customCards.map((c) => tx.objectStore('customCards').put(c)));
   await Promise.all([...writes, tx.done]);
 }
 
@@ -316,24 +330,57 @@ function fromExported(p: ExportedProgress): Progress {
   };
 }
 
+/** The fields a card has (`Card`); anything else on an imported custom card is left behind. */
+const CARD_FIELDS = [
+  'id', 'family', 'kind', 'prompt', 'code', 'answer', 'distractors', 'distractorPool', 'distractorIds',
+  'explain', 'explainFull', 'docsUrl', 'topic', 'icon', 'source', 'rank', 'requires',
+] as const satisfies readonly (keyof Card)[];
+
+/** A custom card from a file: its family must be one the app knows; only the known fields are kept. */
+function parseCustomCard(value: unknown): CustomCard {
+  const c = value as Partial<Card> | null;
+  const text = (v: unknown) => typeof v === 'string';
+  if (!c || !text(c.id) || !text(c.prompt) || !text(c.answer) || typeof c.rank !== 'number') {
+    throw new Error('Export file has a broken custom card.');
+  }
+  if (!Array.isArray(c.distractors) || c.distractors.length !== 3 || !c.distractors.every(text)) {
+    throw new Error(`Export file has a broken custom card: ${c.answer}.`);
+  }
+  if (!FAMILIES.includes(c.family as Card['family'])) {
+    throw new Error(`Export file has a custom card for a family this app does not have: ${String(c.family)}.`);
+  }
+  const card: Record<string, unknown> = {};
+  for (const key of CARD_FIELDS) if (c[key] !== undefined) card[key] = c[key];
+  return { ...(card as unknown as Card), custom: true };
+}
+
 /**
- * Reads a version 1, 2 or 3 file into the version 3 shape (version 1 has no skips or lessons,
- * versions 1 and 2 no exit tickets).
+ * Reads a version 1 to 4 file into the version 4 shape (version 1 has no skips or lessons, versions
+ * 1 and 2 no exit tickets, versions 1 to 3 one global `newCardMode`, which `withDefaults` moves onto
+ * the areas). Only the known parts are read: unknown top-level keys and stores are ignored, and an
+ * unknown area in `settings.areas` is dropped with a console warning. A newer file is refused.
  */
 function parseExport(value: unknown): ExportFile {
-  const file = value as (Omit<Partial<ExportFile>, 'version'> & { version?: unknown }) | null;
-  if (!file || (file.version !== 1 && file.version !== 2 && file.version !== 3)) {
-    throw new Error('Not a godot-vocabulary export (version 1, 2 or 3).');
+  const file = value as (Omit<Partial<ExportFile>, 'version' | 'settings'> & { version?: unknown; settings?: StoredSettings }) | null;
+  if (file && typeof file.version === 'number' && Number.isInteger(file.version) && file.version > EXPORT_VERSION) {
+    throw new Error(NEWER_FILE_MESSAGE);
   }
-  if (!Array.isArray(file.progress) || !Array.isArray(file.customCards) || typeof file.settings !== 'object') {
+  if (!file || (file.version !== 1 && file.version !== 2 && file.version !== 3 && file.version !== 4)) {
+    throw new Error('Not a godot-vocabulary export (version 1 to 4).');
+  }
+  if (!Array.isArray(file.progress) || !Array.isArray(file.customCards) || !file.settings || typeof file.settings !== 'object') {
     throw new Error('Export file is missing progress, settings or custom cards.');
   }
+  for (const id of Object.keys(file.settings.areas ?? {})) {
+    if (!getArea(id)) console.warn(`Import: settings for an area this app does not have (${id}) were left out.`);
+  }
+  const customCards = file.customCards.map(parseCustomCard);
   for (const p of file.progress) {
     if (typeof p?.cardId !== 'string' || Number.isNaN(Date.parse(p.due))) throw new Error('Export file has a broken progress record.');
   }
   const skipped = file.version === 1 ? [] : file.skipped;
   const lessonsDone = file.version === 1 ? [] : file.lessonsDone;
-  const exitTickets = file.version === 3 ? file.exitTickets : [];
+  const exitTickets = file.version >= 3 ? file.exitTickets : [];
   if (!Array.isArray(skipped) || !Array.isArray(lessonsDone)) throw new Error('Export file is missing skipped cards or lessons.');
   if (!Array.isArray(exitTickets)) throw new Error('Export file is missing exit tickets.');
   for (const t of exitTickets) {
@@ -347,5 +394,14 @@ function parseExport(value: unknown): ExportFile {
   for (const l of lessonsDone) {
     if (typeof l?.lessonId !== 'string' || Number.isNaN(Date.parse(l.at))) throw new Error('Export file has a broken lesson record.');
   }
-  return { ...(file as ExportFile), version: 3, skipped, lessonsDone, exitTickets };
+  return {
+    version: EXPORT_VERSION,
+    exportedAt: typeof file.exportedAt === 'string' ? file.exportedAt : '',
+    progress: file.progress,
+    settings: withDefaults(file.settings),
+    customCards,
+    skipped: skipped!,
+    lessonsDone: lessonsDone!,
+    exitTickets: exitTickets!,
+  };
 }

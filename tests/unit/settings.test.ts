@@ -16,7 +16,7 @@ function settings(api: number, gd: number, gh: number, enabled = [true, true, tr
       github: { enabled: enabled[2]!, newPerDay: gh },
     },
     retention: 0.9,
-    newCardMode: 'frequency',
+    areas: { godot: { newCardMode: 'frequency' }, github: { newCardMode: 'frequency' } },
   };
 }
 
@@ -44,5 +44,21 @@ describe('settings maths', () => {
     expect(filled).toEqual(settings(10, 2, 5, [true, false, true]));
     filled.families['godot-api'].newPerDay = 99;
     expect(DEFAULT_SETTINGS.families['godot-api'].newPerDay).toBe(10);
+    filled.areas.godot.newCardMode = 'course';
+    expect(DEFAULT_SETTINGS.areas.godot.newCardMode).toBe('frequency');
+  });
+});
+
+describe('per-area new-card mode (export v4)', () => {
+  it('builds every area from the registry, never from the stored keys', () => {
+    const filled = withDefaults({ areas: { github: { newCardMode: 'course' }, aseprite: { newCardMode: 'course' } } });
+    expect(filled.areas).toEqual({ godot: { newCardMode: 'frequency' }, github: { newCardMode: 'course' } });
+  });
+
+  it('carries an older global course mode to the areas that had a course (Godot) only', () => {
+    expect(withDefaults({ newCardMode: 'course' }).areas).toEqual({ godot: { newCardMode: 'course' }, github: { newCardMode: 'frequency' } });
+    expect(withDefaults({ newCardMode: 'frequency' }).areas.godot.newCardMode).toBe('frequency');
+    // Once a file has areas, a stray global flag is ignored.
+    expect(withDefaults({ newCardMode: 'course', areas: {} }).areas.godot.newCardMode).toBe('frequency');
   });
 });

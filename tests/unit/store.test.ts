@@ -1,6 +1,7 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import type { Card } from '../../src/cards/types';
+import { coursesFor, findLesson } from '../../src/courses/index';
 import { newProgress, review } from '../../src/scheduler/fsrs';
 import { DEFAULT_SETTINGS } from '../../src/settings/load';
 import {
@@ -19,9 +20,12 @@ import {
   listExitTickets,
   listLessonsDone,
   listSkipped,
+  markDoneSettings,
   markLessonDone,
+  NEWER_FILE_MESSAGE,
   saveExitTicket,
   saveProgress,
+  saveReminder,
   saveSettings,
   setLastSessionDate,
   skipCard,
@@ -96,7 +100,7 @@ describe('export and import', () => {
   it('writes one JSON-safe object with version, date, progress, settings and custom cards', async () => {
     await seed();
     const file = await exportAll(later);
-    expect(file.version).toBe(3);
+    expect(file.version).toBe(4);
     expect(file.exportedAt).toBe(later.toISOString());
     expect(file.progress).toHaveLength(1);
     expect(typeof file.progress[0]!.due).toBe('string');
@@ -157,7 +161,7 @@ describe('export and import', () => {
   });
 
   it('rejects files that are not an export', async () => {
-    await expect(importAll({ version: 4 }, 'merge')).rejects.toThrow(/version 1, 2 or 3/);
+    await expect(importAll({ version: 0 }, 'merge')).rejects.toThrow(/version 1 to 4/);
     await expect(importAll('{"version":1}', 'replace')).rejects.toThrow(/missing/);
     const v2 = { ...(await exportAll(later)), skipped: [{ cardId: 'x', at: 'not a date' }] };
     await expect(importAll(v2, 'replace')).rejects.toThrow(/skipped/);
@@ -188,11 +192,11 @@ describe('skipped cards and finished lessons (done-criteria 37, 39)', () => {
     expect(await getLessonsDoneIds()).toEqual(['l1', 'l2']);
   });
 
-  it('exports version 3 with skips and lessons, and restores them on a fresh install', async () => {
+  it('exports version 4 with skips and lessons, and restores them on a fresh install', async () => {
     await skipCard('api:class:Timer', 'confusing', t0);
     await markLessonDone('l1', t0);
     const file = await exportAll(later);
-    expect(file.version).toBe(3);
+    expect(file.version).toBe(4);
     expect(file.skipped).toEqual([{ cardId: 'api:class:Timer', reason: 'confusing', at: t0.toISOString() }]);
     expect(file.lessonsDone).toEqual([{ lessonId: 'l1', at: t0.toISOString() }]);
     expect(JSON.parse(JSON.stringify(file))).toEqual(file);
@@ -244,6 +248,100 @@ describe('skipped cards and finished lessons (done-criteria 37, 39)', () => {
     expect(await listExitTickets()).toEqual([{ lessonId: 'l0', text: 'mine', date: t0 }]);
     await importAll({ ...rest, version: 2 }, 'replace');
     expect(await listExitTickets()).toEqual([]);
+  });
+});
+
+describe('export v4: areas, forward compatibility, validation (decision 53; done-criteria 65)', () => {
+  /** A version 3 file as the 1.2.x app wrote it: one global newCardMode in its settings. */
+  function v3File(newCardMode: 'course' | 'frequency') {
+    const { areas: _a, ...settings } = structuredClone(DEFAULT_SETTINGS);
+    return {
+      version: 3,
+      exportedAt: later.toISOString(),
+      progress: [],
+      settings: { ...settings, newCardMode },
+      customCards: [],
+      skipped: [],
+      lessonsDone: [{ lessonId: 'c1-l0', at: t0.toISOString() }],
+      exitTickets: [],
+    };
+  }
+
+  it('round trip: export → import (replace) → export gives the same JSON apart from exportedAt, with no device-only keys', async () => {
+    await saveProgress(review(newProgress('gd:keyword:var', 'gdscript', t0), true, t0));
+    const settings = structuredClone(DEFAULT_SETTINGS);
+    settings.families.github = { enabled: false, newPerDay: 7 };
+    settings.areas.godot.newCardMode = 'course';
+    await saveSettings(settings);
+    await addCustomCard(myCard);
+    await skipCard('api:class:Timer', 'confusing', t0);
+    await markLessonDone('c1-l0', t0);
+    await saveExitTicket('c1-l0', 'a tree of nodes', t0);
+    await saveReminder({ on: true, time: '07:30' });
+    await setLastSessionDate('2026-10-13');
+
+    const first = await exportAll(later);
+    await importAll(JSON.stringify(first), 'replace');
+    const second = await exportAll(new Date(2026, 9, 14, 9, 0));
+    const strip = ({ exportedAt: _e, ...rest }: typeof first) => rest;
+    expect(JSON.stringify(strip(second))).toBe(JSON.stringify(strip(first)));
+
+    // The last-used area and the reminder are this device's settings: never in the file.
+    const text = JSON.stringify(first);
+    expect(Object.keys(first).sort()).toEqual(['customCards', 'exitTickets', 'exportedAt', 'lessonsDone', 'progress', 'settings', 'skipped', 'version']);
+    expect(Object.keys(first.settings).sort()).toEqual(['areas', 'families', 'retention']);
+    expect(text).not.toMatch(/reminder|lastArea|last-area|lastSession|07:30/i);
+  });
+
+  it('a v3 file’s course mode goes to the Godot area (the one with a course), frequency elsewhere', async () => {
+    await importAll(v3File('course'), 'replace');
+    expect((await getSettings()).areas).toEqual({ godot: { newCardMode: 'course' }, github: { newCardMode: 'frequency' } });
+    await importAll(v3File('frequency'), 'replace');
+    expect((await getSettings()).areas.godot.newCardMode).toBe('frequency');
+  });
+
+  it('ignores unknown top-level keys and stores; drops an unknown area with a warning, not a rejection', async () => {
+    const file = await exportAll(later);
+    const warnings: string[] = [];
+    const warn = console.warn;
+    console.warn = (message: string) => void warnings.push(message);
+    try {
+      await importAll(
+        { ...file, homework: [{ id: 'h1' }], lastArea: 'github', settings: { ...file.settings, areas: { ...file.settings.areas, github: { newCardMode: 'course' }, aseprite: { newCardMode: 'course' } } } },
+        'replace',
+      );
+    } finally {
+      console.warn = warn;
+    }
+    expect((await getSettings()).areas).toEqual({ godot: { newCardMode: 'frequency' }, github: { newCardMode: 'course' } });
+    expect(warnings).toEqual([expect.stringContaining('aseprite')]);
+    const again = await exportAll(later);
+    expect(JSON.stringify(again)).not.toMatch(/aseprite|homework|lastArea/);
+  });
+
+  it('Mark done on a course-1 lesson turns course mode on for Godot and leaves GitHub as it was', async () => {
+    const lesson = findLesson('c1-l0', await coursesFor('godot'))!;
+    await markDoneSettings(lesson.course.area);
+    expect((await getSettings()).areas).toEqual({ godot: { newCardMode: 'course' }, github: { newCardMode: 'frequency' } });
+    const settings = await getSettings();
+    settings.areas = { godot: { newCardMode: 'frequency' }, github: { newCardMode: 'course' } };
+    await saveSettings(settings);
+    await markDoneSettings(lesson.course.area);
+    expect((await getSettings()).areas).toEqual({ godot: { newCardMode: 'course' }, github: { newCardMode: 'course' } });
+  });
+
+  it('refuses a file from a newer version in plain words', async () => {
+    const file = { ...(await exportAll(later)), version: 5 };
+    await expect(importAll(file, 'merge')).rejects.toThrow(NEWER_FILE_MESSAGE);
+    expect(NEWER_FILE_MESSAGE).toBe('This file was made by a newer version of the app. Update the app, then import it.');
+  });
+
+  it('refuses a custom card of a family the app does not have, and keeps only the card fields of the rest', async () => {
+    const file = await exportAll(later);
+    const foreign = { ...myCard, id: 'custom:aseprite:x', family: 'aseprite' };
+    await expect(importAll({ ...file, customCards: [foreign] }, 'replace')).rejects.toThrow(/family this app does not have: aseprite/);
+    await importAll({ ...file, customCards: [{ ...myCard, custom: true, script: 'alert(1)', extra: { a: 1 } }] }, 'replace');
+    expect(await listCustomCards()).toEqual([{ ...myCard, custom: true }]);
   });
 });
 

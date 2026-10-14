@@ -71,7 +71,7 @@ function plan({ area, cards, progress, settings, now, skipped, lessonsDone = [],
   const today = startOfDay(now);
   const families = familiesOf(area);
   const enabled = cards.filter((c) => families.includes(c.family) && settings.families[c.family]?.enabled && !skipped?.has(c.id));
-  const first = settings.newCardMode === 'course' ? courseFirst(lessonsDone, lessons) : new Map<string, number>();
+  const first = settings.areas[area]?.newCardMode === 'course' ? courseFirst(lessonsDone, lessons) : new Map<string, number>();
   const reviews: Card[] = [];
   const overdue: Card[] = [];
   for (const card of enabled) {

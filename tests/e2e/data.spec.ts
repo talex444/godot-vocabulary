@@ -89,7 +89,7 @@ test('add a card, export, then a fresh install imports it all back with replace'
   expect(download.suggestedFilename()).toMatch(/^godot-vocabulary-\d{4}-\d{2}-\d{2}\.json$/);
   const text = await readFile((await download.path())!, 'utf8');
   const file = JSON.parse(text);
-  expect(file.version).toBe(3);
+  expect(file.version).toBe(4);
   expect(file.skipped).toEqual([]);
   expect(file.exitTickets).toEqual([]);
   expect(file.progress).toHaveLength(1);
@@ -119,4 +119,14 @@ test('add a card, export, then a fresh install imports it all back with replace'
   expect(restored.settings).toEqual(file.settings);
   expect(restored.customCards).toEqual(file.customCards);
   await fresh.close();
+});
+
+test('a file from a newer version of the app is refused in plain words, and nothing changes', async ({ page }) => {
+  await gotoStart(page);
+  await open(page, 'Settings');
+  const newer = JSON.stringify({ version: 5, exportedAt: new Date().toISOString(), progress: [], settings: {}, customCards: [] });
+  await page.locator('input[type="file"]').setInputFiles({ name: 'godot-vocabulary-new.json', mimeType: 'application/json', buffer: Buffer.from(newer) });
+  await page.getByRole('button', { name: 'Replace everything on this device' }).click();
+  await expect(page.locator('.gv-result')).toHaveText('Nothing was imported. This file was made by a newer version of the app. Update the app, then import it.');
+  await expect(family(page, 'Godot API').locator('output')).toHaveText('10');
 });

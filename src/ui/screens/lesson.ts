@@ -5,7 +5,7 @@ import { coursesFor, findLesson, pretestCards } from '../../courses/index';
 import type { BlankExercise, ChoiceCheck, Example, FixExercise, LessonImage, TreeDrawing } from '../../courses/types';
 import { drawChoices } from '../../session/choices';
 import { loadCards } from '../../session/deck';
-import { getExitTicket, getSettings, markLessonDone, saveExitTicket, saveSettings } from '../../store/db';
+import { getExitTicket, markDoneSettings, markLessonDone, saveExitTicket } from '../../store/db';
 import type { Nav } from '../app';
 import { asset, button, choiceRow, codeBlock, el, gapField, heading, icon, inlineRich, panel, setChoiceState, textField } from '../kit';
 import { revealTable } from './reveal-table';
@@ -64,9 +64,8 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
     onClick: async () => {
       markDone.disabled = true;
       await markLessonDone(lesson.id);
-      // The first finished lesson switches course mode on (decision 36).
-      const settings = await getSettings();
-      if (settings.newCardMode !== 'course') await saveSettings({ ...settings, newCardMode: 'course' });
+      // The first finished lesson switches course mode on for its course's area (decision 36).
+      await markDoneSettings(course.area);
       nav.courses();
     },
   });

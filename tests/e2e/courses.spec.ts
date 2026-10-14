@@ -142,7 +142,7 @@ test('57: lesson 5 ends with the course table: every cell covered, a tap reveals
   await expect(listTable.locator('.gv-reveal__answer:visible')).toContainText('Any CanvasItem can draw.');
 });
 
-test('49–53: lesson 0 end to end, Mark done, course mode, the next session, and export v3', async ({ page }) => {
+test('49–53: lesson 0 end to end, Mark done, course mode, the next session, and export v4', async ({ page }) => {
   test.setTimeout(90_000);
   await gotoStart(page);
   await onlyFamily(page, 'godot-api', 3);
@@ -212,11 +212,12 @@ test('49–53: lesson 0 end to end, Mark done, course mode, the next session, an
   await open(page, 'Settings');
   await expect(page.getByRole('switch', { name: 'Lesson cards first' })).toHaveAttribute('aria-checked', 'true');
 
-  // Export v3 carries the finished lesson and the ticket.
+  // Export v4 carries the finished lesson, the ticket, and course mode on the Godot area only.
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Export' }).click()]);
   const text = await readFile((await download.path())!, 'utf8');
   const file = JSON.parse(text);
-  expect(file.version).toBe(3);
+  expect(file.version).toBe(4);
+  expect(file.settings.areas).toEqual({ godot: { newCardMode: 'course' }, github: { newCardMode: 'frequency' } });
   expect(file.lessonsDone.map((l: { lessonId: string }) => l.lessonId)).toEqual(['c1-l0']);
   expect(file.exitTickets).toEqual([{ lessonId: 'c1-l0', text: TICKET, date: expect.any(String) }]);
   await backToStart(page);

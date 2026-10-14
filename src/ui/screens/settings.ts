@@ -84,11 +84,15 @@ export async function settingsScreen(nav: Nav): Promise<HTMLElement> {
   ]);
 }
 
-/** Course mode (decision 36): finished lessons' cards are the next new cards. Switches on by itself. */
+/**
+ * Course mode (decision 36): finished lessons' cards are the next new cards. Switches on by itself
+ * for an area when one of its lessons is finished; this one switch sets it for every area.
+ */
 function courseOption(current: Settings, change: () => void): HTMLElement {
   const id = 'course-mode-help';
-  const control = toggle('Lesson cards first', current.newCardMode === 'course', (on) => {
-    current.newCardMode = on ? 'course' : 'frequency';
+  const modes = Object.values(current.areas);
+  const control = toggle('Lesson cards first', modes.some((a) => a.newCardMode === 'course'), (on) => {
+    for (const a of modes) a.newCardMode = on ? 'course' : 'frequency';
     change();
   });
   control.setAttribute('aria-describedby', id);
