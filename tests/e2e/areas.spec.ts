@@ -18,7 +18,7 @@ const look = (page: Page) =>
 
 test('the app opens the home page: a tile per area with its figures, no last-used tag on a fresh install', async ({ page }) => {
   await gotoHome(page);
-  expect(await look(page)).toEqual({ theme: 'home', base: '#171513', font: 'system-ui, sans-serif', scheme: 'dark', title: 'Areas · Godot Vocabulary' });
+  expect(await look(page)).toEqual({ theme: 'home', base: '#110c07', font: 'system-ui, sans-serif', scheme: 'dark', title: 'Areas · Godot Vocabulary' });
   await expect(page.locator('.gv-tile')).toHaveCount(2);
   await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, 0 due, Next: Lesson 0, 0 of 6 lessons');
   await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, 0 due, No courses yet');
@@ -130,12 +130,17 @@ const backdrop = (page: Page) =>
     };
   });
 
-test('two static corner glows on the home only: no sideways scroll at 320 or 360 px, none on About, the same with reduced motion', async ({ page }) => {
+test('one static glow at the top right, on the home only: no sideways scroll at 320 or 360 px, none on About, the same with reduced motion', async ({ page }) => {
   for (const width of [360, 320]) {
     await page.setViewportSize({ width, height: 780 });
     await gotoHome(page);
-    expect(await backdrop(page), `${width} px`).toEqual({ glows: 2, sideways: false });  }
+    expect(await backdrop(page), `${width} px`).toEqual({ glows: 1, sideways: false });
+  }
   const painted = await page.evaluate(() => getComputedStyle(document.documentElement).backgroundImage);
+  expect(painted).toMatch(/at (100% 0%|right top|top right)/);
+  // The tiles have no edge (decision 66): the fill alone, no border and no inset shadow.
+  const edges = await page.locator('.gv-tile').evaluateAll((tiles) => tiles.map((t) => [getComputedStyle(t).borderTopWidth, getComputedStyle(t).boxShadow]));
+  expect(edges).toEqual([['0px', 'none'], ['0px', 'none']]);
   // Static: nothing animates or transitions on the root.
   expect(await page.evaluate(() => document.documentElement.getAnimations().length)).toBe(0);
 

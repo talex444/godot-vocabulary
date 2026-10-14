@@ -6,42 +6,51 @@ import type { ThemeTokens } from './tokens';
  * meets WCAG 2.2 AA in full: `tests/unit/contrast.test.ts` fails the build if any pair it draws falls
  * short.
  *
- * Ten greys, darkest first, in CIELAB LCh with a slight warm tint toward the action colour's hue
- * (chroma 1.6, hue 70°). The four surfaces step evenly by 5.5 L* from L* 7, the six inks by 10.4 L*
- * from L* 48 up to white; the gap between them is where the roles need it (tertiary text holds 4.5:1
- * on the pressed tile, white holds 4.5:1 on the secondary button). Every grey token is one of them.
+ * Ten greys, darkest first, in CIELAB LCh at hue 70° (decision 66: a tonal plan of three values,
+ * the dark page, the tiles as the middle mass, the text and figures as the lights). The warmth is in
+ * the greys themselves: chroma about 3 to 5.5 at the dark end, where a phone shows it, falling to 0 at
+ * white. The page drops to L* 3.6; the surfaces above it keep 1.3.2's L* (12.2, 18.1, 23.6) and so
+ * every ratio drawn on them; the inks keep theirs (48 to 100). Each value is the 8-bit colour whose
+ * measured L*, chroma and hue land closest to the plan; the columns are the measured ones. Every grey
+ * token is one of them.
  *
- * | Grey | Hex | L* | Role |
- * |------|-----|---:|------|
- * | 0 | #171513 | 6.9 | the page (`--base-color`) |
- * | 1 | #22201e | 12.4 | panels and tiles (`--dark-color-1`), code background |
- * | 2 | #2e2c2a | 18.1 | a hovered tile; the disabled secondary button |
- * | 3 | #3a3836 | 23.7 | a pressed tile; inline code chips |
- * | 4 | #74726f | 48.1 | edges of fields and switches; the secondary button's fill |
- * | 5 | #8f8c8a | 58.4 | the focus halo |
- * | 6 | #aaa7a5 | 68.7 | tertiary text (disabled, readonly); tile borders |
- * | 7 | #c6c4c1 | 79.2 | secondary text; the tile icons and chevron |
- * | 8 | #e4e1de | 89.7 | primary text; headings, links and the focus ring (in place of an accent) |
- * | 9 | #ffffff | 100 | text on the secondary button, field input, hover and pressed text |
+ * | Grey | Hex | L* | C* | h | Role |
+ * |------|-----|---:|---:|--:|------|
+ * | 0 | #110c07 | 3.6 | 2.7 | 69° | the page (`--base-color`) |
+ * | 1 | #241f1a | 12.2 | 4.5 | 73° | a pressed or loading tile; panels (`--dark-color-1`), code background |
+ * | 2 | #322b25 | 18.1 | 5.5 | 69° | a tile at rest; the disabled secondary button |
+ * | 3 | #3e3731 | 23.6 | 5.2 | 69° | a hovered tile; inline code chips |
+ * | 4 | #77716c | 48.0 | 3.8 | 69° | edges of fields and switches; the secondary button's fill |
+ * | 5 | #918b86 | 58.2 | 3.7 | 69° | the focus halo |
+ * | 6 | #aca7a3 | 68.8 | 2.9 | 69° | tertiary text (disabled, readonly); the quiet tile lines |
+ * | 7 | #c8c3bf | 79.1 | 2.8 | 69° | secondary text; the tile icons and chevron |
+ * | 8 | #e5e1de | 89.8 | 2.1 | 67° | primary text; headings, links and the focus ring (in place of an accent) |
+ * | 9 | #ffffff | 100 | 0 | – | text on the secondary button, field input, hover and pressed text |
+ *
+ * A tile has no border (decision 66): it is a text-labelled button, so WCAG 1.4.11 asks for no
+ * boundary, and its fill against the page (1.40:1) is a value step, not an edge. The chevron and the
+ * focus ring stay measured as the tile's non-text marks. A pressed tile sinks one step (g1) rather
+ * than lifting: the amber needs 4.5:1 on it, which nothing lighter than g3 holds.
  *
  * The one colour, `--home-action-color` #d59526 (HSL 38° 70% 49%), means "do this next" and nothing
  * else (decision 64). It is the darkest amber at that hue and saturation that holds 4.5:1 as text on
- * all four surfaces: 7.07:1 on the page, 6.31:1 on a tile, 5.40:1 on a hovered tile, 4.53:1 on a
- * pressed one.
+ * the 1.3.2 surfaces, and the surfaces kept their L*: 7.56:1 on the page, 5.41:1 on a tile, 4.54:1
+ * on a hovered tile, 6.34:1 on a pressed one.
  *
- * Two static corner glows (decision 65), painted by screens.css from three tokens:
- * - `--home-glow-color` #e8e1db: LCh 89.9 / 4.0 / 70.5°, a warm light in the greys' own hue with a
- *   little more chroma than the ramp's 1.6 to 1.9. Never the amber (one colour, one meaning).
- * - `--home-glow-strength` 5 %: the glow's alpha at its corner, composited over the page. The largest
- *   whole percent whose peak stays at or below the tile (g1, L* 12.4), so the tiles remain the lightest
- *   thing on the page: page L* 6.9; 5 % gives #211f1d, L* 11.9 (at or below 12.4); 6 % would give
- *   #24211f, L* 13.0 (above the tile). The bottom-left glow mixes three quarters of it (3.75 %,
- *   #1f1d1a, L* 10.9). `tests/unit/contrast.test.ts` measures every page-level pair on the 5 % peak.
- * - `--home-glow-reach` 30vmax: each glow fades out a quarter to a third of the screen from its
- *   corner (Tyler's bound), about 230 px on a 360×780 phone.
+ * One static glow at the top right (decisions 65, 66), painted by screens.css from three tokens:
+ * - `--home-glow-color` #e8e1db: LCh 89.9 / 4.0 / 70.5°, a warm light in the greys' own hue. Never
+ *   the amber (one colour, one meaning).
+ * - `--home-glow-strength` 10 %: the glow's alpha at its corner, composited over the page, giving
+ *   #27211c, L* 13.2 (about the pressed tile's value). The ceiling is 14 % (#2f2a25, L* 17.4), the
+ *   largest whole percent whose peak stays below the tile (g2, L* 18.1); 15 % would give #312c27,
+ *   L* 18.4. At 14 % the corner reached the tile's own value and the Godot tile's top-right edge
+ *   dissolved into it: the page looked lit, so it came down (Tyler's taste rule).
+ *   `tests/unit/contrast.test.ts` measures every page-level pair on the 10 % peak.
+ * - `--home-glow-reach` 30vmax: it fades out a quarter to a third of the screen from the corner
+ *   (Tyler's bound), about 230 px on a 360×780 phone, behind the heading and the tiles.
  */
 
-const G = ['#171513', '#22201e', '#2e2c2a', '#3a3836', '#74726f', '#8f8c8a', '#aaa7a5', '#c6c4c1', '#e4e1de', '#ffffff'] as const;
+const G = ['#110c07', '#241f1a', '#322b25', '#3e3731', '#77716c', '#918b86', '#aca7a3', '#c8c3bf', '#e5e1de', '#ffffff'] as const;
 
 /** The greys, darkest first (the contrast test reads them). */
 export const HOME_GREYS: readonly string[] = G;
@@ -109,8 +118,12 @@ export function homeTokens(): ThemeTokens {
     '--code-executing-line-color': PRIMARY,
     '--code-breakpoint-color': PRIMARY,
     '--home-action-color': HOME_ACTION,
+    '--home-tile-color': g2,
+    '--home-tile-hover-color': g3,
+    '--home-tile-pressed-color': g1,
+    '--home-quiet-color': TERTIARY,
     '--home-glow-color': HOME_GLOW,
-    '--home-glow-strength': '5%',
+    '--home-glow-strength': '10%',
     '--home-glow-reach': '30vmax',
     '--corner-radius': '6px',
     '--font-ui': 'system-ui, sans-serif',

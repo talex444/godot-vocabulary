@@ -34,7 +34,7 @@ test('without it the area wipes in; when the transition has finished the title a
   await page.getByRole('button', { name: 'All areas' }).click();
   await homeReady(page);
   await switchFinished(page);
-  expect(await root(page)).toMatchObject({ theme: 'home', base: '#171513' });
+  expect(await root(page)).toMatchObject({ theme: 'home', base: '#110c07' });
 });
 
 test('a double tap opens the area once', async ({ page }) => {

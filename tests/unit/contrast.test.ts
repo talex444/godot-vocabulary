@@ -116,7 +116,7 @@ function pairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
 }
 
 /**
- * The home page at its brightest point (decision 65): the top-right glow's colour at its strength,
+ * The home page at its brightest point (decisions 65, 66): the top-right glow's colour at its strength,
  * composited over the base as the browser paints it. Every ink is lighter than every surface, so the
  * lightest page point is the worst case for every page-level pair.
  */
@@ -128,10 +128,11 @@ function glowPeak(tokens: ThemeTokens): Rgba {
 
 /**
  * Every pair the home page and the screens it opens in its theme (About, the error screen) draw
- * (decisions 49, 54, 64, 65): text in its three roles and the one action colour on every surface,
- * headings, links, the secondary button, the tiles' borders and chevrons at rest, hovered and
- * pressed, and focus; the page-level pairs also on the page at the glow's peak. No accent fills, so
- * no primary button pairs. These must all pass.
+ * (decisions 49, 54, 64, 65, 66): text in its three roles, the quiet tile lines and the one action
+ * colour on every surface, headings, links, the secondary button, the tiles' chevrons at rest, hovered
+ * and pressed, and focus; the page-level pairs also on the page at the glow's peak. A tile has no
+ * border (decision 66: a text-labelled button needs no boundary under 1.4.11), so no border pair. No
+ * accent fills, so no primary button pairs. These must all pass.
  */
 function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[]; surfaces: Colour[] } {
   const t = (key: string): Colour => {
@@ -140,20 +141,20 @@ function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[]; surfac
     return [key, parseColor(value)];
   };
   const peak: Colour = [`page at glow peak (home_glow_color at ${tokens['--home-glow-strength']} over base_color)`, glowPeak(tokens)];
-  const surfaces: Colour[] = [
-    t('base_color'),
-    peak,
-    t('dark_color_1'),
-    ['dark_color_3 (hovered tile)', t('dark_color_3')[1]],
-    ['highlight_disabled_color (pressed or loading tile)', t('highlight_disabled_color')[1]],
+  const tiles: Colour[] = [
+    ['home_tile_color (tile at rest)', t('home_tile_color')[1]],
+    ['home_tile_hover_color (hovered tile)', t('home_tile_hover_color')[1]],
+    ['home_tile_pressed_color (pressed or loading tile)', t('home_tile_pressed_color')[1]],
   ];
+  const surfaces: Colour[] = [t('base_color'), peak, ['dark_color_1 (About’s panels)', t('dark_color_1')[1]], ...tiles];
   const text: Pair[] = [
     ...surfaces.flatMap((bg) => [
       { pair: 'primary text', fg: t('font_color'), bg, need: TEXT as Need },
       { pair: 'secondary text', fg: t('font_secondary_color'), bg, need: TEXT as Need },
       { pair: 'tertiary text', fg: t('font_disabled_color'), bg, need: TEXT as Need },
-      { pair: 'action text: a due figure above zero (the one colour)', fg: t('home_action_color'), bg, need: TEXT as Need },
+      { pair: 'action text: a figure above zero (the one colour)', fg: t('home_action_color'), bg, need: TEXT as Need },
     ]),
+    ...tiles.map((bg) => ({ pair: 'quiet tile line (lessons, Last used)', fg: t('home_quiet_color'), bg, need: TEXT as Need })),
     ...[t('base_color'), peak, t('dark_color_1')].flatMap((bg) => [
       { pair: 'heading (accent_color is the primary grey)', fg: t('accent_color'), bg, need: TEXT as Need },
       { pair: 'link text', fg: t('accent_color'), bg, need: TEXT as Need },
@@ -162,15 +163,13 @@ function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[]; surfac
     { pair: 'secondary button text (Back)', fg: t('font_focus_color'), bg: t('contrast_color_1'), need: TEXT },
   ];
   const nonText: Pair[] = [
-    ...surfaces.flatMap((bg) => [
-      { pair: 'tile border', fg: t('contrast_color_2'), bg, need: LARGE as Need },
-      { pair: 'tile chevron (secondary grey)', fg: t('font_secondary_color'), bg, need: LARGE as Need },
-    ]),
-    ...[t('base_color'), peak, t('dark_color_1')].flatMap((bg) => [
+    ...tiles.map((bg) => ({ pair: 'tile chevron (secondary grey)', fg: t('font_secondary_color'), bg, need: LARGE as Need })),
+    ...[t('base_color'), peak, t('dark_color_1'), tiles[0]!].flatMap((bg) => [
       { pair: 'focus ring', fg: t('accent_color'), bg, need: LARGE as Need },
       { pair: 'focus halo', fg: t('highlight_color'), bg, need: LARGE as Need },
-      { pair: 'secondary button edge', fg: t('contrast_color_1'), bg, need: LARGE as Need },
     ]),
+    // The secondary button (Back) is drawn on About and the error screen, which have no glow.
+    ...[t('base_color'), t('dark_color_1')].map((bg) => ({ pair: 'secondary button edge', fg: t('contrast_color_1'), bg, need: LARGE as Need })),
   ];
   return { text, nonText, surfaces };
 }
@@ -224,7 +223,9 @@ function report(): { markdown: string; short: Record<string, { text: number; non
     '',
     'From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one action colour): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.',
     '',
-    `The home’s two corner glows (decision 65) lighten the page toward its corners; the page-level pairs are measured again on the page at the brighter glow’s peak, \`${toHex(glowPeak(home))}\` (\`--home-glow-color\` at \`--home-glow-strength\` over \`--base-color\`). Every ink is lighter than every surface, so that peak is the worst case, and it stays at or below the tile surface in lightness.`,
+    `The home’s one glow (decisions 65, 66) lightens the page toward its top-right corner; the page-level pairs are measured again on the page at the glow’s peak, \`${toHex(glowPeak(home))}\` (\`--home-glow-color\` at \`--home-glow-strength\` over \`--base-color\`). Every ink is lighter than every surface, so that peak is the worst case, and it stays below the tile surface in lightness.`,
+    '',
+    'A tile has no border (decision 66): it is a button named by its words, so WCAG 1.4.11 asks for no boundary; its chevron and the focus ring are its non-text marks and are measured below.',
     '',
     '### Text',
     '',
@@ -232,7 +233,7 @@ function report(): { markdown: string; short: Record<string, { text: number; non
     '',
     ...table(homeText),
     '',
-    '### Non-text: tile borders and chevrons (at rest, hovered, pressed), focus and the secondary button (WCAG 1.4.11, 3:1)',
+    '### Non-text: tile chevrons (at rest, hovered, pressed), focus and the secondary button (WCAG 1.4.11, 3:1)',
     '',
     `**${short.home.nonText} of ${homeNonText.length} pairs fall short.**`,
     '',
@@ -291,19 +292,23 @@ describe('contrast report (never fails on an area’s ratio; fails on any home r
     expect(short.home).toEqual({ text: 0, nonText: 0 });
   });
 
-  it('the glow peak: every home ink is lighter than every surface, and the peak is no lighter than a tile', () => {
+  it('the glow peak: every home ink is lighter than every surface, and the peak is darker than a tile', () => {
     const home = homeTokens();
     const { text, nonText, surfaces } = homePairs(home);
-    // Every colour drawn on the five surfaces (the page, its glow peak, a tile at rest, hovered, pressed).
+    // Every colour drawn on the six surfaces (the page, its glow peak, a panel, a tile at rest, hovered, pressed).
     const surfaceHexes = new Set(surfaces.map(([, c]) => toHex(c)));
     const onSurface = [...text, ...nonText].filter((p) => surfaceHexes.has(toHex(p.bg[1])));
     const darkestInk = Math.min(...onSurface.map((p) => luminance(p.fg[1])));
     const lightestSurface = Math.max(...surfaces.map(([, c]) => luminance(c)));
     expect(onSurface.length).toBeGreaterThan(0);
     expect(darkestInk).toBeGreaterThan(lightestSurface);
-    // Luminance is monotonic in L*, so this is the peak's L* at or below g1's (decision 65).
-    expect(luminance(glowPeak(home))).toBeLessThanOrEqual(luminance(parseColor(home['--dark-color-1']!)));
-    expect(toHex(glowPeak(home))).toBe('#211f1d');
+    // Luminance is monotonic in L*, so this is the peak's L* below the tile's (decisions 65, 66).
+    expect(luminance(glowPeak(home))).toBeLessThan(luminance(parseColor(home['--home-tile-color']!)));
+    expect(toHex(glowPeak(home))).toBe('#27211c');
+    // The ceiling is 14 %, the largest whole percent below the tile; 10 % was chosen under it (GV-8f).
+    const at = (pct: number) => luminance(glowPeak({ ...home, '--home-glow-strength': `${pct}%` }));
+    const tileLuminance = luminance(parseColor(home['--home-tile-color']!));
+    expect([at(14) < tileLuminance, at(15) < tileLuminance]).toEqual([true, false]);
   });
 
   it('matches the committed docs/contrast-report.md', () => {
