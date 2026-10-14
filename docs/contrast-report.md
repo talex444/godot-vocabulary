@@ -10,9 +10,11 @@ Ratios are WCAG 2.x relative-luminance contrast. Translucent colours are composi
 
 From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one action colour): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.
 
+The home’s two corner glows (decision 65) lighten the page toward its corners; the page-level pairs are measured again on the page at the brighter glow’s peak, `#211f1d` (`--home-glow-color` at `--home-glow-strength` over `--base-color`). Every ink is lighter than every surface, so that peak is the worst case, and it stays at or below the tile surface in lightness.
+
 ### Text
 
-**0 of 23 pairs fall short.**
+**0 of 30 pairs fall short.**
 
 | Pair | Foreground | Background | Ratio | Needs | Result |
 |------|------------|------------|------:|------:|--------|
@@ -20,6 +22,10 @@ From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one ac
 | secondary text | font_secondary_color `#c6c4c1` | base_color `#171513` | 10.46:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aaa7a5` | base_color `#171513` | 7.61:1 | 4.5:1 | pass |
 | action text: a due figure above zero (the one colour) | home_action_color `#d59526` | base_color `#171513` | 7.07:1 | 4.5:1 | pass |
+| primary text | font_color `#e4e1de` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 12.61:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#c6c4c1` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 9.44:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#aaa7a5` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 6.87:1 | 4.5:1 | pass |
+| action text: a due figure above zero (the one colour) | home_action_color `#d59526` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 6.38:1 | 4.5:1 | pass |
 | primary text | font_color `#e4e1de` | dark_color_1 `#22201e` | 12.47:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c6c4c1` | dark_color_1 `#22201e` | 9.33:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aaa7a5` | dark_color_1 `#22201e` | 6.79:1 | 4.5:1 | pass |
@@ -35,6 +41,9 @@ From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one ac
 | heading (accent_color is the primary grey) | accent_color `#e4e1de` | base_color `#171513` | 13.98:1 | 4.5:1 | pass |
 | link text | accent_color `#e4e1de` | base_color `#171513` | 13.98:1 | 4.5:1 | pass |
 | hovered or pressed button text | font_hover_color `#ffffff` | base_color `#171513` | 18.21:1 | 4.5:1 | pass |
+| heading (accent_color is the primary grey) | accent_color `#e4e1de` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 12.61:1 | 4.5:1 | pass |
+| link text | accent_color `#e4e1de` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 12.61:1 | 4.5:1 | pass |
+| hovered or pressed button text | font_hover_color `#ffffff` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 16.43:1 | 4.5:1 | pass |
 | heading (accent_color is the primary grey) | accent_color `#e4e1de` | dark_color_1 `#22201e` | 12.47:1 | 4.5:1 | pass |
 | link text | accent_color `#e4e1de` | dark_color_1 `#22201e` | 12.47:1 | 4.5:1 | pass |
 | hovered or pressed button text | font_hover_color `#ffffff` | dark_color_1 `#22201e` | 16.24:1 | 4.5:1 | pass |
@@ -42,12 +51,14 @@ From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one ac
 
 ### Non-text: tile borders and chevrons (at rest, hovered, pressed), focus and the secondary button (WCAG 1.4.11, 3:1)
 
-**0 of 14 pairs fall short.**
+**0 of 19 pairs fall short.**
 
 | Pair | Foreground | Background | Ratio | Needs | Result |
 |------|------------|------------|------:|------:|--------|
 | tile border | contrast_color_2 `#aaa7a5` | base_color `#171513` | 7.61:1 | 3:1 | pass |
 | tile chevron (secondary grey) | font_secondary_color `#c6c4c1` | base_color `#171513` | 10.46:1 | 3:1 | pass |
+| tile border | contrast_color_2 `#aaa7a5` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 6.87:1 | 3:1 | pass |
+| tile chevron (secondary grey) | font_secondary_color `#c6c4c1` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 9.44:1 | 3:1 | pass |
 | tile border | contrast_color_2 `#aaa7a5` | dark_color_1 `#22201e` | 6.79:1 | 3:1 | pass |
 | tile chevron (secondary grey) | font_secondary_color `#c6c4c1` | dark_color_1 `#22201e` | 9.33:1 | 3:1 | pass |
 | tile border | contrast_color_2 `#aaa7a5` | dark_color_3 (hovered tile) `#2e2c2a` | 5.82:1 | 3:1 | pass |
@@ -57,6 +68,9 @@ From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one ac
 | focus ring | accent_color `#e4e1de` | base_color `#171513` | 13.98:1 | 3:1 | pass |
 | focus halo | highlight_color `#8f8c8a` | base_color `#171513` | 5.45:1 | 3:1 | pass |
 | secondary button edge | contrast_color_1 `#74726f` | base_color `#171513` | 3.80:1 | 3:1 | pass |
+| focus ring | accent_color `#e4e1de` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 12.61:1 | 3:1 | pass |
+| focus halo | highlight_color `#8f8c8a` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 4.92:1 | 3:1 | pass |
+| secondary button edge | contrast_color_1 `#74726f` | page at glow peak (home_glow_color at 5% over base_color) `#211f1d` | 3.43:1 | 3:1 | pass |
 | focus ring | accent_color `#e4e1de` | dark_color_1 `#22201e` | 12.47:1 | 3:1 | pass |
 | focus halo | highlight_color `#8f8c8a` | dark_color_1 `#22201e` | 4.86:1 | 3:1 | pass |
 | secondary button edge | contrast_color_1 `#74726f` | dark_color_1 `#22201e` | 3.39:1 | 3:1 | pass |

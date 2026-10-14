@@ -28,6 +28,17 @@ import type { ThemeTokens } from './tokens';
  * else (decision 64). It is the darkest amber at that hue and saturation that holds 4.5:1 as text on
  * all four surfaces: 7.07:1 on the page, 6.31:1 on a tile, 5.40:1 on a hovered tile, 4.53:1 on a
  * pressed one.
+ *
+ * Two static corner glows (decision 65), painted by screens.css from three tokens:
+ * - `--home-glow-color` #e8e1db: LCh 89.9 / 4.0 / 70.5°, a warm light in the greys' own hue with a
+ *   little more chroma than the ramp's 1.6 to 1.9. Never the amber (one colour, one meaning).
+ * - `--home-glow-strength` 5 %: the glow's alpha at its corner, composited over the page. The largest
+ *   whole percent whose peak stays at or below the tile (g1, L* 12.4), so the tiles remain the lightest
+ *   thing on the page: page L* 6.9; 5 % gives #211f1d, L* 11.9 (at or below 12.4); 6 % would give
+ *   #24211f, L* 13.0 (above the tile). The bottom-left glow mixes three quarters of it (3.75 %,
+ *   #1f1d1a, L* 10.9). `tests/unit/contrast.test.ts` measures every page-level pair on the 5 % peak.
+ * - `--home-glow-reach` 30vmax: each glow fades out a quarter to a third of the screen from its
+ *   corner (Tyler's bound), about 230 px on a 360×780 phone.
  */
 
 const G = ['#171513', '#22201e', '#2e2c2a', '#3a3836', '#74726f', '#8f8c8a', '#aaa7a5', '#c6c4c1', '#e4e1de', '#ffffff'] as const;
@@ -37,6 +48,9 @@ export const HOME_GREYS: readonly string[] = G;
 
 /** The home's one colour: "do this next" (decision 64). */
 export const HOME_ACTION = '#d59526';
+
+/** The corner glows' light (decision 65): the greys' hue, never the amber. */
+export const HOME_GLOW = '#e8e1db';
 
 const [g0, g1, g2, g3, g4, g5, g6, g7, g8, g9] = G;
 
@@ -95,6 +109,9 @@ export function homeTokens(): ThemeTokens {
     '--code-executing-line-color': PRIMARY,
     '--code-breakpoint-color': PRIMARY,
     '--home-action-color': HOME_ACTION,
+    '--home-glow-color': HOME_GLOW,
+    '--home-glow-strength': '5%',
+    '--home-glow-reach': '30vmax',
     '--corner-radius': '6px',
     '--font-ui': 'system-ui, sans-serif',
     '--font-code': 'ui-monospace, monospace',

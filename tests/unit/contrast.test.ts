@@ -116,19 +116,33 @@ function pairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
 }
 
 /**
- * Every pair the home page and the screens it opens in its theme (About, the error screen) draw
- * (decisions 49, 54, 64): text in its three roles and the one action colour on every surface,
- * headings, links, the secondary button, the tiles' borders and chevrons at rest, hovered and
- * pressed, and focus. No accent fills, so no primary button pairs. These must all pass.
+ * The home page at its brightest point (decision 65): the top-right glow's colour at its strength,
+ * composited over the base as the browser paints it. Every ink is lighter than every surface, so the
+ * lightest page point is the worst case for every page-level pair.
  */
-function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
+function glowPeak(tokens: ThemeTokens): Rgba {
+  const [r, g, b] = parseColor(tokens['--home-glow-color']!);
+  const strength = parseFloat(tokens['--home-glow-strength']!) / 100;
+  return over([r, g, b, strength], parseColor(tokens['--base-color']!));
+}
+
+/**
+ * Every pair the home page and the screens it opens in its theme (About, the error screen) draw
+ * (decisions 49, 54, 64, 65): text in its three roles and the one action colour on every surface,
+ * headings, links, the secondary button, the tiles' borders and chevrons at rest, hovered and
+ * pressed, and focus; the page-level pairs also on the page at the glow's peak. No accent fills, so
+ * no primary button pairs. These must all pass.
+ */
+function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[]; surfaces: Colour[] } {
   const t = (key: string): Colour => {
     const value = tokens[`--${key.replace(/_/g, '-')}`];
     if (value === undefined) throw new Error(`No token for ${key}`);
     return [key, parseColor(value)];
   };
+  const peak: Colour = [`page at glow peak (home_glow_color at ${tokens['--home-glow-strength']} over base_color)`, glowPeak(tokens)];
   const surfaces: Colour[] = [
     t('base_color'),
+    peak,
     t('dark_color_1'),
     ['dark_color_3 (hovered tile)', t('dark_color_3')[1]],
     ['highlight_disabled_color (pressed or loading tile)', t('highlight_disabled_color')[1]],
@@ -140,7 +154,7 @@ function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
       { pair: 'tertiary text', fg: t('font_disabled_color'), bg, need: TEXT as Need },
       { pair: 'action text: a due figure above zero (the one colour)', fg: t('home_action_color'), bg, need: TEXT as Need },
     ]),
-    ...[t('base_color'), t('dark_color_1')].flatMap((bg) => [
+    ...[t('base_color'), peak, t('dark_color_1')].flatMap((bg) => [
       { pair: 'heading (accent_color is the primary grey)', fg: t('accent_color'), bg, need: TEXT as Need },
       { pair: 'link text', fg: t('accent_color'), bg, need: TEXT as Need },
       { pair: 'hovered or pressed button text', fg: t('font_hover_color'), bg, need: TEXT as Need },
@@ -152,13 +166,13 @@ function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
       { pair: 'tile border', fg: t('contrast_color_2'), bg, need: LARGE as Need },
       { pair: 'tile chevron (secondary grey)', fg: t('font_secondary_color'), bg, need: LARGE as Need },
     ]),
-    ...[t('base_color'), t('dark_color_1')].flatMap((bg) => [
+    ...[t('base_color'), peak, t('dark_color_1')].flatMap((bg) => [
       { pair: 'focus ring', fg: t('accent_color'), bg, need: LARGE as Need },
       { pair: 'focus halo', fg: t('highlight_color'), bg, need: LARGE as Need },
       { pair: 'secondary button edge', fg: t('contrast_color_1'), bg, need: LARGE as Need },
     ]),
   ];
-  return { text, nonText };
+  return { text, nonText, surfaces };
 }
 
 interface Measured extends Pair {
@@ -209,6 +223,8 @@ function report(): { markdown: string; short: Record<string, { text: number; non
     '## Home',
     '',
     'From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one action colour): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.',
+    '',
+    `The home’s two corner glows (decision 65) lighten the page toward its corners; the page-level pairs are measured again on the page at the brighter glow’s peak, \`${toHex(glowPeak(home))}\` (\`--home-glow-color\` at \`--home-glow-strength\` over \`--base-color\`). Every ink is lighter than every surface, so that peak is the worst case, and it stays at or below the tile surface in lightness.`,
     '',
     '### Text',
     '',
@@ -273,6 +289,21 @@ describe('contrast report (never fails on an area’s ratio; fails on any home r
   it('the home page: zero pairs short, text and non-text (a hard gate, unlike the areas)', () => {
     const { short } = report();
     expect(short.home).toEqual({ text: 0, nonText: 0 });
+  });
+
+  it('the glow peak: every home ink is lighter than every surface, and the peak is no lighter than a tile', () => {
+    const home = homeTokens();
+    const { text, nonText, surfaces } = homePairs(home);
+    // Every colour drawn on the five surfaces (the page, its glow peak, a tile at rest, hovered, pressed).
+    const surfaceHexes = new Set(surfaces.map(([, c]) => toHex(c)));
+    const onSurface = [...text, ...nonText].filter((p) => surfaceHexes.has(toHex(p.bg[1])));
+    const darkestInk = Math.min(...onSurface.map((p) => luminance(p.fg[1])));
+    const lightestSurface = Math.max(...surfaces.map(([, c]) => luminance(c)));
+    expect(onSurface.length).toBeGreaterThan(0);
+    expect(darkestInk).toBeGreaterThan(lightestSurface);
+    // Luminance is monotonic in L*, so this is the peak's L* at or below g1's (decision 65).
+    expect(luminance(glowPeak(home))).toBeLessThanOrEqual(luminance(parseColor(home['--dark-color-1']!)));
+    expect(toHex(glowPeak(home))).toBe('#211f1d');
   });
 
   it('matches the committed docs/contrast-report.md', () => {

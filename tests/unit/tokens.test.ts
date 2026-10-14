@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { AREAS } from '../../src/areas/registry';
 import { githubTokens } from '../../src/theme/github-desktop';
-import { HOME_ACTION, HOME_GREYS, homeTokens } from '../../src/theme/home';
+import { HOME_ACTION, HOME_GLOW, HOME_GREYS, homeTokens } from '../../src/theme/home';
 import { applyTokens, godotTokens, type ThemeTokens, type TokenRoot } from '../../src/theme/tokens';
 
 // Done-criteria 61: one flat map per area, applied as one unit.
@@ -122,7 +122,10 @@ describe('theme token maps', () => {
       if (i > 0) expect(r, `${grey} is lighter than the grey before it`).toBeGreaterThan(rgb(HOME_GREYS[i - 1]!)[0]!);
     }
     const colours = Object.entries(tokens).filter(([k]) => k.endsWith('-color')).map(([k, v]) => [k, v] as const);
-    expect(colours.filter(([, c]) => !HOME_GREYS.includes(c))).toEqual([['--home-action-color', HOME_ACTION]]);
+    expect(colours.filter(([, c]) => !HOME_GREYS.includes(c))).toEqual([['--home-action-color', HOME_ACTION], ['--home-glow-color', HOME_GLOW]]);
+    // The glows (decision 65): a light in the greys' hue, not the amber; strength and reach are tokens.
+    expect(HOME_GLOW).not.toBe(HOME_ACTION);
+    expect([tokens['--home-glow-strength'], tokens['--home-glow-reach']]).toEqual(['5%', '30vmax']);
     // The one colour is not the accent: the heading, links and focus ring stay grey (decision 64).
     expect(tokens['--accent-color']).toBe(HOME_GREYS[8]);
     expect(tokens['--font-ui']).toBe('system-ui, sans-serif');
@@ -131,7 +134,9 @@ describe('theme token maps', () => {
   });
 
   it('the areas write the home-only roles as unset', () => {
-    for (const area of AREAS) expect(area.theme['--home-action-color'], area.id).toBe('unset');
+    for (const area of AREAS) {
+      for (const key of ['--home-action-color', '--home-glow-color', '--home-glow-strength', '--home-glow-reach']) expect(area.theme[key], `${area.id} ${key}`).toBe('unset');
+    }
   });
 
   it('the web manifest’s theme colour and index.html’s theme-color are the home page’s base colour', () => {

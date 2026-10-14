@@ -28,7 +28,12 @@ export function applyTokens(root: TokenRoot, tokens: ThemeTokens, name: string):
  * The home page's own roles, which no area draws: an area's map writes them as `unset`, so the key
  * sets stay identical and the home's value never lingers inside an area.
  */
-export const HOME_ONLY: ThemeTokens = { '--home-action-color': 'unset' };
+export const HOME_ONLY: ThemeTokens = {
+  '--home-action-color': 'unset',
+  '--home-glow-color': 'unset',
+  '--home-glow-strength': 'unset',
+  '--home-glow-reach': 'unset',
+};
 
 /** The Godot area: the derived 4.7 dark theme, Inter and JetBrains Mono, dark form controls. */
 export function godotTokens(): ThemeTokens {
