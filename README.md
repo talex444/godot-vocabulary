@@ -2,7 +2,7 @@
 
 Godot Vocabulary is a small app for your phone that drills the words of the Godot 4.7 API, GDScript and Git/GitHub as four-choice cards. A spaced-repetition scheduler (FSRS) brings each card back just before you would forget it. It is free, works offline, and keeps everything on your device.
 
-The app has two **areas**, one per tool: **Godot** (the Godot API and GDScript cards, and the courses) and **Git & GitHub** (the GitHub cards). Each area wears its tool's look: the Godot area uses Godot 4.7's editor colours, and the Git & GitHub area follows GitHub Desktop's dark theme and your device's system font.
+The app has two **areas**, one per tool: **Godot** (the Godot API and GDScript cards, and the courses) and **Git & GitHub** (the GitHub cards). It opens on the **Areas** screen: one tile per area with the tool's icon, how many reviews are due and how many lessons you have done, and a **Last used** tag on the area you were in last. Tap a tile to open the area: it loads, then its look spreads from where you tapped (instantly if your phone is set to reduce motion). Each area wears its tool's look: the Godot area uses Godot 4.7's editor colours, and the Git & GitHub area follows GitHub Desktop's dark theme (its colours, rounded corners, Octicons) and your device's system font. The Areas screen has a plain dark grey look of its own. Every area page has **All areas** at the top left and the same links underneath: **Courses**, **Settings**, **Add card**, **About**. **Back** (on screen or your phone's) goes back one screen at a time.
 
 It is an **unofficial community project**. It is not affiliated with or endorsed by the Godot Foundation, the Godot Engine project or GitHub. The Godot logo is not used; the app icon is its own glyph.
 
@@ -15,9 +15,11 @@ The app lives at **https://talex444.github.io/godot-vocabulary/**.
 
 After the first load it works with no network at all, including in airplane mode. There are no accounts, no tracking and no analytics, and the app never sends your data anywhere.
 
+The first visit downloads only what the Areas screen needs, about 128 KB; each area's cards and courses load the first time you open it. That first download has a written budget of 1 MB (1,000,000 bytes on disk), and `pnpm build` fails if it grows past it or if any deck or course creeps into it.
+
 ## Android app
 
-There is also an Android app. It is the same app, plus one thing the web version cannot do: a **daily reminder**. In the app, **Settings → Reminder** has an on/off switch and a time (8 pm unless you change it). The reminder says how many cards are waiting, and tapping it opens the app. By default Android sends it at *about* that time: it may hold it back a while to save battery. If you want it at the exact minute, turn on **Exact time**: it opens Android's "Alarms & reminders" setting for the app. The first time you turn the reminder on, Android asks whether the app may send notifications.
+There is also an Android app. It is the same app, plus one thing the web version cannot do: a **daily reminder**. In the app, **Settings → Reminder** has an on/off switch and a time (8 pm unless you change it). The reminder says how many cards are waiting, and tapping it opens the app on the Areas screen. By default Android sends it at *about* that time: it may hold it back a while to save battery. If you want it at the exact minute, turn on **Exact time**: it opens Android's "Alarms & reminders" setting for the app. The first time you turn the reminder on, Android asks whether the app may send notifications.
 
 **Download:** the newest `godot-vocabulary-vX.Y.Z.apk` is on the [Releases page](https://github.com/talex444/godot-vocabulary/releases). **About → Check for updates** opens that page; the app never checks by itself.
 
@@ -27,7 +29,7 @@ There is also an Android app. It is the same app, plus one thing the web version
 2. Open the downloaded file. Android says the browser is not allowed to install apps: tap **Settings**, switch on **Allow from this source**, then go back.
 3. Tap **Install**. To update later, download the newer APK and install it over the old one. Your progress stays.
 
-**Your progress does not move by itself.** The Android app keeps its own storage, separate from the browser's. To bring your progress across once: in the web version, **Settings → Export**; in the Android app, **Settings → Import** and pick that file (choose **Replace everything on this device** on a fresh install). In the Android app, **Export** opens Android's "Save as" screen, so you choose where the file goes.
+**Your progress does not move by itself.** The Android app keeps its own storage, separate from the browser's. To bring your progress across once: in the web version, open an area, then **Settings → Export**; in the Android app, **Settings → Import** and pick that file (choose **Replace everything on this device** on a fresh install). **Both must be on 1.3.0 or later:** a 1.2.x app cannot read a file exported from 1.3.0, so install the 1.3.0 APK first (see [`docs/release-notes.md`](docs/release-notes.md)). In the Android app, **Export** opens Android's "Save as" screen, so you choose where the file goes.
 
 The web version keeps working as before for everyone else, on any phone. The Android app is for people who want the reminder. There is no iPhone app.
 
@@ -59,7 +61,7 @@ pnpm generate        # writes src/data/cards.*.json; running it twice gives the 
 
 ## Courses
 
-On the Start screen, tap **Courses**. Course 1 is six lessons, one per page of the Godot manual, in the manual's order:
+From the **Areas** screen, open **Godot**, then tap **Courses**. Course 1 is six lessons, one per page of the Godot manual, in the manual's order:
 
 0. "What is a Godot game made of when it runs?" (Overview of Godot's key concepts)
 1. "What is a scene made of, and how do you run one?" (Nodes and Scenes)
@@ -72,15 +74,15 @@ Lessons 3 to 5 show GDScript from the manual, and some of their exercises put th
 
 ## Add your own cards
 
-On the Start screen, tap **Add card**. Pick a family, write the question, the right answer, three wrong answers and an optional explanation, then **Save**. The app tells you in plain words if something is missing, if two answers are the same, or if the question gives the answer away. Your card becomes the family's next new card. **Your cards** below the form lists them, each with a **Delete**.
+From the **Areas** screen, open an area, then tap **Add card**. Pick a family, write the question, the right answer, three wrong answers and an optional explanation, then **Save**. The app tells you in plain words if something is missing, if two answers are the same, or if the question gives the answer away. Your card becomes the family's next new card. **Your cards** below the form lists them, each with a **Delete**.
 
 Your cards stay on your phone. They are never added to this repository.
 
 ## Export and import
 
-In **Settings → Data**:
+In any area, **Settings → Data**:
 
-- **Export** saves one JSON file (`godot-vocabulary-YYYY-MM-DD.json`, version 4) with your progress, your settings (including each area's own **Lesson cards first** setting), your own cards, your skipped cards, your finished lessons and your exit tickets. The reminder stays a setting of the phone and is not in the file. Files from older versions still import: their single **Lesson cards first** setting goes to the Godot area. A file made by a newer version of the app is refused with a message asking you to update the app first.
+- **Export** saves one JSON file (`godot-vocabulary-YYYY-MM-DD.json`, version 4) with your progress, your settings (including each area's own **Lesson cards first** setting), your own cards, your skipped cards, your finished lessons and your exit tickets. The reminder and the **Last used** tag stay settings of the phone and are not in the file. Files from older versions still import: their single **Lesson cards first** setting goes to the Godot area. A file made by a newer version of the app is refused with a message asking you to update the app first.
 - **Import** reads such a file and offers two choices:
   - **Merge with this device** keeps your settings here, adds the file's cards and, for each card, keeps whichever progress was reviewed last.
   - **Replace everything on this device** wipes this device and restores the file's progress, settings and cards.
@@ -89,11 +91,11 @@ Use it to back up, or to move to a new phone. The file only goes where you put i
 
 ## Accessibility, and one known deviation
 
-The bar is WCAG 2.2 Level AA, plus the AAA target size: every tap target is at least 44×44 CSS px. Every screen works at 320 CSS px wide, in portrait and landscape, with text at 200%, with WCAG's text-spacing values, and by keyboard alone, in each area's theme. axe-core checks every screen on every test run.
+The bar is WCAG 2.2 Level AA, plus the AAA target size: every tap target is at least 44×44 CSS px. Every screen works at 320 CSS px wide, in portrait and landscape, with text at 200%, with WCAG's text-spacing values, and by keyboard alone, on the Areas screen and in each area's theme. axe-core checks every screen on every test run. The Areas screen and the navigation meet WCAG 2.2 AA in full, contrast included: a contrast shortfall there fails the build.
 
 **Known deviation from WCAG 1.4.3 / 1.4.11 (contrast):** inside an area the app uses the tool's own colours (Godot 4.7's editor theme; GitHub Desktop's dark theme) and never changes them to pass a ratio. Some pairs fall short: text pairs, and non-text pairs such as focus rings, control edges and selection. The most visible are white text on Godot's blue accent button (2.71:1) and GitHub Desktop's blue accent on its dark background (about 2.7:1). They are measured and listed per area, not hidden:
 
-- [`docs/contrast-report.md`](docs/contrast-report.md): one section per area, with every text/background pair and every non-text pair (control edges, focus, selection), and the ones below 4.5:1 (text) or 3:1 (large text and controls).
+- [`docs/contrast-report.md`](docs/contrast-report.md): one section for the Areas screen (none short) and one per area, with every text/background pair and every non-text pair (control edges, focus, selection), and the ones below 4.5:1 (text) or 3:1 (large text and controls).
 - [`docs/axe-contrast.md`](docs/axe-contrast.md): what axe-core's `color-contrast` rule finds on each screen, one section per area.
 
 ## Licences and attributions
@@ -103,7 +105,7 @@ The app's code is MIT-licensed (see [`LICENSE`](LICENSE)). It is built from:
 - Godot Engine 4.7: class reference, class icons and editor theme colours (MIT, © Godot Engine contributors, Juan Linietsky, Ariel Manzur).
 - Godot documentation: "Juan Linietsky, Ariel Manzur and the Godot community" (CC BY 3.0), including the sentences and screenshots quoted in the course lessons.
 - GitHub Docs glossary (CC BY 4.0, © GitHub, Inc.).
-- The Git & GitHub area's colours: GitHub Desktop's dark theme and the Primer colour palette it uses (both MIT, © GitHub, Inc.). No GitHub logo is used.
+- The Git & GitHub area's colours: GitHub Desktop's dark theme and the Primer colour palette it uses (both MIT, © GitHub, Inc.). Its icons are Octicons, unchanged (MIT, © GitHub Inc.). No GitHub logo is used. Their licence files ship with the app in `public/licenses/`, and About shows the MIT permission notice in full.
 - Inter and JetBrains Mono fonts (SIL Open Font License 1.1).
 - ts-fsrs (MIT), idb (ISC) and Workbox (MIT).
 - The Android app also contains Capacitor and its Local Notifications plugin (MIT) and the AndroidX libraries (Apache 2.0).
@@ -119,10 +121,10 @@ pnpm install
 pnpm dev                                      # development server
 pnpm typecheck                                # TypeScript
 pnpm test                                     # unit tests (Vitest)
-pnpm lint:css                                 # no colour literals outside the theme
+pnpm lint:css                                 # no colour literals outside the theme; no innerHTML under src/
 pnpm exec playwright install chromium         # once, for the end-to-end tests
 pnpm e2e                                      # build, then Playwright at a 360×780 phone viewport (with axe-core)
-pnpm build && pnpm preview                    # the production build at http://localhost:4173/godot-vocabulary/
+pnpm build && pnpm preview                    # the production build (fails above the 1 MB first-load budget) at http://localhost:4173/godot-vocabulary/
 ```
 
 Pushes to `main` build, test and deploy to GitHub Pages through `.github/workflows/deploy.yml`.
