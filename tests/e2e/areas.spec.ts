@@ -68,4 +68,29 @@ test('the tile counts due reviews of the area’s enabled families', async ({ pa
   await gotoHome(page);
   await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, 2 due, 0 of 6 lessons, Last used');
   await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, 1 due, No courses yet');
+  // Both due: the figures carry the one colour, and no tile shows a Next line.
+  await expect(page.locator('.gv-today')).toHaveText('2 due in Godot. 1 due in Git & GitHub.');
+  expect(await coloured(page)).toEqual([['2 due'], ['1 due']]);
+  await expect(page.getByText(/^Next: /)).toHaveCount(0);
+});
+
+const ACTION_RGB = 'rgb(213, 149, 38)'; // --home-action-color #d59526
+
+/** Per tile, the texts drawn in the home's action colour. */
+const coloured = (page: Page) =>
+  page.locator('.gv-tile').evaluateAll((tiles, action) =>
+    tiles.map((t) => [...t.querySelectorAll('.gv-tile__text > *')].filter((n) => getComputedStyle(n).color === action).map((n) => n.textContent)),
+  ACTION_RGB);
+
+test('nothing due: one plain line names the next step; only the Next line is coloured; Git & GitHub stays grey', async ({ page }) => {
+  await gotoHome(page);
+  await expect(page.locator('.gv-today')).toHaveText('Nothing due today. Next: Godot, Lesson 0.');
+  await expect(page.locator('.gv-tile__figure')).toHaveText(['0 due', '0 due']);
+  expect(await coloured(page)).toEqual([['Next: Lesson 0'], []]);
+  // The heading, the today line, the unofficial line and About stay grey.
+  const grey = await page.evaluate(
+    (action) => ['.gv-heading', '.gv-today', '.gv-unofficial', '.gv-links button'].every((s) => getComputedStyle(document.querySelector(s)!).color !== action),
+    ACTION_RGB,
+  );
+  expect(grey).toBe(true);
 });

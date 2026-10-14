@@ -1,5 +1,23 @@
 import { expect, test, type Page } from '@playwright/test';
-import { answer, backToStart, endSession, goNext, gotoHome, gotoStart, open, openArea, screenReady, startSession, walkScreens, type ScreenName } from './helpers';
+import {
+  answer,
+  backToStart,
+  deck,
+  endSession,
+  enterArea,
+  exportFile,
+  goNext,
+  gotoHome,
+  gotoStart,
+  importFromStart,
+  open,
+  openArea,
+  overdueProgress,
+  screenReady,
+  startSession,
+  walkScreens,
+  type ScreenName,
+} from './helpers';
 
 // Done-criteria 25, 29, 31, 66, 70: no horizontal scroll at 360 and 320 CSS px, landscape works, every
 // tap target is at least 44×44, body text is at least 16 px, text at 200% and WCAG text spacing lose
@@ -167,8 +185,69 @@ async function checkHome(page: Page, options: { targets?: boolean; text?: boolea
   await check('about from the home page');
 }
 
+/**
+ * The home tile's own layout (decision 63): the due figure stays on one line, the tile's parts do
+ * not overlap one another, and all of them sit inside the tile. The label may wrap.
+ */
+async function checkTiles(page: Page, where: string) {
+  const tiles = await page.locator('.gv-tile').evaluateAll((nodes) =>
+    nodes.map((tile) => {
+      const box = tile.getBoundingClientRect();
+      const figure = tile.querySelector('.gv-tile__figure')!;
+      const range = document.createRange();
+      range.selectNodeContents(figure);
+      const parts = [...tile.querySelectorAll('.gv-tile__label, .gv-tile__figure, .gv-tile__line, .gv-tile__tag, .gv-tile__icon, .gv-tile__chevron')]
+        .filter((n) => n.getClientRects().length > 0)
+        .map((n) => ({ name: `${n.className} "${n.textContent}"`, r: n.getBoundingClientRect(), spills: n.scrollWidth > n.clientWidth + 1 }));
+      const overlapping: string[] = [];
+      for (const [i, a] of parts.entries()) {
+        for (const b of parts.slice(i + 1)) {
+          const w = Math.min(a.r.right, b.r.right) - Math.max(a.r.left, b.r.left);
+          const h = Math.min(a.r.bottom, b.r.bottom) - Math.max(a.r.top, b.r.top);
+          if (w > 0.5 && h > 0.5) overlapping.push(`${a.name} / ${b.name}`);
+        }
+      }
+      const outside = parts.filter(({ r }) => r.left < box.left - 0.5 || r.right > box.right + 0.5 || r.top < box.top - 0.5 || r.bottom > box.bottom + 0.5).map((p) => p.name);
+      const spilling = parts.filter((p) => p.spills).map((p) => p.name);
+      return { figure: figure.textContent, figureLines: new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size, overlapping, outside, spilling };
+    }),
+  );
+  for (const t of tiles) {
+    expect(t.spilling, `${where}: text wider than its place in the tile`).toEqual([]);
+    expect(t.figureLines, `${where}: "${t.figure}" on one line`).toBe(1);
+    expect(t.overlapping, `${where}: tile parts overlapping`).toEqual([]);
+    expect(t.outside, `${where}: tile parts outside the tile`).toEqual([]);
+  }
+}
+
+/** Twelve Godot reviews and three GitHub reviews due, the widest figures the tiles commonly show. */
+async function bothDue(page: Page) {
+  await enterArea(page, 'Godot');
+  const progress = [...deck('godot-api').slice(0, 12), ...deck('github').slice(0, 3)].map((c) => overdueProgress(c));
+  await importFromStart(page, exportFile({ progress }));
+  await gotoHome(page);
+}
+
 test('360×780 portrait, the home page: the same', async ({ page }) => {
   await checkHome(page);
+});
+
+test('the home tiles at 360 and 320 px: the figure on one line, nothing overlapping, nothing outside the tile', async ({ page }) => {
+  await gotoHome(page);
+  await checkTiles(page, 'fresh, 360');
+  await page.setViewportSize({ width: 320, height: 780 });
+  await checkTiles(page, 'fresh, 320');
+  await bothDue(page);
+  await checkTiles(page, 'both due, 320');
+  await checkHome(page);
+  await gotoHome(page);
+  await page.setViewportSize({ width: 360, height: 780 });
+  await checkTiles(page, 'both due, 360');
+  await page.setViewportSize({ width: 320, height: 780 });
+  await page.evaluate(() => {
+    document.documentElement.style.fontSize = '200%';
+  });
+  await checkTiles(page, 'both due, 320, 200% text');
 });
 
 test('360×780 portrait: no horizontal scroll, every target 44×44, text at least 16 px', async ({ page }) => {
