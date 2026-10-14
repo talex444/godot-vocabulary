@@ -6,12 +6,13 @@ Newest first. Each entry: what changed, what it means for you, why, and anything
 
 ### Summary
 - **One warm colour on the Areas screen, with one meaning: do this next.** An amber marks the one thing to do on each tile: the number of reviews due when there are some, otherwise the next lesson. A tile with nothing to do stays grey, and so does everything else on the page. The greys underneath are re-picked, evenly stepped and slightly warm, and the corners are a little rounder.
-- **The tile is balanced.** The due count sits on the right as the tile's big figure ("12 due"), with **Last used** under it and a small arrow that says the tile opens; the lessons line sits quietly under the area's name. The Godot tile's icon is the app's own glyph in grey (the old ring read as a plain "O").
+- **The tile is balanced.** The due count sits on the right as the tile's big figure ("12 due"), with **Last used** under it and a small arrow that says the tile opens; the lessons line sits quietly under the area's name. The Godot tile's icon is Godot's own PackedScene icon in grey (the old ring read as a plain "O").
 - **The next lesson, in words.** With nothing due, the tile says **Next: Lesson N**, and one plain line under the heading says what today holds: "Nothing due today. Next: Godot, Lesson 0." or "12 due in Godot. 3 due in Git & GitHub." No greeting, no streaks.
+- **After a review of the first build:** "0 due" is small and grey so it never outranks the next lesson; screen readers hear each tile in the words it shows; the Godot icon is PackedScene, not the app glyph that read as a ticked box; and About is underlined.
 
 ### Impact
 - None on your data: progress, settings, lessons done and export files are unchanged.
-- Screen readers hear each tile exactly as in 1.3.0; the line under the heading names the next step.
+- Screen readers hear each tile in the words on screen ("Godot, 0 due, Next: Lesson 0, 0 of 6 lessons" where 1.3.0 said "Nothing due"); "Loading…" is announced on its own when you open an area.
 
 ### Reasoning
 Decisions 63 and 64 (`docs/decisions.md`), after Tyler's first look at 1.3.0: "the home page feels a little dry … very cold and corporate" and "the buttons on the home screen have a lot of text weight on the left side leaving the right side to be bare". The colour is "amber as long as its tasteful and doesnt end up looking like typical ai color drenching": one flat value, at most one mark per tile, and it passes WCAG's 4.5:1 for text on every surface of the page, the pressed tile included. The words always carry the meaning; the colour only repeats it.
