@@ -112,6 +112,44 @@ test('fresh install: one plain line says where to start; no figures; nothing is 
   expect(about).toEqual({ line: 'underline', same: true, big: true });
 });
 
+/** The home footer's geometry: where it sits, the space around it, its two lines and their colours. */
+const footer = (page: Page) =>
+  page.evaluate(() => {
+    const box = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+    const [foot, tiles, about, line] = [box('.gv-home__footer'), box('.gv-tiles'), box('.gv-home__footer .gv-links button'), box('.gv-home__footer .gv-unofficial')];
+    const centre = (r: DOMRect) => r.left + r.width / 2;
+    const quiet = getComputedStyle(document.documentElement).getPropertyValue('--home-quiet-color').trim();
+    const probe = document.createElement('span');
+    probe.style.color = quiet;
+    document.body.append(probe);
+    const quietRgb = getComputedStyle(probe).color;
+    probe.remove();
+    const disclaimer = document.querySelector('.gv-home__footer .gv-unofficial')!;
+    return {
+      gapToViewportBottom: Math.round(window.innerHeight - foot.bottom),
+      spaceAbove: Math.round(about.top - tiles.bottom),
+      spaceInside: Math.round(line.top - about.bottom),
+      aboutFirst: about.bottom <= line.top,
+      sameCentre: Math.abs(centre(about) - centre(line)) <= 1 && getComputedStyle(disclaimer).textAlign === 'center',
+      quiet: getComputedStyle(disclaimer).color === quietRgb,
+      scrolls: document.documentElement.scrollHeight > window.innerHeight,
+    };
+  });
+
+test('decision 66: the footer is pinned to the bottom, About above the quiet disclaimer, one alignment; on a short screen it follows', async ({ page }) => {
+  await gotoHome(page);
+  const tall = await footer(page);
+  // #app's bottom padding is the 16 px gutter; nothing scrolls on a 780 px screen.
+  expect(tall).toMatchObject({ gapToViewportBottom: 16, aboutFirst: true, sameCentre: true, quiet: true, scrolls: false });
+  expect(tall.spaceAbove).toBeGreaterThan(tall.spaceInside);
+  // Landscape on a phone: the content is taller than the screen, so the footer follows it, never over it.
+  await page.setViewportSize({ width: 780, height: 360 });
+  const short = await footer(page);
+  expect(short.spaceAbove).toBeGreaterThanOrEqual(40);
+  expect(short.spaceAbove).toBeGreaterThan(short.spaceInside);
+  expect(short.aboutFirst).toBe(true);
+});
+
 /** The root's painted background: how many radial gradients it carries, and whether the page scrolls sideways. */
 const backdrop = (page: Page) =>
   page.evaluate(() => {

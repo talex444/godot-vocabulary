@@ -136,8 +136,11 @@ export async function homeScreen(nav: Nav, now: Date = new Date()): Promise<HTML
     today !== undefined && el('p', { class: 'gv-note gv-today', text: today }),
     el('ul', { class: 'gv-tiles' }, tiles),
     status,
-    el('p', { class: 'gv-note gv-unofficial', text: UNOFFICIAL_HOME }),
-    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'More' } }, [button('About', { variant: 'flat', onClick: () => nav.about() })]),
+    // Pinned to the bottom of the screen (decision 66): About, then the disclaimer in the quiet grey.
+    el('footer', { class: 'gv-home__footer' }, [
+      el('nav', { class: 'gv-links', attrs: { 'aria-label': 'More' } }, [button('About', { variant: 'flat', onClick: () => nav.about() })]),
+      el('p', { class: 'gv-note gv-unofficial', text: UNOFFICIAL_HOME }),
+    ]),
   ]);
 }
 

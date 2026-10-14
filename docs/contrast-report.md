@@ -16,7 +16,7 @@ A tile has no border (decision 66): it is a button named by its words, so WCAG 1
 
 ### Text
 
-**0 of 37 pairs fall short.**
+**0 of 39 pairs fall short.**
 
 | Pair | Foreground | Background | Ratio | Needs | Result |
 |------|------------|------------|------:|------:|--------|
@@ -47,6 +47,8 @@ A tile has no border (decision 66): it is a button named by its words, so WCAG 1
 | quiet tile line (lessons, Last used) | home_quiet_color `#aca7a3` | home_tile_color (tile at rest) `#322b25` | 5.84:1 | 4.5:1 | pass |
 | quiet tile line (lessons, Last used) | home_quiet_color `#aca7a3` | home_tile_hover_color (hovered tile) `#3e3731` | 4.91:1 | 4.5:1 | pass |
 | quiet tile line (lessons, Last used) | home_quiet_color `#aca7a3` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 6.85:1 | 4.5:1 | pass |
+| quiet footer line (the disclaimer) | home_quiet_color `#aca7a3` | base_color `#110c07` | 8.16:1 | 4.5:1 | pass |
+| quiet footer line (the disclaimer) | home_quiet_color `#aca7a3` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 6.67:1 | 4.5:1 | pass |
 | heading (accent_color is the primary grey) | accent_color `#e5e1de` | base_color `#110c07` | 14.97:1 | 4.5:1 | pass |
 | link text | accent_color `#e5e1de` | base_color `#110c07` | 14.97:1 | 4.5:1 | pass |
 | hovered or pressed button text | font_hover_color `#ffffff` | base_color `#110c07` | 19.45:1 | 4.5:1 | pass |

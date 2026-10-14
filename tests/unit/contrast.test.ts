@@ -155,6 +155,7 @@ function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[]; surfac
       { pair: 'action text: the "N ready" figure (the one colour)', fg: t('home_action_color'), bg, need: TEXT as Need },
     ]),
     ...tiles.map((bg) => ({ pair: 'quiet tile line (lessons, Last used)', fg: t('home_quiet_color'), bg, need: TEXT as Need })),
+    ...[t('base_color'), peak].map((bg) => ({ pair: 'quiet footer line (the disclaimer)', fg: t('home_quiet_color'), bg, need: TEXT as Need })),
     ...[t('base_color'), peak, t('dark_color_1')].flatMap((bg) => [
       { pair: 'heading (accent_color is the primary grey)', fg: t('accent_color'), bg, need: TEXT as Need },
       { pair: 'link text', fg: t('accent_color'), bg, need: TEXT as Need },

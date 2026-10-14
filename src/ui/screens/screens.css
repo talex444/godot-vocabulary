@@ -71,9 +71,42 @@
   gap: 4px;
 }
 
-/* Home: one tile per area, in the home theme's greys (src/theme/home.ts). */
+/*
+ * Home: one tile per area, in the home theme's greys (src/theme/home.ts). The shell and the page are
+ * columns that fill the screen, so the footer sits at its bottom (decision 66); when the content is
+ * taller than the screen, the footer simply follows it.
+ */
+#app:has(.gv-home) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+#app:has(.gv-home) > #screen {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
 .gv-home {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   gap: 16px;
+}
+
+/* More space above the footer (at least 40 px) than inside it (4 px); one alignment, centred. */
+.gv-home__footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  margin-top: auto;
+  padding-top: 24px;
+  text-align: center;
+}
+
+.gv-home__footer .gv-unofficial {
+  color: var(--home-quiet-color);
 }
 
 /*
