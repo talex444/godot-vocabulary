@@ -32,6 +32,15 @@ export async function gotoHome(page: Page): Promise<void> {
 export async function homeReady(page: Page): Promise<void> {
   await page.getByRole('heading', { name: 'Areas', exact: true }).waitFor();
   await page.locator('.gv-tile').first().waitFor();
+  await settled(page);
+}
+
+/**
+ * A theme switch has finished: the wipe's overlay is gone (it takes the taps while it runs). The app
+ * keeps `data-switching` on the root until the transition's `finished` promise resolves.
+ */
+export async function settled(page: Page): Promise<void> {
+  await page.waitForFunction(() => !('switching' in document.documentElement.dataset));
 }
 
 /** An area's tile on the home page: its accessible name starts with the label. */
@@ -54,11 +63,13 @@ export async function gotoStart(page: Page): Promise<void> {
 export async function startReady(page: Page, area?: AreaLabel): Promise<void> {
   await page.getByRole('heading', { name: area ?? /^(Godot|Git & GitHub)$/, exact: area !== undefined }).waitFor();
   await page.evaluate(() => document.fonts.ready);
+  await settled(page);
 }
 
 export async function screenReady(page: Page, heading: string): Promise<void> {
   await page.getByRole('heading', { name: heading, exact: true }).first().waitFor();
   await page.evaluate(() => document.fonts.ready);
+  await settled(page);
 }
 
 /** Lesson 0 of course 1, read from the course file. */

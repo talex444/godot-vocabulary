@@ -76,6 +76,17 @@ function tile(area: Area, figures: TileFigures, lastUsed: boolean, nav: Nav): HT
       el('img', { class: `gv-tile__icon${area.icon.startsWith('octicons/') ? ' gv-octicon' : ''}`, attrs: { src: asset(area.icon), alt: '', 'aria-hidden': 'true', width: '32', height: '32' } }),
     ],
   );
-  node.addEventListener('click', () => nav.area(area.id));
+  // At once: the pressed look and "Loading…" while the area's deck loads and its page is built
+  // (decision 51: the wipe starts only then, from the point tapped). A second tap is ignored.
+  node.addEventListener('click', (event) => {
+    if (node.getAttribute('aria-busy') === 'true') return;
+    node.setAttribute('aria-busy', 'true');
+    node.querySelector('.gv-tile__text')!.append(el('span', { class: 'gv-tile__line', text: 'Loading…' }));
+    node.setAttribute('aria-label', `${node.getAttribute('aria-label')}, Loading…`);
+    const box = node.getBoundingClientRect();
+    // A keyboard press has no pointer position: the tile's centre stands in.
+    const origin = event.detail > 0 ? { x: event.clientX, y: event.clientY } : { x: box.left + box.width / 2, y: box.top + box.height / 2 };
+    void nav.area(area.id, origin);
+  });
   return node;
 }

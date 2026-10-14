@@ -508,6 +508,24 @@ body {
 .tok-member { color: var(--code-member-variable-color); }
 .tok-symbol { color: var(--code-symbol-color); }
 
+/*
+ * The theme switch (src/ui/transition.ts): no default cross-fade; the new screen sits on top of the
+ * old one's snapshot and is revealed by the circle the script animates.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .gv-toggle__thumb {
     transition: none;

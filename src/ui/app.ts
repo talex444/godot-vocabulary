@@ -14,13 +14,17 @@ import { placeholderScreen } from './screens/placeholder';
 import { settingsScreen } from './screens/settings';
 import { startScreen } from './screens/start';
 import { summaryScreen } from './screens/summary';
+import { switchTheme, type Point } from './transition';
 
 /** Moves between screens; one is visible at a time, and every move is one history entry (no URL changes). */
 export interface Nav {
   /** The home page: one tile per area (the first history entry, so this steps back to it). */
   home(): void;
-  /** An area's page; without an argument, the area last opened. */
-  area(area?: AreaId): void;
+  /**
+   * An area's page, entered from the home page: loaded and built first, then wiped in from `origin`
+   * (the tapped tile). Resolves when the wipe has finished; ignored while another switch runs.
+   */
+  area(area: AreaId, origin?: Point): Promise<void>;
   /** One screen back: the same screen the phone's Back button shows (decision 50). */
   back(): void;
   begin(session: Session): void;
@@ -99,9 +103,6 @@ export function mountApp(host: HTMLElement): Nav {
     }
   };
 
-  const showAsync = (screen: Promise<HTMLElement>) =>
-    screen.then(show, (error: unknown) => show(placeholderScreen(nav, 'Something went wrong', String(error))));
-
   const page = Math.random().toString(36).slice(2);
   const home: Entry = { ...HOME, page };
   // The screen on view, as its history entry records it.
@@ -119,32 +120,66 @@ export function mountApp(host: HTMLElement): Nav {
     void setLastArea(area.id).catch(() => undefined);
   };
 
-  /** Draws the screen an entry records. A session or its summary cannot be drawn again: its area page stands in. */
-  const draw = (entry: Entry) => {
-    dress(entry);
+  /** Builds the screen an entry records. A session or its summary cannot be built again: its area page stands in. */
+  const build = (entry: Entry): Promise<HTMLElement> => {
     switch (entry.screen) {
       case 'home':
-        return void showAsync(homeScreen(nav));
+        return homeScreen(nav);
       case 'courses':
-        return void showAsync(coursesScreen(nav, areaOf(entry)));
+        return coursesScreen(nav, areaOf(entry));
       case 'settings':
-        return void showAsync(settingsScreen(nav));
+        return settingsScreen(nav);
       case 'addCard':
-        return void showAsync(addCardScreen(nav));
+        return addCardScreen(nav);
       case 'about':
-        return void showAsync(aboutScreen(nav));
+        return aboutScreen(nav);
       case 'lesson':
-        return void showAsync(lessonScreen(nav, entry.lesson!, areaOf(entry)));
+        return lessonScreen(nav, entry.lesson!, areaOf(entry));
       default:
-        return void showAsync(startScreen(nav, deviceDeps, areaOf(entry)));
+        return startScreen(nav, deviceDeps, areaOf(entry));
+    }
+  };
+
+  // While a theme switch runs (from the tap, through the load, to the wipe's end) taps on tiles and
+  // Back are ignored; a phone Back pressed meanwhile is applied once the switch has finished.
+  let switching = false;
+  let poppedWhileSwitching = false;
+
+  /**
+   * Draws the screen an entry records. Within one theme it just swaps the screen. Across themes the
+   * order is fixed (decision 51): the area's deck and courses load and its screen is built (and its
+   * font faces are ready, so the first Godot entry has no font jump) before the wipe starts.
+   */
+  const draw = async (entry: Entry, origin?: Point) => {
+    const look = entry.area ? getArea(entry.area) : undefined;
+    const crossing = document.documentElement.dataset.theme !== (look?.id ?? 'home');
+    if (crossing) switching = true;
+    try {
+      const screen = await build(entry).catch((error: unknown) => placeholderScreen(nav, 'Something went wrong', String(error)));
+      if (entry !== current) return;
+      const apply = () => {
+        dress(entry);
+        show(screen);
+      };
+      if (!crossing) return apply();
+      await fontsFor(look?.theme ?? homeTokens());
+      await switchTheme(apply, origin);
+    } finally {
+      if (crossing) {
+        switching = false;
+        if (poppedWhileSwitching) {
+          poppedWhileSwitching = false;
+          popped(history.state);
+        }
+      }
     }
   };
 
   /** A new screen: one history entry on top of the current one. */
-  const go = (entry: Omit<Entry, 'index' | 'page'>) => {
+  const go = (entry: Omit<Entry, 'index' | 'page'>, origin?: Point) => {
     current = { ...entry, index: current.index + 1, page };
     history.pushState(current, '');
-    draw(current);
+    return draw(current, origin);
   };
 
   const leaveSession = () => {
@@ -153,25 +188,34 @@ export function mountApp(host: HTMLElement): Nav {
   };
 
   // The phone's Back (and the browser's) moves through the same entries the on-screen Back does.
-  window.addEventListener('popstate', (event) => {
+  const popped = (state: unknown) => {
     leaveSession();
-    current = { ...readEntry(event.state, page), page };
+    current = { ...readEntry(state, page), page };
     if (current.screen === 'session' || current.screen === 'summary') current = { ...current, screen: 'area' };
     history.replaceState(current, '');
-    draw(current);
+    void draw(current);
+  };
+  window.addEventListener('popstate', (event) => {
+    if (switching) poppedWhileSwitching = true;
+    else popped(event.state);
   });
 
   const nav: Nav = {
     home: () => {
+      if (switching) return;
       if (current.index > 0) history.go(-current.index);
       else {
         current = home;
         history.replaceState(current, '');
-        draw(current);
+        void draw(current);
       }
     },
-    area: (next) => go({ screen: 'area', area: getArea(next ?? current.area)?.id ?? AREAS[0]!.id }),
+    area: async (next, origin) => {
+      if (switching) return;
+      await go({ screen: 'area', area: getArea(next)?.id ?? AREAS[0]!.id }, origin);
+    },
     back: () => {
+      if (switching) return;
       if (current.index > 0) history.back();
       else nav.home();
     },
@@ -188,16 +232,22 @@ export function mountApp(host: HTMLElement): Nav {
       history.replaceState(current, '');
       show(summaryScreen(result, nav));
     },
-    settings: () => go({ screen: 'settings', area: areaOf(current) }),
-    addCard: () => go({ screen: 'addCard', area: areaOf(current) }),
-    about: () => go(current.area ? { screen: 'about', area: current.area } : { screen: 'about' }),
-    courses: () => go({ screen: 'courses', area: areaOf(current) }),
-    lesson: (id) => go({ screen: 'lesson', area: areaOf(current), lesson: id }),
+    settings: () => void go({ screen: 'settings', area: areaOf(current) }),
+    addCard: () => void go({ screen: 'addCard', area: areaOf(current) }),
+    about: () => void go(current.area ? { screen: 'about', area: current.area } : { screen: 'about' }),
+    courses: () => void go({ screen: 'courses', area: areaOf(current) }),
+    lesson: (id) => void go({ screen: 'lesson', area: areaOf(current), lesson: id }),
     placeholder: (title) => show(placeholderScreen(nav, title)),
   };
 
   // The app always opens the home page (decision 49), whatever entry a reload left behind.
   history.replaceState(home, '');
-  draw(home);
+  void draw(home);
   return nav;
+}
+
+/** Waits for the font faces a token map names (Inter and JetBrains Mono for Godot; none for system fonts). */
+async function fontsFor(tokens: ThemeTokens): Promise<void> {
+  const faces = [`400 16px ${tokens['--font-ui']}`, `700 16px ${tokens['--font-ui']}`, `400 16px ${tokens['--font-code']}`];
+  await Promise.all(faces.map((font) => document.fonts.load(font))).catch(() => undefined);
 }
