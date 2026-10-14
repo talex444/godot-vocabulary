@@ -47,9 +47,18 @@ export async function settled(page: Page): Promise<void> {
 export const tile = (page: Page, label: AreaLabel) =>
   page.getByRole('button', { name: new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')},`) });
 
-/** From the home page, taps an area's tile and waits for the area page. */
+/**
+ * From the home page, taps an area's tile and waits for the area page. A tile with nothing ready and
+ * a next lesson opens that lesson over the area page (decision 66): its Back steps down to the page.
+ */
 export async function enterArea(page: Page, label: AreaLabel): Promise<void> {
+  const opensLesson = (await tile(page, label).locator('.gv-tile__line--next').count()) > 0;
   await tile(page, label).click();
+  if (opensLesson) {
+    await page.locator('.gv-lesson').waitFor();
+    await settled(page);
+    await page.getByRole('button', { name: 'Back', exact: true }).click();
+  }
   await startReady(page, label);
 }
 

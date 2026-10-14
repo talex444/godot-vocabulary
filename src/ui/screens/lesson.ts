@@ -14,9 +14,10 @@ import { revealTable } from './reveal-table';
  * One lesson as one scrolling page (decision 37): question, pretest, the need, agenda, explanation
  * chunks each with a check, compare, exercises, "what you'll see when it's wrong", exit ticket, Mark
  * done. Nothing here touches the scheduler (decision 36); Mark done records the lesson and turns
- * course mode on.
+ * course mode on. `backLabel` names the screen under it: the course list, or (opened from its home
+ * tile, decision 66) the area page, which plain "Back" reaches.
  */
-export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Promise<HTMLElement> {
+export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId, backLabel = 'Back to courses'): Promise<HTMLElement> {
   const courses = await coursesFor(area);
   const found = findLesson(lessonId, courses);
   if (!found) throw new Error(`No lesson ${lessonId}.`);
@@ -66,7 +67,7 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
       await markLessonDone(lesson.id);
       // The first finished lesson switches course mode on for its course's area (decision 36).
       await markDoneSettings(course.area);
-      // Back to the course list it was opened from, which now shows the tick.
+      // Back to the course list (which now shows the tick) or area page it was opened from.
       nav.back();
     },
   });
@@ -155,7 +156,7 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
       lesson.table ? revealTable(lesson.table) : null,
       markDone,
     ]),
-    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back to courses', { variant: 'secondary', onClick: () => nav.back() })]),
+    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button(backLabel, { variant: 'secondary', onClick: () => nav.back() })]),
   ]);
   return root;
 }

@@ -20,12 +20,15 @@ const context = await browser.newContext({
 const page = await context.newPage();
 const shot = (name) => page.screenshot({ path: join(out, name), fullPage: true });
 
-// The app opens on the home page (1.3.0); its Godot tile opens the area page. Reduced motion, so no wipe is caught mid-way.
+// The app opens on the home page (1.3.0); on a fresh install its Godot tile opens Lesson 0 over the
+// area page (1.3.3), and Back steps down to the page. Reduced motion, so no wipe is caught mid-way.
 await page.emulateMedia({ reducedMotion: 'reduce' });
 await page.goto(base);
 await page.getByRole('heading', { name: 'Areas', exact: true }).waitFor();
 await shot('home.png');
 await page.getByRole('button', { name: /^Godot,/ }).click();
+await page.locator('.gv-lesson').waitFor();
+await page.getByRole('button', { name: 'Back', exact: true }).click();
 await page.getByRole('button', { name: 'Start' }).waitFor();
 await page.evaluate(() => document.fonts.ready);
 await shot('start.png');

@@ -92,6 +92,17 @@ describe('home tiles', () => {
     }
   });
 
+  it('a tile with nothing ready opens its next lesson; with reviews ready, or no lesson left, it opens the area page (decision 66)', () => {
+    const empty = { progress: new Map(), settings: DEFAULT_SETTINGS, skipped: new Set<string>(), now };
+    const godot = getArea('godot')!;
+    const fresh = tileFigures(godot, { ...empty, lessonsDone: [] });
+    expect(tileView(godot, fresh, false).opens).toBe('c1-l0');
+    expect(tileView(godot, tileFigures(godot, { ...empty, lessonsDone: ['c1-l0', 'c1-l1'] }), false).opens).toBe('c1-l2');
+    expect(tileView(godot, { ...fresh, due: 4 }, false).opens).toBeUndefined();
+    expect(tileView(godot, tileFigures(godot, { ...empty, lessonsDone: godot.lessons.map((l) => l.id) }), false).opens).toBeUndefined();
+    expect(tileView(getArea('github')!, tileFigures(getArea('github')!, { ...empty, lessonsDone: [] }), false).opens).toBeUndefined();
+  });
+
   it('names the next lesson by the number the course list shows: the first in course order not done', () => {
     const empty = { progress: new Map(), settings: DEFAULT_SETTINGS, skipped: new Set<string>(), now };
     const godot = getArea('godot')!;

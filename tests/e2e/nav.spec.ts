@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { enterArea, gotoHome, homeReady, open, screenReady, startReady, tile } from './helpers';
+import { deck, enterArea, exportFile, gotoHome, homeReady, importFromStart, LESSON0_TITLE, open, overdueProgress, screenReady, startReady, tile } from './helpers';
 
 // Done-criteria 68 / decision 50: area pages titled with the area, All areas, and Back one screen at a
 // time, where the on-screen Back and the phone's (here the browser's) Back land on the same screen.
@@ -50,6 +50,40 @@ test('area → Courses → Back lands on the area page, with either Back', async
   // Forward again redraws the area page the entry records.
   await page.goForward();
   await startReady(page, 'Godot');
+});
+
+test('decision 66: a tile with nothing ready opens its next lesson; Back goes to the area page, then home', async ({ page }) => {
+  await gotoHome(page);
+  await tile(page, 'Godot').click();
+  await screenReady(page, LESSON0_TITLE);
+  expect(await theme(page)).toBe('godot');
+  await expect(page.locator('.gv-lesson')).toHaveAttribute('data-lesson-id', 'c1-l0');
+  // The area page lies under it, so its Back says only "Back".
+  await expect(page.getByRole('button', { name: 'Back to courses' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Back', exact: true }).click();
+  await startReady(page, 'Godot');
+  await page.getByRole('button', { name: 'All areas', exact: true }).click();
+  await homeReady(page);
+
+  // The phone's Back walks the same two steps.
+  await tile(page, 'Godot').click();
+  await screenReady(page, LESSON0_TITLE);
+  await page.goBack();
+  await startReady(page, 'Godot');
+  await page.goBack();
+  await homeReady(page);
+  expect(await theme(page)).toBe('home');
+});
+
+test('decision 66: a tile with reviews ready opens the area page, as before', async ({ page }) => {
+  await gotoHome(page);
+  await enterArea(page, 'Godot');
+  await importFromStart(page, exportFile({ progress: [overdueProgress(deck('godot-api')[0]!)] }));
+  await gotoHome(page);
+  await expect(tile(page, 'Godot')).toHaveAccessibleName(/^Godot, 1 ready,/);
+  await tile(page, 'Godot').click();
+  await startReady(page, 'Godot');
+  expect(await page.evaluate(() => (history.state as { index: number }).index)).toBe(1);
 });
 
 test('About returns to whatever opened it, in that screen’s theme', async ({ page }) => {

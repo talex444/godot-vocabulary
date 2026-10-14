@@ -22,16 +22,20 @@ export interface TileFigures {
   lessonsTotal: number;
   /** The number of the first lesson in course order not yet done; `null` when every one is (or there are none). */
   nextLesson: number | null;
+  /** That lesson's id, which the tile opens when nothing is ready (decision 66). */
+  nextLessonId?: string;
 }
 
 export function tileFigures(area: Area, input: TileInput): TileFigures {
   const enabled = area.families.filter((f) => input.settings.families[f]?.enabled);
   const done = new Set(input.lessonsDone);
+  const next = area.lessons.find((l) => !done.has(l.id));
   return {
     due: dueCount(input.progress, input.skipped, enabled, input.now),
     lessonsDone: area.lessons.filter((l) => done.has(l.id)).length,
     lessonsTotal: area.lessons.length,
-    nextLesson: area.lessons.find((l) => !done.has(l.id))?.order ?? null,
+    nextLesson: next?.order ?? null,
+    nextLessonId: next?.id,
   };
 }
 
@@ -68,6 +72,11 @@ export interface TileView {
   /** "Last used" in the right-hand column, under the figure (only when there is one). */
   tag: string | undefined;
   name: string;
+  /**
+   * The lesson a tap opens: the one its Next line names, when nothing is ready (decision 66: the
+   * tile keeps the line's promise). Otherwise the tap opens the area page.
+   */
+  opens: string | undefined;
 }
 
 /**
@@ -88,7 +97,8 @@ export function tileView(area: Area, figures: TileFigures, lastUsed: boolean): T
   const tag = lastUsed && figure !== undefined ? 'Last used' : undefined;
   // The accessible name is the words on the tile, in reading order (WCAG 2.5.3, label in name).
   const name = [area.label, figure?.text, ...lines.map((l) => l.text), tag].filter((s) => s !== undefined).join(', ');
-  return { label: area.label, figure, lines, tag, name };
+  const opens = figure === undefined ? figures.nextLessonId : undefined;
+  return { label: area.label, figure, lines, tag, name, opens };
 }
 
 /**
@@ -173,7 +183,7 @@ function tile(area: Area, view: TileView, nav: Nav, status: HTMLElement): HTMLBu
     const box = node.getBoundingClientRect();
     // A keyboard press has no pointer position: the tile's centre stands in.
     const origin = event.detail > 0 ? { x: event.clientX, y: event.clientY } : { x: box.left + box.width / 2, y: box.top + box.height / 2 };
-    void nav.area(area.id, origin);
+    void nav.area(area.id, origin, view.opens);
   });
   return node;
 }
