@@ -10,6 +10,8 @@ export default defineConfig(({ mode }) => {
   const android = mode === 'android';
   return {
     base: android ? './' : '/godot-vocabulary/',
+    // dist/.vite/manifest.json: the chunk graph scripts/check-budget.mjs follows (decision 55).
+    build: { manifest: true },
     plugins: [
       VitePWA({
         disable: android,

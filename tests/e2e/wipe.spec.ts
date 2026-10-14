@@ -48,6 +48,23 @@ test('a double tap opens the area once', async ({ page }) => {
   expect(await page.evaluate(() => (history.state as { index: number }).index)).toBe(0);
 });
 
+// Decision 55's record: time from the tap to the area's title on each area's first open (headless,
+// local preview server, no throttling), to the title in the page and to the wipe's end.
+for (const label of ['Godot', 'Git & GitHub'] as const) {
+  test(`first open of ${label}: time from tap to title`, async ({ page }) => {
+    await gotoHome(page);
+    const started = Date.now();
+    await tile(page, label).click();
+    await page.getByRole('heading', { name: label, exact: true }).waitFor();
+    const title = Date.now() - started;
+    await switchFinished(page);
+    const wiped = Date.now() - started;
+    test.info().annotations.push({ type: 'tap-to-title', description: `${label}: title ${title} ms, wipe finished ${wiped} ms` });
+    console.log(`tap-to-title ${label}: title ${title} ms, wipe finished ${wiped} ms`);
+    expect(title).toBeLessThan(5000);
+  });
+}
+
 test('on a slow network the tile says "Loading…" at once, and the wipe waits for the load', async ({ page }) => {
   await gotoHome(page);
   const cdp = await page.context().newCDPSession(page);
