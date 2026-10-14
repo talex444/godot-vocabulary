@@ -108,9 +108,10 @@ html:has(.gv-home) {
 }
 
 /*
- * A tile (decision 63): icon | label and lines | due figure and "Last used" | chevron. The DOM is
- * label, figure, lines, tag, icon, chevron; `.gv-tile__text` lends its children to the tile's grid,
- * and the lines without a place of their own fill column 2 from the second row down.
+ * A tile (decisions 63, 66): icon | label and lines | ready figure and "Last used" | chevron. The DOM
+ * is label, figure, lines, tag, icon, chevron; `.gv-tile__text` lends its children to the tile's
+ * grid, and the lines without a place of their own fill column 2 from the second row down. With
+ * nothing ready there is no figure, and "Last used" is the last of the lines.
  */
 .gv-tiles > li {
   container-type: inline-size;
@@ -199,13 +200,6 @@ html:has(.gv-home) {
   white-space: nowrap;
 }
 
-/* "0 due" is no call to act: the lessons line's size, weight and tertiary grey, so "Next" outranks it. */
-.gv-tile__figure--quiet {
-  font-weight: 400;
-  font-size: 1rem;
-  line-height: inherit;
-}
-
 .gv-tile__tag {
   grid-area: 2 / 3;
   justify-self: end;
@@ -223,7 +217,7 @@ html:has(.gv-home) {
   color: var(--font-secondary-color);
 }
 
-/* The home's one colour (decision 64): only a due figure above zero, a fact about the cards. */
+/* The home's one colour (decisions 64, 66): only the "N ready" figure, a fact about the cards. */
 .gv-home .gv-action {
   color: var(--home-action-color);
 }

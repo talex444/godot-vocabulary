@@ -76,7 +76,7 @@ test('on a slow network the tile says "Loading…" at once, and the wipe waits f
   await expect(godot).toHaveAttribute('aria-busy', 'true');
   // Announced by the home's status line; the tile's name stays the words it showed.
   await expect(page.getByRole('status')).toHaveText('Loading Godot…');
-  await expect(godot).toHaveAccessibleName('Godot, 0 due, Next: Lesson 0, 0 of 6 lessons');
+  await expect(godot).toHaveAccessibleName('Godot, Next: Lesson 0, 6 lessons');
   // Still the home page, no wipe begun, while the deck downloads.
   expect(await root(page)).toMatchObject({ theme: 'home' });
   await startReady(page, 'Godot');

@@ -35,8 +35,18 @@ export function tileFigures(area: Area, input: TileInput): TileFigures {
   };
 }
 
+/** The lessons line: what there is until the first is done ("6 lessons"), then how far ("1 of 6 lessons"). */
 export const lessonsText = ({ lessonsDone, lessonsTotal }: TileFigures) =>
-  lessonsTotal === 0 ? 'No courses yet' : `${lessonsDone} of ${lessonsTotal} lessons`;
+  lessonsTotal === 0 ? 'No courses yet' : lessonsDone === 0 ? `${lessonsTotal} lessons` : `${lessonsDone} of ${lessonsTotal} lessons`;
+
+/**
+ * The word for reviews whose day has come, on the home and the area page alike (decision 66): they
+ * are offered, not owed.
+ */
+export const READY = 'ready';
+
+/** The tile's figure: "12 ready" above zero; at zero there is no figure at all. */
+export const dueText = (due: number): string | undefined => (due > 0 ? `${due} ${READY}` : undefined);
 
 export const UNOFFICIAL_HOME = 'Unofficial; not affiliated with or endorsed by the Godot Foundation or GitHub.';
 
@@ -51,47 +61,53 @@ export interface TileText {
 /** What a tile shows, in DOM order. */
 export interface TileView {
   label: string;
-  /** The right-hand figure, "N due"; `quiet` (zero) draws it at the lessons line's size and grey. */
-  figure: TileText & { quiet: boolean };
-  /** Under the label: the next step (when nothing is due and the area has courses), then the lessons line. */
+  /** The right-hand figure, "N ready", in the action colour; none when nothing is ready. */
+  figure: TileText | undefined;
+  /**
+   * Under the label: the next step (when nothing is ready and the area has courses), the lessons
+   * line, and "Last used" as a quiet line of its own when there is no figure to sit under.
+   */
   lines: TileText[];
+  /** "Last used" in the right-hand column, under the figure (only when there is one). */
   tag: string | undefined;
   name: string;
 }
 
 /**
  * The words carry the meaning; the colour only repeats it (WCAG 1.4.1), on one element at most: the
- * due figure when reviews are due (a fact about the cards). The "Next: Lesson N" line is plain
- * secondary text, so a fresh install shows no colour at all (decision 64, amended).
+ * figure when reviews are ready (a fact about the cards). Each figure is said once, and a zero is
+ * not said at all (decision 66). The "Next: Lesson N" line is plain secondary text, so a fresh
+ * install shows no colour at all (decision 64, amended).
  */
 export function tileView(area: Area, figures: TileFigures, lastUsed: boolean): TileView {
   const lines: TileText[] = [];
-  if (figures.due === 0 && figures.lessonsTotal > 0) {
+  const text = dueText(figures.due);
+  if (text === undefined && figures.lessonsTotal > 0) {
     lines.push(figures.nextLesson === null ? { text: 'All lessons done', action: false } : { text: `Next: Lesson ${figures.nextLesson}`, action: false, next: true });
   }
   lines.push({ text: lessonsText(figures), action: false });
-  const figure = { text: `${figures.due} due`, action: figures.due > 0, quiet: figures.due === 0 };
-  const tag = lastUsed ? 'Last used' : undefined;
+  const figure = text === undefined ? undefined : { text, action: true };
+  if (lastUsed && figure === undefined) lines.push({ text: 'Last used', action: false });
+  const tag = lastUsed && figure !== undefined ? 'Last used' : undefined;
   // The accessible name is the words on the tile, in reading order (WCAG 2.5.3, label in name).
-  const name = [area.label, figure.text, ...lines.map((l) => l.text), tag].filter((s) => s !== undefined).join(', ');
+  const name = [area.label, figure?.text, ...lines.map((l) => l.text), tag].filter((s) => s !== undefined).join(', ');
   return { label: area.label, figure, lines, tag, name };
 }
 
 /**
- * The one plain line under the heading: what today holds and the next step. No greeting, no streak,
- * no counter (decision 63).
+ * The one plain line under the heading, or none: it names only the next step and is dropped when it
+ * would repeat a tile (decision 66). No greeting, no streak, no counter (decision 63).
  */
-export function todayText(tiles: readonly { area: Area; figures: TileFigures }[]): string {
-  const due = tiles.filter((t) => t.figures.due > 0);
-  if (due.length > 0) return due.map((t) => `${t.figures.due} due in ${t.area.label}.`).join(' ');
+export function todayText(tiles: readonly { area: Area; figures: TileFigures }[]): string | undefined {
+  if (tiles.some((t) => t.figures.due > 0)) return undefined;
   const next = tiles.find((t) => t.figures.nextLesson !== null);
-  return next ? `Nothing due today. Next: ${next.area.label}, Lesson ${next.figures.nextLesson}.` : 'Nothing due today.';
+  return next ? `Start with ${next.area.label}, Lesson ${next.figures.nextLesson}.` : 'Nothing waiting today.';
 }
 
 /**
- * The home page (decisions 49, 63, 64), in its own theme: a line saying what today holds, then one
- * tile per area with the tool's icon, its label, its due figure, the next lesson and its lessons
- * done; the area entered last carries a "Last used" tag.
+ * The home page (decisions 49, 63, 64, 66), in its own theme: a line naming where to start when no
+ * tile already says it, then one tile per area with the tool's icon, its label, its ready figure,
+ * the next lesson and its lessons; the area entered last carries a "Last used" tag.
  */
 export async function homeScreen(nav: Nav, now: Date = new Date()): Promise<HTMLElement> {
   const [progress, settings, skipped, lessonsDone, last] = await Promise.all([
@@ -106,10 +122,11 @@ export async function homeScreen(nav: Nav, now: Date = new Date()): Promise<HTML
   // "Loading…" is announced here, not added to a tile's name, so the name stays the words it shows.
   const status = el('p', { class: 'gv-visually-hidden', attrs: { role: 'status' } });
   const tiles = figures.map((t) => el('li', {}, [tile(t.area, tileView(t.area, t.figures, t.area.id === last), nav, status)]));
+  const today = todayText(figures);
 
   return el('div', { class: 'gv-screen gv-home' }, [
     heading('Areas'),
-    el('p', { class: 'gv-note gv-today', text: todayText(figures) }),
+    today !== undefined && el('p', { class: 'gv-note gv-today', text: today }),
     el('ul', { class: 'gv-tiles' }, tiles),
     status,
     el('p', { class: 'gv-note gv-unofficial', text: UNOFFICIAL_HOME }),
@@ -119,7 +136,7 @@ export async function homeScreen(nav: Nav, now: Date = new Date()): Promise<HTML
 
 /**
  * A tile's accessible name: exactly the words it shows, in reading order: the label, the figure
- * ("0 due"), the Next line when shown, the lessons line, "Last used" when shown.
+ * ("12 ready") when shown, the Next line when shown, the lessons line, "Last used" when shown.
  */
 export function tileName(area: Area, figures: TileFigures, lastUsed: boolean): string {
   return tileView(area, figures, lastUsed).name;
@@ -133,16 +150,15 @@ function glyph(className: string, path: string): HTMLSpanElement {
 }
 
 const ACTION = ' gv-action';
-const QUIET = ' gv-tile__figure--quiet';
 const NEXT = ' gv-tile__line--next';
 
 function tile(area: Area, view: TileView, nav: Nav, status: HTMLElement): HTMLButtonElement {
-  // The DOM keeps 1.3.0's order (label, then the lines); the grid in screens.css places the due
-  // figure and "Last used" in the right-hand column.
+  // The DOM keeps 1.3.0's order (label, then the lines); the grid in screens.css places the ready
+  // figure and "Last used" under it in the right-hand column.
   const node = el('button', { class: 'gv-tile', attrs: { type: 'button', 'data-area': area.id, 'aria-label': view.name } }, [
     el('span', { class: 'gv-tile__text' }, [
       el('span', { class: 'gv-tile__label', text: view.label }),
-      el('span', { class: `gv-tile__figure${view.figure.action ? ACTION : ''}${view.figure.quiet ? QUIET : ''}`, text: view.figure.text }),
+      view.figure !== undefined && el('span', { class: `gv-tile__figure${view.figure.action ? ACTION : ''}`, text: view.figure.text }),
       ...view.lines.map((line) => el('span', { class: `gv-tile__line${line.next ? NEXT : ''}${line.action ? ACTION : ''}`, text: line.text })),
       view.tag !== undefined && el('span', { class: 'gv-tile__tag', text: view.tag }),
     ]),

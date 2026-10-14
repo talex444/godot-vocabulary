@@ -23,27 +23,27 @@ A tile has no border (decision 66): it is a button named by its words, so WCAG 1
 | primary text | font_color `#e5e1de` | base_color `#110c07` | 14.97:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c8c3bf` | base_color `#110c07` | 11.13:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aca7a3` | base_color `#110c07` | 8.16:1 | 4.5:1 | pass |
-| action text: a figure above zero (the one colour) | home_action_color `#d59526` | base_color `#110c07` | 7.56:1 | 4.5:1 | pass |
+| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | base_color `#110c07` | 7.56:1 | 4.5:1 | pass |
 | primary text | font_color `#e5e1de` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 12.23:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c8c3bf` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 9.10:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aca7a3` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 6.67:1 | 4.5:1 | pass |
-| action text: a figure above zero (the one colour) | home_action_color `#d59526` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 6.18:1 | 4.5:1 | pass |
+| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 6.18:1 | 4.5:1 | pass |
 | primary text | font_color `#e5e1de` | dark_color_1 (About’s panels) `#241f1a` | 12.56:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c8c3bf` | dark_color_1 (About’s panels) `#241f1a` | 9.34:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aca7a3` | dark_color_1 (About’s panels) `#241f1a` | 6.85:1 | 4.5:1 | pass |
-| action text: a figure above zero (the one colour) | home_action_color `#d59526` | dark_color_1 (About’s panels) `#241f1a` | 6.34:1 | 4.5:1 | pass |
+| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | dark_color_1 (About’s panels) `#241f1a` | 6.34:1 | 4.5:1 | pass |
 | primary text | font_color `#e5e1de` | home_tile_color (tile at rest) `#322b25` | 10.71:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c8c3bf` | home_tile_color (tile at rest) `#322b25` | 7.97:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aca7a3` | home_tile_color (tile at rest) `#322b25` | 5.84:1 | 4.5:1 | pass |
-| action text: a figure above zero (the one colour) | home_action_color `#d59526` | home_tile_color (tile at rest) `#322b25` | 5.41:1 | 4.5:1 | pass |
+| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | home_tile_color (tile at rest) `#322b25` | 5.41:1 | 4.5:1 | pass |
 | primary text | font_color `#e5e1de` | home_tile_hover_color (hovered tile) `#3e3731` | 9.00:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c8c3bf` | home_tile_hover_color (hovered tile) `#3e3731` | 6.69:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aca7a3` | home_tile_hover_color (hovered tile) `#3e3731` | 4.91:1 | 4.5:1 | pass |
-| action text: a figure above zero (the one colour) | home_action_color `#d59526` | home_tile_hover_color (hovered tile) `#3e3731` | 4.54:1 | 4.5:1 | pass |
+| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | home_tile_hover_color (hovered tile) `#3e3731` | 4.54:1 | 4.5:1 | pass |
 | primary text | font_color `#e5e1de` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 12.56:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c8c3bf` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 9.34:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aca7a3` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 6.85:1 | 4.5:1 | pass |
-| action text: a figure above zero (the one colour) | home_action_color `#d59526` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 6.34:1 | 4.5:1 | pass |
+| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 6.34:1 | 4.5:1 | pass |
 | quiet tile line (lessons, Last used) | home_quiet_color `#aca7a3` | home_tile_color (tile at rest) `#322b25` | 5.84:1 | 4.5:1 | pass |
 | quiet tile line (lessons, Last used) | home_quiet_color `#aca7a3` | home_tile_hover_color (hovered tile) `#3e3731` | 4.91:1 | 4.5:1 | pass |
 | quiet tile line (lessons, Last used) | home_quiet_color `#aca7a3` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 6.85:1 | 4.5:1 | pass |

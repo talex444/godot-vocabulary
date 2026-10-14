@@ -186,16 +186,17 @@ async function checkHome(page: Page, options: { targets?: boolean; text?: boolea
 }
 
 /**
- * The home tile's own layout (decision 63): the due figure stays on one line, the tile's parts do
+ * The home tile's own layout (decision 63): the ready figure stays on one line, the tile's parts do
  * not overlap one another, and all of them sit inside the tile. The label may wrap.
  */
 async function checkTiles(page: Page, where: string) {
   const tiles = await page.locator('.gv-tile').evaluateAll((nodes) =>
     nodes.map((tile) => {
       const box = tile.getBoundingClientRect();
-      const figure = tile.querySelector('.gv-tile__figure')!;
+      // With nothing ready a tile has no figure (decision 66), so no one-line check.
+      const figure = tile.querySelector('.gv-tile__figure');
       const range = document.createRange();
-      range.selectNodeContents(figure);
+      if (figure) range.selectNodeContents(figure);
       const parts = [...tile.querySelectorAll('.gv-tile__label, .gv-tile__figure, .gv-tile__line, .gv-tile__tag, .gv-tile__icon, .gv-tile__chevron')]
         .filter((n) => n.getClientRects().length > 0)
         .map((n) => ({ name: `${n.className} "${n.textContent}"`, r: n.getBoundingClientRect(), spills: n.scrollWidth > n.clientWidth + 1 }));
@@ -209,7 +210,8 @@ async function checkTiles(page: Page, where: string) {
       }
       const outside = parts.filter(({ r }) => r.left < box.left - 0.5 || r.right > box.right + 0.5 || r.top < box.top - 0.5 || r.bottom > box.bottom + 0.5).map((p) => p.name);
       const spilling = parts.filter((p) => p.spills).map((p) => p.name);
-      return { figure: figure.textContent, figureLines: new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size, overlapping, outside, spilling };
+      const figureLines = figure ? new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size : 1;
+      return { figure: figure?.textContent ?? '(none)', figureLines, overlapping, outside, spilling };
     }),
   );
   for (const t of tiles) {

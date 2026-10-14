@@ -152,7 +152,7 @@ function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[]; surfac
       { pair: 'primary text', fg: t('font_color'), bg, need: TEXT as Need },
       { pair: 'secondary text', fg: t('font_secondary_color'), bg, need: TEXT as Need },
       { pair: 'tertiary text', fg: t('font_disabled_color'), bg, need: TEXT as Need },
-      { pair: 'action text: a figure above zero (the one colour)', fg: t('home_action_color'), bg, need: TEXT as Need },
+      { pair: 'action text: the "N ready" figure (the one colour)', fg: t('home_action_color'), bg, need: TEXT as Need },
     ]),
     ...tiles.map((bg) => ({ pair: 'quiet tile line (lessons, Last used)', fg: t('home_quiet_color'), bg, need: TEXT as Need })),
     ...[t('base_color'), peak, t('dark_color_1')].flatMap((bg) => [

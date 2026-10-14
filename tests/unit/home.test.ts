@@ -5,7 +5,7 @@ import type { Card, Family } from '../../src/cards/types';
 import { newProgress, type Progress } from '../../src/scheduler/fsrs';
 import { sessionSummary } from '../../src/session/build';
 import { DEFAULT_SETTINGS } from '../../src/settings/load';
-import { lessonsText, tileFigures, tileName, tileView, todayText, type TileView } from '../../src/ui/screens/home';
+import { dueText, lessonsText, tileFigures, tileName, tileView, todayText, type TileView } from '../../src/ui/screens/home';
 
 // Done-criteria 67: the home tile counts what the area page counts, without loading a deck.
 
@@ -43,22 +43,29 @@ describe('home tiles', () => {
     expect(figures.due).toBe(pageTotal);
   });
 
-  it('counts the area’s lessons done out of its total, and says when an area has no course', () => {
+  it('says how many lessons there are until the first is done, then how far; and when an area has no course', () => {
     const empty = { progress: new Map(), settings: DEFAULT_SETTINGS, skipped: new Set<string>(), now };
-    const godot = tileFigures(getArea('godot')!, { ...empty, lessonsDone: ['c1-l0', 'c1-l2', 'c1-l1', 'other'] });
-    expect(lessonsText(godot)).toBe('3 of 6 lessons');
+    const area = getArea('godot')!;
+    expect(lessonsText(tileFigures(area, { ...empty, lessonsDone: [] }))).toBe('6 lessons');
+    expect(lessonsText(tileFigures(area, { ...empty, lessonsDone: ['c1-l0'] }))).toBe('1 of 6 lessons');
+    expect(lessonsText(tileFigures(area, { ...empty, lessonsDone: ['c1-l0', 'c1-l2', 'c1-l1', 'other'] }))).toBe('3 of 6 lessons');
     expect(lessonsText(tileFigures(getArea('github')!, { ...empty, lessonsDone: ['c1-l0'] }))).toBe('No courses yet');
   });
 
-  it('a tile’s accessible name is exactly the words it shows, in reading order (GV-8d)', () => {
+  it('the figure: "12 ready" above zero, nothing at zero', () => {
+    expect([dueText(12), dueText(1), dueText(0)]).toEqual(['12 ready', '1 ready', undefined]);
+  });
+
+  it('a tile’s accessible name is exactly the words it shows, in reading order (GV-8d, GV-8f)', () => {
     const [godot, github] = [getArea('godot')!, getArea('github')!];
-    expect(tileName(godot, { due: 0, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, false)).toBe('Godot, 0 due, Next: Lesson 0, 0 of 6 lessons');
-    expect(tileName(godot, { due: 2, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, true)).toBe('Godot, 2 due, 0 of 6 lessons, Last used');
-    expect(tileName(godot, { due: 0, lessonsDone: 6, lessonsTotal: 6, nextLesson: null }, false)).toBe('Godot, 0 due, All lessons done, 6 of 6 lessons');
-    expect(tileName(github, { due: 0, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, true)).toBe('Git & GitHub, 0 due, No courses yet, Last used');
-    expect(tileName(github, { due: 1, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, false)).toBe('Git & GitHub, 1 due, No courses yet');
+    expect(tileName(godot, { due: 0, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, false)).toBe('Godot, Next: Lesson 0, 6 lessons');
+    expect(tileName(godot, { due: 2, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, true)).toBe('Godot, 2 ready, 6 lessons, Last used');
+    expect(tileName(godot, { due: 0, lessonsDone: 6, lessonsTotal: 6, nextLesson: null }, false)).toBe('Godot, All lessons done, 6 of 6 lessons');
+    expect(tileName(github, { due: 0, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, true)).toBe('Git & GitHub, No courses yet, Last used');
+    expect(tileName(github, { due: 1, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, false)).toBe('Git & GitHub, 1 ready, No courses yet');
     for (const [area, figures, last] of [
       [godot, { due: 0, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, false],
+      [godot, { due: 0, lessonsDone: 1, lessonsTotal: 6, nextLesson: 1 }, true],
       [github, { due: 3, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, true],
     ] as const) {
       const view = tileView(area, figures, last);
@@ -77,72 +84,75 @@ describe('home tiles', () => {
 });
 
 /** Every element of a tile with its words, and which carry the action colour. */
-const coloured = (view: TileView) => [view.figure, ...view.lines].filter((t) => t.action).map((t) => t.text);
-/** A zero figure is quiet (the lessons line's size and tertiary grey), a count above zero large and bold. */
-const quiet = (view: TileView) => view.figure.quiet;
-const texts = (view: TileView) => [view.label, view.figure.text, ...view.lines.map((l) => l.text), view.tag].filter(Boolean);
+const coloured = (view: TileView) => [view.figure, ...view.lines].filter((t) => t?.action).map((t) => t!.text);
+const texts = (view: TileView) => [view.label, view.figure?.text, ...view.lines.map((l) => l.text), view.tag].filter(Boolean);
 
-describe('the home’s words and its one colour (decisions 63, 64)', () => {
+describe('the home’s words and its one colour (decisions 63, 64, 66)', () => {
   const [godot, github] = [getArea('godot')!, getArea('github')!];
   const fig = (due: number, nextLesson: number | null, lessonsTotal: number, lessonsDone = 0) => ({ due, nextLesson, lessonsTotal, lessonsDone });
 
-  it('fresh install: the Godot tile names its next lesson in plain grey; nothing on the page is coloured', () => {
+  it('fresh install: no figure, the Godot tile names its next lesson in plain grey; the line says where to start', () => {
     const tiles = [
       { area: godot, figures: fig(0, 0, 6) },
       { area: github, figures: fig(0, null, 0) },
     ];
     const [g, h] = tiles.map((t) => tileView(t.area, t.figures, false));
-    expect(texts(g!)).toEqual(['Godot', '0 due', 'Next: Lesson 0', '0 of 6 lessons']);
+    expect(texts(g!)).toEqual(['Godot', 'Next: Lesson 0', '6 lessons']);
     expect(coloured(g!)).toEqual([]);
     expect(g!.lines.filter((l) => l.next).map((l) => l.text)).toEqual(['Next: Lesson 0']);
-    expect(texts(h!)).toEqual(['Git & GitHub', '0 due', 'No courses yet']);
+    expect(texts(h!)).toEqual(['Git & GitHub', 'No courses yet']);
     expect(coloured(h!)).toEqual([]);
-    expect([quiet(g!), quiet(h!)]).toEqual([true, true]);
-    expect(todayText(tiles)).toBe('Nothing due today. Next: Godot, Lesson 0.');
+    expect([g!.figure, h!.figure]).toEqual([undefined, undefined]);
+    expect(todayText(tiles)).toBe('Start with Godot, Lesson 0.');
   });
 
-  it('one area due: only its due figure carries the colour; the other tile names its next lesson in grey', () => {
+  it('one area ready: only its figure carries the colour; the other tile names its next lesson; no line repeats a tile', () => {
     const tiles = [
       { area: godot, figures: fig(0, 2, 6, 2) },
       { area: github, figures: fig(3, null, 0) },
     ];
     const [g, h] = tiles.map((t) => tileView(t.area, t.figures, t.area.id === 'github'));
-    expect(texts(g!)).toEqual(['Godot', '0 due', 'Next: Lesson 2', '2 of 6 lessons']);
+    expect(texts(g!)).toEqual(['Godot', 'Next: Lesson 2', '2 of 6 lessons']);
     expect(coloured(g!)).toEqual([]);
-    expect(texts(h!)).toEqual(['Git & GitHub', '3 due', 'No courses yet', 'Last used']);
-    expect(coloured(h!)).toEqual(['3 due']);
-    expect([quiet(g!), quiet(h!)]).toEqual([true, false]);
-    expect(todayText(tiles)).toBe('3 due in Git & GitHub.');
+    expect(texts(h!)).toEqual(['Git & GitHub', '3 ready', 'No courses yet', 'Last used']);
+    expect(h!.tag).toBe('Last used');
+    expect(coloured(h!)).toEqual(['3 ready']);
+    expect(todayText(tiles)).toBeUndefined();
   });
 
-  it('both due: one coloured figure per tile, no Next line', () => {
+  it('both ready: one coloured figure per tile, no Next line, no line under the heading', () => {
     const tiles = [
       { area: godot, figures: fig(12, 0, 6) },
       { area: github, figures: fig(3, null, 0) },
     ];
     const [g, h] = tiles.map((t) => tileView(t.area, t.figures, false));
-    expect(texts(g!)).toEqual(['Godot', '12 due', '0 of 6 lessons']);
-    expect(coloured(g!)).toEqual(['12 due']);
-    expect(coloured(h!)).toEqual(['3 due']);
-    expect([quiet(g!), quiet(h!)]).toEqual([false, false]);
-    expect(todayText(tiles)).toBe('12 due in Godot. 3 due in Git & GitHub.');
+    expect(texts(g!)).toEqual(['Godot', '12 ready', '6 lessons']);
+    expect(coloured(g!)).toEqual(['12 ready']);
+    expect(coloured(h!)).toEqual(['3 ready']);
+    expect(todayText(tiles)).toBeUndefined();
   });
 
-  it('no courses anywhere and nothing due: no colour at all, a plain line', () => {
+  it('nothing ready, last used: "Last used" is a quiet line of its own under the lessons line', () => {
+    const view = tileView(godot, fig(0, 1, 6, 1), true);
+    expect(view.tag).toBeUndefined();
+    expect(view.lines.map((l) => l.text)).toEqual(['Next: Lesson 1', '1 of 6 lessons', 'Last used']);
+  });
+
+  it('no courses anywhere and nothing ready: no colour, no figure, a plain line', () => {
     const tiles = [
       { area: { ...godot, lessons: [] }, figures: fig(0, null, 0) },
       { area: github, figures: fig(0, null, 0) },
     ];
     for (const t of tiles) expect(coloured(tileView(t.area, t.figures, false))).toEqual([]);
-    for (const t of tiles) expect(quiet(tileView(t.area, t.figures, false))).toBe(true);
-    expect(todayText(tiles)).toBe('Nothing due today.');
+    for (const t of tiles) expect(tileView(t.area, t.figures, false).figure).toBeUndefined();
+    expect(todayText(tiles)).toBe('Nothing waiting today.');
   });
 
-  it('every lesson done and nothing due: "All lessons done", in grey (nothing to do next)', () => {
+  it('every lesson done and nothing ready: "All lessons done", in grey; "Nothing waiting today."', () => {
     const view = tileView(godot, fig(0, null, 6, 6), false);
-    expect(texts(view)).toEqual(['Godot', '0 due', 'All lessons done', '6 of 6 lessons']);
+    expect(texts(view)).toEqual(['Godot', 'All lessons done', '6 of 6 lessons']);
     expect(coloured(view)).toEqual([]);
-    expect(todayText([{ area: godot, figures: fig(0, null, 6, 6) }])).toBe('Nothing due today.');
+    expect(todayText([{ area: godot, figures: fig(0, null, 6, 6) }, { area: github, figures: fig(0, null, 0) }])).toBe('Nothing waiting today.');
   });
 
   it('no greeting, no streak, no counter', () => {
