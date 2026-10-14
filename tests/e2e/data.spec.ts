@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Page } from '@playwright/test';
-import { answer, backToStart, endSession, gotoStart, importOnSettings, open, screenReady, startReady, startSession, statValues } from './helpers';
+import { answer, backToStart, endSession, enterArea, gotoStart, homeReady, importOnSettings, open, screenReady, startReady, startSession, statValues } from './helpers';
 
 test.use({ acceptDownloads: true });
 
@@ -44,7 +44,8 @@ test('settings switches and steppers persist; totals, projection and the above-t
   await expect.poll(() => storedNewPerDay(page)).toBe('godot-api:10 gdscript:6 github:off');
 
   await page.reload();
-  await startReady(page, 'Godot');
+  await homeReady(page);
+  await enterArea(page, 'Godot');
   await open(page, 'Settings');
   await expect(family(page, 'GitHub').getByRole('switch', { name: 'GitHub' })).toHaveAttribute('aria-checked', 'false');
   await expect(family(page, 'GDScript').locator('output')).toHaveText('6');
@@ -56,7 +57,8 @@ test('settings switches and steppers persist; totals, projection and the above-t
   await expect(page.locator('.gv-warning')).toHaveText(WARNING);
   await expect.poll(() => storedNewPerDay(page)).toBe('godot-api:10 gdscript:6 github:5');
   await page.reload();
-  await startReady(page, 'Godot');
+  await homeReady(page);
+  await enterArea(page, 'Godot');
   await open(page, 'Settings');
   expect(await load(page)).toEqual({ 'New per day': 21, 'Reviews per day': 210 });
   await expect(page.locator('.gv-warning')).toHaveText(WARNING);

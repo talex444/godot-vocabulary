@@ -23,10 +23,31 @@ export function deck(family: Family): DeckCard[] {
 /** The areas' start-screen titles. */
 export type AreaLabel = 'Godot' | 'Git & GitHub';
 
-/** Opens the app: it starts on the Godot area's start screen. */
-export async function gotoStart(page: Page): Promise<void> {
+/** Opens the app on the home page (it always opens there). */
+export async function gotoHome(page: Page): Promise<void> {
   await page.goto('./');
-  await startReady(page, 'Godot');
+  await homeReady(page);
+}
+
+export async function homeReady(page: Page): Promise<void> {
+  await page.getByRole('heading', { name: 'Areas', exact: true }).waitFor();
+  await page.locator('.gv-tile').first().waitFor();
+}
+
+/** An area's tile on the home page: its accessible name starts with the label. */
+export const tile = (page: Page, label: AreaLabel) =>
+  page.getByRole('button', { name: new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')},`) });
+
+/** From the home page, taps an area's tile and waits for the area page. */
+export async function enterArea(page: Page, label: AreaLabel): Promise<void> {
+  await tile(page, label).click();
+  await startReady(page, label);
+}
+
+/** Opens the app and enters the Godot area. */
+export async function gotoStart(page: Page): Promise<void> {
+  await gotoHome(page);
+  await enterArea(page, 'Godot');
 }
 
 /** Waits for an area's start screen: the one titled `area`, or any area's when omitted. */
@@ -52,10 +73,10 @@ export async function open(page: Page, name: 'Courses' | 'Settings' | 'Add card'
   await screenReady(page, name);
 }
 
-/** From an area's start screen, the temporary link to another area (until GV-8b's home page). */
+/** From anywhere: back to the home page, then into another area. */
 export async function openArea(page: Page, label: AreaLabel): Promise<void> {
-  await page.getByRole('navigation', { name: 'More' }).getByRole('button', { name: label, exact: true }).click();
-  await startReady(page, label);
+  await gotoHome(page);
+  await enterArea(page, label);
 }
 
 export async function backToStart(page: Page): Promise<void> {

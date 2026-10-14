@@ -25,6 +25,13 @@ export interface Area {
   /** Where a card's docs link goes, in the link's words. */
   docsLabel: string;
   theme: ThemeTokens;
+  /** The tool's icon under `public/` (the home tile; never a logo mark, decision 48). */
+  icon: string;
+  /**
+   * The ids of the written lessons in the area's courses, so the home tile counts lessons without
+   * loading them (`tests/unit/areas.test.ts` checks the list against the course files).
+   */
+  lessonIds: readonly string[];
   /** The area's generated deck and its courses, loaded on demand (decision 55) and kept once loaded. */
   load: () => Promise<{ cards: Card[]; courses: Course[] }>;
 }
@@ -45,6 +52,9 @@ const godot: Area = {
   unofficialLine: 'Unofficial; not affiliated with or endorsed by the Godot Foundation.',
   docsLabel: 'Open in the Godot docs',
   theme: godotTokens(),
+  // Godot's own Node class icon (MIT, already shipped for the cards), not the Godot logo.
+  icon: 'icons/Node.svg',
+  lessonIds: ['c1-l0', 'c1-l1', 'c1-l2', 'c1-l3', 'c1-l4', 'c1-l5'],
   load: once(async () => {
     const [api, gdscript, course1] = await Promise.all([
       import('../data/cards.godot-api.json'),
@@ -65,6 +75,9 @@ const github: Area = {
   unofficialLine: 'Unofficial; not affiliated with or endorsed by GitHub.',
   docsLabel: 'Open on GitHub Docs',
   theme: githubTokens(),
+  // Octicons' git-branch (MIT), as it is; the GitHub mark is never used.
+  icon: 'octicons/git-branch-24.svg',
+  lessonIds: [],
   load: once(async () => {
     const deck = await import('../data/cards.github.json');
     return { cards: deck.default as Card[], courses: [] };
@@ -94,7 +107,10 @@ export function familyTraits(family: Family): FamilyTraits {
   return TRAITS[family];
 }
 
-/** The area with this id; `undefined` for anything else (callers fall back to Godot). */
+/**
+ * The area with this id; `undefined` for anything else. Every id read back from storage, history
+ * state or a file goes through here, so an unknown or tampered value never reaches a screen.
+ */
 export function getArea(id: string | undefined): Area | undefined {
   return AREAS.find((a) => a.id === id);
 }

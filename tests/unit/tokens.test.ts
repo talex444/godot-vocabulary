@@ -3,11 +3,13 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { AREAS } from '../../src/areas/registry';
 import { githubTokens } from '../../src/theme/github-desktop';
+import { HOME_GREYS, homeTokens } from '../../src/theme/home';
 import { applyTokens, godotTokens, type ThemeTokens, type TokenRoot } from '../../src/theme/tokens';
 
 // Done-criteria 61: one flat map per area, applied as one unit.
 
-const MAPS: [string, ThemeTokens][] = AREAS.map((area) => [area.id, area.theme]);
+// Every area's map and the home page's (decision 49), which the app swaps in and out the same way.
+const MAPS: [string, ThemeTokens][] = [...AREAS.map((area): [string, ThemeTokens] => [area.id, area.theme]), ['home', homeTokens()]];
 
 const SRC = join(import.meta.dirname, '..', '..', 'src');
 
@@ -107,6 +109,17 @@ describe('theme token maps', () => {
     expect(gh['--dark-color-3']).toBe(sassLightness('#24292e', 3)); // --box-alt-background-color
     expect(gh['--font-disabled-color']).toBe(sassLightness('#6a737d', -10)); // --text-secondary-color-muted
     expect(gh['--contrast-color-1']).toBe(sassLightness('#6a737d', 3)); // --box-border-contrast-color
+  });
+
+  it('the home theme: dark, one ramp of ten greys and nothing else, system font, 4 px corners', () => {
+    const tokens = homeTokens();
+    expect(HOME_GREYS).toHaveLength(10);
+    for (const grey of HOME_GREYS) expect(grey).toMatch(/^#([0-9a-f]{2})\1\1$/);
+    const colours = Object.entries(tokens).filter(([k]) => k.endsWith('-color')).map(([, v]) => v);
+    expect(colours.filter((c) => !HOME_GREYS.includes(c))).toEqual([]);
+    expect(tokens['--font-ui']).toBe('system-ui, sans-serif');
+    expect(tokens['--corner-radius']).toBe('4px');
+    expect(tokens['color-scheme']).toBe('dark');
   });
 
   it('keeps the Godot look: Inter, JetBrains Mono, dark controls', () => {

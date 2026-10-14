@@ -54,8 +54,6 @@ export async function startScreen(nav: Nav, deps: RunDeps, area: AreaId): Promis
       button('Settings', { variant: 'flat', onClick: () => nav.settings() }),
       button('Add card', { variant: 'flat', onClick: () => nav.addCard() }),
       button('About', { variant: 'flat', onClick: () => nav.about() }),
-      // TODO(GV-8b): remove; the home page's tiles open the areas.
-      ...AREAS.filter((a) => a.id !== area).map((a) => button(a.label, { variant: 'flat', onClick: () => nav.start(a.id) })), // TODO(GV-8b): remove
     ]),
   ]);
 }

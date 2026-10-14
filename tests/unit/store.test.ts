@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
+import type { AreaId } from '../../src/areas/registry';
 import type { Card } from '../../src/cards/types';
 import { coursesFor, findLesson } from '../../src/courses/index';
 import { newProgress, review } from '../../src/scheduler/fsrs';
@@ -10,6 +11,7 @@ import {
   deleteStore,
   exportAll,
   getExitTicket,
+  getLastArea,
   getLastSessionDate,
   getLessonsDoneIds,
   getProgress,
@@ -27,6 +29,7 @@ import {
   saveProgress,
   saveReminder,
   saveSettings,
+  setLastArea,
   setLastSessionDate,
   skipCard,
   unskipCard,
@@ -279,6 +282,7 @@ describe('export v4: areas, forward compatibility, validation (decision 53; done
     await saveExitTicket('c1-l0', 'a tree of nodes', t0);
     await saveReminder({ on: true, time: '07:30' });
     await setLastSessionDate('2026-10-13');
+    await setLastArea('github');
 
     const first = await exportAll(later);
     await importAll(JSON.stringify(first), 'replace');
@@ -291,6 +295,16 @@ describe('export v4: areas, forward compatibility, validation (decision 53; done
     expect(Object.keys(first).sort()).toEqual(['customCards', 'exitTickets', 'exportedAt', 'lessonsDone', 'progress', 'settings', 'skipped', 'version']);
     expect(Object.keys(first.settings).sort()).toEqual(['areas', 'families', 'retention']);
     expect(text).not.toMatch(/reminder|lastArea|last-area|lastSession|07:30/i);
+    // An import leaves the device's own last-used area as it was.
+    expect(await getLastArea()).toBe('github');
+  });
+
+  it('keeps the last-used area on the device; an unknown stored value reads as none', async () => {
+    expect(await getLastArea()).toBeUndefined();
+    await setLastArea('godot');
+    expect(await getLastArea()).toBe('godot');
+    await setLastArea('aseprite' as AreaId);
+    expect(await getLastArea()).toBeUndefined();
   });
 
   it('a v3 file’s course mode goes to the Godot area (the one with a course), frequency elsewhere', async () => {

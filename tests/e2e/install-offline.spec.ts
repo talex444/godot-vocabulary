@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { FAMILY_LABEL, answer, endSession, familyStats, gotoStart, open, openArea, screenReady, startReady, startSession, backToStart, type Family } from './helpers';
+import { FAMILY_LABEL, answer, endSession, enterArea, familyStats, gotoStart, homeReady, open, openArea, screenReady, startReady, startSession, backToStart, type Family } from './helpers';
 
 // Done-criteria 1–3: installable, works offline after one load, progress survives closing the app.
 test.use({ serviceWorkers: 'allow' });
@@ -22,7 +22,8 @@ test('installs, runs offline and keeps progress, settings and custom cards acros
   // 2: offline, the app reloads and a session runs.
   await context.setOffline(true);
   await page.reload();
-  await startReady(page);
+  await homeReady(page);
+  await enterArea(page, 'Godot');
   const initial = Object.fromEntries(await Promise.all(FAMILIES.map(async (f) => [f, await familyStats(page, f)] as const)));
   await startSession(page);
   const label = await page.locator('.gv-card__family').textContent();

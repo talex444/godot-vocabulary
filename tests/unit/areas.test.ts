@@ -1,8 +1,9 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { AREAS, areaOf, familiesOf, familyLabel, getArea } from '../../src/areas/registry';
 import { FAMILIES } from '../../src/cards/types';
+import { sessionLessons } from '../../src/courses/index';
 import deckCounts from '../../src/data/deck-counts.json';
 import { DEFAULT_SETTINGS } from '../../src/settings/load';
 
@@ -61,6 +62,15 @@ describe('area registry', () => {
     }
     expect((await getArea('godot')!.load()).courses.map((c) => c.id)).toEqual(['course-1']);
     expect((await getArea('github')!.load()).courses).toEqual([]);
+  });
+
+  it('lists each area’s written lessons as its courses hold them, and ships its icon', async () => {
+    for (const area of AREAS) {
+      const { courses } = await area.load();
+      const written = sessionLessons(courses).map((l) => l.id);
+      expect(area.lessonIds, area.id).toEqual(written);
+      expect(existsSync(join(SRC, '..', 'public', area.icon)), area.icon).toBe(true);
+    }
   });
 
   it('no family id appears in src/ outside cards/types.ts, areas/ and the data JSON', () => {

@@ -9,6 +9,7 @@ const DB_VERSION = 3;
 const SETTINGS_KEY = 'settings';
 const LAST_SESSION_KEY = 'lastSessionDate';
 const REMINDER_KEY = 'reminder';
+const LAST_AREA_KEY = 'lastArea';
 
 /** A card the learner wrote on this device. */
 export type CustomCard = Card & { custom: true };
@@ -178,6 +179,15 @@ export async function getReminder(): Promise<ReminderSetting> {
 
 export async function saveReminder(reminder: ReminderSetting): Promise<void> {
   await (await db()).put('meta', JSON.stringify(reminder), REMINDER_KEY);
+}
+
+/** The area entered last (the home tile's "Last used" tag); a setting of this device, never exported. */
+export async function getLastArea(): Promise<AreaId | undefined> {
+  return getArea(await (await db()).get('meta', LAST_AREA_KEY))?.id;
+}
+
+export async function setLastArea(area: AreaId): Promise<void> {
+  await (await db()).put('meta', area, LAST_AREA_KEY);
 }
 
 export async function getLastSessionDate(): Promise<string | undefined> {
