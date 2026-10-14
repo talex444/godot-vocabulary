@@ -2,6 +2,21 @@
 
 Newest first. Each entry: what changed, what it means for you, why, and anything you need to do.
 
+## 1.3.2 — 2026-10-14
+
+### Summary
+- **No colour on a fresh install.** "Next: Lesson N" is now plain grey text, in the same place and size, so it still leads the tile without looking like something you missed. The amber marks only a due count ("12 due"): a fact about your cards, not about you.
+- **Two soft corner glows on the Areas screen.** A faint warm light at the top right and a deeper one at the bottom left, fading out within about a third of the screen. They are still images (no motion), only on the Areas screen, and never brighter than the tiles.
+
+### Impact
+- None on your data: progress, settings, lessons done and export files are unchanged.
+
+### Reasoning
+Decisions 64 (amended) and 65 (`docs/decisions.md`), after Tyler used 1.3.1 on his phone: the amber on "Next: Lesson 0" "makes it feel like i did something wrong by not completing a lesson", and "we need gradient bubbles in the top right and bottom left". The glows are a warm light in the greys' own hue, never the amber (one colour, one meaning), at 5 %: the strongest whole percent at which the brightest point stays no lighter than a tile, so the tiles remain the lightest thing on the page. Every text and control on the page is measured against that brightest point and still meets WCAG 2.2 AA.
+
+### Actions required
+- None.
+
 ## 1.3.1 — 2026-10-14
 
 ### Summary

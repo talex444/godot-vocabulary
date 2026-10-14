@@ -875,3 +875,34 @@ The board reviewed the built 1.3.1 home from screenshots; Tyler agreed four fixe
 3. **The Godot tile's icon is `icons/PackedScene.svg`**, Godot's own class icon (MIT, already shipped as the PackedScene card's icon, so `pnpm generate` keeps it), masked in the secondary grey like the branch icon; `public/app-glyph-grey.svg` is deleted (precache 757 → 756 entries). Why: two seats read the app glyph as a ticked checkbox beside "0 of 6 lessons". This also undoes deviations 1 and 2 above.
 4. **About is underlined on the home** in its own grey (`text-decoration-color: currentcolor`), its 44 px target unchanged. Why: a flat grey word does not show it opens (About Face ch. 19, static hinting).
 "Lesson 0" stays (Tyler: "personally i like it"). Decision 63's text still says the Godot icon is the app glyph and the name is unchanged; these fixes amend it, and the row was left for the Chief of Staff to update.
+
+## GV-8e — v1.3.2: the home: amber off the Next line, two corner glows (2026-10-14)
+
+Done-criteria 78–79, decisions 64 (amended) and 65. Five commits, none pushed, no tag: `fix(home): no colour on a fresh install; amber marks only a due count`, `feat(home): glow tokens measured by the contrast gate`, `feat(home): two static corner glows`, `chore(release): version 1.3.2`, and this one. Every commit had `typecheck`, `test`, `lint:css`, `build` (with the budget check) and `e2e` green, run in full.
+
+### Amber off the Next line
+- `tileView()` no longer marks "Next: Lesson N" as `action`; it marks it `next`, and `tile()` gives it `.gv-tile__line--next`, which draws it in `--font-secondary-color` (the today line's grey), one step above the tertiary lessons line, at the same size and weight (400) and in the same place. "All lessons done" stays tertiary. The amber now appears only on a due figure above zero.
+- The contrast row for the amber is relabelled "action text: a due figure above zero"; its ratios are unchanged.
+
+### The glows: colour, strength, L* (`src/theme/home.ts`)
+- **`--home-glow-color` #e8e1db**: LCh 89.9 / 4.0 / 70.5°. The greys sit at chroma 1.6–1.9 and hue 73–75° measured (70° designed); 4.0 is "a little above the ramp's", and L* 90 is the primary ink's lightness, so at 5 % it only warms the page.
+- **`--home-glow-strength` 5 %**, not the brief's starting 6 %. Composited over the base (#171513, L* 6.9) with the test's `over()`: 5 % → **#211f1d, L* 11.9**; 6 % → #24211f, L* 13.0, above the tile (#22201e, L* 12.4). No light glow colour I tried (L* 90–100, C 2–4) passes at 6 %; whole percents only, so the browser's alpha rounding has room.
+- The bottom-left glow mixes `calc(var(--home-glow-strength) * 0.75)` = 3.75 % → #1f1d1a, L* 10.9.
+- **`--home-glow-reach` 30vmax**: 234 px on 360×780.
+- In the built page at 360×780 the top-right corner pixel paints **#221f1d** (Chromium's colour-mix and gradient rounding: one step more red than the model's #211f1d), still at or below the tile #22201e in every channel; the bottom-left corner paints #1f1d1a, exactly the model. Read from a throwaway screenshot, not committed.
+
+### The gate (`tests/unit/contrast.test.ts`)
+- `glowPeak()` computes the fifth surface from the tokens; `homePairs()` adds it to every text role (primary, secondary, tertiary, amber), the heading, link and hovered-text pairs, and the tile border, chevron, focus ring, focus halo and secondary-button edge. "## Home" is now 0 of 30 text and 0 of 19 non-text pairs short. The tightest new pair is the secondary button's edge on the peak, 3.43:1 (3:1 needed); the focus halo 4.92:1, tertiary text 6.87:1, the amber 6.38:1.
+- A new test asserts the darkest ink drawn on the five surfaces is lighter than the lightest surface (the condition that makes the peak the worst case), that the peak's luminance is at or below `--dark-color-1`'s (luminance is monotonic in L*), and pins the peak to #211f1d, so raising the strength fails until the report is re-measured and committed.
+- `HOME_ONLY` writes all three glow tokens as `unset` in the area maps.
+
+### Painting (`screens.css`)
+- `html:has(.gv-home)` carries two `background-image` layers, `no-repeat`, over the root's existing `background: var(--base-color)`. `:has()` keeps it CSS-only and home-only: About and the error screen (both in the home theme) have no `.gv-home`, so no glow. The root's box is at least the viewport tall (`body { min-height: 100dvh }`), so the bottom-left glow sits at the screen's corner on a short page and at the page's end on a long one (200 % text).
+
+### What only the phone can prove
+Done-criteria 78–79's phone checks: whether a fresh install now reads as calm with "Next: Lesson 0" still the way in; whether the glows are felt, not seen, on the S24's OLED (5 % over a near-black base sits near the bottom of what OLEDs render smoothly; banding or a visible edge would show there first); whether the tiles still read as the lightest thing; whether anything reads as a focal point in the empty lower half; and the amber on "12 due", which decision 64 leaves until Tyler has lived with it.
+
+### Deviations and why
+1. **Strength 5 %, not 6 %:** 6 % puts the peak at L* 13.0, above the tile's 12.4; the brief's rule picks the largest value at or below, which is 5 %.
+2. **`circle farthest-corner`, not the brief's `farthest-corner` (an ellipse):** the default ellipse takes the page's aspect ratio, so on a 360×780 phone 30vmax across becomes about 507 px down, over half the screen. A circle keeps the reach at 30vmax in every direction, inside Tyler's quarter-to-a-third bound.
+3. **The Next line has its own class** (`.gv-tile__line--next`, `TileText.next`): the tile lines default to the tertiary grey, and the brief asks for the secondary.
