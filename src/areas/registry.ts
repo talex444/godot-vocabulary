@@ -52,8 +52,8 @@ const godot: Area = {
   unofficialLine: 'Unofficial; not affiliated with or endorsed by the Godot Foundation.',
   docsLabel: 'Open in the Godot docs',
   theme: godotTokens(),
-  // Godot's own Node class icon (MIT, already shipped for the cards), not the Godot logo.
-  icon: 'icons/Node.svg',
+  // The app's own glyph drawn in grey (decision 63), never the Godot logo.
+  icon: 'app-glyph-grey.svg',
   lessonIds: ['c1-l0', 'c1-l1', 'c1-l2', 'c1-l3', 'c1-l4', 'c1-l5'],
   load: once(async () => {
     const [api, gdscript, course1] = await Promise.all([

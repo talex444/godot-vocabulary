@@ -10,6 +10,7 @@ import { isMain, ROOT } from './lib/io.mjs';
 export const SHIPPED = [
   ['theme/github-desktop/octicons/git-branch-24.svg', 'octicons/git-branch-24.svg'],
   ['theme/github-desktop/octicons/arrow-left-24.svg', 'octicons/arrow-left-24.svg'],
+  ['theme/github-desktop/octicons/chevron-right-16.svg', 'octicons/chevron-right-16.svg'],
   ['theme/github-desktop/LICENSE-octicons.txt', 'licenses/LICENSE-octicons.txt'],
   ['theme/github-desktop/LICENSE-primer-css.txt', 'licenses/LICENSE-primer-css.txt'],
   ['theme/github-desktop/LICENSE-github-desktop.txt', 'licenses/LICENSE-github-desktop.txt'],

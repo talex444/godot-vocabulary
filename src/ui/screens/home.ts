@@ -32,6 +32,7 @@ export function tileFigures(area: Area, input: TileInput): TileFigures {
   };
 }
 
+/** The due count in the tile's accessible name (1.3.0's words); the figure on screen reads "N due". */
 export const dueText = (due: number) => (due === 0 ? 'Nothing due' : `${due} due`);
 
 export const lessonsText = ({ lessonsDone, lessonsTotal }: TileFigures) =>
@@ -62,20 +63,32 @@ export async function homeScreen(nav: Nav, now: Date = new Date()): Promise<HTML
   ]);
 }
 
+/** A tile's accessible name, as in 1.3.0 (decision 63): the label, the due count, the lessons, "Last used". */
+export function tileName(area: Area, figures: TileFigures, lastUsed: boolean): string {
+  return [area.label, dueText(figures.due), lessonsText(figures), lastUsed ? 'Last used' : undefined].filter((s) => s !== undefined).join(', ');
+}
+
+/** A decorative glyph drawn in the secondary grey: the file is the mask, the token its colour. */
+function glyph(className: string, path: string): HTMLSpanElement {
+  const node = el('span', { class: className, attrs: { 'aria-hidden': 'true' } });
+  node.style.setProperty('--glyph', `url("${asset(path)}")`);
+  return node;
+}
+
 function tile(area: Area, figures: TileFigures, lastUsed: boolean, nav: Nav): HTMLButtonElement {
-  const lines = [dueText(figures.due), lessonsText(figures), lastUsed ? 'Last used' : undefined].filter((s): s is string => s !== undefined);
-  const node = el(
-    'button',
-    { class: 'gv-tile', attrs: { type: 'button', 'data-area': area.id, 'aria-label': [area.label, ...lines].join(', ') } },
-    [
-      el('span', { class: 'gv-tile__text' }, [
-        el('span', { class: 'gv-tile__label', text: area.label }),
-        ...lines.map((line) => el('span', { class: 'gv-tile__line', text: line })),
-      ]),
-      // After the label in the DOM, drawn before it; decorative, since the label names the area.
-      el('img', { class: `gv-tile__icon${area.icon.startsWith('octicons/') ? ' gv-octicon' : ''}`, attrs: { src: asset(area.icon), alt: '', 'aria-hidden': 'true', width: '32', height: '32' } }),
-    ],
-  );
+  // The DOM keeps 1.3.0's order (label, then the lines); the grid in screens.css places the due
+  // figure and "Last used" in the right-hand column.
+  const node = el('button', { class: 'gv-tile', attrs: { type: 'button', 'data-area': area.id, 'aria-label': tileName(area, figures, lastUsed) } }, [
+    el('span', { class: 'gv-tile__text' }, [
+      el('span', { class: 'gv-tile__label', text: area.label }),
+      el('span', { class: 'gv-tile__figure', text: `${figures.due} due` }),
+      el('span', { class: 'gv-tile__line', text: lessonsText(figures) }),
+      lastUsed && el('span', { class: 'gv-tile__tag', text: 'Last used' }),
+    ]),
+    // After the text in the DOM, drawn beside it; decorative, since the label names the area.
+    glyph('gv-tile__icon', area.icon),
+    glyph('gv-tile__chevron', 'octicons/chevron-right-16.svg'),
+  ]);
   // At once: the pressed look and "Loading…" while the area's deck loads and its page is built
   // (decision 51: the wipe starts only then, from the point tapped). A second tap is ignored.
   node.addEventListener('click', (event) => {

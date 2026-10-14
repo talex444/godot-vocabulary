@@ -25,8 +25,9 @@ test('the app opens the home page: a tile per area with its figures, no last-use
   await expect(page.getByText('Last used')).toHaveCount(0);
   await expect(page.getByText('Unofficial; not affiliated with or endorsed by the Godot Foundation or GitHub.')).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'More' }).getByRole('button')).toHaveText(['About']);
-  // The icons are decorative; the label comes first.
-  await expect(page.locator('.gv-tile img[aria-hidden="true"]')).toHaveCount(2);
+  // The icons and chevrons are decorative; the label comes first.
+  await expect(page.locator('.gv-tile [aria-hidden="true"]')).toHaveCount(4);
+  await expect(page.locator('.gv-tile .gv-tile__label')).toHaveText(['Godot', 'Git & GitHub']);
 });
 
 test('a tile enters its area in its own look; the area page keeps only the app’s own links', async ({ page }) => {
