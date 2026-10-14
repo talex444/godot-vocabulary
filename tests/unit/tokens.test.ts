@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { AREAS } from '../../src/areas/registry';
+import { githubTokens } from '../../src/theme/github-desktop';
 import { applyTokens, godotTokens, type ThemeTokens, type TokenRoot } from '../../src/theme/tokens';
 
 // Done-criteria 61: one flat map per area, applied as one unit.
@@ -30,7 +31,25 @@ function usedTokens(): Set<string> {
   return new Set([...used].filter((name) => !declared.has(name)));
 }
 
-/** An element stand-in: inline properties in write order, like `style.cssText`. */
+/** Sass `lighten(c, n%)` (n > 0) / `darken(c, -n%)`: HSL lightness moved by n points, channels rounded. */
+function sassLightness(hex: string, points: number): string {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as [number, number, number];
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  const d = max - min;
+  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+  let h = 0;
+  if (d > 0) h = max === r ? ((g - b) / d + 6) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  const l2 = Math.min(1, Math.max(0, l + points / 100));
+  const c = (1 - Math.abs(2 * l2 - 1)) * s;
+  const x = c * (1 - Math.abs((h % 2) - 1));
+  const m = l2 - c / 2;
+  const [r1, g1, b1] = h < 1 ? [c, x, 0] : h < 2 ? [x, c, 0] : h < 3 ? [0, c, x] : h < 4 ? [0, x, c] : h < 5 ? [x, 0, c] : [c, 0, x];
+  return `#${[r1, g1, b1].map((v) => Math.round((v + m) * 255).toString(16).padStart(2, '0')).join('')}`;
+}
+
+/** An element stand-in:inline properties in write order, like `style.cssText`. */
 function fakeRoot(): TokenRoot & { css: () => string; attrs: Map<string, string> } {
   const props = new Map<string, string>();
   const attrs = new Map<string, string>();
@@ -65,6 +84,29 @@ describe('theme token maps', () => {
     for (const [name, tokens] of [...MAPS, ...MAPS.slice().reverse(), MAPS[0]!]) applyTokens(root, tokens, name);
     expect(root.css()).toBe(fresh.css());
     expect(root.attrs.get('data-theme')).toBe('godot');
+  });
+
+  it('GitHub Desktop dark: the anchors from _dark.scss and the Primer palette', () => {
+    const gh = githubTokens();
+    expect(gh['--base-color']).toBe('#24292e'); // --background-color: $gray-900
+    expect(gh['--accent-color']).toBe('#0366d6'); // $blue = $blue-500
+    expect(gh['--font-color']).toBe('#f6f8fa'); // --text-color: $gray-100
+    expect(gh['--font-secondary-color']).toBe('#959da5'); // --text-secondary-color: $gray-400
+    expect(gh['--success-color']).toBe('#28a745'); // --color-new: $green
+    expect(gh['--warning-color']).toBe('#dbab09'); // --color-modified: $yellow-700
+    expect(gh['--error-color']).toBe('#d73a49'); // --color-deleted: $red
+    expect(gh['--corner-radius']).toBe('6px');
+    expect(gh['--font-ui']).toMatch(/^system-ui, sans-serif,/);
+    expect(gh['--font-code']).toMatch(/^SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace,/);
+    expect(gh['color-scheme']).toBe('dark');
+  });
+
+  it('GitHub Desktop dark: darken/lighten written as Sass computes them', () => {
+    const gh = githubTokens();
+    expect(gh['--dark-color-1']).toBe(sassLightness('#24292e', -3)); // --box-background-color
+    expect(gh['--dark-color-3']).toBe(sassLightness('#24292e', 3)); // --box-alt-background-color
+    expect(gh['--font-disabled-color']).toBe(sassLightness('#6a737d', -10)); // --text-secondary-color-muted
+    expect(gh['--contrast-color-1']).toBe(sassLightness('#6a737d', 3)); // --box-border-contrast-color
   });
 
   it('keeps the Godot look: Inter, JetBrains Mono, dark controls', () => {

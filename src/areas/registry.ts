@@ -1,5 +1,6 @@
 import type { Card, Family } from '../cards/types';
 import type { Course } from '../courses/types';
+import { githubTokens } from '../theme/github-desktop';
 import { godotTokens, type ThemeTokens } from '../theme/tokens';
 
 /**
@@ -63,7 +64,7 @@ const github: Area = {
   vendor: 'GitHub',
   unofficialLine: 'Unofficial; not affiliated with or endorsed by GitHub.',
   docsLabel: 'Open on GitHub Docs',
-  theme: godotTokens(),
+  theme: githubTokens(),
   load: once(async () => {
     const deck = await import('../data/cards.github.json');
     return { cards: deck.default as Card[], courses: [] };
