@@ -1,11 +1,10 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { getArea } from '../../src/areas/registry';
+import { AREAS, getArea } from '../../src/areas/registry';
 import type { Card, Family } from '../../src/cards/types';
 import { newProgress, type Progress } from '../../src/scheduler/fsrs';
 import { sessionSummary } from '../../src/session/build';
 import { DEFAULT_SETTINGS } from '../../src/settings/load';
-import { homeTokens } from '../../src/theme/home';
 import { lessonsText, tileFigures, tileName, tileView, todayText, type TileView } from '../../src/ui/screens/home';
 
 // Done-criteria 67: the home tile counts what the area page counts, without loading a deck.
@@ -150,10 +149,12 @@ describe('the home’s words and its one colour (decisions 63, 64)', () => {
     expect(code).not.toMatch(/streak|welcome|good (morning|afternoon|evening)|hello|in a row/i);
   });
 
-  it('the Godot tile draws the app’s glyph in the home’s secondary grey, without the blue', () => {
-    const svg = readFileSync(new URL(`../../public/${getArea('godot')!.icon}`, import.meta.url), 'utf8');
-    const colours = new Set([...svg.matchAll(/(?:stroke|fill)="(#[0-9a-f]{6})"/g)].map((m) => m[1]));
-    expect([...colours]).toEqual([homeTokens()['--font-secondary-color']]);
+  it('the Godot tile draws Godot’s PackedScene class icon, masked in the secondary grey like the branch icon', () => {
+    expect(AREAS.map((a) => a.icon)).toEqual(['icons/PackedScene.svg', 'octicons/git-branch-24.svg']);
+    // Both are masks: the file's shape, the colour from the theme's secondary grey (screens.css).
+    const css = readFileSync(new URL('../../src/ui/screens/screens.css', import.meta.url), 'utf8');
+    expect(css).toMatch(/\.gv-tile__icon,\s*\.gv-tile__chevron \{[^}]*background-color: var\(--font-secondary-color\);[^}]*mask: var\(--glyph/);
+    expect(existsSync(new URL('../../public/app-glyph-grey.svg', import.meta.url))).toBe(false);
   });
 
   it('the temporary area links of GV-8a are gone from the area page', () => {

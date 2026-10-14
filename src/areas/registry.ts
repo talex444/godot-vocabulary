@@ -53,8 +53,8 @@ const godot: Area = {
   unofficialLine: 'Unofficial; not affiliated with or endorsed by the Godot Foundation.',
   docsLabel: 'Open in the Godot docs',
   theme: godotTokens(),
-  // The app's own glyph drawn in grey (decision 63), never the Godot logo.
-  icon: 'app-glyph-grey.svg',
+  // Godot's own PackedScene class icon (MIT), masked in grey like the branch icon; never the Godot logo.
+  icon: 'icons/PackedScene.svg',
   lessons: [0, 1, 2, 3, 4, 5].map((order) => ({ id: `c1-l${order}`, order })),
   load: once(async () => {
     const [api, gdscript, course1] = await Promise.all([

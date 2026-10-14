@@ -141,7 +141,7 @@
   display: contents;
 }
 
-/* Octicons and the app glyph as masks, so they take the secondary grey exactly. */
+/* The tools' icons and the chevron as masks, so they take the secondary grey exactly. */
 .gv-tile__icon,
 .gv-tile__chevron {
   grid-row: 1 / span 4;
