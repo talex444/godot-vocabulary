@@ -68,7 +68,10 @@ describe('area registry', () => {
     for (const area of AREAS) {
       const { courses } = await area.load();
       const written = sessionLessons(courses).map((l) => l.id);
-      expect(area.lessonIds, area.id).toEqual(written);
+      expect(area.lessons.map((l) => l.id), area.id).toEqual(written);
+      // The number the course list shows beside each lesson.
+      const orders = new Map(courses.flatMap((c) => c.lessons.map((l) => [l.id, l.order] as const)));
+      for (const lesson of area.lessons) expect(lesson.order, lesson.id).toBe(orders.get(lesson.id));
       expect(existsSync(join(SRC, '..', 'public', area.icon)), area.icon).toBe(true);
     }
   });

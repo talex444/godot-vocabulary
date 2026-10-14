@@ -176,7 +176,7 @@
   grid-area: 1 / 3;
   align-self: baseline;
   justify-self: end;
-  color: var(--font-secondary-color);
+  color: var(--font-disabled-color);
   font-weight: 700;
   font-size: 1.5rem;
   font-variant-numeric: tabular-nums;
@@ -194,6 +194,11 @@
 .gv-tile__line {
   grid-column: 2;
   color: var(--font-disabled-color);
+}
+
+/* The home's one colour, "do this next" (decision 64): the due figure, or else the Next line. */
+.gv-home .gv-action {
+  color: var(--home-action-color);
 }
 
 /*

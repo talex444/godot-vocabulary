@@ -28,10 +28,11 @@ export interface Area {
   /** The tool's icon under `public/` (the home tile; never a logo mark, decision 48). */
   icon: string;
   /**
-   * The ids of the written lessons in the area's courses, so the home tile counts lessons without
-   * loading them (`tests/unit/areas.test.ts` checks the list against the course files).
+   * The written lessons in the area's courses, in course order, with the number the course list
+   * shows, so the home tile counts lessons and names the next one without loading them
+   * (`tests/unit/areas.test.ts` checks the list against the course files).
    */
-  lessonIds: readonly string[];
+  lessons: readonly { id: string; order: number }[];
   /** The area's generated deck and its courses, loaded on demand (decision 55) and kept once loaded. */
   load: () => Promise<{ cards: Card[]; courses: Course[] }>;
 }
@@ -54,7 +55,7 @@ const godot: Area = {
   theme: godotTokens(),
   // The app's own glyph drawn in grey (decision 63), never the Godot logo.
   icon: 'app-glyph-grey.svg',
-  lessonIds: ['c1-l0', 'c1-l1', 'c1-l2', 'c1-l3', 'c1-l4', 'c1-l5'],
+  lessons: [0, 1, 2, 3, 4, 5].map((order) => ({ id: `c1-l${order}`, order })),
   load: once(async () => {
     const [api, gdscript, course1] = await Promise.all([
       import('../data/cards.godot-api.json'),
@@ -77,7 +78,7 @@ const github: Area = {
   theme: githubTokens(),
   // Octicons' git-branch (MIT), as it is; the GitHub mark is never used.
   icon: 'octicons/git-branch-24.svg',
-  lessonIds: [],
+  lessons: [],
   load: once(async () => {
     const deck = await import('../data/cards.github.json');
     return { cards: deck.default as Card[], courses: [] };

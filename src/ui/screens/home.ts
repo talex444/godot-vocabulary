@@ -20,6 +20,8 @@ export interface TileFigures {
   due: number;
   lessonsDone: number;
   lessonsTotal: number;
+  /** The number of the first lesson in course order not yet done; `null` when every one is (or there are none). */
+  nextLesson: number | null;
 }
 
 export function tileFigures(area: Area, input: TileInput): TileFigures {
@@ -27,8 +29,9 @@ export function tileFigures(area: Area, input: TileInput): TileFigures {
   const done = new Set(input.lessonsDone);
   return {
     due: dueCount(input.progress, input.skipped, enabled, input.now),
-    lessonsDone: area.lessonIds.filter((id) => done.has(id)).length,
-    lessonsTotal: area.lessonIds.length,
+    lessonsDone: area.lessons.filter((l) => done.has(l.id)).length,
+    lessonsTotal: area.lessons.length,
+    nextLesson: area.lessons.find((l) => !done.has(l.id))?.order ?? null,
   };
 }
 
@@ -40,9 +43,58 @@ export const lessonsText = ({ lessonsDone, lessonsTotal }: TileFigures) =>
 
 export const UNOFFICIAL_HOME = 'Unofficial; not affiliated with or endorsed by the Godot Foundation or GitHub.';
 
+/** One piece of a tile's text; `action` draws it in the home's one colour (decision 64). */
+export interface TileText {
+  text: string;
+  action: boolean;
+}
+
+/** What a tile shows, in DOM order. */
+export interface TileView {
+  label: string;
+  /** The right-hand figure, "N due". */
+  figure: TileText;
+  /** Under the label: the next step (when nothing is due and the area has courses), then the lessons line. */
+  lines: TileText[];
+  tag: string | undefined;
+  name: string;
+}
+
 /**
- * The home page (decision 49), in its own neutral theme: one tile per area with the tool's icon, its
- * label, its due count and its lessons done; the area entered last carries a "Last used" tag.
+ * The words carry the meaning; the colour only repeats it (WCAG 1.4.1), on one element at most:
+ * the due figure when reviews are due, else the "Next: Lesson N" line. Nothing to do, or no courses,
+ * leaves the tile grey.
+ */
+export function tileView(area: Area, figures: TileFigures, lastUsed: boolean): TileView {
+  const lines: TileText[] = [];
+  if (figures.due === 0 && figures.lessonsTotal > 0) {
+    lines.push(figures.nextLesson === null ? { text: 'All lessons done', action: false } : { text: `Next: Lesson ${figures.nextLesson}`, action: true });
+  }
+  lines.push({ text: lessonsText(figures), action: false });
+  return {
+    label: area.label,
+    figure: { text: `${figures.due} due`, action: figures.due > 0 },
+    lines,
+    tag: lastUsed ? 'Last used' : undefined,
+    name: tileName(area, figures, lastUsed),
+  };
+}
+
+/**
+ * The one plain line under the heading: what today holds and the next step. No greeting, no streak,
+ * no counter (decision 63).
+ */
+export function todayText(tiles: readonly { area: Area; figures: TileFigures }[]): string {
+  const due = tiles.filter((t) => t.figures.due > 0);
+  if (due.length > 0) return due.map((t) => `${t.figures.due} due in ${t.area.label}.`).join(' ');
+  const next = tiles.find((t) => t.figures.nextLesson !== null);
+  return next ? `Nothing due today. Next: ${next.area.label}, Lesson ${next.figures.nextLesson}.` : 'Nothing due today.';
+}
+
+/**
+ * The home page (decisions 49, 63, 64), in its own theme: a line saying what today holds, then one
+ * tile per area with the tool's icon, its label, its due figure, the next lesson and its lessons
+ * done; the area entered last carries a "Last used" tag.
  */
 export async function homeScreen(nav: Nav, now: Date = new Date()): Promise<HTMLElement> {
   const [progress, settings, skipped, lessonsDone, last] = await Promise.all([
@@ -53,10 +105,12 @@ export async function homeScreen(nav: Nav, now: Date = new Date()): Promise<HTML
     getLastArea(),
   ]);
   const input: TileInput = { progress, settings, skipped, lessonsDone, now };
-  const tiles = AREAS.map((area) => el('li', {}, [tile(area, tileFigures(area, input), area.id === last, nav)]));
+  const figures = AREAS.map((area) => ({ area, figures: tileFigures(area, input) }));
+  const tiles = figures.map((t) => el('li', {}, [tile(t.area, tileView(t.area, t.figures, t.area.id === last), nav)]));
 
   return el('div', { class: 'gv-screen gv-home' }, [
     heading('Areas'),
+    el('p', { class: 'gv-note gv-today', text: todayText(figures) }),
     el('ul', { class: 'gv-tiles' }, tiles),
     el('p', { class: 'gv-note gv-unofficial', text: UNOFFICIAL_HOME }),
     el('nav', { class: 'gv-links', attrs: { 'aria-label': 'More' } }, [button('About', { variant: 'flat', onClick: () => nav.about() })]),
@@ -75,15 +129,17 @@ function glyph(className: string, path: string): HTMLSpanElement {
   return node;
 }
 
-function tile(area: Area, figures: TileFigures, lastUsed: boolean, nav: Nav): HTMLButtonElement {
+const ACTION = ' gv-action';
+
+function tile(area: Area, view: TileView, nav: Nav): HTMLButtonElement {
   // The DOM keeps 1.3.0's order (label, then the lines); the grid in screens.css places the due
   // figure and "Last used" in the right-hand column.
-  const node = el('button', { class: 'gv-tile', attrs: { type: 'button', 'data-area': area.id, 'aria-label': tileName(area, figures, lastUsed) } }, [
+  const node = el('button', { class: 'gv-tile', attrs: { type: 'button', 'data-area': area.id, 'aria-label': view.name } }, [
     el('span', { class: 'gv-tile__text' }, [
-      el('span', { class: 'gv-tile__label', text: area.label }),
-      el('span', { class: 'gv-tile__figure', text: `${figures.due} due` }),
-      el('span', { class: 'gv-tile__line', text: lessonsText(figures) }),
-      lastUsed && el('span', { class: 'gv-tile__tag', text: 'Last used' }),
+      el('span', { class: 'gv-tile__label', text: view.label }),
+      el('span', { class: `gv-tile__figure${view.figure.action ? ACTION : ''}`, text: view.figure.text }),
+      ...view.lines.map((line) => el('span', { class: `gv-tile__line${line.action ? ACTION : ''}`, text: line.text })),
+      view.tag !== undefined && el('span', { class: 'gv-tile__tag', text: view.tag }),
     ]),
     // After the text in the DOM, drawn beside it; decorative, since the label names the area.
     glyph('gv-tile__icon', area.icon),

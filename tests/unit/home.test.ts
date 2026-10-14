@@ -6,7 +6,7 @@ import { newProgress, type Progress } from '../../src/scheduler/fsrs';
 import { sessionSummary } from '../../src/session/build';
 import { DEFAULT_SETTINGS } from '../../src/settings/load';
 import { homeTokens } from '../../src/theme/home';
-import { dueText, lessonsText, tileFigures, tileName } from '../../src/ui/screens/home';
+import { dueText, lessonsText, tileFigures, tileName, tileView, todayText, type TileView } from '../../src/ui/screens/home';
 
 // Done-criteria 67: the home tile counts what the area page counts, without loading a deck.
 
@@ -54,10 +54,87 @@ describe('home tiles', () => {
 
   it('a tile’s accessible name is 1.3.0’s for the same figures (decision 63: only the look moved)', () => {
     const [godot, github] = [getArea('godot')!, getArea('github')!];
-    expect(tileName(godot, { due: 0, lessonsDone: 0, lessonsTotal: 6 }, false)).toBe('Godot, Nothing due, 0 of 6 lessons');
-    expect(tileName(godot, { due: 2, lessonsDone: 0, lessonsTotal: 6 }, true)).toBe('Godot, 2 due, 0 of 6 lessons, Last used');
-    expect(tileName(github, { due: 0, lessonsDone: 0, lessonsTotal: 0 }, true)).toBe('Git & GitHub, Nothing due, No courses yet, Last used');
-    expect(tileName(github, { due: 1, lessonsDone: 0, lessonsTotal: 0 }, false)).toBe('Git & GitHub, 1 due, No courses yet');
+    expect(tileName(godot, { due: 0, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, false)).toBe('Godot, Nothing due, 0 of 6 lessons');
+    expect(tileName(godot, { due: 2, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, true)).toBe('Godot, 2 due, 0 of 6 lessons, Last used');
+    expect(tileName(github, { due: 0, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, true)).toBe('Git & GitHub, Nothing due, No courses yet, Last used');
+    expect(tileName(github, { due: 1, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, false)).toBe('Git & GitHub, 1 due, No courses yet');
+  });
+
+  it('names the next lesson by the number the course list shows: the first in course order not done', () => {
+    const empty = { progress: new Map(), settings: DEFAULT_SETTINGS, skipped: new Set<string>(), now };
+    const godot = getArea('godot')!;
+    expect(tileFigures(godot, { ...empty, lessonsDone: [] }).nextLesson).toBe(0);
+    expect(tileFigures(godot, { ...empty, lessonsDone: ['c1-l0', 'c1-l1', 'c1-l3'] }).nextLesson).toBe(2);
+    expect(tileFigures(godot, { ...empty, lessonsDone: godot.lessons.map((l) => l.id) }).nextLesson).toBeNull();
+    expect(tileFigures(getArea('github')!, { ...empty, lessonsDone: [] }).nextLesson).toBeNull();
+  });
+});
+
+/** Every element of a tile with its words, and which carry the action colour. */
+const coloured = (view: TileView) => [view.figure, ...view.lines].filter((t) => t.action).map((t) => t.text);
+const texts = (view: TileView) => [view.label, view.figure.text, ...view.lines.map((l) => l.text), view.tag].filter(Boolean);
+
+describe('the home’s words and its one colour (decisions 63, 64)', () => {
+  const [godot, github] = [getArea('godot')!, getArea('github')!];
+  const fig = (due: number, nextLesson: number | null, lessonsTotal: number, lessonsDone = 0) => ({ due, nextLesson, lessonsTotal, lessonsDone });
+
+  it('nothing due: the Godot tile names its next lesson in the colour; Git & GitHub stays grey; the line names the next step', () => {
+    const tiles = [
+      { area: godot, figures: fig(0, 0, 6) },
+      { area: github, figures: fig(0, null, 0) },
+    ];
+    const [g, h] = tiles.map((t) => tileView(t.area, t.figures, false));
+    expect(texts(g!)).toEqual(['Godot', '0 due', 'Next: Lesson 0', '0 of 6 lessons']);
+    expect(coloured(g!)).toEqual(['Next: Lesson 0']);
+    expect(texts(h!)).toEqual(['Git & GitHub', '0 due', 'No courses yet']);
+    expect(coloured(h!)).toEqual([]);
+    expect(todayText(tiles)).toBe('Nothing due today. Next: Godot, Lesson 0.');
+  });
+
+  it('one area due: its figure carries the colour and the Next line steps aside; the other tile names its next lesson', () => {
+    const tiles = [
+      { area: godot, figures: fig(0, 2, 6, 2) },
+      { area: github, figures: fig(3, null, 0) },
+    ];
+    const [g, h] = tiles.map((t) => tileView(t.area, t.figures, t.area.id === 'github'));
+    expect(coloured(g!)).toEqual(['Next: Lesson 2']);
+    expect(texts(h!)).toEqual(['Git & GitHub', '3 due', 'No courses yet', 'Last used']);
+    expect(coloured(h!)).toEqual(['3 due']);
+    expect(todayText(tiles)).toBe('3 due in Git & GitHub.');
+  });
+
+  it('both due: one coloured figure per tile, no Next line', () => {
+    const tiles = [
+      { area: godot, figures: fig(12, 0, 6) },
+      { area: github, figures: fig(3, null, 0) },
+    ];
+    const [g, h] = tiles.map((t) => tileView(t.area, t.figures, false));
+    expect(texts(g!)).toEqual(['Godot', '12 due', '0 of 6 lessons']);
+    expect(coloured(g!)).toEqual(['12 due']);
+    expect(coloured(h!)).toEqual(['3 due']);
+    expect(todayText(tiles)).toBe('12 due in Godot. 3 due in Git & GitHub.');
+  });
+
+  it('no courses anywhere and nothing due: no colour at all, a plain line', () => {
+    const tiles = [
+      { area: { ...godot, lessons: [] }, figures: fig(0, null, 0) },
+      { area: github, figures: fig(0, null, 0) },
+    ];
+    for (const t of tiles) expect(coloured(tileView(t.area, t.figures, false))).toEqual([]);
+    expect(todayText(tiles)).toBe('Nothing due today.');
+  });
+
+  it('every lesson done and nothing due: "All lessons done", in grey (nothing to do next)', () => {
+    const view = tileView(godot, fig(0, null, 6, 6), false);
+    expect(texts(view)).toEqual(['Godot', '0 due', 'All lessons done', '6 of 6 lessons']);
+    expect(coloured(view)).toEqual([]);
+    expect(todayText([{ area: godot, figures: fig(0, null, 6, 6) }])).toBe('Nothing due today.');
+  });
+
+  it('no greeting, no streak, no counter', () => {
+    const source = readFileSync(new URL('../../src/ui/screens/home.ts', import.meta.url), 'utf8');
+    const code = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+    expect(code).not.toMatch(/streak|welcome|good (morning|afternoon|evening)|hello|in a row/i);
   });
 
   it('the Godot tile draws the app’s glyph in the home’s secondary grey, without the blue', () => {
