@@ -130,6 +130,32 @@ test.describe('landscape 780×360 (WCAG 1.3.4)', () => {
   });
 });
 
+// Done-criteria 60: the Android package draws edge to edge. A browser reports zero env() insets, so the
+// test stands in for the phone by setting the --safe-area-inset-* properties Capacitor injects.
+const shellBox = (page: Page) =>
+  page.evaluate(() => {
+    const style = getComputedStyle(document.getElementById('app')!);
+    const name = document.querySelector('.gv-app-name')!.getBoundingClientRect();
+    return { nameTop: name.top, nameLeft: name.left, padding: [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft] };
+  });
+
+test('safe areas: zero insets keep the shell as it was, injected insets pad every edge', async ({ page }) => {
+  await gotoStart(page);
+  const before = await shellBox(page);
+  expect(before.padding).toEqual(['8px', '16px', '16px', '16px']);
+  await page.evaluate(() => {
+    const root = document.documentElement.style;
+    root.setProperty('--safe-area-inset-top', '48px');
+    root.setProperty('--safe-area-inset-right', '24px');
+    root.setProperty('--safe-area-inset-bottom', '34px');
+    root.setProperty('--safe-area-inset-left', '24px');
+  });
+  const after = await shellBox(page);
+  expect(after.padding).toEqual(['56px', '40px', '50px', '40px']);
+  expect(after.nameTop - before.nameTop).toBeCloseTo(48, 0);
+  expect(after.nameLeft - before.nameLeft).toBeCloseTo(24, 0);
+});
+
 // WCAG 1.4.4 proxy: Playwright cannot set browser zoom or the text-size preference, so the root
 // font size is set to 200% in the page. The stylesheet sizes text in rem, so all text doubles; the
 // check is that nothing scrolls sideways, no text is clipped, and no controls overlap.
