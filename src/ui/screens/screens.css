@@ -144,6 +144,18 @@
   color: var(--font-secondary-color);
 }
 
+/* Area page: "All areas" at the top left, apart from the links under the panel. */
+.gv-areas-nav {
+  display: flex;
+}
+
+.gv-all-areas {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-inline: 8px 12px;
+}
+
 /* Octicons are drawn in black; inverted to white on the dark themes. */
 .gv-octicon {
   filter: invert(1);

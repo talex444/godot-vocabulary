@@ -8,7 +8,7 @@ export function placeholderScreen(nav: Nav, title: string, message?: string): HT
       [
         heading(title),
         el('p', { text: message ?? `The ${title} screen is not available.` }),
-        button('Back', { variant: 'secondary', onClick: () => nav.area() }),
+        button('Back', { variant: 'secondary', onClick: () => nav.back() }),
       ],
       { class: 'gv-stack' },
     ),

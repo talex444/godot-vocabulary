@@ -80,7 +80,7 @@ export async function settingsScreen(nav: Nav): Promise<HTMLElement> {
     reminder,
     panel([skippedHeading, skipped], { class: 'gv-stack gv-skipped' }),
     data,
-    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.area() })]),
+    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.back() })]),
   ]);
 }
 

@@ -2,11 +2,12 @@ import { AREAS, familiesOf, familyLabel, getArea, type AreaId } from '../../area
 import { sessionSummary } from '../../session/build';
 import { Session, load, overdueNote, startBlockedReason, type RunDeps } from '../../session/run';
 import type { Nav } from '../app';
-import { button, el, heading, panel, stat } from '../kit';
+import { asset, button, el, heading, panel, stat } from '../kit';
 
 /**
- * One area today, titled with its name: per enabled family the reviews due, new cards and overdue
- * reviews, then Start; the area's unofficial line under the panel.
+ * An area's page (decision 50), titled with its name: per enabled family the reviews due, new cards
+ * and overdue reviews, then Start; "All areas" above, the area's unofficial line and the app's own
+ * links (the same in every area) below.
  */
 export async function startScreen(nav: Nav, deps: RunDeps, area: AreaId): Promise<HTMLElement> {
   const { label, unofficialLine } = getArea(area) ?? AREAS[0]!;
@@ -38,7 +39,15 @@ export async function startScreen(nav: Nav, deps: RunDeps, area: AreaId): Promis
   });
   start.classList.add('gv-wide');
 
+  // Back to the home page, in the same place on every area page and apart from the "More" group.
+  const allAreas = el('button', { class: 'gv-button gv-button--flat gv-all-areas', attrs: { type: 'button' } }, [
+    el('img', { class: 'gv-icon gv-octicon', attrs: { src: asset('octicons/arrow-left-24.svg'), alt: '', 'aria-hidden': 'true', width: '24', height: '24' } }),
+    'All areas',
+  ]);
+  allAreas.addEventListener('click', () => nav.home());
+
   return el('div', { class: 'gv-screen' }, [
+    el('nav', { class: 'gv-areas-nav', attrs: { 'aria-label': 'Areas' } }, [allAreas]),
     panel(
       [
         heading(label),

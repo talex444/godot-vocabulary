@@ -98,6 +98,6 @@ export async function aboutScreen(nav: Nav): Promise<HTMLElement> {
       ],
       { class: 'gv-stack' },
     ),
-    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.area() })]),
+    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.back() })]),
   ]);
 }

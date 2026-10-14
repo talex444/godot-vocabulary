@@ -65,9 +65,13 @@ export async function applyReminder(reminder: ReminderSetting): Promise<void> {
 /**
  * On launch: re-schedule from the saved setting (so a reboot, an update or a changed exact-alarm
  * setting never leaves a stale alarm), and again whenever the app goes to the background, so the
- * count follows the session just finished.
+ * count follows the session just finished. Tapping the notification opens the home page
+ * (decision 49): a cold start opens there anyway, and `openHome` brings a running app back to it.
  */
-export async function restoreReminder(): Promise<void> {
+export async function restoreReminder(openHome: () => void): Promise<void> {
+  await LocalNotifications.addListener('localNotificationActionPerformed', (action) => {
+    if (action.notification.id === REMINDER_ID) openHome();
+  });
   const refresh = async () => applyReminder(await getReminder()).catch(() => undefined);
   await refresh();
   document.addEventListener('visibilitychange', () => {

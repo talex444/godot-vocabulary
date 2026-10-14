@@ -73,9 +73,10 @@ export async function open(page: Page, name: 'Courses' | 'Settings' | 'Add card'
   await screenReady(page, name);
 }
 
-/** From anywhere: back to the home page, then into another area. */
+/** From an area page: All areas, then into another area. */
 export async function openArea(page: Page, label: AreaLabel): Promise<void> {
-  await gotoHome(page);
+  await page.getByRole('button', { name: 'All areas', exact: true }).click();
+  await homeReady(page);
   await enterArea(page, label);
 }
 

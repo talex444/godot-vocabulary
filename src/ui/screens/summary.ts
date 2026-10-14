@@ -4,7 +4,7 @@ import { button, el, heading, panel, stat } from '../kit';
 
 /** The end of a session: seen, right, wrong, and what tomorrow holds. */
 export function summaryScreen(result: SessionResult, nav: Nav): HTMLElement {
-  const done = button('Done', { variant: 'primary', onClick: () => nav.area() });
+  const done = button('Done', { variant: 'primary', onClick: () => nav.back() });
   done.classList.add('gv-wide');
   const learning = result.learned + result.continueTomorrow > 0;
   return el('div', { class: 'gv-screen' }, [

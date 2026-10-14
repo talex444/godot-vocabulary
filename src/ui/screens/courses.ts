@@ -52,7 +52,7 @@ export async function coursesScreen(nav: Nav, area: AreaId): Promise<HTMLElement
   );
   return el('div', { class: 'gv-screen' }, [
     ...(courses.length > 0 ? courses : [panel([heading('Courses'), el('p', { class: 'gv-note', text: 'No courses in this area yet.' })], { class: 'gv-stack' })]),
-    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.area() })]),
+    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.back() })]),
   ]);
 }
 

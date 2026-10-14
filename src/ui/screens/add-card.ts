@@ -10,7 +10,7 @@ import { button, el, heading, panel, selectField, textField } from '../kit';
 export async function addCardScreen(nav: Nav): Promise<HTMLElement> {
   const list = el('div', { class: 'gv-stack' });
   const formPanel = el('div');
-  const back = button('Back', { variant: 'secondary', onClick: () => nav.area() });
+  const back = button('Back', { variant: 'secondary', onClick: () => nav.back() });
 
   const showList = async () => {
     const cards = (await listCustomCards()).sort((a, b) => a.family.localeCompare(b.family) || a.rank - b.rank);
@@ -45,7 +45,7 @@ export async function addCardScreen(nav: Nav): Promise<HTMLElement> {
             el('strong', { text: card.answer }),
             ` is now a new ${familyLabel(card.family)} card. It comes up after the cards already waiting in that family.`,
           ]),
-          el('div', { class: 'gv-row' }, [again, button('Back', { variant: 'secondary', onClick: () => nav.area() })]),
+          el('div', { class: 'gv-row' }, [again, button('Back', { variant: 'secondary', onClick: () => nav.back() })]),
         ],
         { class: 'gv-stack' },
       ),

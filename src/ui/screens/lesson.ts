@@ -66,7 +66,8 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
       await markLessonDone(lesson.id);
       // The first finished lesson switches course mode on for its course's area (decision 36).
       await markDoneSettings(course.area);
-      nav.courses();
+      // Back to the course list it was opened from, which now shows the tick.
+      nav.back();
     },
   });
   markDone.classList.add('gv-wide');
@@ -154,7 +155,7 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
       lesson.table ? revealTable(lesson.table) : null,
       markDone,
     ]),
-    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back to courses', { variant: 'secondary', onClick: () => nav.courses() })]),
+    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back to courses', { variant: 'secondary', onClick: () => nav.back() })]),
   ]);
   return root;
 }
