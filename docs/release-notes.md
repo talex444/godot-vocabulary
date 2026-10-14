@@ -2,6 +2,23 @@
 
 Newest first. Each entry: what changed, what it means for you, why, and anything you need to do.
 
+## 1.3.3 — 2026-10-14
+
+### Summary
+- **The Areas screen's values and one light.** The page is now near-black (warm, not grey), the tiles are one even middle tone with no outline, and the words on them are the lights. The greys carry a little more warmth, visible on a phone. One soft light stays at the top right, behind the tiles; the bottom-left one is gone.
+- **"Ready", not "due".** A tile says "12 ready" when reviews are waiting and says nothing at all when there are none. The lessons line reads "6 lessons" until you finish one, then "1 of 6 lessons". The line under **Areas** only says where to start, and disappears when a tile already says it. The area page uses the same words: **Ready / New today / Waiting**, and "12 reviews have been waiting since before today. New cards begin after them."
+- **A tile with nothing ready opens the next lesson.** Tapping Godot with no reviews ready opens the lesson its tile names; **Back** goes to the Godot page, then to the Areas screen. With reviews ready, the tile opens the area page as before.
+- **The footer.** About and the unofficial line sit at the bottom of the screen, the unofficial line in a quieter grey under About.
+
+### Impact
+- None on your data: progress, settings, lessons done and export files are unchanged. The rule that new cards wait behind reviews from before today is unchanged; only its wording is.
+
+### Reasoning
+Decision 66 (`docs/decisions.md`), with row 65 amended: after 1.3.2 the board diagnosed the Areas screen as "cold and corporate" (a value problem: dark tiles on a dark page with bright outlines) and "audited" (a numbers problem: "0 due", "0 of 6 lessons", the same counts said twice, "overdue"). Tyler agreed to all of it. Every text and control on the Areas screen still meets WCAG 2.2 AA (`docs/contrast-report.md`, "## Home"). The light came down from the strongest allowed (14 %) to 10 %, because at 14 % the corner looked lit rather than warm.
+
+### Actions required
+- None.
+
 ## 1.3.2 — 2026-10-14
 
 ### Summary

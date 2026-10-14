@@ -906,3 +906,53 @@ Done-criteria 78–79's phone checks: whether a fresh install now reads as calm 
 1. **Strength 5 %, not 6 %:** 6 % puts the peak at L* 13.0, above the tile's 12.4; the brief's rule picks the largest value at or below, which is 5 %.
 2. **`circle farthest-corner`, not the brief's `farthest-corner` (an ellipse):** the default ellipse takes the page's aspect ratio, so on a 360×780 phone 30vmax across becomes about 507 px down, over half the screen. A circle keeps the reach at 30vmax in every direction, inside Tyler's quarter-to-a-third bound.
 3. **The Next line has its own class** (`.gv-tile__line--next`, `TileText.next`): the tile lines default to the tertiary grey, and the brief asks for the secondary.
+
+## GV-8f — v1.3.3: the home fix: values, words, the tap, the footer (2026-10-14)
+
+Done-criteria 80–84, decision 66 and row 65 amended. Seven commits, none pushed, no tag: `feat(home): tonal plan, one light, quiet border`, `fix(home): figures said once and offered, not owed`, `fix(area): the area page uses the home's words`, `feat(home): a tile with nothing ready opens the next lesson`, `feat(home): footer pinned to the bottom`, `chore(release): version 1.3.3`, and this one. Every commit had `typecheck`, `test`, `lint:css`, `build` (with the budget check) and `e2e` green, run in full (69 e2e tests at the end; first load 131,742 of 1,000,000 bytes). The step-4 commit's last full e2e ran before two non-code edits (the README sentence and `scripts/screenshot.mjs`); the rebuilt bundle was byte-identical.
+
+### The values chosen (`src/theme/home.ts`)
+Each grey is the 8-bit colour whose measured L*, chroma and hue land closest to the plan (hue 70°); measured values:
+
+| Grey | Hex | L* | C* | h | Role |
+|---|---|---:|---:|--:|---|
+| 0 | #110c07 | 3.6 | 2.7 | 69° | the page |
+| 1 | #241f1a | 12.2 | 4.5 | 73° | pressed tile; About's panels (`--dark-color-1`) |
+| 2 | #322b25 | 18.1 | 5.5 | 69° | the tile (`--home-tile-color`) |
+| 3 | #3e3731 | 23.6 | 5.2 | 69° | hovered tile |
+| 4 | #77716c | 48.0 | 3.8 | 69° | secondary button fill and edges |
+| 5 | #918b86 | 58.2 | 3.7 | 69° | focus halo |
+| 6 | #aca7a3 | 68.8 | 2.9 | 69° | tertiary text; `--home-quiet-color` |
+| 7 | #c8c3bf | 79.1 | 2.8 | 69° | secondary text, icons, chevron |
+| 8 | #e5e1de | 89.8 | 2.1 | 67° | primary text, heading, links, focus ring |
+| 9 | #ffffff | 100 | 0 | – | hovered/pressed text, text on the secondary button |
+
+- The page's chroma is 2.7, not 4–6: at L* 3.6, chroma 4 gives #130c04, which reads brown rather than warm (red 19 over blue 4). The surfaces above it carry 4.5–5.5.
+- The surfaces keep 1.3.2's L* (12.2, 18.1, 23.6) and the inks theirs, so every existing ratio holds: the amber is 7.56:1 on the page, 5.41:1 on the tile, 4.54:1 hovered, 6.34:1 pressed.
+- **The tile has role tokens** (`--home-tile-color`, `--home-tile-hover-color`, `--home-tile-pressed-color`) rather than moving `--dark-color-1` to L* 18: the secondary button's edge (g4) is 2.89:1 on L* 18 and 3.39:1 on L* 12.2, and the Back button sits on About's panels. **Pressed sinks to g1** rather than lifting: nothing lighter than g3 holds the amber at 4.5:1.
+- **The glow: 10 %**, peak #27211c (L* 13.2). The ceiling the brief names is 14 % (#2f2a25, L* 17.4, below the tile's 18.1; 15 % gives L* 18.4). Built and looked at both: at 14 % the top-right corner reached the tile's own value and the Godot tile's top-right edge dissolved into it, the page looking lit; at 10 % the corner is warm and every tile edge stays distinct. Tyler's taste rule decided it. The test pins 10 % and asserts the 14 % ceiling. Reach 30vmax, anchored top right, as before.
+
+### The border decision
+Dropped. Tile against page is 1.40:1 with the new values, and g3 as a border would be 1.66:1: neither meets 3:1, so a quieter border would only be decoration. WCAG 1.4.11 asks for a boundary only where it is needed to identify the control; the tile is a button named by its words, with the chevron (7.97:1 at rest, 6.69:1 hovered, 9.34:1 pressed) and the focus ring (10.71:1 on the tile, 14.97:1 on the page, 12.23:1 at the glow's peak) as its non-text marks. The "tile border" pairs are gone from the gate.
+
+### The measured pairs (`docs/contrast-report.md` "## Home")
+0 of 39 text and 0 of 13 non-text pairs short. The tightest: the amber on a hovered tile 4.54:1, tertiary/quiet text on a hovered tile 4.91:1, white on the secondary button 4.81:1, the secondary button's edge on a panel 3.39:1, the focus halo on the tile 4.14:1. The secondary button's edge is no longer measured on the glow's peak (it would be 2.9:1 there): it is drawn only on About and the error screen, which have no glow. The quiet grey is measured on the three tile surfaces and on the page and its peak (the disclaimer: 8.16:1 and 6.67:1).
+
+### What the thumbnails showed
+`tests/e2e/greyscale.spec.ts` sets `filter: grayscale(1)` on the root, saves 90-px-wide PNGs and samples the full-size render. Looked at both after each step: three values read at a glance, the dark ground, the tiles as one middle band, the words light; the top-right corner lifts a little, below the tiles. The spec asserts, on the full-size greyscale render, the tile at least 10 L* above the ground (bottom-left gutter) and the label's lightest pixel at least 50 L* above the tile; both states pass. The spec writes a PNG only when its pixels change, so a quiet run leaves the tree clean.
+
+### Words, tap and footer
+- `dueText()` "12 ready" / nothing; `lessonsText()` "6 lessons" / "1 of 6 lessons"; `todayText()` returns nothing when any area is ready, else "Start with Godot, Lesson N." or "Nothing waiting today.". With no figure, "Last used" is the last tile line (quiet grey) and the right column holds only the chevron. The home's word and the area page's (`STAT_LABELS` in `start.ts`) are two separate literals that a unit test holds together.
+- `nav.area(id, origin, lesson)` pushes the area page's entry unbuilt, then the lesson's (`fromHome: true`) and draws the lesson through the wipe; Back draws the area page then. The lesson's on-screen Back reads "Back" in that case (it would otherwise say "Back to courses" and land on the area page). Mark done also steps back to the area page there.
+- The footer is a `<footer>` inside `<main>` (no contentinfo landmark, as before). `#app` and `#screen` become flex columns of at least `100dvh` only while `.gv-home` is shown (`:has()`), and the footer takes `margin-top: auto` with 24 px padding above.
+- The e2e helper `enterArea()` steps Back from the lesson when the tile opens one, so every spec that enters Godot on a fresh install still reaches the area page; `wipe.spec.ts` now measures Godot's tap to the lesson's title (104 ms; wipe finished 430 ms, headless).
+
+### What only the phone can prove
+Whether the near-black page reads as warm, not brown or muddy, on the S24's OLED (L* 3.6 with chroma 2.7 sits where OLED panels crush shadows); whether the 10 % glow banding or edge shows there; whether the tiles read as one calm middle mass without their outlines; whether "12 ready" in amber reads as an offer; whether opening Lesson 0 straight from the tile feels like the tile kept its word or like being pushed; and the week check (done-criteria 84), "did opening it feel like a chore?".
+
+### Deviations and why
+1. **Glow 10 %, not the 14 % ceiling:** the taste rule (see above).
+2. **Page chroma 2.7, not 4–6:** at L* 3.6 a chroma of 4 reads brown; the "4–6 at the dark end" lives on the surfaces (4.5–5.5).
+3. **Tile role tokens and a darker pressed state:** the secondary button's edge and the amber decided it (see above).
+4. **The lesson's Back label changes when opened from the home:** not in the brief, but "Back to courses" would have been untrue.
+5. **The tokens test's warm-tint bound rose from 6 to 13 steps of red over blue:** the higher chroma the decision asks for needs it (#322b25 is 13).
