@@ -2,7 +2,7 @@ import { tokenize, type TokenKind } from './gdscript';
 
 /**
  * The component kit: plain DOM factories styled by `src/ui/kit.css`, which reads only the
- * `--…` properties `applyTheme` writes. Every control is a native element with an accessible name.
+ * `--…` properties `applyTokens` writes. Every control is a native element with an accessible name.
  */
 
 type Child = Node | string | null | undefined | false;

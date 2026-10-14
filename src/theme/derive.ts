@@ -153,8 +153,3 @@ export function themeProperties(theme: DerivedTheme = deriveTheme()): Record<str
   props['--corner-radius'] = `${defaults.interface.corner_radius}px`;
   return props;
 }
-
-/** Writes the theme as custom properties on `:root` (or any element). */
-export function applyTheme(root: HTMLElement, theme?: DerivedTheme): void {
-  for (const [name, value] of Object.entries(themeProperties(theme))) root.style.setProperty(name, value);
-}

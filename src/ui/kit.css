@@ -1,6 +1,6 @@
 /*
- * The component kit. Colours come only from the custom properties `applyTheme` writes
- * (src/theme/derive.ts, from data/theme/godot-4.7-defaults.json); `pnpm lint:css` enforces it.
+ * The component kit. Colours come only from the custom properties `applyTokens` writes
+ * (src/theme/tokens.ts; Godot's from data/theme/godot-4.7-defaults.json); `pnpm lint:css` enforces it.
  * Godot's `alpha1` overlay (mono_color at 0.07) is written as a color-mix with --mono-color.
  */
 
@@ -28,13 +28,11 @@
   font-display: swap;
 }
 
+/* The fonts (--font-ui, --font-code) and color-scheme come with the area's token map (src/theme/tokens.ts). */
 :root {
-  --font-ui: 'Inter', system-ui, sans-serif;
-  --font-code: 'JetBrains Mono', ui-monospace, monospace;
   --gutter: 16px;
   --target: 44px;
   --hover-overlay: color-mix(in srgb, var(--mono-color) 7%, transparent);
-  color-scheme: dark;
 }
 
 *,
