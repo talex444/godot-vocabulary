@@ -84,22 +84,28 @@ const coloured = (page: Page) =>
     tiles.map((t) => [...t.querySelectorAll('.gv-tile__text > *')].filter((n) => getComputedStyle(n).color === action).map((n) => n.textContent)),
   ACTION_RGB);
 
-test('fresh install: one plain line says where to start; no figures; nothing is coloured; Next is plain secondary grey', async ({ page }) => {
+test('fresh install: no line repeats the tile’s Next; no figures; nothing is coloured; Next is plain secondary grey', async ({ page }) => {
   await gotoHome(page);
-  await expect(page.locator('.gv-today')).toHaveText('Start with Godot, Lesson 0.');
+  await expect(tile(page, 'Godot')).toBeVisible();
+  await expect(page.locator('.gv-today')).toHaveCount(0);
   // Nothing ready: no figure at all, the right-hand column holds only the chevron.
   await expect(page.locator('.gv-tile__figure')).toHaveCount(0);
   expect(await coloured(page)).toEqual([[], []]);
-  // The Next line keeps its place and weight, in the secondary grey (as the today line), not the amber.
+  // The Next line keeps its place and weight, in the theme's secondary grey, not the amber.
   const next = await page.getByText('Next: Lesson 0', { exact: true }).evaluate((n) => {
     const c = getComputedStyle(n);
-    return { weight: c.fontWeight, secondary: c.color === getComputedStyle(document.querySelector('.gv-today')!).color };
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--font-secondary-color)';
+    n.parentElement!.append(probe);
+    const secondary = c.color === getComputedStyle(probe).color;
+    probe.remove();
+    return { weight: c.fontWeight, secondary };
   });
   expect(next).toEqual({ weight: '400', secondary: true });
   await expect(tile(page, 'Godot').locator('.gv-tile__line')).toHaveText(['Next: Lesson 0', '6 lessons']);
-  // The heading, the today line, the unofficial line and About stay grey.
+  // The heading, the unofficial line and About stay grey.
   const grey = await page.evaluate(
-    (action) => ['.gv-heading', '.gv-today', '.gv-unofficial', '.gv-links button'].every((s) => getComputedStyle(document.querySelector(s)!).color !== action),
+    (action) => ['.gv-heading', '.gv-unofficial', '.gv-links button'].every((s) => getComputedStyle(document.querySelector(s)!).color !== action),
     ACTION_RGB,
   );
   expect(grey).toBe(true);

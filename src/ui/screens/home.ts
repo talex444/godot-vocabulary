@@ -102,18 +102,18 @@ export function tileView(area: Area, figures: TileFigures, lastUsed: boolean): T
 }
 
 /**
- * The one plain line under the heading, or none: it names only the next step and is dropped when it
- * would repeat a tile (decision 66). No greeting, no streak, no counter (decision 63).
+ * The one plain line under the heading, or none: it is dropped when it would repeat a tile (decision
+ * 66). A tile with reviews shows "N ready"; one without names its next lesson; so the line shows only
+ * when no tile says what to do next. No greeting, no streak, no counter (decision 63).
  */
 export function todayText(tiles: readonly { area: Area; figures: TileFigures }[]): string | undefined {
-  if (tiles.some((t) => t.figures.due > 0)) return undefined;
-  const next = tiles.find((t) => t.figures.nextLesson !== null);
-  return next ? `Start with ${next.area.label}, Lesson ${next.figures.nextLesson}.` : 'Nothing waiting today.';
+  if (tiles.some((t) => t.figures.due > 0 || t.figures.nextLesson !== null)) return undefined;
+  return 'Nothing waiting today.';
 }
 
 /**
- * The home page (decisions 49, 63, 64, 66), in its own theme: a line naming where to start when no
- * tile already says it, then one tile per area with the tool's icon, its label, its ready figure,
+ * The home page (decisions 49, 63, 64, 66), in its own theme: a line saying nothing waits when no
+ * tile names a next step, then one tile per area with the tool's icon, its label, its ready figure,
  * the next lesson and its lessons; the area entered last carries a "Last used" tag.
  */
 export async function homeScreen(nav: Nav, now: Date = new Date()): Promise<HTMLElement> {

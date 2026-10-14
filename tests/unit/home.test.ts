@@ -121,7 +121,7 @@ describe('the home’s words and its one colour (decisions 63, 64, 66)', () => {
   const [godot, github] = [getArea('godot')!, getArea('github')!];
   const fig = (due: number, nextLesson: number | null, lessonsTotal: number, lessonsDone = 0) => ({ due, nextLesson, lessonsTotal, lessonsDone });
 
-  it('fresh install: no figure, the Godot tile names its next lesson in plain grey; the line says where to start', () => {
+  it('fresh install: no figure, the Godot tile names its next lesson in plain grey; no line repeats it', () => {
     const tiles = [
       { area: godot, figures: fig(0, 0, 6) },
       { area: github, figures: fig(0, null, 0) },
@@ -133,7 +133,7 @@ describe('the home’s words and its one colour (decisions 63, 64, 66)', () => {
     expect(texts(h!)).toEqual(['Git & GitHub', 'No courses yet']);
     expect(coloured(h!)).toEqual([]);
     expect([g!.figure, h!.figure]).toEqual([undefined, undefined]);
-    expect(todayText(tiles)).toBe('Start with Godot, Lesson 0.');
+    expect(todayText(tiles)).toBeUndefined();
   });
 
   it('one area ready: only its figure carries the colour; the other tile names its next lesson; no line repeats a tile', () => {
@@ -176,6 +176,21 @@ describe('the home’s words and its one colour (decisions 63, 64, 66)', () => {
     for (const t of tiles) expect(coloured(tileView(t.area, t.figures, false))).toEqual([]);
     for (const t of tiles) expect(tileView(t.area, t.figures, false).figure).toBeUndefined();
     expect(todayText(tiles)).toBe('Nothing waiting today.');
+  });
+
+  it('the line shows only when no tile has a figure or a Next line', () => {
+    const states = [
+      [fig(0, 0, 6), fig(0, null, 0)],
+      [fig(0, 2, 6, 2), fig(3, null, 0)],
+      [fig(12, 0, 6), fig(3, null, 0)],
+      [fig(0, null, 6, 6), fig(0, null, 0)],
+      [fig(0, null, 6, 6), fig(1, null, 0)],
+    ];
+    for (const [a, b] of states) {
+      const tiles = [{ area: godot, figures: a! }, { area: github, figures: b! }];
+      const says = tiles.some((t) => { const v = tileView(t.area, t.figures, false); return v.figure !== undefined || v.lines.some((l) => l.next); });
+      expect(todayText(tiles) === undefined).toBe(says);
+    }
   });
 
   it('every lesson done and nothing ready: "All lessons done", in grey; "Nothing waiting today."', () => {
