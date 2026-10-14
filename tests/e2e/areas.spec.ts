@@ -105,4 +105,11 @@ test('nothing due: one plain line names the next step; only the Next line is col
     ACTION_RGB,
   );
   expect(grey).toBe(true);
+  // About is underlined in its own grey, and keeps its 44 px target.
+  const about = await page.getByRole('navigation', { name: 'More' }).getByRole('button', { name: 'About' }).evaluate((n) => {
+    const c = getComputedStyle(n);
+    const r = n.getBoundingClientRect();
+    return { line: c.textDecorationLine, same: c.textDecorationColor === c.color, big: r.width >= 44 && r.height >= 44 };
+  });
+  expect(about).toEqual({ line: 'underline', same: true, big: true });
 });

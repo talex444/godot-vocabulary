@@ -208,6 +208,13 @@
   color: var(--home-action-color);
 }
 
+/* A plain link shows it opens (static hinting): About is underlined in its own grey, no colour. */
+.gv-home .gv-links .gv-button--flat {
+  text-decoration: underline;
+  text-decoration-color: currentcolor;
+  text-underline-offset: 3px;
+}
+
 /*
  * Large text on a narrow screen (200 % at 320 px): one column of text in DOM order, the chevron
  * beside it, no icon, so the label and figure never squeeze each other.
