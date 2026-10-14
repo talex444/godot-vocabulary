@@ -2,7 +2,7 @@
 
 Godot Vocabulary is a small app for your phone that drills the words of the Godot 4.7 API, GDScript and Git/GitHub as four-choice cards. A spaced-repetition scheduler (FSRS) brings each card back just before you would forget it. It is free, works offline, and keeps everything on your device.
 
-The app has two **areas**, one per tool: **Godot** (the Godot API and GDScript cards, and the courses) and **Git & GitHub** (the GitHub cards). It opens on the **Areas** screen: one tile per area with the tool's icon, how many reviews are due and how many lessons you have done, and a **Last used** tag on the area you were in last. Tap a tile to open the area: it loads, then its look spreads from where you tapped (instantly if your phone is set to reduce motion). Each area wears its tool's look: the Godot area uses Godot 4.7's editor colours, and the Git & GitHub area follows GitHub Desktop's dark theme (its colours, rounded corners, Octicons) and your device's system font. The Areas screen has a plain dark grey look of its own. Every area page has **All areas** at the top left and the same links underneath: **Courses**, **Settings**, **Add card**, **About**. **Back** (on screen or your phone's) goes back one screen at a time.
+The app has two **areas**, one per tool: **Godot** (the Godot API and GDScript cards, and the courses) and **Git & GitHub** (the GitHub cards). It opens on the **Areas** screen: one line saying what today holds, then one tile per area with the tool's icon, how many lessons you have done, how many reviews are due (on the right) and, when nothing is due, the next lesson, plus a **Last used** tag on the area you were in last. Tap a tile to open the area: it loads, then its look spreads from where you tapped (instantly if your phone is set to reduce motion). Each area wears its tool's look: the Godot area uses Godot 4.7's editor colours, and the Git & GitHub area follows GitHub Desktop's dark theme (its colours, rounded corners, Octicons) and your device's system font. The Areas screen has a dark grey look of its own with one warm amber that means "do this next": the due count when reviews are waiting, otherwise the next lesson. Every area page has **All areas** at the top left and the same links underneath: **Courses**, **Settings**, **Add card**, **About**. **Back** (on screen or your phone's) goes back one screen at a time.
 
 It is an **unofficial community project**. It is not affiliated with or endorsed by the Godot Foundation, the Godot Engine project or GitHub. The Godot logo is not used; the app icon is its own glyph.
 
@@ -15,7 +15,7 @@ The app lives at **https://talex444.github.io/godot-vocabulary/**.
 
 After the first load it works with no network at all, including in airplane mode. There are no accounts, no tracking and no analytics, and the app never sends your data anywhere.
 
-The first visit downloads only what the Areas screen needs, about 128 KB; each area's cards and courses load the first time you open it. That first download has a written budget of 1 MB (1,000,000 bytes on disk), and `pnpm build` fails if it grows past it or if any deck or course creeps into it.
+The first visit downloads only what the Areas screen needs, about 130 KB; each area's cards and courses load the first time you open it. That first download has a written budget of 1 MB (1,000,000 bytes on disk), and `pnpm build` fails if it grows past it or if any deck or course creeps into it.
 
 ## Android app
 

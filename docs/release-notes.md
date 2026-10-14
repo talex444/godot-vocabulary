@@ -2,6 +2,23 @@
 
 Newest first. Each entry: what changed, what it means for you, why, and anything you need to do.
 
+## 1.3.1 — 2026-10-14
+
+### Summary
+- **One warm colour on the Areas screen, with one meaning: do this next.** An amber marks the one thing to do on each tile: the number of reviews due when there are some, otherwise the next lesson. A tile with nothing to do stays grey, and so does everything else on the page. The greys underneath are re-picked, evenly stepped and slightly warm, and the corners are a little rounder.
+- **The tile is balanced.** The due count sits on the right as the tile's big figure ("12 due"), with **Last used** under it and a small arrow that says the tile opens; the lessons line sits quietly under the area's name. The Godot tile's icon is the app's own glyph in grey (the old ring read as a plain "O").
+- **The next lesson, in words.** With nothing due, the tile says **Next: Lesson N**, and one plain line under the heading says what today holds: "Nothing due today. Next: Godot, Lesson 0." or "12 due in Godot. 3 due in Git & GitHub." No greeting, no streaks.
+
+### Impact
+- None on your data: progress, settings, lessons done and export files are unchanged.
+- Screen readers hear each tile exactly as in 1.3.0; the line under the heading names the next step.
+
+### Reasoning
+Decisions 63 and 64 (`docs/decisions.md`), after Tyler's first look at 1.3.0: "the home page feels a little dry … very cold and corporate" and "the buttons on the home screen have a lot of text weight on the left side leaving the right side to be bare". The colour is "amber as long as its tasteful and doesnt end up looking like typical ai color drenching": one flat value, at most one mark per tile, and it passes WCAG's 4.5:1 for text on every surface of the page, the pressed tile included. The words always carry the meaning; the colour only repeats it.
+
+### Actions required
+- None.
+
 ## 1.3.0 — 2026-10-14
 
 ### Summary
