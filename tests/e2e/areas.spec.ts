@@ -20,8 +20,8 @@ test('the app opens the home page: a tile per area with its figures, no last-use
   await gotoHome(page);
   expect(await look(page)).toEqual({ theme: 'home', base: '#171513', font: 'system-ui, sans-serif', scheme: 'dark', title: 'Areas Â· Godot Vocabulary' });
   await expect(page.locator('.gv-tile')).toHaveCount(2);
-  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Nothing due, 0 of 6 lessons');
-  await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, Nothing due, No courses yet');
+  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, 0 due, Next: Lesson 0, 0 of 6 lessons');
+  await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, 0 due, No courses yet');
   await expect(page.getByText('Last used')).toHaveCount(0);
   await expect(page.getByText('Unofficial; not affiliated with or endorsed by the Godot Foundation or GitHub.')).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'More' }).getByRole('button')).toHaveText(['About']);
@@ -51,8 +51,8 @@ test('a tile enters its area in its own look; the area page keeps only the appâ€
 
   // Home again: the area used last carries the tag.
   await gotoHome(page);
-  await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, Nothing due, No courses yet, Last used');
-  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Nothing due, 0 of 6 lessons');
+  await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, 0 due, No courses yet, Last used');
+  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, 0 due, Next: Lesson 0, 0 of 6 lessons');
   await enterArea(page, 'Godot');
   await open(page, 'Courses');
   await expect(page.getByRole('heading', { name: 'Course 1: Step by step' })).toBeVisible();

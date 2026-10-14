@@ -6,7 +6,7 @@ import { newProgress, type Progress } from '../../src/scheduler/fsrs';
 import { sessionSummary } from '../../src/session/build';
 import { DEFAULT_SETTINGS } from '../../src/settings/load';
 import { homeTokens } from '../../src/theme/home';
-import { dueText, lessonsText, tileFigures, tileName, tileView, todayText, type TileView } from '../../src/ui/screens/home';
+import { lessonsText, tileFigures, tileName, tileView, todayText, type TileView } from '../../src/ui/screens/home';
 
 // Done-criteria 67: the home tile counts what the area page counts, without loading a deck.
 
@@ -49,15 +49,22 @@ describe('home tiles', () => {
     const godot = tileFigures(getArea('godot')!, { ...empty, lessonsDone: ['c1-l0', 'c1-l2', 'c1-l1', 'other'] });
     expect(lessonsText(godot)).toBe('3 of 6 lessons');
     expect(lessonsText(tileFigures(getArea('github')!, { ...empty, lessonsDone: ['c1-l0'] }))).toBe('No courses yet');
-    expect([dueText(0), dueText(4)]).toEqual(['Nothing due', '4 due']);
   });
 
-  it('a tile’s accessible name is 1.3.0’s for the same figures (decision 63: only the look moved)', () => {
+  it('a tile’s accessible name is exactly the words it shows, in reading order (GV-8d)', () => {
     const [godot, github] = [getArea('godot')!, getArea('github')!];
-    expect(tileName(godot, { due: 0, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, false)).toBe('Godot, Nothing due, 0 of 6 lessons');
+    expect(tileName(godot, { due: 0, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, false)).toBe('Godot, 0 due, Next: Lesson 0, 0 of 6 lessons');
     expect(tileName(godot, { due: 2, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, true)).toBe('Godot, 2 due, 0 of 6 lessons, Last used');
-    expect(tileName(github, { due: 0, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, true)).toBe('Git & GitHub, Nothing due, No courses yet, Last used');
+    expect(tileName(godot, { due: 0, lessonsDone: 6, lessonsTotal: 6, nextLesson: null }, false)).toBe('Godot, 0 due, All lessons done, 6 of 6 lessons');
+    expect(tileName(github, { due: 0, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, true)).toBe('Git & GitHub, 0 due, No courses yet, Last used');
     expect(tileName(github, { due: 1, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, false)).toBe('Git & GitHub, 1 due, No courses yet');
+    for (const [area, figures, last] of [
+      [godot, { due: 0, lessonsDone: 0, lessonsTotal: 6, nextLesson: 0 }, false],
+      [github, { due: 3, lessonsDone: 0, lessonsTotal: 0, nextLesson: null }, true],
+    ] as const) {
+      const view = tileView(area, figures, last);
+      expect(view.name).toBe(texts(view).join(', '));
+    }
   });
 
   it('names the next lesson by the number the course list shows: the first in course order not done', () => {

@@ -35,9 +35,6 @@ export function tileFigures(area: Area, input: TileInput): TileFigures {
   };
 }
 
-/** The due count in the tile's accessible name (1.3.0's words); the figure on screen reads "N due". */
-export const dueText = (due: number) => (due === 0 ? 'Nothing due' : `${due} due`);
-
 export const lessonsText = ({ lessonsDone, lessonsTotal }: TileFigures) =>
   lessonsTotal === 0 ? 'No courses yet' : `${lessonsDone} of ${lessonsTotal} lessons`;
 
@@ -71,13 +68,11 @@ export function tileView(area: Area, figures: TileFigures, lastUsed: boolean): T
     lines.push(figures.nextLesson === null ? { text: 'All lessons done', action: false } : { text: `Next: Lesson ${figures.nextLesson}`, action: true });
   }
   lines.push({ text: lessonsText(figures), action: false });
-  return {
-    label: area.label,
-    figure: { text: `${figures.due} due`, action: figures.due > 0, quiet: figures.due === 0 },
-    lines,
-    tag: lastUsed ? 'Last used' : undefined,
-    name: tileName(area, figures, lastUsed),
-  };
+  const figure = { text: `${figures.due} due`, action: figures.due > 0, quiet: figures.due === 0 };
+  const tag = lastUsed ? 'Last used' : undefined;
+  // The accessible name is the words on the tile, in reading order (WCAG 2.5.3, label in name).
+  const name = [area.label, figure.text, ...lines.map((l) => l.text), tag].filter((s) => s !== undefined).join(', ');
+  return { label: area.label, figure, lines, tag, name };
 }
 
 /**
@@ -106,20 +101,26 @@ export async function homeScreen(nav: Nav, now: Date = new Date()): Promise<HTML
   ]);
   const input: TileInput = { progress, settings, skipped, lessonsDone, now };
   const figures = AREAS.map((area) => ({ area, figures: tileFigures(area, input) }));
-  const tiles = figures.map((t) => el('li', {}, [tile(t.area, tileView(t.area, t.figures, t.area.id === last), nav)]));
+  // "Loading…" is announced here, not added to a tile's name, so the name stays the words it shows.
+  const status = el('p', { class: 'gv-visually-hidden', attrs: { role: 'status' } });
+  const tiles = figures.map((t) => el('li', {}, [tile(t.area, tileView(t.area, t.figures, t.area.id === last), nav, status)]));
 
   return el('div', { class: 'gv-screen gv-home' }, [
     heading('Areas'),
     el('p', { class: 'gv-note gv-today', text: todayText(figures) }),
     el('ul', { class: 'gv-tiles' }, tiles),
+    status,
     el('p', { class: 'gv-note gv-unofficial', text: UNOFFICIAL_HOME }),
     el('nav', { class: 'gv-links', attrs: { 'aria-label': 'More' } }, [button('About', { variant: 'flat', onClick: () => nav.about() })]),
   ]);
 }
 
-/** A tile's accessible name, as in 1.3.0 (decision 63): the label, the due count, the lessons, "Last used". */
+/**
+ * A tile's accessible name: exactly the words it shows, in reading order: the label, the figure
+ * ("0 due"), the Next line when shown, the lessons line, "Last used" when shown.
+ */
 export function tileName(area: Area, figures: TileFigures, lastUsed: boolean): string {
-  return [area.label, dueText(figures.due), lessonsText(figures), lastUsed ? 'Last used' : undefined].filter((s) => s !== undefined).join(', ');
+  return tileView(area, figures, lastUsed).name;
 }
 
 /** A decorative glyph drawn in the secondary grey: the file is the mask, the token its colour. */
@@ -132,7 +133,7 @@ function glyph(className: string, path: string): HTMLSpanElement {
 const ACTION = ' gv-action';
 const QUIET = ' gv-tile__figure--quiet';
 
-function tile(area: Area, view: TileView, nav: Nav): HTMLButtonElement {
+function tile(area: Area, view: TileView, nav: Nav, status: HTMLElement): HTMLButtonElement {
   // The DOM keeps 1.3.0's order (label, then the lines); the grid in screens.css places the due
   // figure and "Last used" in the right-hand column.
   const node = el('button', { class: 'gv-tile', attrs: { type: 'button', 'data-area': area.id, 'aria-label': view.name } }, [
@@ -152,7 +153,7 @@ function tile(area: Area, view: TileView, nav: Nav): HTMLButtonElement {
     if (node.getAttribute('aria-busy') === 'true') return;
     node.setAttribute('aria-busy', 'true');
     node.querySelector('.gv-tile__text')!.append(el('span', { class: 'gv-tile__line', text: 'Loading…' }));
-    node.setAttribute('aria-label', `${node.getAttribute('aria-label')}, Loading…`);
+    status.textContent = `Loading ${area.label}…`;
     const box = node.getBoundingClientRect();
     // A keyboard press has no pointer position: the tile's centre stands in.
     const origin = event.detail > 0 ? { x: event.clientX, y: event.clientY } : { x: box.left + box.width / 2, y: box.top + box.height / 2 };
