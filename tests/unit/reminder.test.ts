@@ -1,6 +1,8 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { AREAS } from '../../src/areas/registry';
 import type { Card, Family } from '../../src/cards/types';
+import { newProgress } from '../../src/scheduler/fsrs';
 import { REMINDER_SENTENCE, cardsWaiting, isNativeApp, nextFire, parseTime, reminderTitle } from '../../src/reminder/reminder';
 import { DEFAULT_SETTINGS } from '../../src/settings/load';
 import { deleteStore, getReminder, saveReminder } from '../../src/store/db';
@@ -37,12 +39,24 @@ describe('reminder helpers', () => {
     expect(nextFire({ hour: 9, minute: 0 }, morning)).toEqual(new Date(2026, 9, 14, 9, 0));
   });
 
-  it('counts due reviews and today’s new cards in the enabled families', () => {
+  it('counts due reviews and today’s new cards in the enabled families, summed over every area', () => {
     const at = new Date(2026, 9, 13, 20, 0);
-    const loaded = { cards: deck, progress: new Map(), settings: structuredClone(DEFAULT_SETTINGS) };
-    expect(cardsWaiting(loaded, at)).toBe(20);
-    loaded.settings.families.github.enabled = false;
-    expect(cardsWaiting(loaded, at)).toBe(15);
+    const settings = structuredClone(DEFAULT_SETTINGS);
+    const areas = AREAS.map((a) => ({ area: a.id, cards: deck, progress: new Map(), settings }));
+    expect(cardsWaiting(areas, at)).toBe(20);
+    expect(cardsWaiting(areas, at)).toBe(cardsWaiting([areas[0]!], at) + cardsWaiting([areas[1]!], at));
+    expect(cardsWaiting([areas[0]!], at)).toBe(15);
+    settings.families.github.enabled = false;
+    expect(cardsWaiting(areas, at)).toBe(15);
+  });
+
+  it('gates each area on its own overdue reviews', () => {
+    const at = new Date(2026, 9, 13, 20, 0);
+    const overdue = { ...newProgress('github:0', 'github', new Date(2026, 9, 1)), due: new Date(2026, 9, 12, 9) };
+    const progress = new Map([[overdue.cardId, overdue]]);
+    const areas = AREAS.map((a) => ({ area: a.id, cards: deck, progress, settings: structuredClone(DEFAULT_SETTINGS) }));
+    // Godot: 15 new cards; GitHub: its one overdue review and no new cards.
+    expect(cardsWaiting(areas, at)).toBe(16);
   });
 
   it('says how many cards wait, or that cards are waiting when it cannot tell', () => {

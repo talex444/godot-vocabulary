@@ -2,7 +2,7 @@ import { familyLabel } from '../../areas/registry';
 import { FAMILIES } from '../../cards/types';
 import { REMINDER_SENTENCE, isNativeApp, parseTime } from '../../reminder/reminder';
 import { projectedReviewsPerDay, totalNewPerDay, warningAboveTwenty, type Settings } from '../../settings/load';
-import { loadCards } from '../../session/deck';
+import { loadAllCards } from '../../session/deck';
 import { getReminder, getSettings, listSkipped, saveReminder, saveSettings, unskipCard } from '../../store/db';
 import { exportFileName, exportText, importSummary, importText } from '../../store/file';
 import type { Nav } from '../app';
@@ -157,7 +157,7 @@ async function reminderSection(): Promise<HTMLElement> {
 
 /** Cards skipped from a card screen (decision 26), oldest first, each with Undo. */
 async function skippedList(afterUndo: () => Promise<void>): Promise<HTMLElement[]> {
-  const [list, cards] = await Promise.all([listSkipped(), loadCards()]);
+  const [list, cards] = await Promise.all([listSkipped(), loadAllCards()]);
   if (list.length === 0) return [el('p', { class: 'gv-note', text: 'No skipped cards. “Skip this card” on a card puts it here.' })];
   const byId = new Map(cards.map((c) => [c.id, c]));
   const items = list.map((s) => {

@@ -47,6 +47,15 @@ export async function open(page: Page, name: 'Courses' | 'Settings' | 'Add card'
   await screenReady(page, name);
 }
 
+/** From an area's start screen, the temporary link to another area (until GV-8b's home page). */
+export async function openArea(page: Page, label: 'Godot' | 'Git & GitHub'): Promise<void> {
+  const link = page.getByRole('navigation', { name: 'More' }).getByRole('button', { name: label, exact: true });
+  await link.click();
+  // The area's own screen has no link to itself.
+  await expect(link).toHaveCount(0);
+  await startReady(page);
+}
+
 export async function backToStart(page: Page): Promise<void> {
   await page.getByRole('button', { name: 'Back', exact: true }).last().click();
   await startReady(page);

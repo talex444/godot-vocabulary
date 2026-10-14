@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { FAMILY_LABEL, answer, endSession, familyStats, gotoStart, open, screenReady, startReady, startSession, backToStart, type Family } from './helpers';
+import { FAMILY_LABEL, answer, endSession, familyStats, gotoStart, open, openArea, screenReady, startReady, startSession, backToStart, type Family } from './helpers';
 
 // Done-criteria 1–3: installable, works offline after one load, progress survives closing the app.
 test.use({ serviceWorkers: 'allow' });
 
-const FAMILIES: Family[] = ['godot-api', 'gdscript', 'github'];
+// The Godot area's families: the app opens on its start screen.
+const FAMILIES: Family[] = ['godot-api', 'gdscript'];
 
 test('installs, runs offline and keeps progress, settings and custom cards across a reopen', async ({ context, page }) => {
   await gotoStart(page);
@@ -56,6 +57,9 @@ test('installs, runs offline and keeps progress, settings and custom cards acros
   const reopened = await context.newPage();
   await gotoStart(reopened);
   for (const f of FAMILIES) expect(await familyStats(reopened, f)).toEqual(before[f]);
+  // The GitHub deck loads offline too: five new cards a day plus one, and the custom card is one of them.
+  await openArea(reopened, 'Git & GitHub');
+  expect((await familyStats(reopened, 'github'))['New today']).toBe(6);
   await open(reopened, 'Settings');
   await expect(reopened.getByRole('group', { name: 'GitHub', exact: true }).locator('output')).toHaveText('6');
   await backToStart(reopened);

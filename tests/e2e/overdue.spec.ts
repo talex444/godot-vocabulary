@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { answer, deck, exportFile, familyStats, goNext, gotoStart, importFromStart, overdueProgress, startSession } from './helpers';
+import { answer, deck, exportFile, familyStats, goNext, gotoStart, importFromStart, openArea, overdueProgress, startSession } from './helpers';
 
 // Done-criteria 11 (and 21 on the way in): an overdue review blocks new cards until it is answered.
 // The overdue state is seeded through the app's own Import with a crafted version 1 export file.
@@ -38,8 +38,19 @@ test('with one overdue review, the session is that review first, then new cards 
 
 test('a fresh install with nothing overdue gets new cards at once', async ({ page }) => {
   await gotoStart(page);
-  for (const f of ['godot-api', 'gdscript', 'github'] as const) expect((await familyStats(page, f)).Overdue).toBe(0);
+  for (const f of ['godot-api', 'gdscript'] as const) expect((await familyStats(page, f)).Overdue).toBe(0);
   await expect(page.locator('.gv-note')).toHaveCount(0);
   await startSession(page);
-  await expect(progressbar(page)).toHaveAttribute('aria-valuemax', '20');
+  await expect(progressbar(page)).toHaveAttribute('aria-valuemax', '15');
+});
+
+test('decision 21, amended: an overdue Godot review does not hold back GitHub’s new cards', async ({ page }) => {
+  await gotoStart(page);
+  await importFromStart(page, exportFile({ progress: [overdueProgress(area2d)] }));
+  await expect(page.locator('.gv-note')).toHaveText('New cards wait until the 1 overdue review is done.');
+  await openArea(page, 'Git & GitHub');
+  expect(await familyStats(page, 'github')).toEqual({ Due: 0, 'New today': 5, Overdue: 0 });
+  await expect(page.locator('.gv-note')).toHaveCount(0);
+  await startSession(page);
+  await expect(progressbar(page)).toHaveAttribute('aria-valuemax', '5');
 });

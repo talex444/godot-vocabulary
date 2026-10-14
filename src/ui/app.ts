@@ -1,3 +1,4 @@
+import { AREAS, getArea, type AreaId } from '../areas/registry';
 import { deviceDeps } from '../session/deck';
 import { Session, type SessionResult } from '../session/run';
 import { aboutScreen } from './screens/about';
@@ -12,7 +13,8 @@ import { summaryScreen } from './screens/summary';
 
 /** Moves between screens; one is visible at a time, no router and no URL changes. */
 export interface Nav {
-  start(): void;
+  /** An area's start screen; without an argument, the area last opened. */
+  start(area?: AreaId): void;
   begin(session: Session): void;
   card(session: Session): void;
   summary(result: SessionResult): void;
@@ -39,8 +41,14 @@ export function mountApp(host: HTMLElement): void {
   const showAsync = (screen: Promise<HTMLElement>) =>
     screen.then(show, (error: unknown) => show(placeholderScreen(nav, 'Something went wrong', String(error))));
 
+  // The area the screens belong to; the app opens Godot (GV-8b opens the home page instead).
+  let area: AreaId = AREAS[0]!.id;
+
   const nav: Nav = {
-    start: () => showAsync(startScreen(nav, deviceDeps)),
+    start: (next) => {
+      area = (getArea(next ?? area) ?? AREAS[0]!).id;
+      showAsync(startScreen(nav, deviceDeps, area));
+    },
     begin: (session) => nav.card(session),
     card: (session) => show(cardScreen(session, nav)),
     summary: (result) => show(summaryScreen(result, nav)),

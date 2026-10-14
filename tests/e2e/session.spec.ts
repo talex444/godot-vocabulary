@@ -10,6 +10,7 @@ import {
   gotoStart,
   nextButton,
   onlyFamily,
+  openArea,
   startSession,
   statValues,
   type Showing,
@@ -31,11 +32,15 @@ test.beforeEach(async ({ page }) => {
   await gotoStart(page);
 });
 
-test('4: Start shows due, new and overdue per family and one Start button', async ({ page }) => {
+test('4: Start shows due, new and overdue per family of the area and one Start button', async ({ page }) => {
   expect(await familyStats(page, 'godot-api')).toEqual({ Due: 0, 'New today': 10, Overdue: 0 });
   expect(await familyStats(page, 'gdscript')).toEqual({ Due: 0, 'New today': 5, Overdue: 0 });
-  expect(await familyStats(page, 'github')).toEqual({ Due: 0, 'New today': 5, Overdue: 0 });
+  await expect(page.locator('.gv-family')).toHaveCount(2);
   await expect(page.getByRole('button', { name: 'Start', exact: true })).toHaveCount(1);
+  await expect(page.getByRole('button', { name: 'Start', exact: true })).toBeEnabled();
+  await openArea(page, 'Git & GitHub');
+  expect(await familyStats(page, 'github')).toEqual({ Due: 0, 'New today': 5, Overdue: 0 });
+  await expect(page.locator('.gv-family')).toHaveCount(1);
   await expect(page.getByRole('button', { name: 'Start', exact: true })).toBeEnabled();
 });
 
@@ -47,8 +52,8 @@ test('5, 8: a new card is a question with one prompt and exactly four choices', 
   // Asked before taught: no explanation and no Next until a choice is tapped.
   await expect(page.locator('.gv-explain')).toHaveCount(0);
   await expect(nextButton(page)).toHaveCount(0);
-  // The whole first session is new cards (fresh install), so every card met is a question first.
-  await expect(page.getByRole('progressbar', { name: 'Cards done' })).toHaveAttribute('aria-valuemax', '20');
+  // The whole first session is new cards (fresh install, Godot's 10 + 5), so every card met is a question first.
+  await expect(page.getByRole('progressbar', { name: 'Cards done' })).toHaveAttribute('aria-valuemax', '15');
 });
 
 test('5: an API class card shows the class icon beside every choice', async ({ page }) => {

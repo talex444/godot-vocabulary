@@ -50,7 +50,7 @@ describe('custom cards', () => {
     const deck = github as Card[];
     const card = draftToCard(draft, deck, 'abc123');
     const settings = { ...DEFAULT_SETTINGS, families: { ...DEFAULT_SETTINGS.families, github: { enabled: true, newPerDay: 1 } } };
-    const ids = buildSession({ cards: [card], progress: new Map(), settings, now: new Date(2026, 9, 13, 9) }, seededRng(1));
+    const ids = buildSession({ area: 'github', cards: [card], progress: new Map(), settings, now: new Date(2026, 9, 13, 9) }, seededRng(1));
     expect(ids).toEqual([card.id]);
   });
 });

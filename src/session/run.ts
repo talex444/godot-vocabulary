@@ -1,14 +1,16 @@
-import { FAMILIES, type Card, type Family } from '../cards/types';
+import { familiesOf, type AreaId } from '../areas/registry';
+import type { Card, Family } from '../cards/types';
 import { sessionLessons } from '../courses/index';
 import { isOverdue, newProgress, review, startOfDay, type Progress } from '../scheduler/fsrs';
 import type { Settings } from '../settings/load';
-import { planSession, seededRng, type FamilySummary, type Lesson, type Rng } from './build';
+import { planSession, seededRng, type AreaSummary, type FamilySummary, type Lesson, type Rng } from './build';
 import { drawChoices, type Draw } from './choices';
 import { answerCurrent, appendCards, currentCard, dropCard, isLearned, showingIndex, startLearning, type LearningState } from './learning';
 
 /** What the flow needs from the device; `src/session/deck.ts` wires the real store. */
 export interface RunDeps {
-  loadCards(): Promise<Card[]>;
+  /** The area's generated cards and the learner's own cards in its families. */
+  loadCards(area: AreaId): Promise<Card[]>;
   getProgress(): Promise<Map<string, Progress>>;
   getSettings(): Promise<Settings>;
   saveProgress(progress: Progress): Promise<void>;
@@ -22,6 +24,7 @@ export interface RunDeps {
 }
 
 export interface Loaded {
+  area: AreaId;
   cards: Card[];
   progress: Map<string, Progress>;
   settings: Settings;
@@ -39,7 +42,7 @@ export interface SessionResult {
   learned: number;
   /** New cards answered this session that still needed showings when it ended. */
   continueTomorrow: number;
-  /** Cards from enabled families due before the end of tomorrow. */
+  /** Cards from the area's enabled families due before the end of tomorrow. */
   dueTomorrow: number;
 }
 
@@ -53,39 +56,44 @@ export function localDate(now: Date): string {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 }
 
-export async function load(deps: RunDeps): Promise<Loaded> {
+export async function load(deps: RunDeps, area: AreaId): Promise<Loaded> {
   const [cards, progress, settings, skipped, lessonsDone] = await Promise.all([
-    deps.loadCards(),
+    deps.loadCards(area),
     deps.getProgress(),
     deps.getSettings(),
     deps.getSkipped?.() ?? new Set<string>(),
     deps.getLessonsDone?.() ?? [],
   ]);
-  return { cards, progress, settings, skipped, lessonsDone, lessons: sessionLessons() };
+  return { area, cards, progress, settings, skipped, lessonsDone, lessons: sessionLessons() };
+}
+
+/** The summary's entries for the area's families, in the registry's order. */
+function entries(summary: AreaSummary, area: AreaId): [Family, FamilySummary][] {
+  return familiesOf(area).flatMap((f) => (summary[f] ? [[f, summary[f]] as [Family, FamilySummary]] : []));
 }
 
 /** Why Start cannot begin, in plain words; `undefined` when there is something to do. */
-export function startBlockedReason(summary: Record<Family, FamilySummary>, loaded: Loaded): string | undefined {
-  const enabled = FAMILIES.filter((f) => summary[f].enabled);
+export function startBlockedReason(summary: AreaSummary, loaded: Loaded): string | undefined {
+  const enabled = entries(summary, loaded.area).filter(([, s]) => s.enabled);
   if (enabled.length === 0) return 'Every card family is switched off. Turn one on in Settings.';
-  const due = enabled.reduce((n, f) => n + summary[f].due, 0);
-  const fresh = enabled.reduce((n, f) => n + summary[f].newAvailable, 0);
+  const due = enabled.reduce((n, [, s]) => n + s.due, 0);
+  const fresh = enabled.reduce((n, [, s]) => n + s.newAvailable, 0);
   if (due + fresh > 0) return undefined;
-  const unseen = loaded.cards.some((c) => summary[c.family].enabled && !loaded.progress.has(c.id) && !loaded.skipped?.has(c.id));
+  const unseen = loaded.cards.some((c) => summary[c.family]?.enabled && !loaded.progress.has(c.id) && !loaded.skipped?.has(c.id));
   return unseen
     ? 'Nothing is due, and today’s new cards are done. Come back tomorrow.'
     : 'Nothing is due, and you have seen every card in the enabled families.';
 }
 
-/** A plain note when new cards wait behind overdue reviews; `undefined` otherwise. */
-export function overdueNote(summary: Record<Family, FamilySummary>): string | undefined {
-  const overdue = FAMILIES.reduce((n, f) => n + (summary[f].enabled ? summary[f].overdue : 0), 0);
+/** A plain note when new cards wait behind the area's overdue reviews; `undefined` otherwise. */
+export function overdueNote(summary: AreaSummary, area: AreaId): string | undefined {
+  const overdue = entries(summary, area).reduce((n, [, s]) => n + (s.enabled ? s.overdue : 0), 0);
   if (overdue === 0) return undefined;
   return `New cards wait until the ${overdue} overdue ${overdue === 1 ? 'review is' : 'reviews are'} done.`;
 }
 
 /**
- * One live session. Reviews come first: while any enabled card is overdue the builder yields reviews
+ * One live session in one area. Reviews come first: while any enabled card of the area is overdue the builder yields reviews
  * only, and once the last overdue card is answered the builder runs again and its new cards are
  * appended. Every answer is saved at once. New cards get first-session learning repeats
  * (`learning.ts`); only a card's first answer of the session reaches FSRS.
@@ -111,8 +119,13 @@ export class Session {
     this.learning = startLearning(planSession({ ...loaded, now }, rng));
   }
 
-  static async start(deps: RunDeps, loaded?: Loaded, rng: Rng = seededRng(Date.now())): Promise<Session> {
-    return new Session(deps, loaded ?? (await load(deps)), rng);
+  static async start(deps: RunDeps, area: AreaId, loaded?: Loaded, rng: Rng = seededRng(Date.now())): Promise<Session> {
+    return new Session(deps, loaded ?? (await load(deps, area)), rng);
+  }
+
+  /** Counted for this session: a family of its area, switched on, the card not skipped. */
+  private counts(p: Progress): boolean {
+    return familiesOf(this.loaded.area).includes(p.family) && this.loaded.settings.families[p.family]?.enabled === true && !this.loaded.skipped?.has(p.cardId);
   }
 
   get current(): Card | undefined {
@@ -197,10 +210,7 @@ export class Session {
     const results = [...this.learning.first.values()];
     const endOfTomorrow = addDays(startOfDay(now), 2).getTime();
     let dueTomorrow = 0;
-    for (const p of this.loaded.progress.values()) {
-      const counted = this.loaded.settings.families[p.family]?.enabled && !this.loaded.skipped?.has(p.cardId);
-      if (counted && p.due.getTime() < endOfTomorrow) dueTomorrow++;
-    }
+    for (const p of this.loaded.progress.values()) if (this.counts(p) && p.due.getTime() < endOfTomorrow) dueTomorrow++;
     const answeredNew = [...this.learning.first.keys()].filter((id) => this.learning.newIds.has(id) && !this.loaded.skipped?.has(id));
     const learned = answeredNew.filter((id) => isLearned(this.learning, id)).length;
     return {
@@ -215,10 +225,7 @@ export class Session {
 
   private hasOverdue(now: Date): boolean {
     const today = startOfDay(now);
-    for (const p of this.loaded.progress.values()) {
-      const counted = this.loaded.settings.families[p.family]?.enabled && this.byId.has(p.cardId) && !this.loaded.skipped?.has(p.cardId);
-      if (counted && isOverdue(p, today)) return true;
-    }
+    for (const p of this.loaded.progress.values()) if (this.counts(p) && this.byId.has(p.cardId) && isOverdue(p, today)) return true;
     return false;
   }
 }

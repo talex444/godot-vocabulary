@@ -3,7 +3,7 @@ import { judgeBlank } from '../../courses/blank';
 import { COURSES, findLesson, pretestCards } from '../../courses/index';
 import type { BlankExercise, ChoiceCheck, Example, FixExercise, LessonImage, TreeDrawing } from '../../courses/types';
 import { drawChoices } from '../../session/choices';
-import { loadCards } from '../../session/deck';
+import { loadAllCards } from '../../session/deck';
 import { getExitTicket, getSettings, markLessonDone, saveExitTicket, saveSettings } from '../../store/db';
 import type { Nav } from '../app';
 import { asset, button, choiceRow, codeBlock, el, gapField, heading, icon, inlineRich, panel, setChoiceState, textField } from '../kit';
@@ -19,7 +19,7 @@ export async function lessonScreen(nav: Nav, lessonId: string): Promise<HTMLElem
   const found = findLesson(lessonId);
   if (!found) throw new Error(`No lesson ${lessonId}.`);
   const { course, lesson } = found;
-  const [cards, ticket] = await Promise.all([loadCards(), getExitTicket(lessonId)]);
+  const [cards, ticket] = await Promise.all([loadAllCards(), getExitTicket(lessonId)]);
   const cardsById = new Map(cards.map((c) => [c.id, c]));
   const courseNumber = COURSES.indexOf(course) + 1;
 

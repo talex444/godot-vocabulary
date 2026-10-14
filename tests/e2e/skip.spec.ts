@@ -1,12 +1,13 @@
 import { readFile } from 'node:fs/promises';
 import { expect, test } from '@playwright/test';
-import { backToStart, cardPanel, deck, gotoStart, onlyFamily, open, playSession, startReady, startSession } from './helpers';
+import { backToStart, cardPanel, deck, gotoStart, onlyFamily, open, openArea, playSession, startReady, startSession } from './helpers';
 
 // Done-criteria 37: Skip this card, at the phone viewport.
 
 test('37: skip with a reason; gone from the session, listed in Settings, exported, and undo brings it back', async ({ page }) => {
   await gotoStart(page);
   await onlyFamily(page, 'github', 3);
+  await openArea(page, 'Git & GitHub');
   await startSession(page);
 
   const skippedId = (await cardPanel(page).getAttribute('data-card-id'))!;

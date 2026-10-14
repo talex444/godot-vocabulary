@@ -1,4 +1,5 @@
-import { FAMILIES, type Card, type Family } from '../cards/types';
+import { familiesOf, type AreaId } from '../areas/registry';
+import type { Card, Family } from '../cards/types';
 import { isDue, isOverdue, startOfDay, type Progress } from '../scheduler/fsrs';
 import type { Settings } from '../settings/load';
 
@@ -26,7 +27,9 @@ export interface Lesson {
 }
 
 export interface SessionInput {
-  /** Every card: the three generated families plus the learner's custom cards. */
+  /** The area the session is for (decision 46): only its families are planned, gated and counted. */
+  area: AreaId;
+  /** The cards to draw from: the area's generated decks plus the learner's custom cards (others are ignored). */
   cards: readonly Card[];
   progress: ReadonlyMap<string, Progress>;
   settings: Settings;
@@ -61,9 +64,13 @@ interface Plan {
   overdue: Card[];
 }
 
-function plan({ cards, progress, settings, now, skipped, lessonsDone = [], lessons = [] }: SessionInput): Plan {
+/** The area's summary: one entry per family of the area, none for the others. */
+export type AreaSummary = { [F in Family]?: FamilySummary };
+
+function plan({ area, cards, progress, settings, now, skipped, lessonsDone = [], lessons = [] }: SessionInput): Plan {
   const today = startOfDay(now);
-  const enabled = cards.filter((c) => settings.families[c.family]?.enabled && !skipped?.has(c.id));
+  const families = familiesOf(area);
+  const enabled = cards.filter((c) => families.includes(c.family) && settings.families[c.family]?.enabled && !skipped?.has(c.id));
   const first = settings.newCardMode === 'course' ? courseFirst(lessonsDone, lessons) : new Map<string, number>();
   const reviews: Card[] = [];
   const overdue: Card[] = [];
@@ -73,8 +80,9 @@ function plan({ cards, progress, settings, now, skipped, lessonsDone = [], lesso
     if (isDue(p, now)) reviews.push(card);
     if (isOverdue(p, today)) overdue.push(card);
   }
-  // Overdue reviews come first: no new cards until they are cleared (decision 21).
-  const fresh = overdue.length > 0 ? [] : FAMILIES.flatMap((family) => newCards(family, enabled, progress, settings, today, first));
+  // Overdue reviews come first: no new cards in this area until its overdue reviews are cleared
+  // (decision 21 as amended 2026-10-14: another area's overdue reviews do not hold these back).
+  const fresh = overdue.length > 0 ? [] : families.flatMap((family) => newCards(family, enabled, progress, settings, today, first));
   return { reviews, fresh, overdue };
 }
 
@@ -120,7 +128,7 @@ function newCards(
     .slice(0, left);
 }
 
-/** Today's session: due reviews and new cards from every enabled family, shuffled together. */
+/** Today's session in one area: due reviews and new cards from its enabled families, shuffled together. */
 export function planSession(input: SessionInput, rng: Rng): SessionPlan {
   const { reviews, fresh } = plan(input);
   return { order: interleave([...reviews, ...fresh], rng).map((c) => c.id), newIds: fresh.map((c) => c.id) };
@@ -131,15 +139,34 @@ export function buildSession(input: SessionInput, rng: Rng): string[] {
   return planSession(input, rng).order;
 }
 
-/** Counts per family for the start screen. */
-export function sessionSummary(input: SessionInput): Record<Family, FamilySummary> {
-  const { reviews, fresh, overdue } = plan(input);
+/**
+ * Reviews due at `now` among the progress records of `families`, skipped cards left out. Reads only
+ * progress, so a count can be shown without loading a deck (the home tile in GV-8b).
+ */
+export function dueCount(
+  progress: ReadonlyMap<string, Progress>,
+  skipped: ReadonlySet<string> | undefined,
+  families: readonly Family[],
+  now: Date,
+): number {
+  let n = 0;
+  for (const p of progress.values()) if (families.includes(p.family) && !skipped?.has(p.cardId) && isDue(p, now)) n++;
+  return n;
+}
+
+/** Counts per family of the area, for its start screen. */
+export function sessionSummary(input: SessionInput): AreaSummary {
+  const { fresh, overdue } = plan(input);
   const count = (list: Card[], family: Family) => list.filter((c) => c.family === family).length;
-  const summary = {} as Record<Family, FamilySummary>;
-  for (const family of FAMILIES) {
+  // Due counts only cards this session can ask: progress of a card no longer in the deck is left out.
+  const ids = new Set(input.cards.map((c) => c.id));
+  const known = new Map([...input.progress].filter(([id]) => ids.has(id)));
+  const summary: AreaSummary = {};
+  for (const family of familiesOf(input.area)) {
+    const enabled = input.settings.families[family].enabled;
     summary[family] = {
-      enabled: input.settings.families[family].enabled,
-      due: count(reviews, family),
+      enabled,
+      due: enabled ? dueCount(known, input.skipped, [family], input.now) : 0,
       overdue: count(overdue, family),
       newAvailable: count(fresh, family),
     };

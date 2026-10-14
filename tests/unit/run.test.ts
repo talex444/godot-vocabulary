@@ -46,7 +46,9 @@ const deck = (['godot-api', 'gdscript', 'github'] as Family[]).flatMap((f) => [0
 describe('live session flow', () => {
   it('saves the first answer at once, repeats a new card GAP places on, and never saves a repeat', async () => {
     const { deps, saved } = fakeDeps(deck);
-    const session = await Session.start(deps, undefined, seededRng(1));
+    // Nine new cards in the Godot area, so a repeat has GAP cards to wait behind.
+    deps.getSettings = async () => withDefaults({ families: { 'godot-api': { enabled: true, newPerDay: 5 }, gdscript: { enabled: true, newPerDay: 4 }, github: { enabled: true, newPerDay: 3 } } });
+    const session = await Session.start(deps, 'godot', undefined, seededRng(1));
     expect(session.total).toBe(9);
     const first = session.current!;
     await session.answer('right');
@@ -68,7 +70,7 @@ describe('live session flow', () => {
 
   it('counts a repeated card once by its first answer and records the session date', async () => {
     const { deps, lastSession } = fakeDeps([card('github', 0), card('github', 1)]);
-    const session = await Session.start(deps, undefined, seededRng(2));
+    const session = await Session.start(deps, 'github', undefined, seededRng(2));
     const firstId = session.current!.id;
     await session.answer('w1');
     await session.answer('right');
@@ -93,7 +95,7 @@ describe('live session flow', () => {
     const skipped: string[] = [];
     const { deps } = fakeDeps(cards);
     deps.skipCard = async (id) => void skipped.push(id);
-    const session = await Session.start(deps, undefined, seededRng(4));
+    const session = await Session.start(deps, 'github', undefined, seededRng(4));
     await session.skip('wrong docs');
     expect(skipped).toHaveLength(1);
     const seen = new Set<string>();
@@ -112,7 +114,7 @@ describe('live session flow', () => {
     const yesterday = new Date(2026, 9, 12, 9, 0, 0);
     const overdue = { ...newProgress('gdscript:0', 'gdscript', new Date(2026, 9, 1)), due: yesterday };
     const { deps } = fakeDeps(deck, [overdue]);
-    const session = await Session.start(deps, undefined, seededRng(3));
+    const session = await Session.start(deps, 'godot', undefined, seededRng(3));
     expect(session.total).toBe(1);
     expect(session.current?.id).toBe('gdscript:0');
     await session.answer('right');
@@ -123,7 +125,17 @@ describe('live session flow', () => {
       await session.answer('right');
     }
     expect(ids).toContain('godot-api:0');
-    expect(ids).toContain('github:0');
     expect(ids).toContain('gdscript:1');
+    expect(ids.some((id) => id.startsWith('github:'))).toBe(false);
+  });
+
+  it('a GitHub session is not held back by an overdue Godot review (decision 21, amended)', async () => {
+    const overdue = { ...newProgress('gdscript:0', 'gdscript', new Date(2026, 9, 1)), due: new Date(2026, 9, 12, 9, 0, 0) };
+    const { deps } = fakeDeps(deck, [overdue]);
+    const session = await Session.start(deps, 'github', undefined, seededRng(3));
+    expect(session.total).toBe(3);
+    expect(session.current?.family).toBe('github');
+    const result = await session.finish();
+    expect(result.dueTomorrow).toBe(0); // the Godot review is not this area's
   });
 });

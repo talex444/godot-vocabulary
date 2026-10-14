@@ -1,4 +1,5 @@
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { AREAS } from '../areas/registry';
 import { load } from '../session/run';
 import { deviceDeps } from '../session/deck';
 import { getReminder, type ReminderSetting } from '../store/db';
@@ -43,7 +44,8 @@ export async function applyReminder(reminder: ReminderSetting): Promise<void> {
   if ((await LocalNotifications.checkPermissions()).display !== 'granted') return;
   let count: number | undefined;
   try {
-    count = cardsWaiting(await load(deviceDeps), nextFire(time, new Date()));
+    const areas = await Promise.all(AREAS.map((area) => load(deviceDeps, area.id)));
+    count = cardsWaiting(areas, nextFire(time, new Date()));
   } catch {
     count = undefined;
   }

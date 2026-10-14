@@ -13,6 +13,7 @@ import {
   gotoStart,
   LESSON0_TITLE,
   open,
+  openArea,
   screenReady,
   settings,
   startReady,
@@ -109,17 +110,18 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async
   await expect(page.locator('.gv-result')).toHaveText(/^Restored /);
   await backToStart(page);
 
+  // The Godot area's session: one API card and one GDScript card.
   await startSession(page);
   const cards: string[] = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 2; i++) {
     const family = (await page.locator('.gv-card__family').textContent())!;
     cards.push(family);
     await audit(page, `card (${family})`);
     await answer(page, 0);
     await audit(page, `card answered (${family})`);
-    if (i < 2) await goNext(page);
+    if (i < 1) await goNext(page);
   }
-  expect(cards.sort()).toEqual(['GDScript', 'GitHub', 'Godot API']);
+  expect(cards.sort()).toEqual(['GDScript', 'Godot API']);
 
   // Second looks: the API class card comes back flipped (name and icon asked, descriptions to pick).
   for (let i = 0; i < 6; i++) {
@@ -142,6 +144,18 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async
   await audit(page, 'summary');
   await page.getByRole('button', { name: 'Done' }).click();
   await startReady(page);
+
+  // The Git & GitHub area's session: its one GitHub card.
+  await openArea(page, 'Git & GitHub');
+  await startSession(page);
+  await audit(page, 'card (GitHub)');
+  await answer(page, 0);
+  await audit(page, 'card answered (GitHub)');
+  await endSession(page);
+  await page.getByRole('button', { name: 'Done' }).click();
+  await startReady(page);
+  await openArea(page, 'Godot');
+
   await open(page, 'Settings');
   await audit(page, 'settings (skipped cards)');
   await backToStart(page);
@@ -193,6 +207,8 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast', async
   const rank = (s: string) => fixed.findIndex((f) => s.endsWith(`(${f})`)) * 2 + (s.startsWith('card answered') ? 1 : 0);
   const sortedCards = [...cardScreens].sort((a, b) => rank(a) - rank(b));
   const firstCard = screens.findIndex((s) => s.startsWith('card'));
-  screens.splice(firstCard, cardScreens.length, ...sortedCards);
+  const others = screens.filter((s) => !s.startsWith('card'));
+  others.splice(firstCard, 0, ...sortedCards);
+  screens.splice(0, screens.length, ...others);
   writeReport();
 });

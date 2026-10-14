@@ -1,4 +1,3 @@
-import { FAMILIES } from '../cards/types';
 import { sessionSummary } from '../session/build';
 import type { Loaded } from '../session/run';
 
@@ -31,10 +30,16 @@ export function nextFire(time: { hour: number; minute: number }, now: Date): Dat
   return at;
 }
 
-/** Due reviews plus today's new cards in the enabled families, as they will stand at `at`. */
-export function cardsWaiting(loaded: Loaded, at: Date): number {
-  const summary = sessionSummary({ ...loaded, now: at });
-  return FAMILIES.reduce((n, f) => (summary[f].enabled ? n + summary[f].due + summary[f].newAvailable : n), 0);
+/**
+ * Due reviews plus today's new cards in the enabled families, as they will stand at `at`, summed over
+ * every area (one notification, one total). Each area is counted with its own overdue gate.
+ */
+export function cardsWaiting(areas: readonly Loaded[], at: Date): number {
+  let n = 0;
+  for (const loaded of areas) {
+    for (const s of Object.values(sessionSummary({ ...loaded, now: at }))) if (s.enabled) n += s.due + s.newAvailable;
+  }
+  return n;
 }
 
 /** The notification's title; without a count (unknown, or none) it says cards are waiting. */

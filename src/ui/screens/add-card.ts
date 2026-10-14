@@ -1,4 +1,4 @@
-import { familyLabel } from '../../areas/registry';
+import { areaOf, familyLabel } from '../../areas/registry';
 import { draftToCard, validateDraft, type CustomDraft } from '../../cards/custom';
 import { FAMILIES, type Family } from '../../cards/types';
 import { loadCards } from '../../session/deck';
@@ -99,7 +99,7 @@ function form(family: Family, onSaved: (card: CustomCard) => Promise<void>): HTM
       errors.replaceChildren(...(problems.length ? [el('ul', {}, problems.map((p) => el('li', { text: p })))] : []));
       if (problems.length) return;
       save.disabled = true;
-      await onSaved(await addCustomCard(draftToCard(d, await loadCards())));
+      await onSaved(await addCustomCard(draftToCard(d, await loadCards(areaOf(d.family).id))));
     },
   });
   save.classList.add('gv-wide');
