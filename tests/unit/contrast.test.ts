@@ -138,7 +138,7 @@ function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
       { pair: 'primary text', fg: t('font_color'), bg, need: TEXT as Need },
       { pair: 'secondary text', fg: t('font_secondary_color'), bg, need: TEXT as Need },
       { pair: 'tertiary text', fg: t('font_disabled_color'), bg, need: TEXT as Need },
-      { pair: 'action text: the due figure or the Next line (the one colour)', fg: t('home_action_color'), bg, need: TEXT as Need },
+      { pair: 'action text: a due figure above zero (the one colour)', fg: t('home_action_color'), bg, need: TEXT as Need },
     ]),
     ...[t('base_color'), t('dark_color_1')].flatMap((bg) => [
       { pair: 'heading (accent_color is the primary grey)', fg: t('accent_color'), bg, need: TEXT as Need },

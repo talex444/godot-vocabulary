@@ -19,19 +19,19 @@ From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one ac
 | primary text | font_color `#e4e1de` | base_color `#171513` | 13.98:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c6c4c1` | base_color `#171513` | 10.46:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aaa7a5` | base_color `#171513` | 7.61:1 | 4.5:1 | pass |
-| action text: the due figure or the Next line (the one colour) | home_action_color `#d59526` | base_color `#171513` | 7.07:1 | 4.5:1 | pass |
+| action text: a due figure above zero (the one colour) | home_action_color `#d59526` | base_color `#171513` | 7.07:1 | 4.5:1 | pass |
 | primary text | font_color `#e4e1de` | dark_color_1 `#22201e` | 12.47:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c6c4c1` | dark_color_1 `#22201e` | 9.33:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aaa7a5` | dark_color_1 `#22201e` | 6.79:1 | 4.5:1 | pass |
-| action text: the due figure or the Next line (the one colour) | home_action_color `#d59526` | dark_color_1 `#22201e` | 6.31:1 | 4.5:1 | pass |
+| action text: a due figure above zero (the one colour) | home_action_color `#d59526` | dark_color_1 `#22201e` | 6.31:1 | 4.5:1 | pass |
 | primary text | font_color `#e4e1de` | dark_color_3 (hovered tile) `#2e2c2a` | 10.68:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c6c4c1` | dark_color_3 (hovered tile) `#2e2c2a` | 7.99:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aaa7a5` | dark_color_3 (hovered tile) `#2e2c2a` | 5.82:1 | 4.5:1 | pass |
-| action text: the due figure or the Next line (the one colour) | home_action_color `#d59526` | dark_color_3 (hovered tile) `#2e2c2a` | 5.40:1 | 4.5:1 | pass |
+| action text: a due figure above zero (the one colour) | home_action_color `#d59526` | dark_color_3 (hovered tile) `#2e2c2a` | 5.40:1 | 4.5:1 | pass |
 | primary text | font_color `#e4e1de` | highlight_disabled_color (pressed or loading tile) `#3a3836` | 8.96:1 | 4.5:1 | pass |
 | secondary text | font_secondary_color `#c6c4c1` | highlight_disabled_color (pressed or loading tile) `#3a3836` | 6.71:1 | 4.5:1 | pass |
 | tertiary text | font_disabled_color `#aaa7a5` | highlight_disabled_color (pressed or loading tile) `#3a3836` | 4.88:1 | 4.5:1 | pass |
-| action text: the due figure or the Next line (the one colour) | home_action_color `#d59526` | highlight_disabled_color (pressed or loading tile) `#3a3836` | 4.53:1 | 4.5:1 | pass |
+| action text: a due figure above zero (the one colour) | home_action_color `#d59526` | highlight_disabled_color (pressed or loading tile) `#3a3836` | 4.53:1 | 4.5:1 | pass |
 | heading (accent_color is the primary grey) | accent_color `#e4e1de` | base_color `#171513` | 13.98:1 | 4.5:1 | pass |
 | link text | accent_color `#e4e1de` | base_color `#171513` | 13.98:1 | 4.5:1 | pass |
 | hovered or pressed button text | font_hover_color `#ffffff` | base_color `#171513` | 18.21:1 | 4.5:1 | pass |

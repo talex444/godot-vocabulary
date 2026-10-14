@@ -44,6 +44,8 @@ export const UNOFFICIAL_HOME = 'Unofficial; not affiliated with or endorsed by t
 export interface TileText {
   text: string;
   action: boolean;
+  /** The "Next: Lesson N" line: secondary grey, a step above the lessons line, never coloured. */
+  next?: boolean;
 }
 
 /** What a tile shows, in DOM order. */
@@ -58,14 +60,14 @@ export interface TileView {
 }
 
 /**
- * The words carry the meaning; the colour only repeats it (WCAG 1.4.1), on one element at most:
- * the due figure when reviews are due, else the "Next: Lesson N" line. Nothing to do, or no courses,
- * leaves the tile grey.
+ * The words carry the meaning; the colour only repeats it (WCAG 1.4.1), on one element at most: the
+ * due figure when reviews are due (a fact about the cards). The "Next: Lesson N" line is plain
+ * secondary text, so a fresh install shows no colour at all (decision 64, amended).
  */
 export function tileView(area: Area, figures: TileFigures, lastUsed: boolean): TileView {
   const lines: TileText[] = [];
   if (figures.due === 0 && figures.lessonsTotal > 0) {
-    lines.push(figures.nextLesson === null ? { text: 'All lessons done', action: false } : { text: `Next: Lesson ${figures.nextLesson}`, action: true });
+    lines.push(figures.nextLesson === null ? { text: 'All lessons done', action: false } : { text: `Next: Lesson ${figures.nextLesson}`, action: false, next: true });
   }
   lines.push({ text: lessonsText(figures), action: false });
   const figure = { text: `${figures.due} due`, action: figures.due > 0, quiet: figures.due === 0 };
@@ -132,6 +134,7 @@ function glyph(className: string, path: string): HTMLSpanElement {
 
 const ACTION = ' gv-action';
 const QUIET = ' gv-tile__figure--quiet';
+const NEXT = ' gv-tile__line--next';
 
 function tile(area: Area, view: TileView, nav: Nav, status: HTMLElement): HTMLButtonElement {
   // The DOM keeps 1.3.0's order (label, then the lines); the grid in screens.css places the due
@@ -140,7 +143,7 @@ function tile(area: Area, view: TileView, nav: Nav, status: HTMLElement): HTMLBu
     el('span', { class: 'gv-tile__text' }, [
       el('span', { class: 'gv-tile__label', text: view.label }),
       el('span', { class: `gv-tile__figure${view.figure.action ? ACTION : ''}${view.figure.quiet ? QUIET : ''}`, text: view.figure.text }),
-      ...view.lines.map((line) => el('span', { class: `gv-tile__line${line.action ? ACTION : ''}`, text: line.text })),
+      ...view.lines.map((line) => el('span', { class: `gv-tile__line${line.next ? NEXT : ''}${line.action ? ACTION : ''}`, text: line.text })),
       view.tag !== undefined && el('span', { class: 'gv-tile__tag', text: view.tag }),
     ]),
     // After the text in the DOM, drawn beside it; decorative, since the label names the area.

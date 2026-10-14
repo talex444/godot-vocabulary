@@ -82,11 +82,17 @@ const coloured = (page: Page) =>
     tiles.map((t) => [...t.querySelectorAll('.gv-tile__text > *')].filter((n) => getComputedStyle(n).color === action).map((n) => n.textContent)),
   ACTION_RGB);
 
-test('nothing due: one plain line names the next step; only the Next line is coloured; Git & GitHub stays grey', async ({ page }) => {
+test('fresh install: one plain line names the next step; nothing is coloured; Next is plain secondary grey', async ({ page }) => {
   await gotoHome(page);
   await expect(page.locator('.gv-today')).toHaveText('Nothing due today. Next: Godot, Lesson 0.');
   await expect(page.locator('.gv-tile__figure')).toHaveText(['0 due', '0 due']);
-  expect(await coloured(page)).toEqual([['Next: Lesson 0'], []]);
+  expect(await coloured(page)).toEqual([[], []]);
+  // The Next line keeps its place and weight, in the secondary grey (as the today line), not the amber.
+  const next = await page.getByText('Next: Lesson 0', { exact: true }).evaluate((n) => {
+    const c = getComputedStyle(n);
+    return { weight: c.fontWeight, secondary: c.color === getComputedStyle(document.querySelector('.gv-today')!).color };
+  });
+  expect(next).toEqual({ weight: '400', secondary: true });
   // A zero figure is quiet: drawn like the lessons line (size, weight, grey), so "Next" outranks it.
   const quiet = await page.locator('.gv-tile').evaluateAll((tiles) =>
     tiles.map((t) => {

@@ -86,27 +86,29 @@ describe('the home’s words and its one colour (decisions 63, 64)', () => {
   const [godot, github] = [getArea('godot')!, getArea('github')!];
   const fig = (due: number, nextLesson: number | null, lessonsTotal: number, lessonsDone = 0) => ({ due, nextLesson, lessonsTotal, lessonsDone });
 
-  it('nothing due: the Godot tile names its next lesson in the colour; Git & GitHub stays grey; the line names the next step', () => {
+  it('fresh install: the Godot tile names its next lesson in plain grey; nothing on the page is coloured', () => {
     const tiles = [
       { area: godot, figures: fig(0, 0, 6) },
       { area: github, figures: fig(0, null, 0) },
     ];
     const [g, h] = tiles.map((t) => tileView(t.area, t.figures, false));
     expect(texts(g!)).toEqual(['Godot', '0 due', 'Next: Lesson 0', '0 of 6 lessons']);
-    expect(coloured(g!)).toEqual(['Next: Lesson 0']);
+    expect(coloured(g!)).toEqual([]);
+    expect(g!.lines.filter((l) => l.next).map((l) => l.text)).toEqual(['Next: Lesson 0']);
     expect(texts(h!)).toEqual(['Git & GitHub', '0 due', 'No courses yet']);
     expect(coloured(h!)).toEqual([]);
     expect([quiet(g!), quiet(h!)]).toEqual([true, true]);
     expect(todayText(tiles)).toBe('Nothing due today. Next: Godot, Lesson 0.');
   });
 
-  it('one area due: its figure carries the colour and the Next line steps aside; the other tile names its next lesson', () => {
+  it('one area due: only its due figure carries the colour; the other tile names its next lesson in grey', () => {
     const tiles = [
       { area: godot, figures: fig(0, 2, 6, 2) },
       { area: github, figures: fig(3, null, 0) },
     ];
     const [g, h] = tiles.map((t) => tileView(t.area, t.figures, t.area.id === 'github'));
-    expect(coloured(g!)).toEqual(['Next: Lesson 2']);
+    expect(texts(g!)).toEqual(['Godot', '0 due', 'Next: Lesson 2', '2 of 6 lessons']);
+    expect(coloured(g!)).toEqual([]);
     expect(texts(h!)).toEqual(['Git & GitHub', '3 due', 'No courses yet', 'Last used']);
     expect(coloured(h!)).toEqual(['3 due']);
     expect([quiet(g!), quiet(h!)]).toEqual([true, false]);

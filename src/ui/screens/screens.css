@@ -203,7 +203,12 @@
   color: var(--font-disabled-color);
 }
 
-/* The home's one colour, "do this next" (decision 64): the due figure, or else the Next line. */
+/* "Next: Lesson N" leads by place, not colour: plain secondary grey (decision 64, amended). */
+.gv-tile__line--next {
+  color: var(--font-secondary-color);
+}
+
+/* The home's one colour (decision 64): only a due figure above zero, a fact about the cards. */
 .gv-home .gv-action {
   color: var(--home-action-color);
 }
