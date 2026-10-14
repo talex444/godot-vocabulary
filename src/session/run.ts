@@ -85,15 +85,20 @@ export function startBlockedReason(summary: AreaSummary, loaded: Loaded): string
   if (due + fresh > 0) return undefined;
   const unseen = loaded.cards.some((c) => summary[c.family]?.enabled && !loaded.progress.has(c.id) && !loaded.skipped?.has(c.id));
   return unseen
-    ? 'Nothing is due, and today’s new cards are done. Come back tomorrow.'
-    : 'Nothing is due, and you have seen every card in the enabled families.';
+    ? 'Nothing is ready, and today’s new cards are done. Come back tomorrow.'
+    : 'Nothing is ready, and you have seen every card in the enabled families.';
 }
 
-/** A plain note when new cards wait behind the area's overdue reviews; `undefined` otherwise. */
+/**
+ * A plain note when new cards wait behind the area's overdue reviews; `undefined` otherwise. It says
+ * what is waiting and that new cards begin after it, never that anything is owed (decision 66).
+ */
 export function overdueNote(summary: AreaSummary, area: AreaId): string | undefined {
   const overdue = entries(summary, area).reduce((n, [, s]) => n + (s.enabled ? s.overdue : 0), 0);
   if (overdue === 0) return undefined;
-  return `New cards wait until the ${overdue} overdue ${overdue === 1 ? 'review is' : 'reviews are'} done.`;
+  return overdue === 1
+    ? '1 review has been waiting since before today. New cards begin after it.'
+    : `${overdue} reviews have been waiting since before today. New cards begin after them.`;
 }
 
 /**

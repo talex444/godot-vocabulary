@@ -174,7 +174,7 @@ export async function onlyFamily(page: Page, family: Family, n: number): Promise
   await importFromStart(page, exportFile({ settings: settings(perFamily) }));
 }
 
-/** Due / New today / Overdue for one family on the Start screen. */
+/** Ready / New today / Waiting for one family on the area page. */
 export async function familyStats(page: Page, family: Family): Promise<Record<string, number>> {
   const block = page.locator('.gv-family').filter({ has: page.getByRole('heading', { name: FAMILY_LABEL[family], exact: true }) });
   return statValues(block.locator('.gv-stat'));

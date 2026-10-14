@@ -40,13 +40,10 @@ export const lessonsText = ({ lessonsDone, lessonsTotal }: TileFigures) =>
   lessonsTotal === 0 ? 'No courses yet' : lessonsDone === 0 ? `${lessonsTotal} lessons` : `${lessonsDone} of ${lessonsTotal} lessons`;
 
 /**
- * The word for reviews whose day has come, on the home and the area page alike (decision 66): they
- * are offered, not owed.
+ * The tile's figure: "12 ready" above zero, offered rather than owed, the area page's word too
+ * (decision 66; tests/unit/home.test.ts holds the two together); at zero there is no figure at all.
  */
-export const READY = 'ready';
-
-/** The tile's figure: "12 ready" above zero; at zero there is no figure at all. */
-export const dueText = (due: number): string | undefined => (due > 0 ? `${due} ${READY}` : undefined);
+export const dueText = (due: number): string | undefined => (due > 0 ? `${due} ready` : undefined);
 
 export const UNOFFICIAL_HOME = 'Unofficial; not affiliated with or endorsed by the Godot Foundation or GitHub.';
 

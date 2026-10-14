@@ -5,9 +5,15 @@ import type { Nav } from '../app';
 import { asset, button, el, heading, panel, stat } from '../kit';
 
 /**
- * An area's page (decision 50), titled with its name: per enabled family the reviews due, new cards
- * and overdue reviews, then Start; "All areas" above, the area's unofficial line and the app's own
- * links (the same in every area) below.
+ * The per-family figures, in the home's words (decision 66): reviews whose day has come are "ready",
+ * reviews due since before today are "waiting"; nothing here says "due", "overdue" or "owed".
+ */
+export const STAT_LABELS = { ready: 'Ready', fresh: 'New today', waiting: 'Waiting' } as const;
+
+/**
+ * An area's page (decision 50), titled with its name: per enabled family the reviews ready, new cards
+ * and reviews waiting since before today, then Start; "All areas" above, the area's unofficial line
+ * and the app's own links (the same in every area) below.
  */
 export async function startScreen(nav: Nav, deps: RunDeps, area: AreaId): Promise<HTMLElement> {
   const { label, unofficialLine } = getArea(area) ?? AREAS[0]!;
@@ -22,7 +28,7 @@ export async function startScreen(nav: Nav, deps: RunDeps, area: AreaId): Promis
     return [
       el('div', { class: 'gv-family' }, [
         el('h3', { class: 'gv-family__name', text: familyLabel(family) }),
-        el('dl', { class: 'gv-stats' }, [stat('Due', s.due), stat('New today', s.newAvailable), stat('Overdue', s.overdue)]),
+        el('dl', { class: 'gv-stats' }, [stat(STAT_LABELS.ready, s.due), stat(STAT_LABELS.fresh, s.newAvailable), stat(STAT_LABELS.waiting, s.overdue)]),
       ]),
     ];
   });

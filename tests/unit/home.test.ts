@@ -4,8 +4,10 @@ import { AREAS, getArea } from '../../src/areas/registry';
 import type { Card, Family } from '../../src/cards/types';
 import { newProgress, type Progress } from '../../src/scheduler/fsrs';
 import { sessionSummary } from '../../src/session/build';
+import { overdueNote } from '../../src/session/run';
 import { DEFAULT_SETTINGS } from '../../src/settings/load';
 import { dueText, lessonsText, tileFigures, tileName, tileView, todayText, type TileView } from '../../src/ui/screens/home';
+import { STAT_LABELS } from '../../src/ui/screens/start';
 
 // Done-criteria 67: the home tile counts what the area page counts, without loading a deck.
 
@@ -54,6 +56,23 @@ describe('home tiles', () => {
 
   it('the figure: "12 ready" above zero, nothing at zero', () => {
     expect([dueText(12), dueText(1), dueText(0)]).toEqual(['12 ready', '1 ready', undefined]);
+  });
+
+  it('the home’s figure word and the area page’s stat label are the same word: "ready" (decision 66)', () => {
+    const homeWord = dueText(12)!.split(' ')[1];
+    expect(homeWord).toBe('ready');
+    expect(STAT_LABELS.ready.toLowerCase()).toBe(homeWord);
+    // Nothing on the area page says "due", "overdue" or "owed".
+    const fam = (overdue: number) => ({ enabled: true, due: overdue, overdue, newAvailable: 0 });
+    const notes = [overdueNote({ 'godot-api': fam(12), gdscript: fam(0) }, 'godot'), overdueNote({ 'godot-api': fam(1), gdscript: fam(0) }, 'godot')];
+    expect(notes).toEqual([
+      '12 reviews have been waiting since before today. New cards begin after them.',
+      '1 review has been waiting since before today. New cards begin after it.',
+    ]);
+    const source = readFileSync(new URL('../../src/session/run.ts', import.meta.url), 'utf8');
+    const reasons = [...source.matchAll(/'(Nothing[^']*)'/g)].map((m) => m[1]);
+    expect(reasons).toHaveLength(2);
+    for (const words of [...Object.values(STAT_LABELS), ...notes, ...reasons]) expect(words).not.toMatch(/\b(due|overdue|owed?)\b/i);
   });
 
   it('a tile’s accessible name is exactly the words it shows, in reading order (GV-8d, GV-8f)', () => {
