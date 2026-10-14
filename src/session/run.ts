@@ -1,6 +1,7 @@
 import { familiesOf, type AreaId } from '../areas/registry';
 import type { Card, Family } from '../cards/types';
 import { sessionLessons } from '../courses/index';
+import type { Course } from '../courses/types';
 import { isOverdue, newProgress, review, startOfDay, type Progress } from '../scheduler/fsrs';
 import type { Settings } from '../settings/load';
 import { planSession, seededRng, type AreaSummary, type FamilySummary, type Lesson, type Rng } from './build';
@@ -21,6 +22,8 @@ export interface RunDeps {
   skipCard?(cardId: string, reason?: string): Promise<void>;
   /** Finished lesson ids (decision 30); none when omitted. */
   getLessonsDone?(): Promise<string[]>;
+  /** The area's courses (course mode reads their lessons); none when omitted. */
+  loadCourses?(area: AreaId): Promise<Course[]>;
 }
 
 export interface Loaded {
@@ -57,14 +60,15 @@ export function localDate(now: Date): string {
 }
 
 export async function load(deps: RunDeps, area: AreaId): Promise<Loaded> {
-  const [cards, progress, settings, skipped, lessonsDone] = await Promise.all([
+  const [cards, progress, settings, skipped, lessonsDone, courses] = await Promise.all([
     deps.loadCards(area),
     deps.getProgress(),
     deps.getSettings(),
     deps.getSkipped?.() ?? new Set<string>(),
     deps.getLessonsDone?.() ?? [],
+    deps.loadCourses?.(area) ?? [],
   ]);
-  return { area, cards, progress, settings, skipped, lessonsDone, lessons: sessionLessons() };
+  return { area, cards, progress, settings, skipped, lessonsDone, lessons: sessionLessons(courses) };
 }
 
 /** The summary's entries for the area's families, in the registry's order. */

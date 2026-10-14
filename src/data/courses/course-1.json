@@ -1,5 +1,6 @@
 {
   "id": "course-1",
+  "area": "godot",
   "title": "Step by step",
   "lessons": [
     {

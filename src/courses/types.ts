@@ -6,8 +6,12 @@
  * Text fields use the card screens' inline rule: `inline code` in JetBrains Mono, `____` as a slot.
  */
 
+import { getArea, type AreaId } from '../areas/registry';
+
 export interface Course {
   id: string;
+  /** The area the course belongs to (decision 46); its courses load with the area. */
+  area: AreaId;
   title: string;
   lessons: (CourseLesson | PlannedLesson)[];
 }
@@ -160,6 +164,7 @@ export function validateCourse(value: unknown): string[] {
   };
   if (!course || typeof course !== 'object') return ['course: not an object'];
   need(str(course.id), 'course', 'id missing');
+  need(getArea(course.area) !== undefined, 'course', 'area must be an area in src/areas/registry.ts');
   need(str(course.title), 'course', 'title missing');
   if (!Array.isArray(course.lessons) || course.lessons.length === 0) return [...errors, 'course: no lessons'];
 

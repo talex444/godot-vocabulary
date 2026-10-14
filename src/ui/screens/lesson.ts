@@ -1,9 +1,10 @@
 import type { Card } from '../../cards/types';
 import { judgeBlank } from '../../courses/blank';
-import { COURSES, findLesson, pretestCards } from '../../courses/index';
+import type { AreaId } from '../../areas/registry';
+import { coursesFor, findLesson, pretestCards } from '../../courses/index';
 import type { BlankExercise, ChoiceCheck, Example, FixExercise, LessonImage, TreeDrawing } from '../../courses/types';
 import { drawChoices } from '../../session/choices';
-import { loadAllCards } from '../../session/deck';
+import { loadCards } from '../../session/deck';
 import { getExitTicket, getSettings, markLessonDone, saveExitTicket, saveSettings } from '../../store/db';
 import type { Nav } from '../app';
 import { asset, button, choiceRow, codeBlock, el, gapField, heading, icon, inlineRich, panel, setChoiceState, textField } from '../kit';
@@ -15,13 +16,14 @@ import { revealTable } from './reveal-table';
  * done. Nothing here touches the scheduler (decision 36); Mark done records the lesson and turns
  * course mode on.
  */
-export async function lessonScreen(nav: Nav, lessonId: string): Promise<HTMLElement> {
-  const found = findLesson(lessonId);
+export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Promise<HTMLElement> {
+  const courses = await coursesFor(area);
+  const found = findLesson(lessonId, courses);
   if (!found) throw new Error(`No lesson ${lessonId}.`);
   const { course, lesson } = found;
-  const [cards, ticket] = await Promise.all([loadAllCards(), getExitTicket(lessonId)]);
+  const [cards, ticket] = await Promise.all([loadCards(course.area), getExitTicket(lessonId)]);
   const cardsById = new Map(cards.map((c) => [c.id, c]));
-  const courseNumber = COURSES.indexOf(course) + 1;
+  const courseNumber = courses.indexOf(course) + 1;
 
   const exercisesHeading = stepHeading('Exercises');
   exercisesHeading.id = 'lesson-exercises';

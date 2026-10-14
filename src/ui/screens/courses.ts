@@ -1,14 +1,15 @@
-import { COURSES } from '../../courses/index';
+import type { AreaId } from '../../areas/registry';
+import { coursesFor } from '../../courses/index';
 import { isPlanned, type CourseLesson } from '../../courses/types';
 import { getLessonsDoneIds } from '../../store/db';
 import type { Nav } from '../app';
 import { button, el, heading, panel } from '../kit';
 import { revealTable } from './reveal-table';
 
-/** The course list (decision 37): each course's lessons in order, a tick on the done ones, any reopenable. */
-export async function coursesScreen(nav: Nav): Promise<HTMLElement> {
-  const done = new Set(await getLessonsDoneIds());
-  const courses = COURSES.map((course, index) =>
+/** An area's course list (decision 37): each course's lessons in order, a tick on the done ones, any reopenable. */
+export async function coursesScreen(nav: Nav, area: AreaId): Promise<HTMLElement> {
+  const [done, list] = await Promise.all([getLessonsDoneIds().then((ids) => new Set(ids)), coursesFor(area)]);
+  const courses = list.map((course, index) =>
     panel(
       [
         index === 0 ? heading('Courses') : null,
@@ -50,7 +51,7 @@ export async function coursesScreen(nav: Nav): Promise<HTMLElement> {
     ),
   );
   return el('div', { class: 'gv-screen' }, [
-    ...courses,
+    ...(courses.length > 0 ? courses : [panel([heading('Courses'), el('p', { class: 'gv-note', text: 'No courses in this area yet.' })], { class: 'gv-stack' })]),
     el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back', { variant: 'secondary', onClick: () => nav.start() })]),
   ]);
 }

@@ -21,7 +21,9 @@ export interface Nav {
   settings(): void;
   addCard(): void;
   about(): void;
-  courses(): void;
+  /** An area's course list; without an argument, the area last opened. */
+  courses(area?: AreaId): void;
+  /** A lesson of the area last opened. */
   lesson(id: string): void;
   placeholder(title: string): void;
 }
@@ -44,19 +46,21 @@ export function mountApp(host: HTMLElement): void {
   // The area the screens belong to; the app opens Godot (GV-8b opens the home page instead).
   let area: AreaId = AREAS[0]!.id;
 
+  const enter = (next: AreaId | undefined) => {
+    area = (getArea(next ?? area) ?? AREAS[0]!).id;
+    return area;
+  };
+
   const nav: Nav = {
-    start: (next) => {
-      area = (getArea(next ?? area) ?? AREAS[0]!).id;
-      showAsync(startScreen(nav, deviceDeps, area));
-    },
+    start: (next) => showAsync(startScreen(nav, deviceDeps, enter(next))),
     begin: (session) => nav.card(session),
     card: (session) => show(cardScreen(session, nav)),
     summary: (result) => show(summaryScreen(result, nav)),
     settings: () => showAsync(settingsScreen(nav)),
     addCard: () => showAsync(addCardScreen(nav)),
     about: () => showAsync(aboutScreen(nav)),
-    courses: () => showAsync(coursesScreen(nav)),
-    lesson: (id) => showAsync(lessonScreen(nav, id)),
+    courses: (next) => showAsync(coursesScreen(nav, enter(next))),
+    lesson: (id) => showAsync(lessonScreen(nav, id, area)),
     placeholder: (title) => show(placeholderScreen(nav, title)),
   };
   nav.start();

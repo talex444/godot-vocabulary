@@ -4,14 +4,33 @@ import { describe, expect, it } from 'vitest';
 import { checkCourse, loadDecks } from '../../scripts/check-lessons.mjs';
 import type { Card } from '../../src/cards/types';
 import { judgeBlank } from '../../src/courses/blank';
-import { COURSES, pretestCards } from '../../src/courses/index';
+import { coursesFor, findLesson, pretestCards } from '../../src/courses/index';
+import course1 from '../../src/data/courses/course-1.json';
 import { allShown, coveredTable, isShown, reveal, shownCount } from '../../src/courses/reveal';
 import { chunkWords, isPlanned, validateCourse, type Course, type CourseLesson, type LessonImage } from '../../src/courses/types';
 
 const dir = 'src/data/courses';
 const files = readdirSync(dir).filter((f) => f.endsWith('.json'));
 const cards = loadDecks() as Card[];
+const COURSES: readonly Course[] = [course1 as Course];
 const lesson0 = COURSES[0]!.lessons[0] as CourseLesson;
+
+describe('courses per area (decision 46; done-criteria 64)', () => {
+  it('course 1 belongs to the Godot area; Git & GitHub has none yet', async () => {
+    expect(COURSES[0]!.area).toBe('godot');
+    expect((await coursesFor('godot')).map((c) => c.id)).toEqual(['course-1']);
+    expect(await coursesFor('github')).toEqual([]);
+  });
+
+  it('finds a lesson among the courses it is given', async () => {
+    expect(findLesson('c1-l0', await coursesFor('godot'))?.lesson.id).toBe('c1-l0');
+    expect(findLesson('c1-l0', await coursesFor('github'))).toBeUndefined();
+  });
+
+  it('rejects a course whose area is not registered', () => {
+    expect(validateCourse({ ...structuredClone(course1), area: 'aseprite' })).toContain('course: area must be an area in src/areas/registry.ts');
+  });
+});
 
 describe('course files (decisions 31–42)', () => {
   it.each(files)('%s matches the lesson format', (file) => {

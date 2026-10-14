@@ -1,5 +1,6 @@
 import { AREAS, familiesOf, getArea, type AreaId } from '../areas/registry';
 import type { Card } from '../cards/types';
+import { coursesFor } from '../courses/index';
 import {
   getLessonsDoneIds,
   getProgress,
@@ -39,4 +40,5 @@ export const deviceDeps: RunDeps = {
   getSkipped: getSkippedIds,
   skipCard: (cardId, reason) => skipCard(cardId, reason),
   getLessonsDone: getLessonsDoneIds,
+  loadCourses: coursesFor,
 };
