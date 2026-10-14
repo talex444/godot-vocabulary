@@ -1,11 +1,10 @@
 import './ui/kit.css';
 import './ui/screens/screens.css';
 import { isNativeApp } from './reminder/reminder';
-import { applyTokens, godotTokens } from './theme/tokens';
 import { mountApp } from './ui/app';
 
-// Theme first (the stylesheets read its custom properties; the font faces load with them), then the Start screen.
-applyTokens(document.documentElement, godotTokens(), 'godot');
+// The app opens the Godot area's start screen; entering it applies the area's token map before
+// the first paint (the stylesheets read its custom properties; the font faces load with them).
 const host = document.querySelector<HTMLElement>('#screen');
 if (host) mountApp(host);
 

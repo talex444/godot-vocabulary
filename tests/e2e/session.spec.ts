@@ -173,5 +173,5 @@ test('12: the summary shows cards seen, right, wrong and due tomorrow', async ({
   expect(stats['Cards learned']).toBe(0);
   expect(stats['Continue tomorrow']).toBe(2);
   await page.getByRole('button', { name: 'Done' }).click();
-  await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Godot', exact: true })).toBeVisible();
 });

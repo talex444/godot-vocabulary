@@ -13,14 +13,17 @@ the flipped card is the Godot API card’s second look, and the skip field opens
 
 Screens audited: start, settings, settings with the warning, settings (import choice), card (Godot API), card answered (Godot API), card (GDScript), card answered (GDScript), card (GitHub), card answered (GitHub), flipped card (Godot API), flipped card answered (Godot API), skip this card (reason field), summary, settings (skipped cards), add card, add card with errors, about, courses, lesson, lesson answered, lesson with code, lesson with the course table.
 
-Findings: 12.
+Findings: 15.
 
 | Screen | Selector | Text | Background | Expected | Actual |
 |--------|----------|------|------------|----------|--------|
 | start | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | card answered (Godot API) | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | card answered (GDScript) | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
-| card answered (GitHub) | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
+| card (GitHub) | `h2` | #0366d6 | #1d2125 | 3:1 | 2.98:1 |
+| card answered (GitHub) | `.gv-feedback__wrong` | #d73a49 | #1d2125 | 4.5:1 | 3.54:1 |
+| card answered (GitHub) | `a` | #0366d6 | #1d2125 | 4.5:1 | 2.98:1 |
+| card answered (GitHub) | `h2` | #0366d6 | #1d2125 | 3:1 | 2.98:1 |
 | flipped card answered (Godot API) | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | summary | `button` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | add card | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |

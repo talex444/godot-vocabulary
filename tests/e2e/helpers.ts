@@ -20,13 +20,18 @@ export function deck(family: Family): DeckCard[] {
   return JSON.parse(readFileSync(`src/data/cards.${family}.json`, 'utf8')) as DeckCard[];
 }
 
+/** The areas' start-screen titles. */
+export type AreaLabel = 'Godot' | 'Git & GitHub';
+
+/** Opens the app: it starts on the Godot area's start screen. */
 export async function gotoStart(page: Page): Promise<void> {
   await page.goto('./');
-  await startReady(page);
+  await startReady(page, 'Godot');
 }
 
-export async function startReady(page: Page): Promise<void> {
-  await page.getByRole('heading', { name: 'Today', exact: true }).waitFor();
+/** Waits for an area's start screen: the one titled `area`, or any area's when omitted. */
+export async function startReady(page: Page, area?: AreaLabel): Promise<void> {
+  await page.getByRole('heading', { name: area ?? /^(Godot|Git & GitHub)$/, exact: area !== undefined }).waitFor();
   await page.evaluate(() => document.fonts.ready);
 }
 
@@ -48,12 +53,9 @@ export async function open(page: Page, name: 'Courses' | 'Settings' | 'Add card'
 }
 
 /** From an area's start screen, the temporary link to another area (until GV-8b's home page). */
-export async function openArea(page: Page, label: 'Godot' | 'Git & GitHub'): Promise<void> {
-  const link = page.getByRole('navigation', { name: 'More' }).getByRole('button', { name: label, exact: true });
-  await link.click();
-  // The area's own screen has no link to itself.
-  await expect(link).toHaveCount(0);
-  await startReady(page);
+export async function openArea(page: Page, label: AreaLabel): Promise<void> {
+  await page.getByRole('navigation', { name: 'More' }).getByRole('button', { name: label, exact: true }).click();
+  await startReady(page, label);
 }
 
 export async function backToStart(page: Page): Promise<void> {

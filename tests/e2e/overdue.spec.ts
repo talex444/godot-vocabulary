@@ -6,6 +6,8 @@ import { answer, deck, exportFile, familyStats, goNext, gotoStart, importFromSta
 
 const area2d = deck('godot-api').find((c) => c.id === 'api:class:Area2D')!;
 const progressbar = (page: import('@playwright/test').Page) => page.getByRole('progressbar', { name: 'Cards done' });
+/** The start screen's note under the families (why Start waits or cannot begin). */
+const note = (page: import('@playwright/test').Page) => page.locator('#start-reason');
 
 test('with one overdue review, the session is that review first, then new cards follow', async ({ page }) => {
   await gotoStart(page);
@@ -14,7 +16,7 @@ test('with one overdue review, the session is that review first, then new cards 
   const api = await familyStats(page, 'godot-api');
   expect(api.Overdue).toBeGreaterThanOrEqual(1);
   expect(api.Due).toBeGreaterThanOrEqual(1);
-  await expect(page.locator('.gv-note')).toHaveText('New cards wait until the 1 overdue review is done.');
+  await expect(note(page)).toHaveText('New cards wait until the 1 overdue review is done.');
 
   await startSession(page);
   // Reviews only: the queue holds the one overdue card.
@@ -39,7 +41,7 @@ test('with one overdue review, the session is that review first, then new cards 
 test('a fresh install with nothing overdue gets new cards at once', async ({ page }) => {
   await gotoStart(page);
   for (const f of ['godot-api', 'gdscript'] as const) expect((await familyStats(page, f)).Overdue).toBe(0);
-  await expect(page.locator('.gv-note')).toHaveCount(0);
+  await expect(note(page)).toHaveCount(0);
   await startSession(page);
   await expect(progressbar(page)).toHaveAttribute('aria-valuemax', '15');
 });
@@ -47,10 +49,10 @@ test('a fresh install with nothing overdue gets new cards at once', async ({ pag
 test('decision 21, amended: an overdue Godot review does not hold back GitHub’s new cards', async ({ page }) => {
   await gotoStart(page);
   await importFromStart(page, exportFile({ progress: [overdueProgress(area2d)] }));
-  await expect(page.locator('.gv-note')).toHaveText('New cards wait until the 1 overdue review is done.');
+  await expect(note(page)).toHaveText('New cards wait until the 1 overdue review is done.');
   await openArea(page, 'Git & GitHub');
   expect(await familyStats(page, 'github')).toEqual({ Due: 0, 'New today': 5, Overdue: 0 });
-  await expect(page.locator('.gv-note')).toHaveCount(0);
+  await expect(note(page)).toHaveCount(0);
   await startSession(page);
   await expect(progressbar(page)).toHaveAttribute('aria-valuemax', '5');
 });

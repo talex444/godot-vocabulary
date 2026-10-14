@@ -1,6 +1,7 @@
 import { AREAS, getArea, type AreaId } from '../areas/registry';
 import { deviceDeps } from '../session/deck';
 import { Session, type SessionResult } from '../session/run';
+import { applyTokens } from '../theme/tokens';
 import { aboutScreen } from './screens/about';
 import { addCardScreen } from './screens/add-card';
 import { cardScreen } from './screens/card';
@@ -46,8 +47,13 @@ export function mountApp(host: HTMLElement): void {
   // The area the screens belong to; the app opens Godot (GV-8b opens the home page instead).
   let area: AreaId = AREAS[0]!.id;
 
+  // Entering an area puts on its look (decision 47): the only theme switch, no animation (GV-8b adds the wipe).
   const enter = (next: AreaId | undefined) => {
-    area = (getArea(next ?? area) ?? AREAS[0]!).id;
+    const entered = getArea(next ?? area) ?? AREAS[0]!;
+    area = entered.id;
+    const root = document.documentElement;
+    if (root.dataset.theme !== entered.id) applyTokens(root, entered.theme, entered.id);
+    document.title = `${entered.label} · Godot Vocabulary`;
     return area;
   };
 
