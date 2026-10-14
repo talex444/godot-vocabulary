@@ -10,6 +10,24 @@ export const REPO_URL = 'https://github.com/talex444/godot-vocabulary';
 /** New Android packages are published here (decision 28); the app itself never checks. */
 export const RELEASES_URL = `${REPO_URL}/releases`;
 
+/** Where the contrast pairs each area's tool colours leave short are listed (decisions 22, 54). */
+export const CONTRAST_REPORT_URL = `${REPO_URL}/blob/main/docs/contrast-report.md`;
+/** The GitHub glossary at the commit the GitHub cards were generated from. */
+export const GLOSSARY_URL = 'https://github.com/github/docs/blob/ae648a1d/data/glossaries/external.yml';
+
+/**
+ * The MIT licence's permission notice, shown once; every MIT row points to it. The same words as in
+ * `public/licenses/` (Octicons, Primer, GitHub Desktop), which `tests/unit/about.test.ts` checks.
+ */
+export const MIT_PERMISSION: readonly string[] = [
+  'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:',
+  'The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.',
+  'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.',
+];
+
+export const CONTRAST_DISCLOSURE =
+  'Inside an area the tool’s colours win over WCAG contrast, text and controls alike; the pairs that fall short are listed per area in the contrast report. The home page and navigation meet WCAG 2.2 AA.';
+
 /** Cards per generated deck, written by `pnpm generate` so About never loads a deck. */
 const DECK_COUNTS = deckCounts as Record<Family, number>;
 
@@ -29,11 +47,13 @@ export const ATTRIBUTIONS: readonly [work: string, notice: string][] = [
   ],
   [
     'GitHub Docs glossary, CC BY 4.0',
-    '© GitHub, Inc. https://creativecommons.org/licenses/by/4.0/ — terms filtered by an allow-list and adapted into question form.',
+    `© GitHub, Inc. https://creativecommons.org/licenses/by/4.0/ — terms filtered by an allow-list and adapted into question form. Source: ${GLOSSARY_URL}. Provided as-is, no warranties.`,
   ],
   ['Godot demo projects, MIT licence (class frequency counts only; no demo code is shipped)', 'Copyright (c) Godot Engine contributors.'],
-  ['GitHub Desktop (the dark theme’s colours, corner radius and font stacks, in the Git & GitHub area), MIT licence', 'Copyright (c) GitHub, Inc.'],
+  // The next three notices are copied character for character from their licence files (tests/unit/about.test.ts).
+  ['GitHub Desktop (the dark theme’s variables: colours, corner radius and font stacks, in the Git & GitHub area), MIT licence', 'Copyright (c) GitHub, Inc.'],
   ['Primer CSS colour system (the palette GitHub Desktop’s dark theme uses), MIT licence', 'Copyright (c) 2018 GitHub Inc.'],
+  ['Octicons (the git-branch and arrow-left icons, used as they are), MIT licence', 'Copyright (c) 2026 GitHub Inc.'],
   ['Inter, SIL Open Font License 1.1', 'Copyright (c) 2016 The Inter Project Authors.'],
   ['JetBrains Mono, SIL Open Font License 1.1', 'Copyright 2020, The JetBrains Mono Project Authors.'],
   ['ts-fsrs, MIT licence', 'Copyright (c) 2026 Open Spaced Repetition.'],
@@ -88,10 +108,20 @@ export async function aboutScreen(nav: Nav): Promise<HTMLElement> {
         el(
           'ul',
           { class: 'gv-credits' },
-          ATTRIBUTIONS.map(([work, notice]) => el('li', {}, [el('p', { class: 'gv-label', text: work }), el('p', { class: 'gv-note', text: notice })])),
+          ATTRIBUTIONS.map(([work, notice]) =>
+            el('li', {}, [
+              el('p', { class: 'gv-label', text: work }),
+              el('p', { class: 'gv-note', text: notice }),
+              /MIT licence/.test(work) ? el('p', { class: 'gv-note', text: 'Under the MIT licence; its permission notice is below.' }) : null,
+            ]),
+          ),
         ),
+        el('h4', { class: 'gv-family__name', text: 'The MIT licence’s permission notice' }),
+        el('div', { class: 'gv-credits' }, MIT_PERMISSION.map((text) => el('p', { class: 'gv-note', text }))),
         el('p', { text: 'The app’s own code is MIT-licensed.' }),
+        el('p', { text: CONTRAST_DISCLOSURE }),
         el('a', { class: 'gv-link', text: 'Source code on GitHub', attrs: { href: REPO_URL, rel: 'noopener' } }),
+        el('a', { class: 'gv-link', text: 'Contrast report', attrs: { href: CONTRAST_REPORT_URL, rel: 'noopener' } }),
         el('p', { class: 'gv-note', text: `Version ${version}` }),
         // Opens the browser (in the Android package too: the WebView hands other sites to Android).
         el('a', { class: 'gv-link', text: 'Check for updates', attrs: { href: RELEASES_URL, target: '_blank', rel: 'noopener' } }),

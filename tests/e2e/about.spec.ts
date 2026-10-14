@@ -31,8 +31,20 @@ test('About carries every attribution, the unofficial statement and the reposito
   expect(text).toMatch(/Not affiliated with or endorsed by the Godot Foundation or GitHub/);
   expect(text).toContain('The Godot logo is not used');
 
+  // Done-criteria 72: the MIT permission notice in full, once; the GitHub glossary's pinned source.
+  expect(text).toContain('Permission is hereby granted, free of charge');
+  expect(text.split('Permission is hereby granted').length - 1).toBe(1);
+  expect(text).toContain('THE SOFTWARE IS PROVIDED "AS IS"');
+  expect(text).toContain('Copyright (c) 2026 GitHub Inc.');
+  expect(text).toContain('https://github.com/github/docs/blob/ae648a1d/data/glossaries/external.yml');
+  expect(text).toContain('Provided as-is, no warranties.');
+
   const link = page.getByRole('link', { name: 'Source code on GitHub' });
   await expect(link).toHaveAttribute('href', 'https://github.com/talex444/godot-vocabulary');
+  // Decision 54: the per-area disclosure, and the report it names.
+  expect(text).toContain('Inside an area the tool’s colours win over WCAG contrast, text and controls alike');
+  expect(text).toContain('The home page and navigation meet WCAG 2.2 AA.');
+  await expect(page.getByRole('link', { name: 'Contrast report' })).toHaveAttribute('href', 'https://github.com/talex444/godot-vocabulary/blob/main/docs/contrast-report.md');
 
   // Done-criteria 44: the Releases page, opened outside the app; the app itself makes no request.
   const updates = page.getByRole('link', { name: 'Check for updates' });
