@@ -66,9 +66,12 @@ describe('home tiles', () => {
     const fam = (overdue: number) => ({ enabled: true, due: overdue, overdue, newAvailable: 0 });
     const notes = [overdueNote({ 'godot-api': fam(12), gdscript: fam(0) }, 'godot'), overdueNote({ 'godot-api': fam(1), gdscript: fam(0) }, 'godot')];
     expect(notes).toEqual([
-      '12 reviews have been waiting since before today. New cards begin after them.',
-      '1 review has been waiting since before today. New cards begin after it.',
+      '12 reviews are from before today. New cards begin after them.',
+      '1 review is from before today. New cards begin after it.',
     ]);
+    // The figure and the note use the same words (GV-8g).
+    expect(STAT_LABELS.before).toBe('From before today');
+    for (const n of notes) expect(n).toContain(STAT_LABELS.before.toLowerCase());
     const source = readFileSync(new URL('../../src/session/run.ts', import.meta.url), 'utf8');
     const reasons = [...source.matchAll(/'(Nothing[^']*)'/g)].map((m) => m[1]);
     expect(reasons).toHaveLength(2);

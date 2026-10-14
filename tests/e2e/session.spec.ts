@@ -32,14 +32,14 @@ test.beforeEach(async ({ page }) => {
   await gotoStart(page);
 });
 
-test('4: Start shows ready, new and waiting per family of the area and one Start button', async ({ page }) => {
-  expect(await familyStats(page, 'godot-api')).toEqual({ Ready: 0, 'New today': 10, Waiting: 0 });
-  expect(await familyStats(page, 'gdscript')).toEqual({ Ready: 0, 'New today': 5, Waiting: 0 });
+test('4: Start shows ready, new and from before today per family of the area and one Start button', async ({ page }) => {
+  expect(await familyStats(page, 'godot-api')).toEqual({ Ready: 0, 'New today': 10, 'From before today': 0 });
+  expect(await familyStats(page, 'gdscript')).toEqual({ Ready: 0, 'New today': 5, 'From before today': 0 });
   await expect(page.locator('.gv-family')).toHaveCount(2);
   await expect(page.getByRole('button', { name: 'Start', exact: true })).toHaveCount(1);
   await expect(page.getByRole('button', { name: 'Start', exact: true })).toBeEnabled();
   await openArea(page, 'Git & GitHub');
-  expect(await familyStats(page, 'github')).toEqual({ Ready: 0, 'New today': 5, Waiting: 0 });
+  expect(await familyStats(page, 'github')).toEqual({ Ready: 0, 'New today': 5, 'From before today': 0 });
   // The area page uses the home's words: nothing says "due", "overdue" or "owed" (decision 66).
   await expect(page.locator('.gv-panel')).not.toContainText(/\b(due|overdue|owed?)\b/i);
   await expect(page.locator('.gv-family')).toHaveCount(1);

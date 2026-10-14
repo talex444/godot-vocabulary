@@ -14,9 +14,9 @@ test('with one overdue review, the session is that review first, then new cards 
   await importFromStart(page, exportFile({ progress: [overdueProgress(area2d)] }));
 
   const api = await familyStats(page, 'godot-api');
-  expect(api.Waiting).toBeGreaterThanOrEqual(1);
-  expect(api.Ready).toBeGreaterThanOrEqual(1);
-  await expect(note(page)).toHaveText('1 review has been waiting since before today. New cards begin after it.');
+  expect(api['From before today']).toBeGreaterThanOrEqual(1);
+  expect(api.Ready).toBeGreaterThanOrEqual(api['From before today']!);
+  await expect(note(page)).toHaveText('1 review is from before today. New cards begin after it.');
   // The area page uses the home's words: nothing says "due", "overdue" or "owed" (decision 66).
   await expect(page.locator('.gv-panel')).not.toContainText(/\b(due|overdue|owed?)\b/i);
 
@@ -42,7 +42,7 @@ test('with one overdue review, the session is that review first, then new cards 
 
 test('a fresh install with nothing overdue gets new cards at once', async ({ page }) => {
   await gotoStart(page);
-  for (const f of ['godot-api', 'gdscript'] as const) expect((await familyStats(page, f)).Waiting).toBe(0);
+  for (const f of ['godot-api', 'gdscript'] as const) expect((await familyStats(page, f))['From before today']).toBe(0);
   await expect(note(page)).toHaveCount(0);
   await startSession(page);
   await expect(progressbar(page)).toHaveAttribute('aria-valuemax', '15');
@@ -51,9 +51,9 @@ test('a fresh install with nothing overdue gets new cards at once', async ({ pag
 test('decision 21, amended: an overdue Godot review does not hold back GitHub’s new cards', async ({ page }) => {
   await gotoStart(page);
   await importFromStart(page, exportFile({ progress: [overdueProgress(area2d)] }));
-  await expect(note(page)).toHaveText('1 review has been waiting since before today. New cards begin after it.');
+  await expect(note(page)).toHaveText('1 review is from before today. New cards begin after it.');
   await openArea(page, 'Git & GitHub');
-  expect(await familyStats(page, 'github')).toEqual({ Ready: 0, 'New today': 5, Waiting: 0 });
+  expect(await familyStats(page, 'github')).toEqual({ Ready: 0, 'New today': 5, 'From before today': 0 });
   await expect(note(page)).toHaveCount(0);
   await startSession(page);
   await expect(progressbar(page)).toHaveAttribute('aria-valuemax', '5');

@@ -91,14 +91,15 @@ export function startBlockedReason(summary: AreaSummary, loaded: Loaded): string
 
 /**
  * A plain note when new cards wait behind the area's overdue reviews; `undefined` otherwise. It says
- * what is waiting and that new cards begin after it, never that anything is owed (decision 66).
+ * how many reviews are from before today and that new cards begin after them, never that anything
+ * is owed (decision 66; GV-8g, in the words of the "From before today" figure).
  */
 export function overdueNote(summary: AreaSummary, area: AreaId): string | undefined {
   const overdue = entries(summary, area).reduce((n, [, s]) => n + (s.enabled ? s.overdue : 0), 0);
   if (overdue === 0) return undefined;
   return overdue === 1
-    ? '1 review has been waiting since before today. New cards begin after it.'
-    : `${overdue} reviews have been waiting since before today. New cards begin after them.`;
+    ? '1 review is from before today. New cards begin after it.'
+    : `${overdue} reviews are from before today. New cards begin after them.`;
 }
 
 /**

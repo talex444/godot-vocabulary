@@ -6,13 +6,14 @@ import { asset, button, el, heading, panel, stat } from '../kit';
 
 /**
  * The per-family figures, in the home's words (decision 66): reviews whose day has come are "ready",
- * reviews due since before today are "waiting"; nothing here says "due", "overdue" or "owed".
+ * reviews due since before today are "From before today" (a part of the ready ones, said in the
+ * note's own words, GV-8g); nothing here says "due", "overdue" or "owed".
  */
-export const STAT_LABELS = { ready: 'Ready', fresh: 'New today', waiting: 'Waiting' } as const;
+export const STAT_LABELS = { ready: 'Ready', fresh: 'New today', before: 'From before today' } as const;
 
 /**
  * An area's page (decision 50), titled with its name: per enabled family the reviews ready, new cards
- * and reviews waiting since before today, then Start; "All areas" above, the area's unofficial line
+ * and the reviews from before today, then Start; "All areas" above, the area's unofficial line
  * and the app's own links (the same in every area) below.
  */
 export async function startScreen(nav: Nav, deps: RunDeps, area: AreaId): Promise<HTMLElement> {
@@ -28,7 +29,7 @@ export async function startScreen(nav: Nav, deps: RunDeps, area: AreaId): Promis
     return [
       el('div', { class: 'gv-family' }, [
         el('h3', { class: 'gv-family__name', text: familyLabel(family) }),
-        el('dl', { class: 'gv-stats' }, [stat(STAT_LABELS.ready, s.due), stat(STAT_LABELS.fresh, s.newAvailable), stat(STAT_LABELS.waiting, s.overdue)]),
+        el('dl', { class: 'gv-stats' }, [stat(STAT_LABELS.ready, s.due), stat(STAT_LABELS.fresh, s.newAvailable), stat(STAT_LABELS.before, s.overdue)]),
       ]),
     ];
   });

@@ -6,7 +6,7 @@ Newest first. Each entry: what changed, what it means for you, why, and anything
 
 ### Summary
 - **The Areas screen's values and one light.** The page is now near-black (warm, not grey), the tiles are one even middle tone with no outline, and the words on them are the lights. The greys carry a little more warmth, visible on a phone. One soft light stays at the top right, behind the tiles; the bottom-left one is gone.
-- **"Ready", not "due".** A tile says "12 ready" when reviews are waiting and says nothing at all when there are none. The lessons line reads "6 lessons" until you finish one, then "1 of 6 lessons". The line under **Areas** appears only when no tile says what to do next ("Nothing waiting today."). The area page uses the same words: **Ready / New today / Waiting**, and "12 reviews have been waiting since before today. New cards begin after them."
+- **"Ready", not "due".** A tile says "12 ready" when reviews are waiting and says nothing at all when there are none. The lessons line reads "6 lessons" until you finish one, then "1 of 6 lessons". The line under **Areas** appears only when no tile says what to do next ("Nothing waiting today."). The area page uses the same words: **Ready / New today / From before today** (the reviews from before today are part of the ready ones), and "12 reviews are from before today. New cards begin after them."
 - **A tile with nothing ready opens the next lesson.** Tapping Godot with no reviews ready opens the lesson its tile names; **Back** goes to the Godot page, then to the Areas screen. With reviews ready, the tile opens the area page as before.
 - **The footer.** About and the unofficial line sit at the bottom of the screen, the unofficial line in a quieter grey under About.
 
