@@ -250,6 +250,10 @@ test('the home tiles at 360 and 320 px: the figure on one line, nothing overlapp
     document.documentElement.style.fontSize = '200%';
   });
   await checkTiles(page, 'both due, 320, 200% text');
+  // CI's system-ui is a Linux font wider than Segoe UI; Verdana, about the widest common sans, makes
+  // this machine catch what that runner catches.
+  await page.addStyleTag({ content: '.gv-tile__figure { font-family: "Verdana", sans-serif; }' });
+  await checkTiles(page, 'both due, 320, 200% text, wide font');
 });
 
 test('360×780 portrait: no horizontal scroll, every target 44×44, text at least 16 px', async ({ page }) => {

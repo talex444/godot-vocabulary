@@ -288,7 +288,15 @@ html:has(.gv-home) {
     justify-self: start;
   }
 
-  .gv-tile__figure,
+  /*
+   * The figure keeps one line across the whole text column, one step smaller: "12 ready" at 200 %
+   * is 40 px glyphs, about 196 px in Verdana bold, the widest common sans, in about 228 px.
+   */
+  .gv-tile__figure {
+    justify-self: stretch;
+    font-size: 1.25rem;
+  }
+
   .gv-tile__tag {
     white-space: normal;
   }
