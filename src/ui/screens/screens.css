@@ -76,6 +76,28 @@
   gap: 16px;
 }
 
+/*
+ * Two static corner glows behind the home only, not About or the error screen (decision 65): the
+ * brighter at the top right, the deeper (three quarters of the strength) at the bottom left, each
+ * fading out over the base colour within the reach. Background layers on the root: no positioned
+ * element, nothing that can overflow. Circles, so the reach is the same down the page as across.
+ * The strength is measured by tests/unit/contrast.test.ts; change it there, not here.
+ */
+html:has(.gv-home) {
+  background-image:
+    radial-gradient(
+      circle farthest-corner at top right,
+      color-mix(in oklab, var(--home-glow-color) var(--home-glow-strength), transparent),
+      transparent var(--home-glow-reach)
+    ),
+    radial-gradient(
+      circle farthest-corner at bottom left,
+      color-mix(in oklab, var(--home-glow-color) calc(var(--home-glow-strength) * 0.75), transparent),
+      transparent var(--home-glow-reach)
+    );
+  background-repeat: no-repeat;
+}
+
 .gv-tiles {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

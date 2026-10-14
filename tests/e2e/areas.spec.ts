@@ -119,3 +119,31 @@ test('fresh install: one plain line names the next step; nothing is coloured; Ne
   });
   expect(about).toEqual({ line: 'underline', same: true, big: true });
 });
+
+/** The root's painted background: how many radial gradients it carries, and whether the page scrolls sideways. */
+const backdrop = (page: Page) =>
+  page.evaluate(() => {
+    const root = document.documentElement;
+    return {
+      glows: getComputedStyle(root).backgroundImage.match(/radial-gradient\(/g)?.length ?? 0,
+      sideways: root.scrollWidth > root.clientWidth,
+    };
+  });
+
+test('two static corner glows on the home only: no sideways scroll at 320 or 360 px, none on About, the same with reduced motion', async ({ page }) => {
+  for (const width of [360, 320]) {
+    await page.setViewportSize({ width, height: 780 });
+    await gotoHome(page);
+    expect(await backdrop(page), `${width} px`).toEqual({ glows: 2, sideways: false });  }
+  const painted = await page.evaluate(() => getComputedStyle(document.documentElement).backgroundImage);
+  // Static: nothing animates or transitions on the root.
+  expect(await page.evaluate(() => document.documentElement.getAnimations().length)).toBe(0);
+
+  await page.getByRole('button', { name: 'About', exact: true }).click();
+  await screenReady(page, 'About');
+  expect(await backdrop(page)).toEqual({ glows: 0, sideways: false });
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await gotoHome(page);
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundImage)).toBe(painted);
+});
