@@ -9,6 +9,11 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   backgroundColor: theme.interface.base_color,
   plugins: {
+    // node_modules/@capacitor/cli/dist/declarations.d.ts (SystemBars): edge to edge, real env() insets plus --safe-area-inset-* vars.
+    SystemBars: {
+      insetsHandling: 'css',
+      initialViewportFitValueHint: 'cover',
+    },
     LocalNotifications: {
       // android/app/src/main/res/drawable/ic_stat_reminder.xml: the app glyph's tick, white on transparent.
       smallIcon: 'ic_stat_reminder',
