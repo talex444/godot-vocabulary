@@ -18,7 +18,7 @@ const look = (page: Page) =>
 
 test('the app opens the home page: a tile per area with its figures, no last-used tag on a fresh install', async ({ page }) => {
   await gotoHome(page);
-  expect(await look(page)).toEqual({ theme: 'home', base: '#110c07', font: 'system-ui, sans-serif', scheme: 'dark', title: 'Areas · Godot Vocabulary' });
+  expect(await look(page)).toEqual({ theme: 'home', base: '#130e09', font: 'system-ui, sans-serif', scheme: 'dark', title: 'Areas · Godot Vocabulary' });
   await expect(page.locator('.gv-tile')).toHaveCount(2);
   await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Next: Lesson 0, 6 lessons');
   await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, No courses yet');
@@ -76,7 +76,7 @@ test('the tile counts ready reviews of the area’s enabled families', async ({ 
   await expect(tile(page, 'Godot').locator('.gv-tile__tag')).toHaveText('Last used');
 });
 
-const ACTION_RGB = 'rgb(213, 149, 38)'; // --home-action-color #d59526
+const ACTION_RGB = 'rgb(227, 191, 127)'; // --home-action-color #e3bf7f
 
 /** Per tile, the texts drawn in the home's action colour. */
 const coloured = (page: Page) =>

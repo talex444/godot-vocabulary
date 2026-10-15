@@ -30,9 +30,14 @@ export function applyTokens(root: TokenRoot, tokens: ThemeTokens, name: string):
  */
 export const HOME_ONLY: ThemeTokens = {
   '--home-action-color': 'unset',
+  '--home-tan-color': 'unset',
   '--home-tile-color': 'unset',
+  '--home-tile-light-color': 'unset',
   '--home-tile-hover-color': 'unset',
+  '--home-tile-hover-light-color': 'unset',
   '--home-tile-pressed-color': 'unset',
+  '--home-tile-pressed-light-color': 'unset',
+  '--home-tile-edge-strength': 'unset',
   '--home-quiet-color': 'unset',
   '--home-glow-color': 'unset',
   '--home-glow-strength': 'unset',

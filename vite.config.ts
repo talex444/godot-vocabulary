@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 // The app opens on the home page, so the installed app's bars and splash wear its base colour
 // (src/theme/home.ts, grey 0; tests/unit/tokens.test.ts keeps the two equal).
-export const HOME_BASE_COLOR = '#110c07';
+export const HOME_BASE_COLOR = '#130e09';
 const baseColor = HOME_BASE_COLOR;
 
 // `vite build --mode android` (pnpm build:android) builds for the Capacitor package: its WebView serves

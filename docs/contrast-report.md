@@ -8,77 +8,118 @@ Ratios are WCAG 2.x relative-luminance contrast. Translucent colours are composi
 
 ## Home
 
-From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one action colour): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.
+From the home page’s own theme (`src/theme/home.ts`: eleven warm greys and two warm inks, the pale amber and the tan): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.
 
-The home’s one glow (decisions 65, 66) lightens the page toward its top-right corner; the page-level pairs are measured again on the page at the glow’s peak, `#27211c` (`--home-glow-color` at `--home-glow-strength` over `--base-color`). Every ink is lighter than every surface, so that peak is the worst case, and it stays below the tile surface in lightness.
+Every pair is measured on every surface the home draws: the page; the page at the glow’s peak, `#3d3121` (`--home-glow-color` at `--home-glow-strength` over `--base-color`, decision 67: the one light, from the top right); About’s panels; and both gradient stops of a tile at rest, hovered and pressed. Every ink is lighter than every surface, so on a tile the light stop is each ink’s worst case.
 
-A tile has no border (decision 66): it is a button named by its words, so WCAG 1.4.11 asks for no boundary; its chevron and the focus ring are its non-text marks and are measured below.
+A tile has no border (decision 66): it is a button named by its words, so WCAG 1.4.11 asks for no boundary; its chevron and the focus ring are its non-text marks and are measured below, with the tool’s icon (decorative, measured anyway).
 
 ### Text
 
-**0 of 39 pairs fall short.**
+**0 of 64 pairs fall short.**
 
 | Pair | Foreground | Background | Ratio | Needs | Result |
 |------|------------|------------|------:|------:|--------|
-| primary text | font_color `#e5e1de` | base_color `#110c07` | 14.97:1 | 4.5:1 | pass |
-| secondary text | font_secondary_color `#c8c3bf` | base_color `#110c07` | 11.13:1 | 4.5:1 | pass |
-| tertiary text | font_disabled_color `#aca7a3` | base_color `#110c07` | 8.16:1 | 4.5:1 | pass |
-| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | base_color `#110c07` | 7.56:1 | 4.5:1 | pass |
-| primary text | font_color `#e5e1de` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 12.23:1 | 4.5:1 | pass |
-| secondary text | font_secondary_color `#c8c3bf` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 9.10:1 | 4.5:1 | pass |
-| tertiary text | font_disabled_color `#aca7a3` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 6.67:1 | 4.5:1 | pass |
-| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 6.18:1 | 4.5:1 | pass |
-| primary text | font_color `#e5e1de` | dark_color_1 (About’s panels) `#241f1a` | 12.56:1 | 4.5:1 | pass |
-| secondary text | font_secondary_color `#c8c3bf` | dark_color_1 (About’s panels) `#241f1a` | 9.34:1 | 4.5:1 | pass |
-| tertiary text | font_disabled_color `#aca7a3` | dark_color_1 (About’s panels) `#241f1a` | 6.85:1 | 4.5:1 | pass |
-| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | dark_color_1 (About’s panels) `#241f1a` | 6.34:1 | 4.5:1 | pass |
-| primary text | font_color `#e5e1de` | home_tile_color (tile at rest) `#322b25` | 10.71:1 | 4.5:1 | pass |
-| secondary text | font_secondary_color `#c8c3bf` | home_tile_color (tile at rest) `#322b25` | 7.97:1 | 4.5:1 | pass |
-| tertiary text | font_disabled_color `#aca7a3` | home_tile_color (tile at rest) `#322b25` | 5.84:1 | 4.5:1 | pass |
-| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | home_tile_color (tile at rest) `#322b25` | 5.41:1 | 4.5:1 | pass |
-| primary text | font_color `#e5e1de` | home_tile_hover_color (hovered tile) `#3e3731` | 9.00:1 | 4.5:1 | pass |
-| secondary text | font_secondary_color `#c8c3bf` | home_tile_hover_color (hovered tile) `#3e3731` | 6.69:1 | 4.5:1 | pass |
-| tertiary text | font_disabled_color `#aca7a3` | home_tile_hover_color (hovered tile) `#3e3731` | 4.91:1 | 4.5:1 | pass |
-| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | home_tile_hover_color (hovered tile) `#3e3731` | 4.54:1 | 4.5:1 | pass |
-| primary text | font_color `#e5e1de` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 12.56:1 | 4.5:1 | pass |
-| secondary text | font_secondary_color `#c8c3bf` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 9.34:1 | 4.5:1 | pass |
-| tertiary text | font_disabled_color `#aca7a3` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 6.85:1 | 4.5:1 | pass |
-| action text: the "N ready" figure (the one colour) | home_action_color `#d59526` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 6.34:1 | 4.5:1 | pass |
-| quiet tile line (lessons, Last used) | home_quiet_color `#aca7a3` | home_tile_color (tile at rest) `#322b25` | 5.84:1 | 4.5:1 | pass |
-| quiet tile line (lessons, Last used) | home_quiet_color `#aca7a3` | home_tile_hover_color (hovered tile) `#3e3731` | 4.91:1 | 4.5:1 | pass |
-| quiet tile line (lessons, Last used) | home_quiet_color `#aca7a3` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 6.85:1 | 4.5:1 | pass |
-| quiet footer line (the disclaimer) | home_quiet_color `#aca7a3` | base_color `#110c07` | 8.16:1 | 4.5:1 | pass |
-| quiet footer line (the disclaimer) | home_quiet_color `#aca7a3` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 6.67:1 | 4.5:1 | pass |
-| heading (accent_color is the primary grey) | accent_color `#e5e1de` | base_color `#110c07` | 14.97:1 | 4.5:1 | pass |
-| link text | accent_color `#e5e1de` | base_color `#110c07` | 14.97:1 | 4.5:1 | pass |
-| hovered or pressed button text | font_hover_color `#ffffff` | base_color `#110c07` | 19.45:1 | 4.5:1 | pass |
-| heading (accent_color is the primary grey) | accent_color `#e5e1de` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 12.23:1 | 4.5:1 | pass |
-| link text | accent_color `#e5e1de` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 12.23:1 | 4.5:1 | pass |
-| hovered or pressed button text | font_hover_color `#ffffff` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 15.90:1 | 4.5:1 | pass |
-| heading (accent_color is the primary grey) | accent_color `#e5e1de` | dark_color_1 `#241f1a` | 12.56:1 | 4.5:1 | pass |
-| link text | accent_color `#e5e1de` | dark_color_1 `#241f1a` | 12.56:1 | 4.5:1 | pass |
-| hovered or pressed button text | font_hover_color `#ffffff` | dark_color_1 `#241f1a` | 16.33:1 | 4.5:1 | pass |
+| primary text | font_color `#e5e1de` | base_color `#130e09` | 14.76:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#c8c3bf` | base_color `#130e09` | 10.98:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#aca7a3` | base_color `#130e09` | 8.05:1 | 4.5:1 | pass |
+| action text: "Next: Lesson N", "N ready" (pale amber) | home_action_color `#e3bf7f` | base_color `#130e09` | 10.99:1 | 4.5:1 | pass |
+| tan text: the heading, the today line | home_tan_color `#cdb690` | base_color `#130e09` | 9.77:1 | 4.5:1 | pass |
+| quiet text: lessons figure and lines, Last used, the disclaimer | home_quiet_color `#aca7a3` | base_color `#130e09` | 8.05:1 | 4.5:1 | pass |
+| primary text | font_color `#e5e1de` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 9.73:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#c8c3bf` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 7.24:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#aca7a3` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 5.31:1 | 4.5:1 | pass |
+| action text: "Next: Lesson N", "N ready" (pale amber) | home_action_color `#e3bf7f` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 7.25:1 | 4.5:1 | pass |
+| tan text: the heading, the today line | home_tan_color `#cdb690` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 6.44:1 | 4.5:1 | pass |
+| quiet text: lessons figure and lines, Last used, the disclaimer | home_quiet_color `#aca7a3` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 5.31:1 | 4.5:1 | pass |
+| primary text | font_color `#e5e1de` | dark_color_1 (About’s panels) `#1f1a16` | 13.27:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#c8c3bf` | dark_color_1 (About’s panels) `#1f1a16` | 9.87:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#aca7a3` | dark_color_1 (About’s panels) `#1f1a16` | 7.24:1 | 4.5:1 | pass |
+| action text: "Next: Lesson N", "N ready" (pale amber) | home_action_color `#e3bf7f` | dark_color_1 (About’s panels) `#1f1a16` | 9.88:1 | 4.5:1 | pass |
+| tan text: the heading, the today line | home_tan_color `#cdb690` | dark_color_1 (About’s panels) `#1f1a16` | 8.78:1 | 4.5:1 | pass |
+| quiet text: lessons figure and lines, Last used, the disclaimer | home_quiet_color `#aca7a3` | dark_color_1 (About’s panels) `#1f1a16` | 7.24:1 | 4.5:1 | pass |
+| primary text | font_color `#e5e1de` | home_tile_color (tile at rest, dark end) `#2d251f` | 11.57:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#c8c3bf` | home_tile_color (tile at rest, dark end) `#2d251f` | 8.61:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#aca7a3` | home_tile_color (tile at rest, dark end) `#2d251f` | 6.31:1 | 4.5:1 | pass |
+| action text: "Next: Lesson N", "N ready" (pale amber) | home_action_color `#e3bf7f` | home_tile_color (tile at rest, dark end) `#2d251f` | 8.61:1 | 4.5:1 | pass |
+| tan text: the heading, the today line | home_tan_color `#cdb690` | home_tile_color (tile at rest, dark end) `#2d251f` | 7.66:1 | 4.5:1 | pass |
+| quiet text: lessons figure and lines, Last used, the disclaimer | home_quiet_color `#aca7a3` | home_tile_color (tile at rest, dark end) `#2d251f` | 6.31:1 | 4.5:1 | pass |
+| primary text | font_color `#e5e1de` | home_tile_light_color (tile at rest, light end) `#433830` | 8.75:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#c8c3bf` | home_tile_light_color (tile at rest, light end) `#433830` | 6.50:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#aca7a3` | home_tile_light_color (tile at rest, light end) `#433830` | 4.77:1 | 4.5:1 | pass |
+| action text: "Next: Lesson N", "N ready" (pale amber) | home_action_color `#e3bf7f` | home_tile_light_color (tile at rest, light end) `#433830` | 6.51:1 | 4.5:1 | pass |
+| tan text: the heading, the today line | home_tan_color `#cdb690` | home_tile_light_color (tile at rest, light end) `#433830` | 5.79:1 | 4.5:1 | pass |
+| quiet text: lessons figure and lines, Last used, the disclaimer | home_quiet_color `#aca7a3` | home_tile_light_color (tile at rest, light end) `#433830` | 4.77:1 | 4.5:1 | pass |
+| primary text | font_color `#e5e1de` | home_tile_hover_color (hovered tile, dark end) `#372e27` | 10.21:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#c8c3bf` | home_tile_hover_color (hovered tile, dark end) `#372e27` | 7.59:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#aca7a3` | home_tile_hover_color (hovered tile, dark end) `#372e27` | 5.57:1 | 4.5:1 | pass |
+| action text: "Next: Lesson N", "N ready" (pale amber) | home_action_color `#e3bf7f` | home_tile_hover_color (hovered tile, dark end) `#372e27` | 7.60:1 | 4.5:1 | pass |
+| tan text: the heading, the today line | home_tan_color `#cdb690` | home_tile_hover_color (hovered tile, dark end) `#372e27` | 6.75:1 | 4.5:1 | pass |
+| quiet text: lessons figure and lines, Last used, the disclaimer | home_quiet_color `#aca7a3` | home_tile_hover_color (hovered tile, dark end) `#372e27` | 5.57:1 | 4.5:1 | pass |
+| primary text | font_color `#e5e1de` | home_tile_hover_light_color (hovered tile, light end) `#433830` | 8.75:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#c8c3bf` | home_tile_hover_light_color (hovered tile, light end) `#433830` | 6.50:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#aca7a3` | home_tile_hover_light_color (hovered tile, light end) `#433830` | 4.77:1 | 4.5:1 | pass |
+| action text: "Next: Lesson N", "N ready" (pale amber) | home_action_color `#e3bf7f` | home_tile_hover_light_color (hovered tile, light end) `#433830` | 6.51:1 | 4.5:1 | pass |
+| tan text: the heading, the today line | home_tan_color `#cdb690` | home_tile_hover_light_color (hovered tile, light end) `#433830` | 5.79:1 | 4.5:1 | pass |
+| quiet text: lessons figure and lines, Last used, the disclaimer | home_quiet_color `#aca7a3` | home_tile_hover_light_color (hovered tile, light end) `#433830` | 4.77:1 | 4.5:1 | pass |
+| primary text | font_color `#e5e1de` | home_tile_pressed_color (pressed or loading tile, dark end) `#1f1a16` | 13.27:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#c8c3bf` | home_tile_pressed_color (pressed or loading tile, dark end) `#1f1a16` | 9.87:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#aca7a3` | home_tile_pressed_color (pressed or loading tile, dark end) `#1f1a16` | 7.24:1 | 4.5:1 | pass |
+| action text: "Next: Lesson N", "N ready" (pale amber) | home_action_color `#e3bf7f` | home_tile_pressed_color (pressed or loading tile, dark end) `#1f1a16` | 9.88:1 | 4.5:1 | pass |
+| tan text: the heading, the today line | home_tan_color `#cdb690` | home_tile_pressed_color (pressed or loading tile, dark end) `#1f1a16` | 8.78:1 | 4.5:1 | pass |
+| quiet text: lessons figure and lines, Last used, the disclaimer | home_quiet_color `#aca7a3` | home_tile_pressed_color (pressed or loading tile, dark end) `#1f1a16` | 7.24:1 | 4.5:1 | pass |
+| primary text | font_color `#e5e1de` | home_tile_pressed_light_color (pressed or loading tile, light end) `#372e27` | 10.21:1 | 4.5:1 | pass |
+| secondary text | font_secondary_color `#c8c3bf` | home_tile_pressed_light_color (pressed or loading tile, light end) `#372e27` | 7.59:1 | 4.5:1 | pass |
+| tertiary text | font_disabled_color `#aca7a3` | home_tile_pressed_light_color (pressed or loading tile, light end) `#372e27` | 5.57:1 | 4.5:1 | pass |
+| action text: "Next: Lesson N", "N ready" (pale amber) | home_action_color `#e3bf7f` | home_tile_pressed_light_color (pressed or loading tile, light end) `#372e27` | 7.60:1 | 4.5:1 | pass |
+| tan text: the heading, the today line | home_tan_color `#cdb690` | home_tile_pressed_light_color (pressed or loading tile, light end) `#372e27` | 6.75:1 | 4.5:1 | pass |
+| quiet text: lessons figure and lines, Last used, the disclaimer | home_quiet_color `#aca7a3` | home_tile_pressed_light_color (pressed or loading tile, light end) `#372e27` | 5.57:1 | 4.5:1 | pass |
+| About’s headings (accent_color is the primary grey) | accent_color `#e5e1de` | base_color `#130e09` | 14.76:1 | 4.5:1 | pass |
+| link text | accent_color `#e5e1de` | base_color `#130e09` | 14.76:1 | 4.5:1 | pass |
+| hovered or pressed button text | font_hover_color `#ffffff` | base_color `#130e09` | 19.19:1 | 4.5:1 | pass |
+| About’s headings (accent_color is the primary grey) | accent_color `#e5e1de` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 9.73:1 | 4.5:1 | pass |
+| link text | accent_color `#e5e1de` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 9.73:1 | 4.5:1 | pass |
+| hovered or pressed button text | font_hover_color `#ffffff` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 12.65:1 | 4.5:1 | pass |
+| About’s headings (accent_color is the primary grey) | accent_color `#e5e1de` | dark_color_1 `#1f1a16` | 13.27:1 | 4.5:1 | pass |
+| link text | accent_color `#e5e1de` | dark_color_1 `#1f1a16` | 13.27:1 | 4.5:1 | pass |
+| hovered or pressed button text | font_hover_color `#ffffff` | dark_color_1 `#1f1a16` | 17.25:1 | 4.5:1 | pass |
 | secondary button text (Back) | font_focus_color `#ffffff` | contrast_color_1 `#77716c` | 4.81:1 | 4.5:1 | pass |
 
-### Non-text: tile chevrons (at rest, hovered, pressed), focus and the secondary button (WCAG 1.4.11, 3:1)
+### Non-text: tile icons and chevrons, focus and the secondary button (WCAG 1.4.11, 3:1)
 
-**0 of 13 pairs fall short.**
+**0 of 29 pairs fall short.**
 
 | Pair | Foreground | Background | Ratio | Needs | Result |
 |------|------------|------------|------:|------:|--------|
-| tile chevron (secondary grey) | font_secondary_color `#c8c3bf` | home_tile_color (tile at rest) `#322b25` | 7.97:1 | 3:1 | pass |
-| tile chevron (secondary grey) | font_secondary_color `#c8c3bf` | home_tile_hover_color (hovered tile) `#3e3731` | 6.69:1 | 3:1 | pass |
-| tile chevron (secondary grey) | font_secondary_color `#c8c3bf` | home_tile_pressed_color (pressed or loading tile) `#241f1a` | 9.34:1 | 3:1 | pass |
-| focus ring | accent_color `#e5e1de` | base_color `#110c07` | 14.97:1 | 3:1 | pass |
-| focus halo | highlight_color `#918b86` | base_color `#110c07` | 5.78:1 | 3:1 | pass |
-| focus ring | accent_color `#e5e1de` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 12.23:1 | 3:1 | pass |
-| focus halo | highlight_color `#918b86` | page at glow peak (home_glow_color at 10% over base_color) `#27211c` | 4.73:1 | 3:1 | pass |
-| focus ring | accent_color `#e5e1de` | dark_color_1 `#241f1a` | 12.56:1 | 3:1 | pass |
-| focus halo | highlight_color `#918b86` | dark_color_1 `#241f1a` | 4.85:1 | 3:1 | pass |
-| focus ring | accent_color `#e5e1de` | home_tile_color (tile at rest) `#322b25` | 10.71:1 | 3:1 | pass |
-| focus halo | highlight_color `#918b86` | home_tile_color (tile at rest) `#322b25` | 4.14:1 | 3:1 | pass |
-| secondary button edge | contrast_color_1 `#77716c` | base_color `#110c07` | 4.04:1 | 3:1 | pass |
-| secondary button edge | contrast_color_1 `#77716c` | dark_color_1 `#241f1a` | 3.39:1 | 3:1 | pass |
+| tile icon and chevron (tan) | home_tan_color `#cdb690` | base_color `#130e09` | 9.77:1 | 3:1 | pass |
+| focus ring | accent_color `#e5e1de` | base_color `#130e09` | 14.76:1 | 3:1 | pass |
+| focus halo | highlight_color `#918b86` | base_color `#130e09` | 5.70:1 | 3:1 | pass |
+| tile icon and chevron (tan) | home_tan_color `#cdb690` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 6.44:1 | 3:1 | pass |
+| focus ring | accent_color `#e5e1de` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 9.73:1 | 3:1 | pass |
+| focus halo | highlight_color `#918b86` | page at glow peak (home_glow_color at 20% over base_color) `#3d3121` | 3.76:1 | 3:1 | pass |
+| tile icon and chevron (tan) | home_tan_color `#cdb690` | dark_color_1 (About’s panels) `#1f1a16` | 8.78:1 | 3:1 | pass |
+| focus ring | accent_color `#e5e1de` | dark_color_1 (About’s panels) `#1f1a16` | 13.27:1 | 3:1 | pass |
+| focus halo | highlight_color `#918b86` | dark_color_1 (About’s panels) `#1f1a16` | 5.13:1 | 3:1 | pass |
+| tile icon and chevron (tan) | home_tan_color `#cdb690` | home_tile_color (tile at rest, dark end) `#2d251f` | 7.66:1 | 3:1 | pass |
+| focus ring | accent_color `#e5e1de` | home_tile_color (tile at rest, dark end) `#2d251f` | 11.57:1 | 3:1 | pass |
+| focus halo | highlight_color `#918b86` | home_tile_color (tile at rest, dark end) `#2d251f` | 4.47:1 | 3:1 | pass |
+| tile icon and chevron (tan) | home_tan_color `#cdb690` | home_tile_light_color (tile at rest, light end) `#433830` | 5.79:1 | 3:1 | pass |
+| focus ring | accent_color `#e5e1de` | home_tile_light_color (tile at rest, light end) `#433830` | 8.75:1 | 3:1 | pass |
+| focus halo | highlight_color `#918b86` | home_tile_light_color (tile at rest, light end) `#433830` | 3.38:1 | 3:1 | pass |
+| tile icon and chevron (tan) | home_tan_color `#cdb690` | home_tile_hover_color (hovered tile, dark end) `#372e27` | 6.75:1 | 3:1 | pass |
+| focus ring | accent_color `#e5e1de` | home_tile_hover_color (hovered tile, dark end) `#372e27` | 10.21:1 | 3:1 | pass |
+| focus halo | highlight_color `#918b86` | home_tile_hover_color (hovered tile, dark end) `#372e27` | 3.94:1 | 3:1 | pass |
+| tile icon and chevron (tan) | home_tan_color `#cdb690` | home_tile_hover_light_color (hovered tile, light end) `#433830` | 5.79:1 | 3:1 | pass |
+| focus ring | accent_color `#e5e1de` | home_tile_hover_light_color (hovered tile, light end) `#433830` | 8.75:1 | 3:1 | pass |
+| focus halo | highlight_color `#918b86` | home_tile_hover_light_color (hovered tile, light end) `#433830` | 3.38:1 | 3:1 | pass |
+| tile icon and chevron (tan) | home_tan_color `#cdb690` | home_tile_pressed_color (pressed or loading tile, dark end) `#1f1a16` | 8.78:1 | 3:1 | pass |
+| focus ring | accent_color `#e5e1de` | home_tile_pressed_color (pressed or loading tile, dark end) `#1f1a16` | 13.27:1 | 3:1 | pass |
+| focus halo | highlight_color `#918b86` | home_tile_pressed_color (pressed or loading tile, dark end) `#1f1a16` | 5.13:1 | 3:1 | pass |
+| tile icon and chevron (tan) | home_tan_color `#cdb690` | home_tile_pressed_light_color (pressed or loading tile, light end) `#372e27` | 6.75:1 | 3:1 | pass |
+| focus ring | accent_color `#e5e1de` | home_tile_pressed_light_color (pressed or loading tile, light end) `#372e27` | 10.21:1 | 3:1 | pass |
+| focus halo | highlight_color `#918b86` | home_tile_pressed_light_color (pressed or loading tile, light end) `#372e27` | 3.94:1 | 3:1 | pass |
+| secondary button edge | contrast_color_1 `#77716c` | base_color `#130e09` | 3.99:1 | 3:1 | pass |
+| secondary button edge | contrast_color_1 `#77716c` | dark_color_1 `#1f1a16` | 3.58:1 | 3:1 | pass |
 
 ## Godot
 

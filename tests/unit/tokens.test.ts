@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { AREAS } from '../../src/areas/registry';
 import { githubTokens } from '../../src/theme/github-desktop';
-import { HOME_ACTION, HOME_GLOW, HOME_GREYS, homeTokens } from '../../src/theme/home';
+import { HOME_ACTION, HOME_GREYS, HOME_TAN, homeTokens } from '../../src/theme/home';
 import { applyTokens, godotTokens, HOME_ONLY, type ThemeTokens, type TokenRoot } from '../../src/theme/tokens';
 
 // Done-criteria 61: one flat map per area, applied as one unit.
@@ -111,27 +111,37 @@ describe('theme token maps', () => {
     expect(gh['--contrast-color-1']).toBe(sassLightness('#6a737d', 3)); // --box-border-contrast-color
   });
 
-  it('the home theme: dark, one ramp of ten warm greys and one action colour, system font, 6 px corners', () => {
+  it('the home theme: dark, one ramp of eleven warm greys and two warm inks, system font, 6 px corners', () => {
     const tokens = homeTokens();
-    expect(HOME_GREYS).toHaveLength(10);
+    expect(HOME_GREYS).toHaveLength(11);
     const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
     for (const [i, grey] of HOME_GREYS.entries()) {
       const [r, g, b] = rgb(grey) as [number, number, number];
-      // A warm tint (decision 66: chroma up to about 5.5 at hue 70°): red over blue, never a hue you would name.
-      expect(r >= g && g >= b && r - b <= 13, grey).toBe(true);
+      // A warm tint (decision 67: chroma up to about 7.6 near hue 65°): red over blue, never a hue you would name.
+      expect(r >= g && g >= b && r - b <= 19, grey).toBe(true);
       if (i > 0) expect(r, `${grey} is lighter than the grey before it`).toBeGreaterThan(rgb(HOME_GREYS[i - 1]!)[0]!);
     }
+    // Every colour is a ramp step or one of the two warm inks (decision 67: one system).
     const colours = Object.entries(tokens).filter(([k]) => k.endsWith('-color')).map(([k, v]) => [k, v] as const);
-    expect(colours.filter(([, c]) => !HOME_GREYS.includes(c))).toEqual([['--home-action-color', HOME_ACTION], ['--home-glow-color', HOME_GLOW]]);
-    // The glow (decisions 65, 66): a light in the greys' hue, not the amber; strength and reach are tokens.
-    expect(HOME_GLOW).not.toBe(HOME_ACTION);
-    expect([tokens['--home-glow-strength'], tokens['--home-glow-reach']]).toEqual(['10%', '30vmax']);
-    // Decision 66's tonal plan: a near-black page, the tiles one middle value, the quiet lines in a role of their own.
-    expect(tokens['--base-color']).toBe('#110c07');
-    expect([tokens['--home-tile-color'], tokens['--home-tile-hover-color'], tokens['--home-tile-pressed-color']]).toEqual([HOME_GREYS[2], HOME_GREYS[3], HOME_GREYS[1]]);
-    expect(tokens['--home-quiet-color']).toBe(HOME_GREYS[6]);
-    // The one colour is not the accent: the heading, links and focus ring stay grey (decision 64).
-    expect(tokens['--accent-color']).toBe(HOME_GREYS[8]);
+    expect(colours.filter(([, c]) => !HOME_GREYS.includes(c))).toEqual([
+      ['--home-action-color', HOME_ACTION],
+      ['--home-tan-color', HOME_TAN],
+      ['--home-glow-color', HOME_ACTION],
+    ]);
+    // The light (decision 67): the pale amber itself, from the top right; strength and reach are tokens.
+    expect([tokens['--home-glow-strength'], tokens['--home-glow-reach']]).toEqual(['20%', '48vmax']);
+    // B2's page; a tile is a two-step gradient on the ramp: rest g2 → g4, hovered g3 → g4, pressed g1 → g3.
+    expect(tokens['--base-color']).toBe('#130e09');
+    const tile = (state: string) => [tokens[`--home-tile${state}-color`], tokens[`--home-tile${state}-light-color`]];
+    expect([tile(''), tile('-hover'), tile('-pressed')]).toEqual([
+      [HOME_GREYS[2], HOME_GREYS[4]],
+      [HOME_GREYS[3], HOME_GREYS[4]],
+      [HOME_GREYS[1], HOME_GREYS[3]],
+    ]);
+    expect(tokens['--home-tile-edge-strength']).toBe('8%');
+    expect(tokens['--home-quiet-color']).toBe(HOME_GREYS[7]);
+    // The amber is not the accent: links and the focus ring stay grey (decision 64).
+    expect(tokens['--accent-color']).toBe(HOME_GREYS[9]);
     expect(tokens['--font-ui']).toBe('system-ui, sans-serif');
     expect(tokens['--corner-radius']).toBe('6px');
     expect(tokens['color-scheme']).toBe('dark');

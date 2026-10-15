@@ -116,9 +116,9 @@ function pairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[] } {
 }
 
 /**
- * The home page at its brightest point (decisions 65, 66): the top-right glow's colour at its strength,
- * composited over the base as the browser paints it. Every ink is lighter than every surface, so the
- * lightest page point is the worst case for every page-level pair.
+ * The home page at its brightest point (decisions 65, 67): the top-right glow's colour at its strength,
+ * composited over the base as the browser paints it. The glow may rise above a tile (decision 67), so
+ * it is one surface among the others and every ink is measured on it.
  */
 function glowPeak(tokens: ThemeTokens): Rgba {
   const [r, g, b] = parseColor(tokens['--home-glow-color']!);
@@ -126,13 +126,25 @@ function glowPeak(tokens: ThemeTokens): Rgba {
   return over([r, g, b, strength], parseColor(tokens['--base-color']!));
 }
 
+/** A tile's two gradient stops in each state (decision 67), dark end first. */
+function tileStops(tokens: ThemeTokens): [state: string, dark: Colour, light: Colour][] {
+  const stop = (key: string, what: string): Colour => [`${key.slice(2).replace(/-/g, '_')} (${what})`, parseColor(tokens[key]!)];
+  return [
+    ['at rest', stop('--home-tile-color', 'tile at rest, dark end'), stop('--home-tile-light-color', 'tile at rest, light end')],
+    ['hovered', stop('--home-tile-hover-color', 'hovered tile, dark end'), stop('--home-tile-hover-light-color', 'hovered tile, light end')],
+    ['pressed', stop('--home-tile-pressed-color', 'pressed or loading tile, dark end'), stop('--home-tile-pressed-light-color', 'pressed or loading tile, light end')],
+  ];
+}
+
 /**
  * Every pair the home page and the screens it opens in its theme (About, the error screen) draw
- * (decisions 49, 54, 64, 65, 66): text in its three roles, the quiet tile lines and the one action
- * colour on every surface, headings, links, the secondary button, the tiles' chevrons at rest, hovered
- * and pressed, and focus; the page-level pairs also on the page at the glow's peak. A tile has no
- * border (decision 66: a text-labelled button needs no boundary under 1.4.11), so no border pair. No
- * accent fills, so no primary button pairs. These must all pass.
+ * (decisions 49, 54, 64, 65, 66, 67), on every surface: the page, the page at the glow's peak, a
+ * panel, and both gradient stops of a tile at rest, hovered and pressed. Text in its three roles, the
+ * two warm inks (the pale amber on the Next line and the ready figure; the tan on the heading and the
+ * today line), the quiet lines and the zero-state lessons figure, links and the secondary button; the
+ * non-text marks (the tan icon and chevron, the focus ring and halo). A tile has no border (decision
+ * 66: a text-labelled button needs no boundary under 1.4.11), so no border pair. No accent fills, so
+ * no primary button pairs. These must all pass.
  */
 function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[]; surfaces: Colour[] } {
   const t = (key: string): Colour => {
@@ -141,31 +153,28 @@ function homePairs(tokens: ThemeTokens): { text: Pair[]; nonText: Pair[]; surfac
     return [key, parseColor(value)];
   };
   const peak: Colour = [`page at glow peak (home_glow_color at ${tokens['--home-glow-strength']} over base_color)`, glowPeak(tokens)];
-  const tiles: Colour[] = [
-    ['home_tile_color (tile at rest)', t('home_tile_color')[1]],
-    ['home_tile_hover_color (hovered tile)', t('home_tile_hover_color')[1]],
-    ['home_tile_pressed_color (pressed or loading tile)', t('home_tile_pressed_color')[1]],
-  ];
+  const tiles: Colour[] = tileStops(tokens).flatMap(([, dark, light]) => [dark, light]);
   const surfaces: Colour[] = [t('base_color'), peak, ['dark_color_1 (About’s panels)', t('dark_color_1')[1]], ...tiles];
   const text: Pair[] = [
     ...surfaces.flatMap((bg) => [
       { pair: 'primary text', fg: t('font_color'), bg, need: TEXT as Need },
       { pair: 'secondary text', fg: t('font_secondary_color'), bg, need: TEXT as Need },
       { pair: 'tertiary text', fg: t('font_disabled_color'), bg, need: TEXT as Need },
-      { pair: 'action text: the "N ready" figure (the one colour)', fg: t('home_action_color'), bg, need: TEXT as Need },
+      { pair: 'action text: "Next: Lesson N", "N ready" (pale amber)', fg: t('home_action_color'), bg, need: TEXT as Need },
+      { pair: 'tan text: the heading, the today line', fg: t('home_tan_color'), bg, need: TEXT as Need },
+      { pair: 'quiet text: lessons figure and lines, Last used, the disclaimer', fg: t('home_quiet_color'), bg, need: TEXT as Need },
     ]),
-    ...tiles.map((bg) => ({ pair: 'quiet tile line (lessons, Last used)', fg: t('home_quiet_color'), bg, need: TEXT as Need })),
-    ...[t('base_color'), peak].map((bg) => ({ pair: 'quiet footer line (the disclaimer)', fg: t('home_quiet_color'), bg, need: TEXT as Need })),
     ...[t('base_color'), peak, t('dark_color_1')].flatMap((bg) => [
-      { pair: 'heading (accent_color is the primary grey)', fg: t('accent_color'), bg, need: TEXT as Need },
+      { pair: 'About’s headings (accent_color is the primary grey)', fg: t('accent_color'), bg, need: TEXT as Need },
       { pair: 'link text', fg: t('accent_color'), bg, need: TEXT as Need },
       { pair: 'hovered or pressed button text', fg: t('font_hover_color'), bg, need: TEXT as Need },
     ]),
     { pair: 'secondary button text (Back)', fg: t('font_focus_color'), bg: t('contrast_color_1'), need: TEXT },
   ];
   const nonText: Pair[] = [
-    ...tiles.map((bg) => ({ pair: 'tile chevron (secondary grey)', fg: t('font_secondary_color'), bg, need: LARGE as Need })),
-    ...[t('base_color'), peak, t('dark_color_1'), tiles[0]!].flatMap((bg) => [
+    ...surfaces.flatMap((bg) => [
+      // The icon is aria-hidden (the label names the tile) and measured anyway.
+      { pair: 'tile icon and chevron (tan)', fg: t('home_tan_color'), bg, need: LARGE as Need },
       { pair: 'focus ring', fg: t('accent_color'), bg, need: LARGE as Need },
       { pair: 'focus halo', fg: t('highlight_color'), bg, need: LARGE as Need },
     ]),
@@ -222,11 +231,11 @@ function report(): { markdown: string; short: Record<string, { text: number; non
     '',
     '## Home',
     '',
-    'From the home page’s own theme (`src/theme/home.ts`: ten warm greys and one action colour): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.',
+    'From the home page’s own theme (`src/theme/home.ts`: eleven warm greys and two warm inks, the pale amber and the tan): the home page, and About and the error screen when opened from it. Unlike the areas, it meets WCAG 2.2 AA in full: `pnpm test` fails if any pair below falls short.',
     '',
-    `The home’s one glow (decisions 65, 66) lightens the page toward its top-right corner; the page-level pairs are measured again on the page at the glow’s peak, \`${toHex(glowPeak(home))}\` (\`--home-glow-color\` at \`--home-glow-strength\` over \`--base-color\`). Every ink is lighter than every surface, so that peak is the worst case, and it stays below the tile surface in lightness.`,
+    `Every pair is measured on every surface the home draws: the page; the page at the glow’s peak, \`${toHex(glowPeak(home))}\` (\`--home-glow-color\` at \`--home-glow-strength\` over \`--base-color\`, decision 67: the one light, from the top right); About’s panels; and both gradient stops of a tile at rest, hovered and pressed. Every ink is lighter than every surface, so on a tile the light stop is each ink’s worst case.`,
     '',
-    'A tile has no border (decision 66): it is a button named by its words, so WCAG 1.4.11 asks for no boundary; its chevron and the focus ring are its non-text marks and are measured below.',
+    'A tile has no border (decision 66): it is a button named by its words, so WCAG 1.4.11 asks for no boundary; its chevron and the focus ring are its non-text marks and are measured below, with the tool’s icon (decorative, measured anyway).',
     '',
     '### Text',
     '',
@@ -234,7 +243,7 @@ function report(): { markdown: string; short: Record<string, { text: number; non
     '',
     ...table(homeText),
     '',
-    '### Non-text: tile chevrons (at rest, hovered, pressed), focus and the secondary button (WCAG 1.4.11, 3:1)',
+    '### Non-text: tile icons and chevrons, focus and the secondary button (WCAG 1.4.11, 3:1)',
     '',
     `**${short.home.nonText} of ${homeNonText.length} pairs fall short.**`,
     '',
@@ -293,23 +302,30 @@ describe('contrast report (never fails on an area’s ratio; fails on any home r
     expect(short.home).toEqual({ text: 0, nonText: 0 });
   });
 
-  it('the glow peak: every home ink is lighter than every surface, and the peak is darker than a tile', () => {
+  it('every home ink is lighter than every surface: the glow peak and both stops of every tile state', () => {
     const home = homeTokens();
     const { text, nonText, surfaces } = homePairs(home);
-    // Every colour drawn on the six surfaces (the page, its glow peak, a panel, a tile at rest, hovered, pressed).
+    // The nine surfaces: the page, its glow peak, a panel, and two stops each for a tile at rest, hovered, pressed.
+    expect(surfaces).toHaveLength(9);
     const surfaceHexes = new Set(surfaces.map(([, c]) => toHex(c)));
     const onSurface = [...text, ...nonText].filter((p) => surfaceHexes.has(toHex(p.bg[1])));
     const darkestInk = Math.min(...onSurface.map((p) => luminance(p.fg[1])));
     const lightestSurface = Math.max(...surfaces.map(([, c]) => luminance(c)));
     expect(onSurface.length).toBeGreaterThan(0);
     expect(darkestInk).toBeGreaterThan(lightestSurface);
-    // Luminance is monotonic in L*, so this is the peak's L* below the tile's (decisions 65, 66).
-    expect(luminance(glowPeak(home))).toBeLessThan(luminance(parseColor(home['--home-tile-color']!)));
-    expect(toHex(glowPeak(home))).toBe('#27211c');
-    // The ceiling is 14 %, the largest whole percent below the tile; 10 % was chosen under it (GV-8f).
-    const at = (pct: number) => luminance(glowPeak({ ...home, '--home-glow-strength': `${pct}%` }));
-    const tileLuminance = luminance(parseColor(home['--home-tile-color']!));
-    expect([at(14) < tileLuminance, at(15) < tileLuminance]).toEqual([true, false]);
+  });
+
+  it('on a tile, each ink’s worst case is the gradient’s light stop, in every state (decision 67)', () => {
+    const home = homeTokens();
+    const page = parseColor(home['--base-color']!);
+    const { text, nonText } = homePairs(home);
+    const inks = new Map([...text, ...nonText].map((p) => [toHex(p.fg[1]), p.fg] as const));
+    for (const [state, dark, light] of tileStops(home)) {
+      expect(luminance(light[1]), `${state}: the light stop is the lighter`).toBeGreaterThan(luminance(dark[1]));
+      for (const [hex, ink] of inks) {
+        expect(contrast(ink[1], light[1], page), `${ink[0]} ${hex}, ${state}`).toBeLessThan(contrast(ink[1], dark[1], page));
+      }
+    }
   });
 
   it('matches the committed docs/contrast-report.md', () => {
