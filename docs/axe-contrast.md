@@ -64,7 +64,7 @@ Findings: 25.
 | settings | `.gv-skipped > h2` | #0366d6 | #1d2125 | 3:1 | 2.98:1 |
 | settings | `button[aria-describedby="export-help"]` | #ffffff | #717b85 | 4.5:1 | 4.3:1 |
 | settings | `button[aria-describedby="import-help"]` | #ffffff | #717b85 | 4.5:1 | 4.3:1 |
-| settings | `button[aria-label="Undo skip: Scene dock"]` | #ffffff | #717b85 | 4.5:1 | 4.3:1 |
+| settings | `button[aria-label="Undo skip: extends"]` | #ffffff | #717b85 | 4.5:1 | 4.3:1 |
 | settings | `nav > .gv-button--secondary.gv-button` | #ffffff | #717b85 | 4.5:1 | 4.3:1 |
 | settings | `section:nth-child(1) > h2` | #0366d6 | #1d2125 | 3:1 | 2.98:1 |
 | settings | `section:nth-child(3) > h2` | #0366d6 | #1d2125 | 3:1 | 2.98:1 |
