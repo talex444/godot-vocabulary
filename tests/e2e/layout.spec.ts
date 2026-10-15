@@ -190,6 +190,13 @@ async function checkHome(page: Page, options: { targets?: boolean; text?: boolea
  * do not overlap one another, and all of them sit inside the tile. The label may wrap between words,
  * never inside one; the lessons count in the figure's place may wrap too.
  */
+/**
+ * The home wears the device's font (src/theme/home.ts): CI's system-ui is DejaVu Sans, about a fifth
+ * wider than Segoe UI or Roboto. Verdana, about the widest common sans and on Windows too, makes this
+ * machine catch what the runner catches. The style holds until the next navigation.
+ */
+const wideFont = (page: Page) => page.addStyleTag({ content: '.gv-tile, .gv-tile * { font-family: "Verdana", sans-serif; }' });
+
 async function checkTiles(page: Page, where: string) {
   const tiles = await page.locator('.gv-tile').evaluateAll((nodes) =>
     nodes.map((tile) => {
@@ -254,6 +261,8 @@ test('the home tiles at 360 and 320 px: the figure on one line, nothing overlapp
   await checkTiles(page, 'fresh, 360');
   await page.setViewportSize({ width: 320, height: 780 });
   await checkTiles(page, 'fresh, 320');
+  await wideFont(page);
+  await checkTiles(page, 'fresh, 320, wide font');
   await oneLessonDone(page);
   await expect(page.locator('.gv-tile__lessons')).toHaveText('1 of 6 lessons');
   await checkTiles(page, 'one lesson done, 320');
@@ -265,6 +274,8 @@ test('the home tiles at 360 and 320 px: the figure on one line, nothing overlapp
   await page.evaluate(() => (document.documentElement.style.fontSize = ''));
   await bothDue(page);
   await checkTiles(page, 'both due, 320');
+  await wideFont(page);
+  await checkTiles(page, 'both due, 320, wide font');
   await checkHome(page);
   await gotoHome(page);
   await page.setViewportSize({ width: 360, height: 780 });
@@ -274,12 +285,13 @@ test('the home tiles at 360 and 320 px: the figure on one line, nothing overlapp
     document.documentElement.style.fontSize = '200%';
   });
   await checkTiles(page, 'both due, 320, 200% text');
-  // CI's system-ui is a Linux font wider than Segoe UI; Verdana, about the widest common sans, makes
-  // this machine catch what that runner catches.
-  await page.addStyleTag({ content: '.gv-tile__figure, .gv-tile__lessons, .gv-tile__label { font-family: "Verdana", sans-serif; }' });
+  await wideFont(page);
   await checkTiles(page, 'both due, 320, 200% text, wide font');
+  await page.evaluate(() => (document.documentElement.style.fontSize = ''));
+  await page.setViewportSize({ width: 360, height: 780 });
+  await checkTiles(page, 'both due, 360, wide font');
   await oneLessonDone(page);
-  await page.addStyleTag({ content: '.gv-tile__figure, .gv-tile__lessons, .gv-tile__label { font-family: "Verdana", sans-serif; }' });
+  await wideFont(page);
   await checkTiles(page, 'one lesson done, 320, wide font');
   await page.evaluate(() => (document.documentElement.style.fontSize = '200%'));
   await checkTiles(page, 'one lesson done, 320, 200% text, wide font');

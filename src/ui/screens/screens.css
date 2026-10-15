@@ -161,7 +161,8 @@ html:has(.gv-home) {
 
 .gv-tile {
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr) auto 16px;
+  /* The label column keeps its longest word: a name never breaks inside a word; the count wraps first. */
+  grid-template-columns: 32px minmax(min-content, 1fr) auto 16px;
   align-items: start;
   column-gap: 12px;
   width: 100%;
@@ -278,11 +279,7 @@ html:has(.gv-home) {
   text-align: end;
 }
 
-/* The label keeps its longest word's width; the count wraps first ("1 of 6 / lessons" at 320 px). */
-.gv-tile:has(.gv-tile__lessons) {
-  grid-template-columns: 32px minmax(min-content, 1fr) auto 16px;
-}
-
+/* The lines under the label run under the count too ("1 of 6 / lessons" wraps at 320 px). */
 .gv-tile:has(.gv-tile__lessons) .gv-tile__line {
   grid-column: 2 / 4;
 }
@@ -300,12 +297,29 @@ html:has(.gv-home) {
 }
 
 /*
+ * A 320 px phone (a tile under 19em) in a wide system font. The home wears the device's own font
+ * (src/theme/home.ts), and DejaVu Sans, the CI runner's system-ui, sets bold text about a fifth
+ * wider than Segoe UI or Roboto. The figure steps down to the label's size and the columns close
+ * up, so the label keeps its longest word beside the figure: in Verdana bold, about the widest
+ * common sans, "12 ready" at 1.25rem is about 99 px and "Godot" about 69 px, in the 184 px they share.
+ */
+@container (max-width: 19em) {
+  .gv-tile {
+    column-gap: 8px;
+  }
+
+  .gv-tile__figure,
+  .gv-tile__lessons {
+    font-size: 1.25rem;
+  }
+}
+
+/*
  * Large text on a narrow screen (200 % at 320 px): one column of text in DOM order, the chevron
  * beside it, no icon, so the label and figure never squeeze each other.
  */
 @container (max-width: 16em) {
-  .gv-tile,
-  .gv-tile:has(.gv-tile__lessons) {
+  .gv-tile {
     grid-template-columns: minmax(0, 1fr) 16px;
   }
 
@@ -334,7 +348,7 @@ html:has(.gv-home) {
 
   /*
    * The figure keeps one line across the whole text column, one step smaller: "12 ready" at 200 %
-   * is 40 px glyphs, about 196 px in Verdana bold, the widest common sans, in about 228 px.
+   * is 40 px glyphs, about 196 px in Verdana bold, the widest common sans, in about 232 px.
    */
   .gv-tile__figure {
     justify-self: stretch;
