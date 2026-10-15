@@ -21,3 +21,12 @@ export function judgeBlank(typed: string, answer: string, misses: number): { ver
   if (next >= BLANK_TRIES) return { verdict: 'shown', misses: next };
   return { verdict: word.toLowerCase() === answer.toLowerCase() ? 'case' : 'wrong', misses: next };
 }
+
+/**
+ * Judges one try at a typed recall check (decision 71): like a blank, spaces inside tidied; a code name
+ * (a class) is case-sensitive, any other name (a dock's) is not.
+ */
+export function judgeRecall(typed: string, answer: string, misses: number, caseSensitive: boolean): { verdict: BlankVerdict; misses: number } {
+  const tidy = typed.trim().replace(/\s+/g, ' ');
+  return caseSensitive ? judgeBlank(tidy, answer, misses) : judgeBlank(tidy.toLowerCase(), answer.toLowerCase(), misses);
+}

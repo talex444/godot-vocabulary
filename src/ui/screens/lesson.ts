@@ -1,9 +1,21 @@
 import type { Card } from '../../cards/types';
-import { judgeBlank } from '../../courses/blank';
+import { judgeBlank, judgeRecall, type BlankVerdict } from '../../courses/blank';
 import { getArea, type AreaId } from '../../areas/registry';
 import { cardsToAdd, finishedText, finishLabel } from '../../courses/finish';
-import { coursesFor, findLesson, pretestCards, sessionLessons } from '../../courses/index';
-import { isPlanned, type BlankExercise, type ChoiceCheck, type CourseLesson, type Example, type FixExercise, type LessonImage, type TreeDrawing } from '../../courses/types';
+import { coursesFor, findLesson, pretestCards, sessionLessons, termName } from '../../courses/index';
+import { TERM_PARTS, termPage, type TermPageItem } from '../../courses/terms';
+import {
+  isPlanned,
+  type BlankExercise,
+  type ChoiceCheck,
+  type CourseLesson,
+  type Example,
+  type FixExercise,
+  type LessonImage,
+  type LessonPage,
+  type RecallCheck,
+  type TreeDrawing,
+} from '../../courses/types';
 import { drawChoices } from '../../session/choices';
 import { loadCards } from '../../session/deck';
 import { getExitTicket, getLessonsDoneIds, getProgress, getSkippedIds, markDoneSettings, markLessonDone, saveExitTicket } from '../../store/db';
@@ -13,7 +25,8 @@ import { revealTable } from './reveal-table';
 
 /**
  * One lesson as one scrolling page (decision 37): question, pretest, the need, agenda, explanation
- * chunks each with a check, compare, exercises, "what you'll see when it's wrong", exit ticket, the
+ * chunks each with a check (or, in a term lesson, the term list, the six-part term sections and the
+ * recall steps: decision 71), compare, exercises, "what you'll see when it's wrong", exit ticket, the
  * Finish button. Nothing here touches the scheduler (decision 36); finishing records the lesson and
  * turns course mode on, then says so in place, with the next lesson and the course list (decision 69c).
  */
@@ -103,10 +116,7 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
   });
   markDone.classList.add('gv-wide');
 
-  const pageLink = el('a', { class: 'gv-link', attrs: { href: lesson.page.url, target: '_blank', rel: 'noopener' } }, [
-    `Manual: ${lesson.page.title}`,
-    el('span', { class: 'gv-visually-hidden', text: ' (opens in a new tab)' }),
-  ]);
+  const pageLink = manualLink(lesson.page);
 
   const root = el('div', { class: 'gv-screen gv-lesson', attrs: { 'data-lesson-id': lesson.id } }, [
     panel(
@@ -135,16 +145,19 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
       el('p', { class: 'gv-label', text: 'In this lesson' }),
       el('ol', { class: 'gv-agenda' }, lesson.agenda.map((line) => el('li', {}, inlineRich(line)))),
     ]),
-    ...(lesson.chunks ?? []).map((chunk, i) =>
-      step(`chunk-${i}`, [
-        stepHeading(chunk.heading),
-        ...paragraphs(chunk.text),
-        chunk.code ? codeBlock(chunk.code) : null,
-        chunk.drawing ? treeDrawing(chunk.drawing) : null,
-        chunk.image ? figure(chunk.image) : null,
-        choiceCheck(chunk.check, `check-${i}`),
-      ]),
-    ),
+    // A term lesson (decision 71) has its term list and sections here; a chunk lesson its chunks.
+    ...(lesson.terms
+      ? termSteps(lesson, cardsById)
+      : (lesson.chunks ?? []).map((chunk, i) =>
+          step(`chunk-${i}`, [
+            stepHeading(chunk.heading),
+            ...paragraphs(chunk.text),
+            chunk.code ? codeBlock(chunk.code) : null,
+            chunk.drawing ? treeDrawing(chunk.drawing) : null,
+            chunk.image ? figure(chunk.image) : null,
+            choiceCheck(chunk.check, `check-${i}`),
+          ]),
+        )),
     step('compare', [
       stepHeading('Compare'),
       el('div', { class: 'gv-compare' }, [example(lesson.compare.a), example(lesson.compare.b)]),
@@ -210,6 +223,171 @@ function paragraphs(text: string): HTMLElement[] {
     .split(/\n{2,}/)
     .filter((p) => p.trim())
     .map((p) => el('p', { class: 'gv-lesson__text' }, inlineRich(p.trim())));
+}
+
+/** A link to the manual page a lesson or a term quotes, opening in the browser. */
+function manualLink(page: LessonPage): HTMLAnchorElement {
+  return el('a', { class: 'gv-link', attrs: { href: page.url, target: '_blank', rel: 'noopener' } }, [
+    `Manual: ${page.title}`,
+    el('span', { class: 'gv-visually-hidden', text: ' (opens in a new tab)' }),
+  ]);
+}
+
+/**
+ * A term lesson's middle (decision 71): "In this lesson:" with a same-page link to each term, then one
+ * step per term (its name as the heading, six labelled parts) and a Recall step after every fourth term
+ * and after the last. The order is `termPage`'s.
+ */
+function termSteps(lesson: CourseLesson, cardsById: ReadonlyMap<string, Card>): HTMLElement[] {
+  const page = termPage(lesson, (id) => {
+    const card = cardsById.get(id);
+    return card ? termName(card) : undefined;
+  });
+  const headings = new Map<string, HTMLHeadingElement>();
+  // Real links, so each section has an address; a tap scrolls and focuses in place, leaving history alone.
+  const links = page.list.map((item) => {
+    const link = el('a', { class: 'gv-link', text: item.name, attrs: { href: item.href } });
+    link.addEventListener('click', (event) => {
+      const target = headings.get(item.href.slice(1));
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({ block: 'start' });
+      target.focus({ preventScroll: true });
+    });
+    return el('li', {}, [link]);
+  });
+  const list = step('term-list', [
+    el('nav', { class: 'gv-term-list', attrs: { 'aria-label': 'Terms in this lesson' } }, [el('p', { class: 'gv-label', text: 'In this lesson:' }), el('ul', {}, links)]),
+  ]);
+  return [list, ...page.items.map((item) => (item.kind === 'term' ? termSection(item, cardsById, headings) : recallStep(item, cardsById)))];
+}
+
+/** One term: its name as the step heading, then the six parts as a definition list. */
+function termSection(item: Extract<TermPageItem, { kind: 'term' }>, cardsById: ReadonlyMap<string, Card>, headings: Map<string, HTMLHeadingElement>): HTMLElement {
+  const { term } = item;
+  const heading = stepHeading(item.name);
+  heading.id = item.anchor;
+  headings.set(item.anchor, heading);
+  const other = cardsById.has(`api:class:${term.contrast.other}`)
+    ? el('code', { class: 'gv-inline-code', text: term.contrast.other })
+    : el('strong', { class: 'gv-fix-label', text: term.contrast.other });
+  const parts: (Node | null)[][] = [
+    [...paragraphs(term.what.text), manualLink(term.what.page)],
+    paragraphs(term.when),
+    [...paragraphs(term.where.text), term.where.image ? figure(term.where.image) : null],
+    [
+      ...paragraphs(term.example.text),
+      term.example.drawing ? treeDrawing(term.example.drawing) : null,
+      term.example.code ? codeBlock(term.example.code) : null,
+      term.example.image ? figure(term.example.image) : null,
+    ],
+    [el('p', {}, [other]), ...paragraphs(term.contrast.text)],
+    [recallControl(term.check, `term-${item.index}`, item.caseSensitive, cardsById)],
+  ];
+  return step(`term-${item.index}`, [
+    heading,
+    el('dl', { class: 'gv-term' }, TERM_PARTS.flatMap((label, i) => [el('dt', { class: 'gv-label', text: label }), el('dd', {}, parts[i]!)])),
+  ]);
+}
+
+/** The no-peeking check after a group of four terms (Make It Stick ch. 2). */
+function recallStep(item: Extract<TermPageItem, { kind: 'recall' }>, cardsById: ReadonlyMap<string, Card>): HTMLElement {
+  return step(`recall-${item.index}`, [
+    stepHeading('Recall'),
+    el('p', { class: 'gv-note', text: 'From memory, without scrolling up.' }),
+    recallControl(item.check, `recall-${item.index}`, item.caseSensitive, cardsById),
+  ]);
+}
+
+/**
+ * A recall check: the description, then four names to pick from (a class with its icon) or a field to
+ * type the name in. Either ends with the verdict and the why, like the other checks.
+ */
+function recallControl(check: RecallCheck, name: string, caseSensitive: boolean, cardsById: ReadonlyMap<string, Card>): HTMLElement {
+  const feedback = el('div', { class: 'gv-feedback', attrs: { role: 'status' } });
+  const root = el('div', { class: 'gv-question gv-recall', attrs: { 'data-question': name, 'data-kind': 'recall' } }, [
+    el('p', { class: 'gv-card__prompt' }, inlineRich(check.prompt)),
+  ]);
+  if (check.choices) {
+    const choices = check.choices;
+    const right = choices.indexOf(check.answer);
+    const choose = (index: number) => {
+      rows.forEach((row, i) => setChoiceState(row, i === index ? (i === right ? 'chosen-right' : 'chosen-wrong') : i === right ? 'revealed-right' : 'disabled'));
+      root.dataset.result = index === right ? 'right' : 'wrong';
+      feedback.replaceChildren(...verdict(index === right, 'Not quite. The right answer is marked.', check.why));
+    };
+    const rows = choices.map((text, index) => choiceRow(text, { icon: cardsById.get(`api:class:${text}`)?.icon, onChoose: () => choose(index) }));
+    root.append(el('div', { class: 'gv-choices', attrs: { role: 'group', 'aria-label': 'Choices' } }, rows), feedback);
+    return root;
+  }
+  // The field's width is fixed, so it never hints at the answer's length.
+  const input = gapField('Name', 18);
+  const submit = button('Check', { variant: 'secondary', onClick: () => judge() });
+  const judge = typedJudge(root, input, submit, feedback, {
+    answer: check.answer,
+    code: caseSensitive,
+    why: check.why,
+    noun: 'name',
+    caseHint: 'Check the case. Godot’s class names are case-sensitive.',
+    judge: (typed, misses) => judgeRecall(typed, check.answer, misses, caseSensitive),
+  });
+  root.append(el('div', { class: 'gv-row' }, [el('label', { class: 'gv-recall__field' }, ['Name ', input]), submit]), feedback);
+  return root;
+}
+
+/**
+ * The judging of a typed answer, shared by the blank and the typed recall: exact match, a case hint, the
+ * answer after two misses (decision 35). Returns the judge for the Check button and Enter.
+ */
+function typedJudge(
+  root: HTMLElement,
+  input: HTMLInputElement,
+  submit: HTMLButtonElement,
+  feedback: HTMLElement,
+  o: { answer: string; code: boolean; why: string; noun: 'word' | 'name'; caseHint: string; judge: (typed: string, misses: number) => { verdict: BlankVerdict; misses: number } },
+): () => void {
+  let misses = 0;
+  const finish = (result: 'right' | 'wrong') => {
+    root.dataset.result = result;
+    input.readOnly = true;
+    submit.disabled = true;
+  };
+  const judge = () => {
+    if (root.dataset.result) return;
+    const result = o.judge(input.value, misses);
+    misses = result.misses;
+    input.setAttribute('aria-invalid', String(result.verdict !== 'right' && result.verdict !== 'empty'));
+    const why = el('p', {}, inlineRich(o.why));
+    switch (result.verdict) {
+      case 'empty':
+        feedback.replaceChildren(el('p', { text: `Type a ${o.noun} first.` }));
+        input.focus();
+        return;
+      case 'case':
+        feedback.replaceChildren(el('p', { class: 'gv-feedback__wrong', text: o.caseHint }));
+        input.focus();
+        return;
+      case 'wrong':
+        feedback.replaceChildren(el('p', { class: 'gv-feedback__wrong', text: `Not that ${o.noun}. One more try.` }));
+        input.focus();
+        return;
+      case 'shown':
+        input.value = o.answer;
+        feedback.replaceChildren(
+          el('p', { class: 'gv-feedback__wrong' }, ['The answer is ', o.code ? el('code', { class: 'gv-inline-code', text: o.answer }) : o.answer, '.']),
+          why,
+        );
+        finish('wrong');
+        return;
+      case 'right':
+        feedback.replaceChildren(el('p', { class: 'gv-feedback__right', text: misses === 0 ? 'Right.' : 'Second try, and you had it.' }), why);
+        finish('right');
+    }
+  };
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') judge();
+  });
+  return judge;
 }
 
 function figure(image: LessonImage): HTMLElement {
@@ -303,7 +481,6 @@ function choiceCheck(check: ChoiceCheck, name: string, kind?: 'predict'): HTMLEl
 function blankExercise(exercise: BlankExercise, index: number): HTMLElement {
   const input = gapField('Missing word', exercise.answer.length);
   const feedback = el('div', { class: 'gv-feedback', attrs: { role: 'status' } });
-  let misses = 0;
   const check = button('Check', { variant: 'secondary', onClick: () => judge() });
   const line = exercise.code
     ? codeBlock(exercise.code, { gap: input })
@@ -319,43 +496,14 @@ function blankExercise(exercise: BlankExercise, index: number): HTMLElement {
     el('div', { class: 'gv-row' }, [check]),
     feedback,
   ]);
-  input.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') judge();
+  const judge = typedJudge(root, input, check, feedback, {
+    answer: exercise.answer,
+    code: true,
+    why: exercise.why,
+    noun: 'word',
+    caseHint: 'Check the case. GDScript names are case-sensitive.',
+    judge: (typed, misses) => judgeBlank(typed, exercise.answer, misses),
   });
-  function finish(result: 'right' | 'wrong') {
-    root.dataset.result = result;
-    input.readOnly = true;
-    check.disabled = true;
-  }
-  function judge() {
-    if (root.dataset.result) return;
-    const result = judgeBlank(input.value, exercise.answer, misses);
-    misses = result.misses;
-    input.setAttribute('aria-invalid', String(result.verdict !== 'right' && result.verdict !== 'empty'));
-    const why = el('p', {}, inlineRich(exercise.why));
-    switch (result.verdict) {
-      case 'empty':
-        feedback.replaceChildren(el('p', { text: 'Type a word first.' }));
-        input.focus();
-        return;
-      case 'case':
-        feedback.replaceChildren(el('p', { class: 'gv-feedback__wrong', text: 'Check the case. GDScript names are case-sensitive.' }));
-        input.focus();
-        return;
-      case 'wrong':
-        feedback.replaceChildren(el('p', { class: 'gv-feedback__wrong', text: 'Not that word. One more try.' }));
-        input.focus();
-        return;
-      case 'shown':
-        input.value = exercise.answer;
-        feedback.replaceChildren(el('p', { class: 'gv-feedback__wrong' }, ['The answer is ', el('code', { class: 'gv-inline-code', text: exercise.answer }), '.']), why);
-        finish('wrong');
-        return;
-      case 'right':
-        feedback.replaceChildren(el('p', { class: 'gv-feedback__right', text: misses === 0 ? 'Right.' : 'Second try, and you had it.' }), why);
-        finish('right');
-    }
-  }
   return root;
 }
 

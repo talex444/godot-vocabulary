@@ -788,6 +788,58 @@ button.gv-lesson-row:focus-visible {
   padding-inline-start: 1.5em;
 }
 
+/* A term lesson (decision 71): the term list, then each term's six parts as a definition list. */
+.gv-term-list {
+  display: grid;
+  gap: 4px;
+}
+
+.gv-term-list ul {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding-inline-start: 1.5em;
+}
+
+/* A short name ("Node") still makes a 44 px target; a long one ("CollisionShape2D") breaks at 200 % text. */
+.gv-term-list .gv-link {
+  min-width: var(--target);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.gv-term {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  margin: 0;
+}
+
+.gv-term dt:not(:first-child) {
+  margin-top: 8px;
+}
+
+.gv-term dd {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  margin: 0;
+}
+
+/* The check's own label is its dt, so it needs no rule above it. */
+.gv-term .gv-question {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.gv-recall__field {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+}
+
 .gv-ticket {
   display: grid;
   gap: 4px;
