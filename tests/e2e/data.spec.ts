@@ -33,15 +33,19 @@ async function storedNewPerDay(page: Page): Promise<string> {
 test('settings switches and steppers persist; totals, projection and the above-twenty warning', async ({ page }) => {
   await gotoStart(page);
   await open(page, 'Settings');
-  expect(await load(page)).toEqual({ 'New per day': 20, 'Reviews per day': 200 });
-  await expect(page.locator('.gv-warning')).toBeEmpty();
+  // The defaults, 5 + 10 + 5 + 5 = 25 with the Godot editor family (GV-8n), are above twenty already.
+  expect(await load(page)).toEqual({ 'New per day': 25, 'Reviews per day': 250 });
+  await expect(page.locator('.gv-warning')).toHaveText(WARNING);
   // Retention is not exposed in v1.
   await expect(page.getByText(/retention/i)).toHaveCount(0);
 
+  await family(page, 'Godot editor').getByRole('switch', { name: 'Godot editor' }).click();
+  expect(await load(page)).toEqual({ 'New per day': 20, 'Reviews per day': 200 });
+  await expect(page.locator('.gv-warning')).toBeEmpty();
   await family(page, 'GitHub').getByRole('switch', { name: 'GitHub' }).click();
   await family(page, 'GDScript').getByRole('button', { name: 'More: New cards per day' }).click();
   expect(await load(page)).toEqual({ 'New per day': 16, 'Reviews per day': 160 });
-  await expect.poll(() => storedNewPerDay(page)).toBe('godot-api:10 gdscript:6 github:off');
+  await expect.poll(() => storedNewPerDay(page)).toBe('godot-editor:off godot-api:10 gdscript:6 github:off');
 
   await page.reload();
   await homeReady(page);
@@ -55,7 +59,7 @@ test('settings switches and steppers persist; totals, projection and the above-t
   await family(page, 'GitHub').getByRole('switch', { name: 'GitHub' }).click();
   expect(await load(page)).toEqual({ 'New per day': 21, 'Reviews per day': 210 });
   await expect(page.locator('.gv-warning')).toHaveText(WARNING);
-  await expect.poll(() => storedNewPerDay(page)).toBe('godot-api:10 gdscript:6 github:5');
+  await expect.poll(() => storedNewPerDay(page)).toBe('godot-editor:off godot-api:10 gdscript:6 github:5');
   await page.reload();
   await homeReady(page);
   await enterArea(page, 'Godot');
@@ -86,7 +90,7 @@ test('add a card, export, then a fresh install imports it all back with replace'
 
   await open(page, 'Settings');
   await family(page, 'Godot API').getByRole('button', { name: 'Fewer: New cards per day' }).click();
-  await expect.poll(() => storedNewPerDay(page)).toBe('godot-api:9 gdscript:5 github:5');
+  await expect.poll(() => storedNewPerDay(page)).toBe('godot-editor:5 godot-api:9 gdscript:5 github:5');
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Export' }).click()]);
   expect(download.suggestedFilename()).toMatch(/^godot-vocabulary-\d{4}-\d{2}-\d{2}\.json$/);
   const text = await readFile((await download.path())!, 'utf8');

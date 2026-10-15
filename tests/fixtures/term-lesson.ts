@@ -22,7 +22,8 @@ export function termTreatment(name: string, i: number, others: readonly string[]
       text: 'Built node by node in the Scene dock.',
       ...(i === 0 ? { drawing: { caption: 'A small tree.', nodes: [{ name: 'Player', type: 'Node2D', depth: 0 }, { name: 'Sprite', type: 'Sprite2D', depth: 1 }] } } : {}),
     },
-    contrast: { other: i === 0 ? 'Scene dock' : TERM_CLASSES[0], text: 'The other one is a different thing.' },
+    // A phrase that names no card is plain words ("Scene dock" is a card since GV-8n).
+    contrast: { other: i === 0 ? 'Inspector dock' : TERM_CLASSES[0], text: 'The other one is a different thing.' },
     // Every second term is typed, the rest picked from four names.
     check: { prompt: 'Which class is the building block described above?', answer: name, why: 'That is its description.', ...(i % 2 === 0 ? { choices } : {}) },
   };

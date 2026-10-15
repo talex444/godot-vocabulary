@@ -145,7 +145,8 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast inside 
   await audit(page, 'settings with the warning');
 
   // Import, so the cards that follow are the same on every run: one new card per family.
-  const file = exportFile({ settings: settings({ 'godot-api': { enabled: true, newPerDay: 1 }, gdscript: { enabled: true, newPerDay: 1 }, github: { enabled: true, newPerDay: 1 } }) });
+  const one = { enabled: true, newPerDay: 1 };
+  const file = exportFile({ settings: settings({ 'godot-editor': one, 'godot-api': one, gdscript: one, github: one }) });
   await page.locator('input[type="file"]').setInputFiles({ name: 'godot-vocabulary-test.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(file)) });
   await page.getByRole('button', { name: 'Replace everything on this device' }).waitFor();
   await audit(page, 'settings (import choice)');
@@ -153,18 +154,18 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast inside 
   await expect(page.locator('.gv-result')).toHaveText(/^Restored /);
   await backToStart(page);
 
-  // The Godot area's session: one API card and one GDScript card.
+  // The Godot area's session: one editor card, one API card and one GDScript card.
   await startSession(page);
   const cards: string[] = [];
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3; i++) {
     const family = (await page.locator('.gv-card__family').textContent())!;
     cards.push(family);
     await audit(page, `card (${family})`);
     await answer(page, 0);
     await audit(page, `card answered (${family})`);
-    if (i < 1) await goNext(page);
+    if (i < 2) await goNext(page);
   }
-  expect(cards.sort()).toEqual(['GDScript', 'Godot API']);
+  expect(cards.sort()).toEqual(['GDScript', 'Godot API', 'Godot editor']);
 
   // Second looks: the API class card comes back flipped (name and icon asked, descriptions to pick).
   for (let i = 0; i < 6; i++) {
@@ -264,7 +265,7 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast inside 
 
   // Fixed order for the report: the Godot card screens by family name.
   const { screens } = runs.Godot;
-  const fixed = ['Godot API', 'GDScript'];
+  const fixed = ['Godot editor', 'Godot API', 'GDScript'];
   const cardScreens = screens.filter((s) => s.startsWith('card'));
   const rank = (s: string) => fixed.findIndex((f) => s.endsWith(`(${f})`)) * 2 + (s.startsWith('card answered') ? 1 : 0);
   const sortedCards = [...cardScreens].sort((a, b) => rank(a) - rank(b));

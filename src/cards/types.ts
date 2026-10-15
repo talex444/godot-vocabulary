@@ -1,6 +1,6 @@
 import { AREAS } from '../areas/registry';
 
-export type Family = 'godot-api' | 'gdscript' | 'github';
+export type Family = 'godot-editor' | 'godot-api' | 'gdscript' | 'github';
 
 /** Every family, area by area (`src/areas/registry.ts` is where a family is added). */
 export const FAMILIES: readonly Family[] = AREAS.flatMap((area) => area.families);
@@ -19,7 +19,7 @@ export interface CardSource {
 /**
  * One four-choice card. Choices are `answer` plus `distractors`, shuffled at display time.
  * Ids are stable: `api:class:Timer`, `api:method:Timer.start`, `api:prop:Timer.wait_time`,
- * `api:signal:Timer.timeout`, `gh:term:pull-request`, `gd:…`.
+ * `api:signal:Timer.timeout`, `gh:term:pull-request`, `gd:…`, `editor:dock:scene`.
  */
 export interface Card {
   id: string;

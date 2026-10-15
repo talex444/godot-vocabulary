@@ -1,6 +1,7 @@
 {
   "about": "Card topics (decision 30, done-criteria 39). A class takes the topic of the first page below, in this order, that mentions it as ``Name`` or :ref:`class_Name`; otherwise the first root it inherits from; otherwise the default. Members take their class's topic. Language cards take the topic of their source page; class-reference pages take that class's topic, or the classPages entry.",
   "pages": [
+    { "page": "getting_started/introduction/first_look_at_the_editor", "topic": "First look at the editor" },
     { "page": "getting_started/step_by_step/nodes_and_scenes", "topic": "Nodes and scenes" },
     { "page": "getting_started/step_by_step/instancing", "topic": "Instancing" },
     { "page": "getting_started/step_by_step/scripting_first_script", "topic": "Your first script" },

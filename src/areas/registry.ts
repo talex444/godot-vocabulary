@@ -46,9 +46,9 @@ function once<T>(loader: () => Promise<T>): () => Promise<T> {
 const godot: Area = {
   id: 'godot',
   label: 'Godot',
-  families: ['godot-api', 'gdscript'],
-  familyLabels: { 'godot-api': 'Godot API', gdscript: 'GDScript' },
-  newPerDay: { 'godot-api': 10, gdscript: 5 },
+  families: ['godot-editor', 'godot-api', 'gdscript'],
+  familyLabels: { 'godot-editor': 'Godot editor', 'godot-api': 'Godot API', gdscript: 'GDScript' },
+  newPerDay: { 'godot-editor': 5, 'godot-api': 10, gdscript: 5 },
   vendor: 'the Godot Foundation',
   unofficialLine: 'Unofficial; not affiliated with or endorsed by the Godot Foundation.',
   docsLabel: 'Open in the Godot docs',
@@ -57,12 +57,16 @@ const godot: Area = {
   icon: 'icons/PackedScene.svg',
   lessons: [0, 1, 2, 3, 4, 5].map((order) => ({ id: `c1-l${order}`, order })),
   load: once(async () => {
-    const [api, gdscript, course1] = await Promise.all([
+    const [editor, api, gdscript, course1] = await Promise.all([
+      import('../data/cards.godot-editor.json'),
       import('../data/cards.godot-api.json'),
       import('../data/cards.gdscript.json'),
       import('../data/courses/course-1.json'),
     ]);
-    return { cards: [...(api.default as Card[]), ...(gdscript.default as Card[])], courses: [course1.default as Course] };
+    return {
+      cards: [...(editor.default as Card[]), ...(api.default as Card[]), ...(gdscript.default as Card[])],
+      courses: [course1.default as Course],
+    };
   }),
 };
 
@@ -99,6 +103,8 @@ export interface FamilyTraits {
 }
 
 const TRAITS: Record<Family, FamilyTraits> = {
+  // A dock's or a screen's name is a plain name, never code font.
+  'godot-editor': { classIcons: false, plainNames: true, languageItems: false },
   'godot-api': { classIcons: true, plainNames: false, languageItems: false },
   gdscript: { classIcons: false, plainNames: false, languageItems: true },
   github: { classIcons: false, plainNames: true, languageItems: false },

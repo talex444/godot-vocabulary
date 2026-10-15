@@ -68,6 +68,16 @@ async function fetchAll() {
   const docs = join(SOURCES, 'godot-docs');
   const raw = `https://raw.githubusercontent.com/godotengine/godot-docs/${DOCS_BRANCH}/`;
   const pages = [
+    // The class pages lesson 1 (key concepts) quotes, beside the class reference the API cards come from.
+    'classes/class_camera2d.rst',
+    'classes/class_characterbody2d.rst',
+    'classes/class_collisionshape2d.rst',
+    'classes/class_node.rst',
+    'classes/class_node3d.rst',
+    'classes/class_packedscene.rst',
+    'classes/class_scenetree.rst',
+    'classes/class_signal.rst',
+    'classes/class_sprite2d.rst',
     'getting_started/first_2d_game/01.project_setup.rst',
     'getting_started/first_2d_game/02.player_scene.rst',
     'getting_started/first_2d_game/03.coding_the_player.rst',
@@ -75,6 +85,7 @@ async function fetchAll() {
     'getting_started/first_2d_game/05.the_main_game_scene.rst',
     'getting_started/first_2d_game/06.heads_up_display.rst',
     'getting_started/first_2d_game/07.finishing-up.rst',
+    'getting_started/introduction/first_look_at_the_editor.rst',
     'getting_started/introduction/key_concepts_overview.rst',
     'getting_started/step_by_step/instancing.rst',
     'getting_started/step_by_step/nodes_and_scenes.rst',

@@ -42,10 +42,11 @@ test('with one overdue review, the session is that review first, then new cards 
 
 test('a fresh install with nothing overdue gets new cards at once', async ({ page }) => {
   await gotoStart(page);
-  for (const f of ['godot-api', 'gdscript'] as const) expect((await familyStats(page, f))['From before today']).toBe(0);
+  for (const f of ['godot-editor', 'godot-api', 'gdscript'] as const) expect((await familyStats(page, f))['From before today']).toBe(0);
   await expect(note(page)).toHaveCount(0);
   await startSession(page);
-  await expect(progressbar(page)).toHaveAttribute('aria-valuemax', '15');
+  // Godot's 5 + 10 + 5.
+  await expect(progressbar(page)).toHaveAttribute('aria-valuemax', '20');
 });
 
 test('decision 21, amended: an overdue Godot review does not hold back GitHub’s new cards', async ({ page }) => {

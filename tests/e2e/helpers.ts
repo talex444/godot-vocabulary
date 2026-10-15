@@ -3,8 +3,8 @@ import { expect, type Page } from '@playwright/test';
 
 /** Shared navigation for the phone specs; the same paths `scripts/screenshot.mjs` takes. */
 
-export type Family = 'godot-api' | 'gdscript' | 'github';
-export const FAMILY_LABEL: Record<Family, string> = { 'godot-api': 'Godot API', gdscript: 'GDScript', github: 'GitHub' };
+export type Family = 'godot-editor' | 'godot-api' | 'gdscript' | 'github';
+export const FAMILY_LABEL: Record<Family, string> = { 'godot-editor': 'Godot editor', 'godot-api': 'Godot API', gdscript: 'GDScript', github: 'GitHub' };
 
 export interface DeckCard {
   id: string;
@@ -170,7 +170,7 @@ export async function playSession(page: Page, wrong: (index: number, showing: nu
 /** Only `godot-api` (or the given family) with `n` new cards today, set through the app's own Import. */
 export async function onlyFamily(page: Page, family: Family, n: number): Promise<void> {
   const off = { enabled: true, newPerDay: 0 };
-  const perFamily = { 'godot-api': off, gdscript: off, github: off, [family]: { enabled: true, newPerDay: n } };
+  const perFamily = { 'godot-editor': off, 'godot-api': off, gdscript: off, github: off, [family]: { enabled: true, newPerDay: n } };
   await importFromStart(page, exportFile({ settings: settings(perFamily) }));
 }
 
@@ -196,6 +196,7 @@ export interface FamilySetting {
 export function settings(perFamily: Partial<Record<Family, FamilySetting>> = {}) {
   return {
     families: {
+      'godot-editor': { enabled: true, newPerDay: 5 },
       'godot-api': { enabled: true, newPerDay: 10 },
       gdscript: { enabled: true, newPerDay: 5 },
       github: { enabled: true, newPerDay: 5 },

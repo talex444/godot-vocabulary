@@ -29,7 +29,7 @@ function fakeDeps(cards: Card[], progress: Progress[] = []) {
   const deps: RunDeps = {
     loadCards: async () => cards,
     getProgress: async () => new Map(progress.map((p) => [p.cardId, p])),
-    getSettings: async () => withDefaults({ families: { 'godot-api': { enabled: true, newPerDay: 3 }, gdscript: { enabled: true, newPerDay: 3 }, github: { enabled: true, newPerDay: 3 } } }),
+    getSettings: async () => withDefaults({ families: { 'godot-editor': { enabled: true, newPerDay: 0 }, 'godot-api': { enabled: true, newPerDay: 3 }, gdscript: { enabled: true, newPerDay: 3 }, github: { enabled: true, newPerDay: 3 } } }),
     saveProgress: async (p) => {
       saved.push(p);
     },
@@ -47,7 +47,7 @@ describe('live session flow', () => {
   it('saves the first answer at once, repeats a new card GAP places on, and never saves a repeat', async () => {
     const { deps, saved } = fakeDeps(deck);
     // Nine new cards in the Godot area, so a repeat has GAP cards to wait behind.
-    deps.getSettings = async () => withDefaults({ families: { 'godot-api': { enabled: true, newPerDay: 5 }, gdscript: { enabled: true, newPerDay: 4 }, github: { enabled: true, newPerDay: 3 } } });
+    deps.getSettings = async () => withDefaults({ families: { 'godot-editor': { enabled: true, newPerDay: 0 }, 'godot-api': { enabled: true, newPerDay: 5 }, gdscript: { enabled: true, newPerDay: 4 }, github: { enabled: true, newPerDay: 3 } } });
     const session = await Session.start(deps, 'godot', undefined, seededRng(1));
     expect(session.total).toBe(9);
     const first = session.current!;

@@ -5,11 +5,12 @@ import { MIN_POOL } from '../../scripts/generate-api-cards.mjs';
 import { RAW_TAG_PATTERN } from '../../scripts/lib/bbcode.mjs';
 import type { Card } from '../../src/cards/types';
 import api from '../../src/data/cards.godot-api.json';
+import editor from '../../src/data/cards.godot-editor.json';
 import gdscript from '../../src/data/cards.gdscript.json';
 import github from '../../src/data/cards.github.json';
 
 const ROOT = join(__dirname, '../..');
-const deck = [...(api as Card[]), ...(github as Card[]), ...(gdscript as Card[])];
+const deck = [...(editor as Card[]), ...(api as Card[]), ...(github as Card[]), ...(gdscript as Card[])];
 const byId = new Map(deck.map((c) => [c.id, c]));
 
 describe('generated deck', () => {
@@ -102,6 +103,8 @@ describe('distractor pools, full descriptions, links and topics (done-criteria 3
     expect(byId.get('api:signal:Timer.timeout')!.docsUrl).toBe(`${godot}classes/class_timer.html#class-timer-signal-timeout`);
     expect(byId.get('api:method:Timer.start')!.docsUrl).toBe(`${godot}classes/class_timer.html#class-timer-method-start`);
     expect(byId.get('gd:keyword:if')!.docsUrl).toBe(`${godot}tutorials/scripting/gdscript/gdscript_basics.html#if-else-elif`);
+    expect(byId.get('editor:dock:scene')!.docsUrl).toBe(`${godot}getting_started/introduction/first_look_at_the_editor.html#first-look-at-godot-s-editor`);
+    expect(byId.get('editor:screen:game')!.docsUrl).toBe(`${godot}getting_started/introduction/first_look_at_the_editor.html#the-five-main-screens`);
     expect(byId.get('gh:term:pull-request')!.docsUrl).toBe(
       'https://docs.github.com/en/get-started/learning-about-github/github-glossary#pull-request',
     );
@@ -110,6 +113,7 @@ describe('distractor pools, full descriptions, links and topics (done-criteria 3
   it('gives every card a topic', () => {
     for (const c of deck) expect(c.topic?.trim(), c.id).toBeTruthy();
     expect(new Set((github as Card[]).map((c) => c.topic))).toEqual(new Set(['Git basics', 'Branches and pull requests', 'GitHub features']));
+    expect(new Set((editor as Card[]).map((c) => c.topic))).toEqual(new Set(['First look at the editor']));
     // The first staged page that mentions the class: step by step comes before the first 2D game.
     expect(byId.get('api:class:Area2D')!.topic).toBe('Signals');
     expect(byId.get('api:class:AnimatedSprite2D')!.topic).toBe('Your first 2D game');

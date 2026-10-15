@@ -79,6 +79,10 @@ describe('the term check on a term lesson (decision 71)', () => {
     ]);
     expect(failures((l) => (l.terms![1]!.contrast.other = 'Spatial'))).toEqual([`${lessonName}: \`Spatial\` in code font (terms[1].contrast.other) is not a card in the decks`]);
     expect(failures((l) => (l.terms![1]!.contrast.other = 'Inspector dock'))).toEqual([]);
+    // A dock's name is a card's name (the godot-editor family): unmet, it fails like a class.
+    expect(failures((l) => (l.terms![1]!.contrast.other = 'Scene dock'))).toEqual([
+      `${lessonName}: \`Scene dock\` in code font (terms[1].contrast.other) is not a card the learner has met; add editor:dock:scene to this lesson's or an earlier lesson's cardIds`,
+    ]);
     expect(failures((l) => (l.terms![0]!.example.code = '$Label'))).toEqual([expect.stringMatching(/`Label` in code font \(terms\[0\]\.example\.code\)/)]);
     expect(failures((l) => (l.terms![0]!.when = 'When a `Label` is not enough.'))).toEqual([expect.stringMatching(/`Label` in code font \(terms\[0\]\.when\)/)]);
   });

@@ -5,7 +5,7 @@ import { FAMILY_LABEL, answer, endSession, enterArea, familyStats, gotoStart, ho
 test.use({ serviceWorkers: 'allow' });
 
 // The Godot area's families: the app opens on its start screen.
-const FAMILIES: Family[] = ['godot-api', 'gdscript'];
+const FAMILIES: Family[] = ['godot-editor', 'godot-api', 'gdscript'];
 
 test('installs, runs offline and keeps progress, settings and custom cards across a reopen', async ({ context, page }) => {
   await gotoStart(page);

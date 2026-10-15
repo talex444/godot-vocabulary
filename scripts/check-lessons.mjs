@@ -220,7 +220,7 @@ export function checkCourse(course, cards, options = {}) {
 }
 
 export function loadDecks() {
-  return ['godot-api', 'gdscript', 'github'].flatMap((f) => JSON.parse(readFileSync(join(ROOT, `src/data/cards.${f}.json`), 'utf8')));
+  return ['godot-editor', 'godot-api', 'gdscript', 'github'].flatMap((f) => JSON.parse(readFileSync(join(ROOT, `src/data/cards.${f}.json`), 'utf8')));
 }
 
 export function loadCourses() {

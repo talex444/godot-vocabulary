@@ -8,9 +8,11 @@ import {
   type Settings,
 } from '../../src/settings/load';
 
-function settings(api: number, gd: number, gh: number, enabled = [true, true, true]): Settings {
+/** Settings with these budgets: the Godot editor family last, so most cases read api / gdscript / github. */
+function settings(api: number, gd: number, gh: number, enabled = [true, true, true], editor = { enabled: true, newPerDay: 5 }): Settings {
   return {
     families: {
+      'godot-editor': editor,
       'godot-api': { enabled: enabled[0]!, newPerDay: api },
       gdscript: { enabled: enabled[1]!, newPerDay: gd },
       github: { enabled: enabled[2]!, newPerDay: gh },
@@ -20,22 +22,26 @@ function settings(api: number, gd: number, gh: number, enabled = [true, true, tr
   };
 }
 
+const NO_EDITOR = { enabled: false, newPerDay: 5 };
+
 describe('settings maths', () => {
-  it('defaults to 10/5/5, all enabled, retention 0.9', () => {
+  it('defaults to 5/10/5/5, all enabled, retention 0.9; the four together are above twenty', () => {
     expect(DEFAULT_SETTINGS).toEqual(settings(10, 5, 5));
-    expect(totalNewPerDay(DEFAULT_SETTINGS)).toBe(20);
-    expect(projectedReviewsPerDay(DEFAULT_SETTINGS)).toBe(200);
-    expect(warningAboveTwenty(DEFAULT_SETTINGS)).toBe(false);
+    // The Godot editor family's 5 (GV-8n) takes the default total from 20 to 25, so the warning shows.
+    expect(totalNewPerDay(DEFAULT_SETTINGS)).toBe(25);
+    expect(projectedReviewsPerDay(DEFAULT_SETTINGS)).toBe(250);
+    expect(warningAboveTwenty(DEFAULT_SETTINGS)).toBe(true);
   });
 
   it('counts only enabled families', () => {
-    expect(totalNewPerDay(settings(10, 5, 5, [true, false, true]))).toBe(15);
-    expect(projectedReviewsPerDay(settings(10, 5, 5, [false, false, false]))).toBe(0);
+    expect(totalNewPerDay(settings(10, 5, 5, [true, false, true], NO_EDITOR))).toBe(15);
+    expect(projectedReviewsPerDay(settings(10, 5, 5, [false, false, false], NO_EDITOR))).toBe(0);
   });
 
   it('warns only above twenty, and still accepts the value', () => {
-    expect(warningAboveTwenty(settings(10, 5, 6))).toBe(true);
-    expect(totalNewPerDay(settings(10, 5, 6))).toBe(21);
+    expect(warningAboveTwenty(settings(10, 5, 5, [true, true, true], NO_EDITOR))).toBe(false);
+    expect(warningAboveTwenty(settings(10, 5, 6, [true, true, true], NO_EDITOR))).toBe(true);
+    expect(totalNewPerDay(settings(10, 5, 6, [true, true, true], NO_EDITOR))).toBe(21);
     expect(warningAboveTwenty(settings(30, 5, 5, [false, true, true]))).toBe(false);
   });
 

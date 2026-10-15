@@ -20,12 +20,19 @@ const language = existsSync(gdscript) ? JSON.parse(readFileSync(gdscript, 'utf8'
 writeJson('src/data/cards.gdscript.json', language.map((card) => enrichLanguageCard(card, language)));
 console.log(`gdscript: ${language.length} cards${existsSync(gdscript) ? '' : ' (data/cards/gdscript.json not written yet)'}`);
 
+// The editor cards are hand-written from the "First look" page (data/cards/godot-editor.json, left as
+// it is); the copy is enriched the same way, its pool filled from the other parts of the editor.
+const editorFile = join(ROOT, 'data/cards/godot-editor.json');
+const editor = JSON.parse(readFileSync(editorFile, 'utf8'));
+writeJson('src/data/cards.godot-editor.json', editor.map((card) => enrichLanguageCard(card, editor, { anyKind: true })));
+console.log(`godot-editor: ${editor.length} cards`);
+
 // What the generator rules removed, for the deck test and the session notes.
 writeJson('data/removed-cards.json', removed);
 
 // Cards per family for the About screen, so About never loads a deck (decision 55).
 const counts = {};
-for (const family of ['godot-api', 'gdscript', 'github']) {
+for (const family of ['godot-editor', 'godot-api', 'gdscript', 'github']) {
   counts[family] = JSON.parse(readFileSync(join(ROOT, `src/data/cards.${family}.json`), 'utf8')).length;
 }
 writeJson('src/data/deck-counts.json', counts);
@@ -34,19 +41,24 @@ await generateIcons();
 copyLessonImages();
 copyShippedFiles();
 
-/** Pool = the hand-written wrong answers, then other answers of the same kind and form, then the kind. */
-function enrichLanguageCard(card, all) {
+/**
+ * Pool = the hand-written wrong answers, then other answers of the same kind and form, then the kind.
+ * With `anyKind` (the editor's parts: a dock is confused with a panel as easily as with a dock), the
+ * rest of the deck follows, and a wrong answer points at whichever card it is.
+ */
+function enrichLanguageCard(card, all, { anyKind = false } = {}) {
   const after = (list) => {
     const at = list.indexOf(card);
     return [...list.slice(at + 1), ...list.slice(0, at)];
   };
   const kin = after(all.filter((c) => c.kind === card.kind));
   const sameForm = kin.filter((c) => Boolean(c.code) === Boolean(card.code));
+  const rest = anyKind ? after(all).filter((c) => c.kind !== card.kind) : [];
   const pool = [];
-  for (const text of [...card.distractors, ...sameForm.map((c) => c.answer), ...kin.map((c) => c.answer)]) {
+  for (const text of [...card.distractors, ...sameForm.map((c) => c.answer), ...kin.map((c) => c.answer), ...rest.map((c) => c.answer)]) {
     if (text !== card.answer && !pool.includes(text) && pool.length < POOL_SIZE) pool.push(text);
   }
-  const idOf = (text) => all.find((c) => c.answer === text && c.kind === card.kind)?.id ?? `gd:wrong:${card.kind}:${text}`;
+  const idOf = (text) => all.find((c) => c.answer === text && (anyKind || c.kind === card.kind))?.id ?? `gd:wrong:${card.kind}:${text}`;
   const [page, heading] = card.source.ref.split('#');
   return {
     ...card,

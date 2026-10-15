@@ -25,13 +25,14 @@ Findings: 0.
 
 ## Godot
 
-Screens audited: start, settings, settings with the warning, settings (import choice), card (Godot API), card answered (Godot API), card (GDScript), card answered (GDScript), flipped card (Godot API), flipped card answered (Godot API), skip this card (reason field), summary, settings (skipped cards), add card, add card with errors, about, courses, lesson, lesson answered, lesson finished, lesson with code, lesson with the course table.
+Screens audited: start, settings, settings with the warning, settings (import choice), card (Godot editor), card answered (Godot editor), card (Godot API), card answered (Godot API), card (GDScript), card answered (GDScript), flipped card (Godot API), flipped card answered (Godot API), skip this card (reason field), summary, settings (skipped cards), add card, add card with errors, about, courses, lesson, lesson answered, lesson finished, lesson with code, lesson with the course table.
 
-Findings: 12.
+Findings: 13.
 
 | Screen | Selector | Text | Background | Expected | Actual |
 |--------|----------|------|------------|----------|--------|
 | start | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
+| card answered (Godot editor) | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | card answered (Godot API) | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | card answered (GDScript) | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | flipped card answered (Godot API) | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |

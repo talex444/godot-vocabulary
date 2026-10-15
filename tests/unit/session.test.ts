@@ -302,6 +302,8 @@ describe('sessionSummary', () => {
   it('counts due, overdue and new cards per family of the area, and only those', () => {
     const progress = [seen('github:0', 'github', yesterday, new Date(2026, 9, 13, 8, 0))];
     expect(sessionSummary(input(progress))).toEqual({
+      // The test deck has no editor cards, so the family is there with nothing to bring in.
+      'godot-editor': { enabled: true, due: 0, overdue: 0, newAvailable: 0 },
       'godot-api': { enabled: true, due: 0, overdue: 0, newAvailable: 10 },
       gdscript: { enabled: true, due: 0, overdue: 0, newAvailable: 5 },
     });

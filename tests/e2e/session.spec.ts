@@ -33,9 +33,10 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('4: Start shows ready, new and from before today per family of the area and one Start button', async ({ page }) => {
+  expect(await familyStats(page, 'godot-editor')).toEqual({ Ready: 0, 'New today': 5, 'From before today': 0 });
   expect(await familyStats(page, 'godot-api')).toEqual({ Ready: 0, 'New today': 10, 'From before today': 0 });
   expect(await familyStats(page, 'gdscript')).toEqual({ Ready: 0, 'New today': 5, 'From before today': 0 });
-  await expect(page.locator('.gv-family')).toHaveCount(2);
+  await expect(page.locator('.gv-family')).toHaveCount(3);
   await expect(page.getByRole('button', { name: 'Start', exact: true })).toHaveCount(1);
   await expect(page.getByRole('button', { name: 'Start', exact: true })).toBeEnabled();
   await openArea(page, 'Git & GitHub');
@@ -54,8 +55,8 @@ test('5, 8: a new card is a question with one prompt and exactly four choices', 
   // Asked before taught: no explanation and no Next until a choice is tapped.
   await expect(page.locator('.gv-explain')).toHaveCount(0);
   await expect(nextButton(page)).toHaveCount(0);
-  // The whole first session is new cards (fresh install, Godot's 10 + 5), so every card met is a question first.
-  await expect(page.getByRole('progressbar', { name: 'Cards done' })).toHaveAttribute('aria-valuemax', '15');
+  // The whole first session is new cards (fresh install, Godot's 5 + 10 + 5), so every card met is a question first.
+  await expect(page.getByRole('progressbar', { name: 'Cards done' })).toHaveAttribute('aria-valuemax', '20');
 });
 
 test('5: an API class card shows the class icon beside every choice', async ({ page }) => {

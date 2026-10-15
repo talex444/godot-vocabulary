@@ -1,0 +1,178 @@
+[
+  {
+    "id": "editor:dock:scene",
+    "family": "godot-editor",
+    "kind": "dock",
+    "prompt": "Which dock “lists the active scene's nodes”?",
+    "answer": "Scene dock",
+    "distractors": ["FileSystem dock", "Inspector", "scene tabs"],
+    "explain": "The Scene dock shows the nodes of the scene you have open, as a tree.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#First look at Godot's editor", "version": "4.7" },
+    "rank": 0
+  },
+  {
+    "id": "editor:dock:inspector",
+    "family": "godot-editor",
+    "kind": "dock",
+    "prompt": "Which dock “allows you to edit the properties of a selected node”?",
+    "answer": "Inspector",
+    "distractors": ["Scene dock", "FileSystem dock", "toolbar"],
+    "explain": "The Inspector shows the properties of the node you have selected, and you change them there.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#First look at Godot's editor", "version": "4.7" },
+    "rank": 1
+  },
+  {
+    "id": "editor:dock:filesystem",
+    "family": "godot-editor",
+    "kind": "dock",
+    "prompt": "Which dock “lists your project files, including scripts, images, audio samples, and more”?",
+    "answer": "FileSystem dock",
+    "distractors": ["Scene dock", "Inspector", "Asset Library"],
+    "explain": "The FileSystem dock lists the files of your project: scripts, images, sounds and the rest.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#First look at Godot's editor", "version": "4.7" },
+    "rank": 2
+  },
+  {
+    "id": "editor:panel:viewport",
+    "family": "godot-editor",
+    "kind": "panel",
+    "prompt": "What sits in the center of the editor, “below the scene selector”, with its toolbar at the top?",
+    "answer": "viewport",
+    "distractors": ["bottom panel", "Scene dock", "2D screen"],
+    "explain": "The viewport is the center of the editor, under the scene tabs, with its toolbar at the top and docks on either side.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#First look at Godot's editor", "version": "4.7" },
+    "rank": 3
+  },
+  {
+    "id": "editor:screen:2d",
+    "family": "godot-editor",
+    "kind": "screen",
+    "prompt": "Which main screen do you use “for all types of games”, and is “where you'll build your interfaces”?",
+    "answer": "2D screen",
+    "distractors": ["3D screen", "Script screen", "Game screen"],
+    "explain": "The 2D screen is for every kind of game: besides 2D games, it is where interfaces are built.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#The five main screens", "version": "4.7" },
+    "rank": 4
+  },
+  {
+    "id": "editor:screen:script",
+    "family": "godot-editor",
+    "kind": "screen",
+    "prompt": "Which main screen “is a complete code editor with a debugger, rich auto-completion, and built-in code reference”?",
+    "answer": "Script screen",
+    "distractors": ["2D screen", "Game screen", "class reference"],
+    "explain": "The Script screen is the editor's own code editor, with a debugger and built-in code reference.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#The five main screens", "version": "4.7" },
+    "rank": 5
+  },
+  {
+    "id": "editor:control:toolbar",
+    "family": "godot-editor",
+    "kind": "control",
+    "prompt": "At the top of the viewport, where do you “find different tools to move, scale, or lock the scene's nodes”?",
+    "answer": "toolbar",
+    "distractors": ["main menu", "bottom panel", "playtest buttons"],
+    "explain": "The toolbar sits at the top of the viewport and changes with the context and the selected node.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#First look at Godot's editor", "version": "4.7" },
+    "rank": 6
+  },
+  {
+    "id": "editor:panel:bottom-panel",
+    "family": "godot-editor",
+    "kind": "panel",
+    "prompt": "What, “situated below the viewport, is the host for the debug console, the animation editor, the audio mixer, and more”?",
+    "answer": "bottom panel",
+    "distractors": ["toolbar", "Inspector", "FileSystem dock"],
+    "explain": "The bottom panel holds tools such as the debug console, folded until you click one.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#First look at Godot's editor", "version": "4.7" },
+    "rank": 7
+  },
+  {
+    "id": "editor:screen:game",
+    "family": "godot-editor",
+    "kind": "screen",
+    "prompt": "Which main screen “is where your project will appear when running it from the editor”?",
+    "answer": "Game screen",
+    "distractors": ["2D screen", "viewport", "playtest buttons"],
+    "explain": "The Game screen shows your running project; changes made there are not saved when it stops.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#The five main screens", "version": "4.7" },
+    "rank": 8
+  },
+  {
+    "id": "editor:control:playtest-buttons",
+    "family": "godot-editor",
+    "kind": "control",
+    "prompt": "Along the editor's top edge, what sits on the right, beside the Movie Maker Mode toggle?",
+    "answer": "playtest buttons",
+    "distractors": ["main menu", "scene tabs", "toolbar"],
+    "explain": "The playtest buttons sit at the right of the editor's top edge, beside the Movie Maker Mode toggle.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#First look at Godot's editor", "version": "4.7" },
+    "rank": 9
+  },
+  {
+    "id": "editor:control:scene-tabs",
+    "family": "godot-editor",
+    "kind": "control",
+    "prompt": "“Just below the workspace buttons”, what shows each opened scene, with a plus (+) button beside them to add a new one?",
+    "answer": "scene tabs",
+    "distractors": ["main menu", "toolbar", "playtest buttons"],
+    "explain": "The opened scenes show as tabs under the workspace buttons; the plus (+) button adds a new scene.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#First look at Godot's editor", "version": "4.7" },
+    "rank": 10
+  },
+  {
+    "id": "editor:control:main-menu",
+    "family": "godot-editor",
+    "kind": "control",
+    "prompt": "“By default, along the window's top edge”, what sits on the left?",
+    "answer": "main menu",
+    "distractors": ["playtest buttons", "scene tabs", "toolbar"],
+    "explain": "The main menu sits at the left of the editor's top edge, with the workspace buttons in the center.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#First look at Godot's editor", "version": "4.7" },
+    "rank": 11
+  },
+  {
+    "id": "editor:screen:3d",
+    "family": "godot-editor",
+    "kind": "screen",
+    "prompt": "In which main screen can you “work with meshes, lights, and design levels for 3D games”?",
+    "answer": "3D screen",
+    "distractors": ["2D screen", "Game screen", "Script screen"],
+    "explain": "The 3D screen is where 3D levels are built from meshes and lights.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#The five main screens", "version": "4.7" },
+    "rank": 12
+  },
+  {
+    "id": "editor:panel:project-manager",
+    "family": "godot-editor",
+    "kind": "panel",
+    "prompt": "“When you launch Godot”, what is “the first window you see”?",
+    "answer": "Project Manager",
+    "distractors": ["Asset Library", "main menu", "Inspector"],
+    "explain": "The Project Manager opens first; there you manage, import or create projects before the editor opens.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#The Project Manager", "version": "4.7" },
+    "rank": 13
+  },
+  {
+    "id": "editor:screen:asset-library",
+    "family": "godot-editor",
+    "kind": "screen",
+    "prompt": "Which main screen “is a library of free and open source add-ons, scripts, and assets to use in your projects”?",
+    "answer": "Asset Library",
+    "distractors": ["FileSystem dock", "Script screen", "Project Manager"],
+    "explain": "The Asset Library is the fifth main screen, where community add-ons and assets are found.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#The five main screens", "version": "4.7" },
+    "rank": 14
+  },
+  {
+    "id": "editor:panel:class-reference",
+    "family": "godot-editor",
+    "kind": "panel",
+    "prompt": "Godot comes with it built in: press F1 anywhere in the editor to search it for “a class, method, property, constant, or signal”. What is it?",
+    "answer": "class reference",
+    "distractors": ["Script screen", "Inspector", "Asset Library"],
+    "explain": "The built-in class reference opens an item's page in the Script screen when you double-click it in the search.",
+    "source": { "doc": "godot-docs 4.7", "ref": "getting_started/introduction/first_look_at_the_editor#Integrated class reference", "version": "4.7" },
+    "rank": 15
+  }
+]
