@@ -22,11 +22,9 @@ export interface Nav {
   home(): void;
   /**
    * An area's page, entered from the home page: loaded and built first, then wiped in from `origin`
-   * (the tapped tile). Resolves when the wipe has finished; ignored while another switch runs. With
-   * `lesson`, the tile's promise (decision 66): that lesson opens through the same wipe, over the
-   * area page, so Back goes to the area page and then home.
+   * (the tapped tile). Resolves when the wipe has finished; ignored while another switch runs.
    */
-  area(area: AreaId, origin?: Point, lesson?: string): Promise<void>;
+  area(area: AreaId, origin?: Point): Promise<void>;
   /** One screen back: the same screen the phone's Back button shows (decision 50). */
   back(): void;
   begin(session: Session): void;
@@ -51,8 +49,6 @@ interface Entry {
   /** The area whose theme the screen wears; none on the home page and on About opened from it. */
   area?: AreaId;
   lesson?: string;
-  /** A lesson opened from its home tile: the area page lies under it, not the course list. */
-  fromHome?: true;
   /** Position in this app's history: 0 is the home page. */
   index: number;
   /** Which page load wrote the entry; entries a reload left behind read as the home page. */
@@ -78,7 +74,7 @@ export function readEntry(state: unknown, page: string): Entry {
   if (!area) return { ...HOME, index };
   if (screen === 'lesson') {
     if (typeof s.lesson !== 'string' || !/^[\w-]{1,64}$/.test(s.lesson)) return { screen: 'area', area, index };
-    return s.fromHome === true ? { screen, area, lesson: s.lesson, fromHome: true, index } : { screen, area, lesson: s.lesson, index };
+    return { screen, area, lesson: s.lesson, index };
   }
   return { screen, area, index };
 }
@@ -139,7 +135,7 @@ export function mountApp(host: HTMLElement): Nav {
       case 'about':
         return aboutScreen(nav);
       case 'lesson':
-        return lessonScreen(nav, entry.lesson!, areaOf(entry), entry.fromHome ? 'Back' : 'Back to courses');
+        return lessonScreen(nav, entry.lesson!, areaOf(entry));
       default:
         return startScreen(nav, deviceDeps, areaOf(entry));
     }
@@ -215,14 +211,9 @@ export function mountApp(host: HTMLElement): Nav {
         void draw(current);
       }
     },
-    area: async (next, origin, lesson) => {
+    area: async (next, origin) => {
       if (switching) return;
-      const area = getArea(next)?.id ?? AREAS[0]!.id;
-      if (lesson === undefined) return go({ screen: 'area', area }, origin);
-      // The area page's entry goes under the lesson unbuilt; Back draws it then (decision 66).
-      current = { screen: 'area', area, index: current.index + 1, page };
-      history.pushState(current, '');
-      await go({ screen: 'lesson', area, lesson, fromHome: true }, origin);
+      await go({ screen: 'area', area: getArea(next)?.id ?? AREAS[0]!.id }, origin);
     },
     back: () => {
       if (switching) return;

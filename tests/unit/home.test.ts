@@ -95,15 +95,20 @@ describe('home tiles', () => {
     }
   });
 
-  it('a tile with nothing ready opens its next lesson; with reviews ready, or no lesson left, it opens the area page (decision 66)', () => {
+  it('a tile never carries a lesson to open: every tap opens the area page (decision 69a)', () => {
     const empty = { progress: new Map(), settings: DEFAULT_SETTINGS, skipped: new Set<string>(), now };
     const godot = getArea('godot')!;
     const fresh = tileFigures(godot, { ...empty, lessonsDone: [] });
-    expect(tileView(godot, fresh, false).opens).toBe('c1-l0');
-    expect(tileView(godot, tileFigures(godot, { ...empty, lessonsDone: ['c1-l0', 'c1-l1'] }), false).opens).toBe('c1-l2');
-    expect(tileView(godot, { ...fresh, due: 4 }, false).opens).toBeUndefined();
-    expect(tileView(godot, tileFigures(godot, { ...empty, lessonsDone: godot.lessons.map((l) => l.id) }), false).opens).toBeUndefined();
-    expect(tileView(getArea('github')!, tileFigures(getArea('github')!, { ...empty, lessonsDone: [] }), false).opens).toBeUndefined();
+    const views = [
+      tileView(godot, fresh, false),
+      tileView(godot, tileFigures(godot, { ...empty, lessonsDone: ['c1-l0', 'c1-l1'] }), true),
+      tileView(godot, { ...fresh, due: 4 }, false),
+      tileView(getArea('github')!, tileFigures(getArea('github')!, { ...empty, lessonsDone: [] }), false),
+    ];
+    for (const view of views) expect(Object.keys(view).sort()).toEqual(['figure', 'label', 'lines', 'name', 'tag']);
+    expect(Object.keys(fresh)).not.toContain('nextLessonId');
+    // The Next line stays as information.
+    expect(views[0]!.lines[0]).toMatchObject({ text: 'Next: Lesson 0', next: true });
   });
 
   it('names the next lesson by the number the course list shows: the first in course order not done', () => {

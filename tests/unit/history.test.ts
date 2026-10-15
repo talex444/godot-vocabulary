@@ -10,9 +10,8 @@ describe('history entries read back', () => {
   it('keep a known screen and area', () => {
     expect(readEntry({ screen: 'courses', area: 'github', index: 2, page }, page)).toEqual({ screen: 'courses', area: 'github', index: 2 });
     expect(readEntry({ screen: 'lesson', area: 'godot', lesson: 'c1-l3', index: 3, page }, page)).toEqual({ screen: 'lesson', area: 'godot', lesson: 'c1-l3', index: 3 });
-    // A lesson opened from its home tile keeps that, so its Back is labelled for the area page (decision 66).
-    expect(readEntry({ screen: 'lesson', area: 'godot', lesson: 'c1-l0', fromHome: true, index: 2, page }, page)).toEqual({ screen: 'lesson', area: 'godot', lesson: 'c1-l0', fromHome: true, index: 2 });
-    expect(readEntry({ screen: 'lesson', area: 'godot', lesson: 'c1-l0', fromHome: 'yes', index: 2, page }, page)).toEqual({ screen: 'lesson', area: 'godot', lesson: 'c1-l0', index: 2 });
+    // An entry 1.3.5 wrote for a lesson opened from its tile reads as a plain lesson (decision 69a).
+    expect(readEntry({ screen: 'lesson', area: 'godot', lesson: 'c1-l0', fromHome: true, index: 2, page }, page)).toEqual({ screen: 'lesson', area: 'godot', lesson: 'c1-l0', index: 2 });
     // About opened from the home page has no area and wears the home theme.
     expect(readEntry({ screen: 'about', index: 1, page }, page)).toEqual({ screen: 'about', index: 1 });
   });
