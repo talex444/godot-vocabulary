@@ -101,13 +101,16 @@ async function fetchAll() {
   for (const page of pages) await download(raw + page, join(docs, page.replace(/\//g, '_')));
   await download(raw + 'LICENSE.txt', join(docs, 'LICENSE.txt'));
 
-  // The pictures of the pages the courses are written from (introduction and step-by-step), flat in
-  // godot-docs/img/; `pnpm generate` copies the ones a lesson names to public/courses/img.
-  for (const page of pages.filter((p) => /^getting_started\/(introduction|step_by_step)\//.test(p))) {
+  // The pictures of the pages the courses are written from (introduction, step-by-step and the first
+  // 2D game), flat in godot-docs/img/; `pnpm generate` copies the ones a lesson names to public/courses/img.
+  // The first-2D-game pages name theirs without a prefix (img/add_node.webp), so they are saved as
+  // first_2d_game_add_node.webp; the other pages' names already carry one.
+  for (const page of pages.filter((p) => /^getting_started\/(introduction|step_by_step|first_2d_game)\//.test(p))) {
     const text = readFileSync(join(docs, page.replace(/\//g, '_')), 'utf8');
     const dir = page.slice(0, page.lastIndexOf('/') + 1);
+    const prefix = dir === 'getting_started/first_2d_game/' ? 'first_2d_game_' : '';
     const images = new Set([...text.matchAll(/^\s*\.\. (?:image|figure):: (img\/[^\s]+)/gm)].map((m) => m[1]));
-    for (const image of [...images].sort(byName)) await download(raw + dir + image, join(docs, image));
+    for (const image of [...images].sort(byName)) await download(raw + dir + image, join(docs, 'img', prefix + image.slice('img/'.length)));
   }
 
   // GitHub glossary (CC BY 4.0).

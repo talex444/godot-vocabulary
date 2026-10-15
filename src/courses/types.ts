@@ -67,7 +67,7 @@ export interface LessonImage {
   height: number;
 }
 
-/** A scene-dock drawing built up one node at a time from the editor icons. */
+/** A scene-dock drawing built up one node at a time from the editor icons (one node only in a term's example). */
 export interface TreeDrawing {
   caption: string;
   nodes: { name: string; type: string; depth: number }[];
@@ -238,11 +238,12 @@ export function validateCourse(value: unknown, nameOf?: (cardId: string) => stri
     need(str(i?.caption), at, 'image caption missing');
     need(Number.isInteger(i?.width) && Number.isInteger(i?.height) && i!.width! > 0 && i!.height! > 0, at, 'image width and height required');
   };
-  const drawing = (v: unknown, at: string) => {
+  // A term's example may draw a single node: the tree as it stands when that term adds its root.
+  const drawing = (v: unknown, at: string, min: 1 | 2 = 2) => {
     const d = v as Partial<TreeDrawing>;
     need(str(d?.caption), at, 'drawing caption missing');
     const nodes = Array.isArray(d?.nodes) ? d!.nodes! : [];
-    need(nodes.length >= 2, at, 'drawing needs at least two nodes');
+    need(nodes.length >= min, at, min === 1 ? 'drawing needs at least one node' : 'drawing needs at least two nodes');
     nodes.forEach((n, i) => {
       need(str(n?.name) && str(n?.type) && Number.isInteger(n?.depth) && n.depth >= 0, `${at} node ${i}`, 'name, type and depth required');
       need(i === 0 ? n?.depth === 0 : n?.depth <= nodes[i - 1]!.depth + 1, `${at} node ${i}`, 'depth jumps');
@@ -283,7 +284,7 @@ export function validateCourse(value: unknown, nameOf?: (cardId: string) => stri
     need(str(t?.where?.text), at, '(3) where it lives: text missing');
     if (t?.where?.image) image(t.where.image, `${at} (3) where it lives image`);
     need(str(t?.example?.text), at, '(4) example: text missing');
-    if (t?.example?.drawing) drawing(t.example.drawing, `${at} (4) example drawing`);
+    if (t?.example?.drawing) drawing(t.example.drawing, `${at} (4) example drawing`, 1);
     if (t?.example?.image) image(t.example.image, `${at} (4) example image`);
     if (t?.example?.code !== undefined) need(str(t.example.code), `${at} (4) example`, 'empty code');
     need(str(t?.contrast?.other), at, '(5) not to be confused with: the other’s name missing');

@@ -79,7 +79,7 @@ export const COURSE1 = JSON.parse(readFileSync('src/data/courses/course-1.json',
 /** Lesson 0, whatever sits first in the course: since GV-8n the editor lesson, a term lesson (decision 70). */
 export const LESSON0 = COURSE1.lessons[0]!;
 export const LESSON0_TITLE = LESSON0.title;
-/** Lesson 1, the key concepts (`c1-l0`, lesson 0 before the shift), still a chunk lesson. */
+/** Lesson 1, the key concepts (`c1-l0`, lesson 0 before the shift), a term lesson since GV-8o. */
 export const LESSON1 = COURSE1.lessons[1]!;
 
 /** From Start, one of the flat links. */
@@ -267,11 +267,13 @@ export type ScreenName =
   | 'add-card'
   | 'about'
   | 'courses'
-  | 'lesson';
+  | 'lesson'
+  | 'lesson-1';
 
 /**
  * Every screen once, in one pass: Start, a card before and after answering, the summary, Settings
- * (and with the above-twenty warning), Add card, About. `visit` runs on each. Settings are put back.
+ * (and with the above-twenty warning), Add card, About, Courses, Lessons 0 and 1 (the two term
+ * lessons). `visit` runs on each. Settings are put back.
  */
 export async function walkScreens(page: Page, visit: (name: ScreenName) => Promise<void>, afterLoad?: () => Promise<void>): Promise<void> {
   await gotoStart(page);
@@ -307,6 +309,11 @@ export async function walkScreens(page: Page, visit: (name: ScreenName) => Promi
   await page.locator(`[data-lesson-id="${LESSON0.id}"] button`).click();
   await screenReady(page, LESSON0_TITLE);
   await visit('lesson');
+  await page.getByRole('button', { name: 'Back to courses' }).click();
+  await screenReady(page, 'Courses');
+  await page.locator(`[data-lesson-id="${LESSON1.id}"] button`).click();
+  await screenReady(page, LESSON1.title);
+  await visit('lesson-1');
   await page.getByRole('button', { name: 'Back to courses' }).click();
   await screenReady(page, 'Courses');
   await backToStart(page);

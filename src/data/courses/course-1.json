@@ -460,109 +460,391 @@
         "api:class:CollisionShape2D",
         "api:class:Node3D"
       ],
-      "need": "Open Godot for the first time and you see a Scene panel, a big view in the middle, and a list of several hundred node types. Before any script of yours runs, Godot has already decided what a game is made of and how its parts fit together. Every script in the later lessons is attached to one of those parts and runs because the part is in the game. So the question comes first: when you press Play, what is actually there? The manual answers it with four words, and this lesson takes them one at a time.",
+      "need": "Open a new scene and the Scene dock waits for its first node, while the Create New Node window lists several hundred kinds. Before any script of yours runs, Godot has already decided what a game is made of and how its parts fit together. Every script in the later lessons is attached to one of those parts and runs because the part is in the game. So the question comes first: when you press Play, what is actually there? The manual answers with four words, nodes, scenes, the scene tree and signals, and the class reference gives each its own page. This lesson takes them one at a time, then builds the manual's own example, a Player, one node at a time.",
       "agenda": [
-        "Scenes and nodes: what a game is built from.",
-        "The scene tree: where every part comes together when the game runs.",
-        "Signals: how one node tells others that something happened."
+        "Nodes, the scene tree and saved scenes: what a game is built from and where it all runs.",
+        "Signals: how one node tells others that something happened.",
+        "The Player, node by node: its body, sprite, collision shape and camera, then the 3D base node."
       ],
-      "chunks": [
+      "terms": [
         {
-          "heading": "Scenes",
-          "text": "The manual starts with one sentence that holds the whole lesson: “In Godot, a game is a tree of nodes that you group together into scenes. You can then wire these nodes so they can communicate using signals.”\n\n“In Godot, you break down your game into reusable scenes. A scene can be a character, a weapon, a menu in the user interface, a single house, an entire level, or anything you can think of. Godot's scenes are flexible; they fill the role of both prefabs and scenes in some other game engines.”\n\n“You can also nest scenes. For example, you can put your character in a level, and drag and drop a scene as a child of it.”",
-          "image": {
-            "src": "key_concepts_scene_example.webp",
-            "alt": "The Scene dock: Game at the top, Level under it, Player under Level and Hook under Player. Level, Player and Hook each carry the clapperboard icon of a nested scene. Beside the dock, the character holds a hook in the 2D view.",
-            "caption": "A character scene nested in a level, nested in the game.",
-            "width": 782,
-            "height": 363
+          "cardId": "api:class:Node",
+          "what": {
+            "text": "In the class reference, `Node` is the “Base class for all scene objects.” Its description begins: “Nodes are Godot's building blocks. They can be assigned as the child of another node, resulting in a tree arrangement.”\n\nThe key-concepts page says it in its own words: “A scene is composed of one or more nodes. Nodes are your game's smallest building blocks that you arrange into trees.”",
+            "page": {
+              "title": "Node (class reference)",
+              "url": "https://docs.godotengine.org/en/4.7/classes/class_node.html"
+            }
+          },
+          "when": "You reach for nodes for every part of a game. The Nodes and Scenes page: “There are dozens of kinds that can display an image, play a sound, represent a camera, and much more.”",
+          "where": {
+            "text": "Nodes are made in the Create New Node window, opened from the Scene dock's Add Child Node button (the plus at its top left) or, in an empty scene, its Other Node button. In the manual's picture, Node is at the top of the list, its description under it: “Base class for all scene objects.”",
+            "image": {
+              "src": "nodes_and_scenes_03_create_node_window.webp",
+              "alt": "The Create New Node window: an empty Search field, then Matches, a tree with Node at the top and Viewport, Window, SubViewport, Node3D, CanvasItem, Node2D and Control under it. Below, Description shows Class Node < Object, Base class for all scene objects, and the start of its description. Create and Cancel buttons at the bottom.",
+              "caption": "The Create New Node window, Node at the top of the list.",
+              "width": 900,
+              "height": 508
+            }
+          },
+          "example": {
+            "text": "The key-concepts page's example of nodes is a character: “Here's an example of a character's nodes.” “It is made of a `CharacterBody2D` node named ‘Player’, a `Camera2D`, a `Sprite2D`, and a `CollisionShape2D`.” Player at the top, the other three its children. The second half of this lesson builds this tree one node at a time.",
+            "image": {
+              "src": "key_concepts_character_nodes.webp",
+              "alt": "The Scene dock with Player at the top and Camera2D, Sprite2D and CollisionShape2D under it; beside it, the 2D view shows a green square sprite.",
+              "caption": "A character's nodes, from the key-concepts page.",
+              "width": 609,
+              "height": 295
+            }
+          },
+          "contrast": {
+            "other": "Node2D and Node3D",
+            "text": "A plain `Node` is the base class of them all. Under it in the Create New Node window sit `Node3D`, the “Base object in 3D space, inherited by all 3D nodes”, and, under CanvasItem, Node2D, the root that the Scene dock's 2D Scene button adds. A 2D or 3D node is still a `Node`."
           },
           "check": {
-            "prompt": "Which of these can a Godot scene be?",
-            "choices": [
-              "Only a whole level",
-              "Only a character the player controls",
-              "A character, a weapon, a menu or a whole level",
-              "Only something drawn on the screen"
-            ],
-            "answer": 2,
-            "why": "The manual: a scene can be “a character, a weapon, a menu in the user interface, a single house, an entire level, or anything you can think of.”"
+            "prompt": "Which class is the base for all scene objects, listed first in the window where you make new nodes?",
+            "answer": "Node",
+            "choices": ["Node2D", "Node3D", "Node", "CanvasItem"],
+            "why": "`Node` is the “Base class for all scene objects”; Node2D, Node3D and CanvasItem all sit under it in the Create New Node window."
           }
         },
         {
-          "heading": "Nodes",
-          "text": "“A scene is composed of one or more nodes. Nodes are your game's smallest building blocks that you arrange into trees. Here's an example of a character's nodes.”\n\n“It is made of a `CharacterBody2D` node named ‘Player’, a `Camera2D`, a `Sprite2D`, and a `CollisionShape2D`.” Build it below, one node at a time.\n\n“The node names end with ‘2D’ because this is a 2D scene. Their 3D counterparts have names that end with ‘3D’.” The 3D base node is `Node3D`.\n\n“Notice how nodes and scenes look the same in the editor. When you save a tree of nodes as a scene, it then shows as a single node, with its internal structure hidden in the editor.”\n\nIn the class reference, `Node` is the “Base class for all scene objects”, and a saved scene is a `PackedScene`: “An abstraction of a serialized scene.”",
-          "drawing": {
-            "caption": "The Player scene in the Scene dock",
-            "nodes": [
-              { "name": "Player", "type": "CharacterBody2D", "depth": 0 },
-              { "name": "Camera2D", "type": "Camera2D", "depth": 1 },
-              { "name": "Sprite2D", "type": "Sprite2D", "depth": 1 },
-              { "name": "CollisionShape2D", "type": "CollisionShape2D", "depth": 1 }
-            ]
+          "cardId": "api:class:SceneTree",
+          "what": {
+            "text": "In the class reference, `SceneTree` “Manages the game loop via a hierarchy of nodes.” Its description: “As one of the most important classes, the SceneTree manages the hierarchy of nodes in a scene, as well as scenes themselves. Nodes can be added, fetched and removed. The whole scene tree (and thus the current scene) can be paused.”\n\nThe key-concepts page: “All your game's scenes come together in the scene tree, literally a tree of scenes. And as scenes are trees of nodes, the scene tree also is a tree of nodes.”",
+            "page": {
+              "title": "SceneTree (class reference)",
+              "url": "https://docs.godotengine.org/en/4.7/classes/class_scenetree.html"
+            }
           },
-          "image": {
-            "src": "key_concepts_character_nodes.webp",
-            "alt": "The Scene dock with Player at the top and Camera2D, Sprite2D and CollisionShape2D under it; beside it, the 2D view shows a green square sprite.",
-            "caption": "The same scene in the editor, from the manual.",
-            "width": 609,
-            "height": 295
+          "when": "You reach for the SceneTree when you think about the running game as a whole: “The SceneTree contains the active tree of nodes,” says the Node page.",
+          "where": {
+            "text": "In the editor, the tree you see is the Scene dock's: the nodes of the scene you have open. The manual's picture under “The scene tree” is that dock with a level, Level01, holding other scenes as branches. When the game runs, a tree like it is what the SceneTree manages.",
+            "image": {
+              "src": "key_concepts_scene_tree.webp",
+              "alt": "The Scene dock of a level: Level01 at the root with BackgroundLayer, InterfaceLayer, a TileMap, a CharacterBody2D, Portal2D, Coins and Enemies under it. UserInterface, CharacterBody2D and Portal2D carry the clapperboard icon of a nested scene.",
+              "caption": "A level in the Scene dock: other scenes nested as branches of one tree.",
+              "width": 291,
+              "height": 342
+            }
+          },
+          "example": {
+            "text": "In that picture, Level01 holds layers, a TileMap, a character, a Portal2D, Coins and Enemies; the clapperboard icons mark the ones that are scenes of their own. Press Play and all of it runs as one tree of nodes. The page's advice: “it's easier to think of your game in terms of scenes as they can represent characters, weapons, doors, or your user interface.”"
+          },
+          "contrast": {
+            "other": "Scene dock",
+            "text": "The Scene dock shows the tree of the one scene you are editing, and it is there while nothing runs. The SceneTree is the tree of the running game: every scene that is in the game at that moment, nested together, managed for as long as the game runs."
           },
           "check": {
-            "prompt": "You save the Player tree as a scene and add it to a level. How does it show in the level's Scene dock?",
-            "choices": [
-              "As a single node, its insides hidden",
-              "As four separate nodes at the top of the level",
-              "As a file name with no icon",
-              "It does not show until the game runs"
-            ],
-            "answer": 0,
-            "why": "“When you save a tree of nodes as a scene, it then shows as a single node, with its internal structure hidden in the editor.”"
+            "prompt": "When the game runs, one object manages the game loop and the whole hierarchy of nodes, every scene in the game nested in it. Which class is it? Type its name.",
+            "answer": "SceneTree",
+            "why": "`SceneTree` “Manages the game loop via a hierarchy of nodes.”"
           }
         },
         {
-          "heading": "The scene tree",
-          "text": "“All your game's scenes come together in the scene tree, literally a tree of scenes. And as scenes are trees of nodes, the scene tree also is a tree of nodes. But it's easier to think of your game in terms of scenes as they can represent characters, weapons, doors, or your user interface.”\n\nIn the class reference, the `SceneTree` “Manages the game loop via a hierarchy of nodes.” That is the answer to this lesson's question: when the game runs, Godot runs one tree, and every scene you made is a branch of it.",
-          "image": {
-            "src": "key_concepts_scene_tree.webp",
-            "alt": "The Scene dock of a level: Level01 at the root with BackgroundLayer, InterfaceLayer, a TileMap, a CharacterBody2D, Portal2D, Coins and Enemies under it. UserInterface, CharacterBody2D and Portal2D carry the clapperboard icon of a nested scene.",
-            "caption": "A level: other scenes nested as branches of one tree.",
-            "width": 291,
-            "height": 342
+          "cardId": "api:class:PackedScene",
+          "what": {
+            "text": "A scene saved to disk is a `PackedScene`: “An abstraction of a serialized scene.” Serialized means written out, here to a file. Its description: “Can be used to save a node to a file. When saving, the node as well as all the nodes it owns get saved.”\n\nThe key-concepts page, on how one looks in the editor: “When you save a tree of nodes as a scene, it then shows as a single node, with its internal structure hidden in the editor.”",
+            "page": {
+              "title": "PackedScene (class reference)",
+              "url": "https://docs.godotengine.org/en/4.7/classes/class_packedscene.html"
+            }
+          },
+          "when": "You reach for a saved scene when you want to use one tree again. The Node page: “Scenes can be saved to the disk and then instantiated into other scenes.”",
+          "where": {
+            "text": "A saved scene is a file ending in .tscn, and it lives in the FileSystem dock with the project's other files. In the manual's signals lesson, a scene saved as sprite_2d.tscn is dragged from the FileSystem dock onto a node in the Scene dock: “click and drag the sprite_2d.tscn file you saved previously onto the Node2D to instantiate it.”",
+            "image": {
+              "src": "signals_03_dragging_scene.webp",
+              "alt": "The Scene dock with one node, Node2D, and a file named sprite_2d.tscn being dragged onto it from the FileSystem dock, the mouse pointer over Node2D.",
+              "caption": "A saved scene, sprite_2d.tscn, dragged onto a node to put it in the scene.",
+              "width": 258,
+              "height": 271
+            }
+          },
+          "example": {
+            "text": "The key-concepts page nests scenes: “For example, you can put your character in a level, and drag and drop a scene as a child of it.” In its picture, Game holds Level, Level holds Player, and Player holds Hook. Level, Player and Hook are each a saved scene of their own, so each shows as a single node with a clapperboard icon, its own nodes hidden inside.",
+            "image": {
+              "src": "key_concepts_scene_example.webp",
+              "alt": "The Scene dock: Game at the top, Level under it, Player under Level and Hook under Player. Level, Player and Hook each carry the clapperboard icon of a nested scene. Beside the dock, the character holds a hook in the 2D view.",
+              "caption": "A character scene nested in a level, nested in the game.",
+              "width": 782,
+              "height": 363
+            }
+          },
+          "contrast": {
+            "other": "the nodes made from it",
+            "text": "The `PackedScene` is the saved file, the plan. Each time it is put into a scene, a new set of nodes is made from it, and those nodes are what is in the tree. The Nodes and Scenes page: “You could have five or ten characters in your game, created from your Character scene.” One file; five or ten sets of nodes."
           },
           "check": {
-            "prompt": "The scene tree is a tree of scenes. What else is it, in the manual's words?",
-            "choices": [
-              "A tree of nodes",
-              "A list of saved files",
-              "A tree of signals",
-              "A list of scripts"
-            ],
-            "answer": 0,
-            "why": "“As scenes are trees of nodes, the scene tree also is a tree of nodes.”"
+            "prompt": "A tree of nodes saved to a file, ready to be put into other scenes as often as you like. Which class is it?",
+            "answer": "PackedScene",
+            "choices": ["SceneTree", "Node", "PackedScene", "Signal"],
+            "why": "A `PackedScene` is “An abstraction of a serialized scene”: a scene saved to a file."
           }
         },
         {
-          "heading": "Signals",
-          "text": "“Nodes emit signals when some event occurs. This feature allows you to make nodes communicate without hard-wiring them in code. It gives you a lot of flexibility in how you structure your scenes.”\n\n“For example, buttons emit a signal when pressed. You can connect a piece of code to this signal which will run in reaction to this event, like starting the game or opening a menu.”\n\n“Other built-in signals can tell you when two objects collided, when a character or monster entered a given area, and much more. You can also define new signals tailored to your game.” In the class reference, a signal is a `Signal`.",
-          "image": {
-            "src": "key_concepts_signals.webp",
-            "alt": "The Node dock's Signals tab for an Area2D: area_entered, area_exited, body_entered and more. body_entered has a connection under it to a function named _on_area_2d_body_entered.",
-            "caption": "The signals one node can emit, one of them connected.",
-            "width": 305,
-            "height": 369
+          "cardId": "api:class:Signal",
+          "what": {
+            "text": "The key-concepts page: “Nodes emit signals when some event occurs. This feature allows you to make nodes communicate without hard-wiring them in code.”\n\nIn the class reference, a signal is a `Signal`, “A built-in type representing a signal of an Object.” Its description: “Signals allow all connected Callables (and by extension their respective objects) to listen and react to events, without directly referencing one another.”",
+            "page": {
+              "title": "Signal (class reference)",
+              "url": "https://docs.godotengine.org/en/4.7/classes/class_signal.html"
+            }
+          },
+          "when": "You reach for a signal when one node needs to react to something that happened to another. The key-concepts page's example: “buttons emit a signal when pressed. You can connect a piece of code to this signal which will run in reaction to this event, like starting the game or opening a menu.”",
+          "where": {
+            "text": "Signals are connected in the Signals dock. The signals lesson: “Select the Button node and, on the right side of the editor, click on the tab named Signals next to the Inspector.” “The dock displays a list of signals available on the selected node.” In the manual's picture the selected node is a Button, and pressed() is among its signals.",
+            "image": {
+              "src": "signals_11_pressed_signals.webp",
+              "alt": "The Signals tab, between Inspector and Groups, with a Filter Signals field and the signals of BaseButton listed: button_down(), button_up(), pressed() (outlined) and toggled(toggled_on: bool).",
+              "caption": "The Signals dock for a selected Button; pressed() is outlined.",
+              "width": 298,
+              "height": 194
+            }
+          },
+          "example": {
+            "text": "The key-concepts page's picture, from an older editor where Signals was a tab of the Node dock, lists the signals of an Area2D, a node that detects what enters it. One of them, body_entered, is connected: under it sits the function that runs each time it is emitted. In a game, from the signals lesson: “an Area2D representing a coin emits a body_entered signal whenever the player's physics body enters its collision shape, allowing you to know when the player collected it.”",
+            "image": {
+              "src": "key_concepts_signals.webp",
+              "alt": "The Node dock's Signals tab for an Area2D: area_entered, area_exited, body_entered and more. body_entered has a connection under it to a function named _on_area_2d_body_entered.",
+              "caption": "The signals one node can emit, one of them connected.",
+              "width": 305,
+              "height": 369
+            }
+          },
+          "contrast": {
+            "other": "a function call",
+            "text": "When code calls a function on another node, it has to know that node and name it: the two are wired together. A node that emits a signal does not know who is listening; signals let objects react “without directly referencing one another.”"
           },
           "check": {
-            "prompt": "A button in your menu is pressed. What does the button do, in the manual's words?",
-            "choices": [
-              "It emits a signal",
-              "It calls every script in the tree",
-              "It restarts the scene",
-              "It saves the scene to disk"
-            ],
-            "answer": 0,
-            "why": "“Buttons emit a signal when pressed”, and code connected to that signal runs in reaction."
+            "prompt": "A button is pressed, and code connected to it runs, though the button never names that code. What does the button emit?",
+            "answer": "Signal",
+            "choices": ["Node", "Signal", "PackedScene", "SceneTree"],
+            "why": "“Buttons emit a signal when pressed”; in the class reference, a signal is a `Signal`."
           }
+        },
+        {
+          "cardId": "api:class:CharacterBody2D",
+          "what": {
+            "text": "In the class reference, `CharacterBody2D` is “A 2D physics body specialized for characters moved by script.” Its description: “CharacterBody2D is a specialized class for physics bodies that are meant to be user-controlled. They are not affected by physics at all, but they affect other physics bodies in their path.”",
+            "page": {
+              "title": "CharacterBody2D (class reference)",
+              "url": "https://docs.godotengine.org/en/4.7/classes/class_characterbody2d.html"
+            }
+          },
+          "when": "You reach for a CharacterBody2D for a player or an enemy that your script moves. The first 2D game tutorial notes: “In many real world projects, CharacterBody2D would be a better choice for players and enemies.”",
+          "where": {
+            "text": "To make it a scene's first node, its root, the first 2D game tutorial starts in the Scene dock: “In the upper-left corner, in the \"Scene\" tab, click the \"Other Node\" button”. Its rule for choosing the root: “a scene's root node should reflect the object's desired functionality - what the object is.”",
+            "image": {
+              "src": "first_2d_game_add_node.webp",
+              "alt": "The Scene dock of an empty scene: Create Root Node: with 2D Scene, 3D Scene, User Interface and, outlined, Other Node.",
+              "caption": "Other Node, for a root that is none of the three presets.",
+              "width": 279,
+              "height": 271
+            }
+          },
+          "example": {
+            "text": "This is where the manual's character starts. A `CharacterBody2D` is the root, renamed Player, because a player is what the object is. The drawing shows the Scene dock so far: one node, its name, and its class beside it. Each of the next three terms adds one child under it.",
+            "drawing": {
+              "caption": "The Player scene so far: its root.",
+              "nodes": [
+                { "name": "Player", "type": "CharacterBody2D", "depth": 0 }
+              ]
+            }
+          },
+          "contrast": {
+            "other": "Area2D and AnimatableBody2D",
+            "text": "The first 2D game tutorial builds its own player on an Area2D instead, a node that detects: “With Area2D we can detect objects that overlap or run into the player.” A `CharacterBody2D` is for bodies “that must move in specific ways and collide with the world”. For a moving platform the class reference points elsewhere: “For game objects that don't require complex movement or collision detection, such as moving platforms, AnimatableBody2D is simpler to configure.”"
+          },
+          "check": {
+            "prompt": "A 2D physics body for characters your script moves, not pushed around by physics itself; the manual's pick for players and enemies. Which node is it?",
+            "answer": "CharacterBody2D",
+            "choices": ["Area2D", "CharacterBody2D", "RigidBody2D", "AnimatableBody2D"],
+            "why": "`CharacterBody2D` is “A 2D physics body specialized for characters moved by script.”"
+          }
+        },
+        {
+          "cardId": "api:class:Sprite2D",
+          "what": {
+            "text": "In the class reference, `Sprite2D` is a “General-purpose sprite node.” Its description: “A node that displays a 2D texture. The texture displayed can be a region from a larger atlas texture, or a frame from a sprite sheet animation.” A texture is a picture, such as the project's icon.svg.",
+            "page": {
+              "title": "Sprite2D (class reference)",
+              "url": "https://docs.godotengine.org/en/4.7/classes/class_sprite2d.html"
+            }
+          },
+          "when": "You reach for a Sprite2D when something in a 2D game needs a picture. The first-script lesson starts with one for the Godot icon: “We need to create a Sprite2D node to display it in the game.”",
+          "where": {
+            "text": "Select Player in the Scene dock and press Add Child Node, the plus at the dock's top left. In the Create New Node window that opens, as the first-script lesson shows: “Type \"Sprite2D\" in the search bar to filter nodes and double-click on Sprite2D to create the node.”",
+            "image": {
+              "src": "scripting_first_script_add_sprite_node.webp",
+              "alt": "The Create New Node window with Sprite2D typed in Search: under Node, CanvasItem and Node2D, the matches AnimatedSprite2D and Sprite2D, Sprite2D selected. The Description reads Class Sprite2D < Node2D < CanvasItem < Node < Object, General-purpose sprite node, then the two sentences of its description.",
+              "caption": "Sprite2D, found by typing its name.",
+              "width": 900,
+              "height": 552
+            }
+          },
+          "example": {
+            "text": "Add the Sprite2D under Player and the tree has its first child; press the button under the drawing to add it. A sprite needs something to display. The first-script lesson: “In the Inspector on the right, you can see that the Texture property says <empty>. To display the Godot icon, click and drag the file icon.svg from the FileSystem dock onto the Texture slot.”",
+            "drawing": {
+              "caption": "The Player scene: Sprite2D added under Player.",
+              "nodes": [
+                { "name": "Player", "type": "CharacterBody2D", "depth": 0 },
+                { "name": "Sprite2D", "type": "Sprite2D", "depth": 1 }
+              ]
+            }
+          },
+          "contrast": {
+            "other": "the texture it shows",
+            "text": "The texture is the picture: a file in the FileSystem dock, such as icon.svg. The `Sprite2D` is the node that displays it in the scene. Without one, the node has nothing to show: “A Sprite2D node needs a texture to display.”"
+          },
+          "check": {
+            "prompt": "The Player's child that displays a 2D texture, the picture you see. Which class is it? Type its name.",
+            "answer": "Sprite2D",
+            "why": "`Sprite2D`: “A node that displays a 2D texture.”"
+          }
+        },
+        {
+          "cardId": "api:class:CollisionShape2D",
+          "what": {
+            "text": "In the class reference, `CollisionShape2D` is “A node that provides a Shape2D to a CollisionObject2D parent.” Its description goes on: “This can give a detection shape to an Area2D or turn a PhysicsBody2D into a solid object.”",
+            "page": {
+              "title": "CollisionShape2D (class reference)",
+              "url": "https://docs.godotengine.org/en/4.7/classes/class_collisionshape2d.html"
+            }
+          },
+          "when": "You reach for a CollisionShape2D whenever a body or an area needs a size and a shape to collide with. The first 2D game adds one to its player because “This will determine the player's \"hitbox\", or the bounds of its collision area.”",
+          "where": {
+            "text": "Add it under Player like any node, then give it a shape in the Inspector: “next to \"Shape\" in the Inspector, click \"[empty]\" -> \"New CapsuleShape2D\"”. The shape then shows in the viewport with handles: “Using the two size handles, resize the shape to cover the sprite”, as in the manual's picture.",
+            "image": {
+              "src": "first_2d_game_player_coll_shape.webp",
+              "alt": "The viewport: the player's sprite, a round creature, covered by a capsule-shaped collision shape, with two small handles outlined, one on the right edge and one at the bottom.",
+              "caption": "A capsule shape resized to cover the sprite, its two size handles outlined.",
+              "width": 324,
+              "height": 403
+            }
+          },
+          "example": {
+            "text": "Add the CollisionShape2D under Player, beside the Sprite2D. It is a child of the body, not of the sprite, because the body is what it gives a shape to: “A node that provides a Shape2D to a CollisionObject2D parent.”",
+            "drawing": {
+              "caption": "The Player scene: CollisionShape2D added under Player.",
+              "nodes": [
+                { "name": "Player", "type": "CharacterBody2D", "depth": 0 },
+                { "name": "Sprite2D", "type": "Sprite2D", "depth": 1 },
+                { "name": "CollisionShape2D", "type": "CollisionShape2D", "depth": 1 }
+              ]
+            }
+          },
+          "contrast": {
+            "other": "an Area2D",
+            "text": "An Area2D is the other kind of parent a collision shape can serve: from it, the area gets “a detection shape”, so it can detect what overlaps it. Under a physics body such as Player, the same node turns it “into a solid object.” The shape node is the same in both; its parent decides what the shape is for. Without a shape, either one shows a warning."
+          },
+          "check": {
+            "prompt": "The Player's child that gives the body its hitbox, the bounds of its collision area. Which node is it?",
+            "answer": "CollisionShape2D",
+            "choices": ["Sprite2D", "CollisionShape2D", "Camera2D", "CharacterBody2D"],
+            "why": "A `CollisionShape2D` “provides a Shape2D to a CollisionObject2D parent”; the tutorial calls it the player's “hitbox”."
+          }
+        },
+        {
+          "cardId": "api:class:Camera2D",
+          "what": {
+            "text": "In the class reference, `Camera2D` is the “Camera node for 2D scenes.” Its description: “It forces the screen (current layer) to scroll following this node.”",
+            "page": {
+              "title": "Camera2D (class reference)",
+              "url": "https://docs.godotengine.org/en/4.7/classes/class_camera2d.html"
+            }
+          },
+          "when": "You reach for a Camera2D when the screen should scroll to follow something. Put under the Player, it makes the Nodes and Scenes page's “playable character that the camera follows”.",
+          "where": {
+            "text": "It is added under Player like the others. The Nodes and Scenes page's picture shows a fuller game in the Scene dock: Main holds a Player with an AnimatedSprite2D, a CollisionShape2D, an AudioStreamPlayer2D and a Camera2D, the camera's icon a small film camera.",
+            "image": {
+              "src": "nodes_and_scenes_nodes.webp",
+              "alt": "The Scene dock: Main at the top; under it Player with AnimatedSprite2D, CollisionShape2D, AudioStreamPlayer2D and Camera2D; Enemy with AnimatedSprite2D, CollisionShape2D and an Area2D holding its own CollisionShape2D; then a CanvasLayer with UI.",
+              "caption": "A game's tree, with a Camera2D under the Player.",
+              "width": 279,
+              "height": 389
+            }
+          },
+          "example": {
+            "text": "Add the Camera2D and the tree matches the key-concepts page: Player with three children. The manual's picture lists the camera first, right under Player, and so does the drawing. With the camera inside the character's scene, the screen follows the Player in whatever level it is put into.",
+            "drawing": {
+              "caption": "The Player scene, complete: Camera2D added under Player.",
+              "nodes": [
+                { "name": "Player", "type": "CharacterBody2D", "depth": 0 },
+                { "name": "Camera2D", "type": "Camera2D", "depth": 1 },
+                { "name": "Sprite2D", "type": "Sprite2D", "depth": 1 },
+                { "name": "CollisionShape2D", "type": "CollisionShape2D", "depth": 1 }
+              ]
+            }
+          },
+          "contrast": {
+            "other": "viewport",
+            "text": "The editor's viewport is where you see the scene while you build it, with the toolbar's tools to move, scale or lock its nodes. The `Camera2D` is a node in the scene itself: when the game runs, it “forces the screen (current layer) to scroll following this node.” One is part of the editor; the other is part of your game."
+          },
+          "check": {
+            "prompt": "The Player's child that makes the screen scroll to follow it. Which node is it?",
+            "answer": "Camera2D",
+            "choices": ["Sprite2D", "Camera2D", "CollisionShape2D", "Node3D"],
+            "why": "`Camera2D` “forces the screen (current layer) to scroll following this node.”"
+          }
+        },
+        {
+          "cardId": "api:class:Node3D",
+          "what": {
+            "text": "In the class reference, `Node3D` is the “Base object in 3D space, inherited by all 3D nodes.” Its description: “The Node3D node is the base representation of a node in 3D space. All other 3D nodes inherit from this class.”\n\nThe key-concepts page's note under Nodes: “The node names end with \"2D\" because this is a 2D scene. Their 3D counterparts have names that end with \"3D\".”",
+            "page": {
+              "title": "Node3D (class reference)",
+              "url": "https://docs.godotengine.org/en/4.7/classes/class_node3d.html"
+            }
+          },
+          "when": "You reach for a Node3D when you build in 3D: it is the root the Scene dock's 3D Scene button adds, and every 3D node, from the 3D camera to the 3D collision shape, inherits from it.",
+          "where": {
+            "text": "In an empty scene the Scene dock offers it straight away. The Nodes and Scenes page: “2D Scene adds a Node2D node, 3D Scene adds a Node3D node, and User Interface adds a Control node.” Its icon is a red ring, where the 2D Scene's is blue.",
+            "image": {
+              "src": "nodes_and_scenes_02_scene_dock.webp",
+              "alt": "The Scene dock of an empty scene: the plus button outlined at the top left, then Create Root Node: with 2D Scene (a blue ring), 3D Scene (a red ring), User Interface (a green ring) and, outlined, Other Node.",
+              "caption": "The 3D Scene button adds a Node3D root.",
+              "width": 280,
+              "height": 280
+            }
+          },
+          "example": {
+            "text": "The Nodes and Scenes page's 3D example is a character as well: a Player with a CollisionShape3D, a CameraRig and more, the 3D counterparts of the 2D Player's nodes. The red icons mark 3D nodes, the family `Node3D` heads; the white rings, StateMachine and the nodes under it, are plain nodes of the `Node` class itself.",
+            "image": {
+              "src": "nodes_and_scenes_3d_scene_example.webp",
+              "alt": "The Scene dock of a 3D character: Player at the top, then Mannequiny, CollisionShape3D, StateMachine with Move, Idle, Air and Run under it, and CameraRig. Player, Mannequiny, CollisionShape3D and CameraRig have red icons, StateMachine and its children white rings. Beside it, a blue 3D mannequin stands in the 3D view under a camera's outline.",
+              "caption": "A 3D character's tree.",
+              "width": 695,
+              "height": 430
+            }
+          },
+          "contrast": {
+            "other": "Node",
+            "text": "A `Node` is the base of every node, 2D, 3D or neither, like StateMachine above. A `Node3D` is a node with a place in 3D space: its translation, rotation and scale are worked out “in the coordinate system relative to the parent”. All 3D nodes inherit it; the 2D counterpart is Node2D."
+          },
+          "check": {
+            "prompt": "The base object in 3D space, inherited by every 3D node, and the root the 3D Scene button adds. Which class is it? Type its name.",
+            "answer": "Node3D",
+            "why": "`Node3D` is the “Base object in 3D space, inherited by all 3D nodes.”"
+          }
+        }
+      ],
+      "recall": [
+        {
+          "prompt": "A scene saved to a file, which shows as a single node when you put it in another scene. Which class is it? Type its name.",
+          "answer": "PackedScene",
+          "why": "A `PackedScene` is “An abstraction of a serialized scene”; saved, a tree of nodes “shows as a single node, with its internal structure hidden in the editor.”"
+        },
+        {
+          "prompt": "Nodes emit one when some event occurs, so that other nodes can react without being hard-wired to them in code. Which class is it? Type its name.",
+          "answer": "Signal",
+          "why": "“Nodes emit signals when some event occurs”; in the class reference, a signal is a `Signal`."
+        },
+        {
+          "prompt": "Without this child, a physics body has no shape and can't collide or interact with other objects. Which node gives it one?",
+          "answer": "CollisionShape2D",
+          "choices": ["Sprite2D", "Camera2D", "CollisionShape2D", "CharacterBody2D"],
+          "why": "A `CollisionShape2D` can “turn a PhysicsBody2D into a solid object.”"
         }
       ],
       "compare": {
@@ -647,9 +929,9 @@
           "source": "Sorva 2012, Table A.1, row 79 (Holland et al. 1997)."
         },
         {
-          "what": "“Objects are created by themselves, without explicit instructions to create them.” In Godot: you save a scene, press Play, and it is not in the game.",
-          "fix": "A node exists in the game only once it is in the tree, so nest the scene in your main scene (or instance it) before you run.",
-          "source": "Sorva 2012, Table A.1, row 91 (Détienne 1997; Ragonis & Ben-Ari 2005a)."
+          "what": "A warning icon next to a body in the Scene dock: “This node has no shape, so it can't collide or interact with other objects.”",
+          "fix": "Add a `CollisionShape2D` as its child and pick a Shape for it in the Inspector: “Once this is done, the warning on the Area2D node will disappear, as it now has a shape assigned.”",
+          "source": "Godot manual, Your first 2D game, Creating the player scene, Node structure (the warning in its picture)."
         }
       ],
       "exitStem": "When a Godot game runs, it is made of …"

@@ -565,7 +565,8 @@ function treeDrawing(drawing: TreeDrawing): HTMLElement {
   return el('figure', { class: 'gv-figure gv-drawing' }, [
     el('ul', { class: 'gv-tree', attrs: { 'aria-label': drawing.caption } }, rows),
     el('figcaption', { class: 'gv-note', text: drawing.caption }),
-    el('div', { class: 'gv-row' }, [add]),
-    status,
+    // A one-node drawing (a term's tree when its root is added) has nothing to add.
+    rows.length > 1 ? el('div', { class: 'gv-row' }, [add]) : null,
+    rows.length > 1 ? status : null,
   ]);
 }

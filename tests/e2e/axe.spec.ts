@@ -254,16 +254,22 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast inside 
   await page.locator('.gv-finish__status:not(:empty)').waitFor();
   await audit(page, 'lesson finished');
 
-  // Lesson 1, a chunk lesson: its check, the tree drawing, the typed blank with the case hint, the fix.
+  // Lesson 1, the key concepts as terms: class names with their icons picked, a typed class name with the
+  // case hint, the one-node drawing and a drawing part built, the typed blank, the fix.
   await page.getByRole('button', { name: 'Next: Lesson 1' }).click();
   await screenReady(page, LESSON1.title);
-  await page.locator('[data-question="check-0"] .gv-choice').first().click();
-  await page.getByRole('button', { name: 'Add the next node' }).click();
-  await page.getByRole('textbox', { name: 'Missing word' }).fill('characterbody2d');
-  await page.getByRole('button', { name: 'Check', exact: true }).click();
+  await audit(page, 'lesson 1');
+  await page.locator('[data-question="term-4"] .gv-choice').first().click();
+  const typedClass = page.locator('[data-question="term-1"]');
+  await typedClass.getByRole('textbox', { name: 'Name' }).fill('scenetree');
+  await typedClass.getByRole('button', { name: 'Check', exact: true }).click();
+  await page.locator('[data-step="term-5"]').getByRole('button', { name: 'Add the next node' }).click();
+  await page.locator('[data-question="recall-2"] .gv-choice').first().click();
+  await page.locator('[data-kind="blank"]').getByRole('textbox', { name: 'Missing word' }).fill('characterbody2d');
+  await page.locator('[data-kind="blank"]').getByRole('button', { name: 'Check', exact: true }).click();
   await page.locator('[data-kind="fix"] .gv-choice').first().click();
-  await page.getByText('Check the case.').waitFor();
-  await audit(page, 'lesson with chunks answered');
+  await typedClass.getByText('Check the case.').waitFor();
+  await audit(page, 'lesson 1 answered');
 
   // Lesson 4's code (a blank inside code, code fix lines) and lesson 6's course table, two cells shown.
   await page.getByRole('button', { name: 'Back to courses' }).click();

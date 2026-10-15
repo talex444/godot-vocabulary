@@ -31,8 +31,10 @@ const nameOf = (id: string) => {
 const COURSES: readonly Course[] = [course1 as Course];
 /** Lesson 0, the editor (decision 70): the first term lesson. */
 const lesson0 = COURSES[0]!.lessons[0] as CourseLesson;
-/** Lesson 1, the key concepts (`c1-l0`, the old lesson 0): still a chunk lesson. */
+/** Lesson 1, the key concepts (`c1-l0`, the old lesson 0): a term lesson since GV-8o. */
 const lesson1 = COURSES[0]!.lessons[1] as CourseLesson;
+/** Lesson 2, nodes and scenes (`c1-l1`): still a chunk lesson. */
+const lesson2 = COURSES[0]!.lessons[2] as CourseLesson;
 
 describe('courses per area (decision 46; done-criteria 64)', () => {
   it('course 1 belongs to the Godot area; Git & GitHub has none yet', async () => {
@@ -117,12 +119,17 @@ describe('course files (decisions 31–42)', () => {
     }
   });
 
-  it('lesson 1 (c1-l0, key concepts) has no code, a drawing, every exercise type and two or three sourced errors', () => {
+  it('lesson 1 (c1-l0, key concepts) is a term lesson with no code, a drawing, every exercise type and two or three sourced errors', () => {
     expect(lesson1.id).toBe('c1-l0');
+    expect(lesson1.chunks).toBeUndefined();
     expect(JSON.stringify(lesson1)).not.toMatch(/"code":/);
-    expect(lesson1.chunks!.some((c) => c.drawing)).toBe(true);
+    expect(lesson1.terms!.some((t) => t.example.drawing)).toBe(true);
+    expect(lesson1.terms).toHaveLength(9);
+    expect(lesson1.recall).toHaveLength(3);
     expect(new Set(lesson1.exercises.map((e) => e.type))).toEqual(new Set(['predict', 'blank', 'fix']));
     expect(lesson1.errors.length).toBeGreaterThanOrEqual(2);
+    expect(lesson1.errors.length).toBeLessThanOrEqual(3);
+    for (const e of lesson1.errors) expect(e.source).toMatch(/^(Godot manual, |Sorva 2012, Table A\.1, row \d+)/);
   });
 
   it("the pretest is the lesson's three cards with the best frequency rank", () => {
@@ -175,6 +182,57 @@ describe('Lesson 0, first look at the editor (decisions 70, 71; done-criteria 93
   });
 });
 
+describe('Lesson 1, the key concepts in the six-part treatment (decision 71; done-criteria 94)', () => {
+  const terms = lesson1.terms!;
+  const CLASSES = 'https://docs.godotengine.org/en/4.7/classes/class_';
+
+  it("keeps its id, question, cards and exit stem, and teaches the nine cards in the page's order of ideas", () => {
+    expect(lesson1.title).toBe('What is a Godot game made of when it runs?');
+    expect(lesson1.exitStem).toBe('When a Godot game runs, it is made of …');
+    expect(lesson1.cardIds).toEqual([
+      'api:class:Node', 'api:class:PackedScene', 'api:class:SceneTree', 'api:class:Signal', 'api:class:CharacterBody2D',
+      'api:class:Camera2D', 'api:class:Sprite2D', 'api:class:CollisionShape2D', 'api:class:Node3D',
+    ]);
+    expect(terms.map((t) => nameOf(t.cardId))).toEqual([
+      'Node', 'SceneTree', 'PackedScene', 'Signal', 'CharacterBody2D', 'Sprite2D', 'CollisionShape2D', 'Camera2D', 'Node3D',
+    ]);
+  });
+
+  it('quotes each class reference page for what it is, and shows a picture of where it lives', () => {
+    for (const t of terms) {
+      const name = nameOf(t.cardId)!;
+      expect(t.what.text, name).toMatch(/“[^”]+”/);
+      expect(t.what.page.url, name).toBe(`${CLASSES}${name.toLowerCase()}.html`);
+      expect(t.where.image, name).toBeDefined();
+      expect(t.contrast.other, name).not.toBe(name);
+    }
+  });
+
+  it('builds the Player one node per term, from its root to the full key-concepts tree', () => {
+    const drawn = terms.filter((t) => t.example.drawing).map((t) => t.example.drawing!.nodes.map((n) => n.type));
+    expect(drawn).toEqual([
+      ['CharacterBody2D'],
+      ['CharacterBody2D', 'Sprite2D'],
+      ['CharacterBody2D', 'Sprite2D', 'CollisionShape2D'],
+      ['CharacterBody2D', 'Camera2D', 'Sprite2D', 'CollisionShape2D'],
+    ]);
+    expect(terms.filter((t) => t.example.drawing).map((t) => nameOf(t.cardId))).toEqual(['CharacterBody2D', 'Sprite2D', 'CollisionShape2D', 'Camera2D']);
+  });
+
+  it('asks for each class by its description, picked from four class names or typed, and recalls after terms 4, 8 and 9', () => {
+    for (const t of terms) if (t.check.choices) expect(t.check.choices.every((c) => /^[A-Z]\w+$/.test(c)), t.cardId).toBe(true);
+    expect(terms.filter((t) => !t.check.choices).map((t) => t.check.answer)).toEqual(['SceneTree', 'Sprite2D', 'Node3D']);
+    expect(terms[4]!.check.choices).toContain('CharacterBody2D');
+    expect(lesson1.recall!.map((r) => r.answer)).toEqual(['PackedScene', 'Signal', 'CollisionShape2D']);
+    expect(lesson1.recall!.some((r) => !r.choices)).toBe(true);
+  });
+
+  it(`keeps its explanation within the provisional cap (decision 73: the figure is set after Tyler's read)`, () => {
+    expect(lessonWords(lesson1)).toBeGreaterThan(lessonWords(lesson0));
+    expect(lessonWords(lesson1)).toBeLessThanOrEqual(LESSON_WORDS_MAX);
+  });
+});
+
 describe('the term format (decision 71)', () => {
   /** The fixture course with one change made to its lesson; returns validateCourse's errors. */
   const errorsAfter = (change: (lesson: CourseLesson) => void, names?: readonly string[]) => {
@@ -196,10 +254,10 @@ describe('the term format (decision 71)', () => {
   });
 
   it('a lesson has chunks or terms: never both, never neither', () => {
-    expect(errorsAfter((l) => (l.chunks = structuredClone(lesson1.chunks)))).toContain(`${at}: has both chunks and terms; write the lesson in one format`);
+    expect(errorsAfter((l) => (l.chunks = structuredClone(lesson2.chunks)))).toContain(`${at}: has both chunks and terms; write the lesson in one format`);
     expect(errorsAfter((l) => { delete l.terms; delete l.recall; })).toContain(`${at}: no chunks and no terms; a written lesson needs one of them`);
     expect(errorsAfter((l) => (l.terms = []))).toContain(`${at}: no terms`);
-    expect(errorsAfter((l) => { delete l.terms; l.chunks = structuredClone(lesson1.chunks); })).toContain(`${at}: recall checks belong to a term lesson`);
+    expect(errorsAfter((l) => { delete l.terms; l.chunks = structuredClone(lesson2.chunks); })).toContain(`${at}: recall checks belong to a term lesson`);
   });
 
   it('every cardId has exactly one term, and every term is one of the cardIds', () => {
@@ -234,7 +292,9 @@ describe('the term format (decision 71)', () => {
     const t = `${at} term 0 (api:class:Node)`;
     expect(errorsAfter((l) => (l.terms![0]!.where.image!.alt = ''))).toEqual([`${t} (3) where it lives image: image alt missing`]);
     expect(errorsAfter((l) => (l.terms![0]!.example.image = { src: 'a b.jpg', alt: 'a', caption: 'c', width: 1, height: 1 }))).toEqual([`${t} (4) example image: image src must be a file name`]);
-    expect(errorsAfter((l) => l.terms![0]!.example.drawing!.nodes.pop())).toEqual([`${t} (4) example drawing: drawing needs at least two nodes`]);
+    // A term's example may draw one node (the tree when the term adds its root), never none.
+    expect(errorsAfter((l) => l.terms![0]!.example.drawing!.nodes.pop())).toEqual([]);
+    expect(errorsAfter((l) => (l.terms![0]!.example.drawing!.nodes = []))).toEqual([`${t} (4) example drawing: drawing needs at least one node`]);
     expect(errorsAfter((l) => (l.terms![0]!.example.code = ''))).toEqual([`${t} (4) example: empty code`]);
   });
 
@@ -265,7 +325,7 @@ describe('the term format (decision 71)', () => {
     expect(lessonWords(lesson)).toBe(3 * per);
     lesson.terms![0]!.check.why = 'many more words that are never counted at all';
     expect(lessonWords(lesson)).toBe(3 * per);
-    expect(lessonWords(lesson1)).toBe(lesson1.chunks!.reduce((n, c) => n + c.text.split(/\s+/).filter(Boolean).length, 0));
+    expect(lessonWords(lesson2)).toBe(lesson2.chunks!.reduce((n, c) => n + c.text.split(/\s+/).filter(Boolean).length, 0));
   });
 });
 
@@ -277,7 +337,7 @@ describe('term check (decision 34)', () => {
   it('fails a lesson that uses an unmet card in code font, naming the lesson and the token', () => {
     const course = structuredClone(COURSES[0]) as Course;
     const lesson = course.lessons[1] as CourseLesson;
-    lesson.chunks![0]!.text += ' A `Timer` counts down.';
+    lesson.terms![0]!.when += ' A `Timer` counts down.';
     const errors = checkCourse(course, cards) as string[];
     expect(errors).toHaveLength(1);
     expect(errors[0]).toMatch(/lesson c1-l0/);

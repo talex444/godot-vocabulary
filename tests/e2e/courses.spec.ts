@@ -20,9 +20,9 @@ import {
   tile,
 } from './helpers';
 
-// Courses (decisions 31–42, 69, 70, 71, done-criteria 47–53, 89, 93): the list, Lesson 0 (the editor,
-// a term lesson) and Lesson 1 (key concepts, chunks) end to end, Finish → what happened, course mode and
-// the lesson's cards first, and exit tickets through export v4.
+// Courses (decisions 31–42, 69, 70, 71, done-criteria 47–53, 89, 93, 94): the list, Lesson 0 (the
+// editor) and Lesson 1 (key concepts), both term lessons, end to end, Finish → what happened, course mode
+// and the lesson's cards first, and exit tickets through export v4.
 
 const TICKET = 'a tree of nodes, grouped into scenes, wired with signals.';
 
@@ -193,6 +193,67 @@ test('93: finishing Lesson 0 adds the nine editor cards; the home tile then name
   expect([...new Set(showings.map((s) => s.cardId))].sort()).toEqual(LESSON0.cardIds!.slice(0, 3).sort());
 });
 
+test('94: Lesson 1 lists its nine terms in order, builds the Player node by node, and its checks and recalls mark right and wrong', async ({ page }) => {
+  await gotoStart(page);
+  await open(page, 'Courses');
+  await openLesson1(page);
+  await expect(page.locator('.gv-card__family')).toHaveText('Course 1 · Lesson 1');
+
+  // The term list and nine sections in the page's order of ideas, a recall after terms 4, 8 and 9.
+  const names = ['Node', 'SceneTree', 'PackedScene', 'Signal', 'CharacterBody2D', 'Sprite2D', 'CollisionShape2D', 'Camera2D', 'Node3D'];
+  const list = page.getByRole('navigation', { name: 'Terms in this lesson' });
+  await expect(list.getByRole('link')).toHaveText(names);
+  const steps = await page.locator('[data-step]').evaluateAll((nodes) => nodes.map((n) => (n as HTMLElement).dataset.step));
+  expect(steps).toEqual([
+    'pretest', 'need', 'term-list',
+    'term-0', 'term-1', 'term-2', 'term-3', 'recall-0',
+    'term-4', 'term-5', 'term-6', 'term-7', 'recall-1',
+    'term-8', 'recall-2',
+    'compare', 'exercises', 'errors', 'exit',
+  ]);
+  for (const [i, name] of names.entries()) {
+    const term = page.locator(`[data-step="term-${i}"]`);
+    await expect(term.getByRole('heading', { level: 3 }).first(), name).toHaveText(name);
+    // What it is cites the class reference page.
+    await expect(term.locator('dd').first().getByRole('link'), name).toHaveAttribute('href', `https://docs.godotengine.org/en/4.7/classes/class_${name.toLowerCase()}.html`);
+  }
+
+  // CharacterBody2D: the root alone, one node, nothing to add; its check marks a wrong pick and reveals the right one.
+  const body = page.locator('[data-step="term-4"]');
+  await expect(body.locator('.gv-tree__row')).toHaveCount(1);
+  await expect(body.locator('.gv-tree__row')).toContainText('Player');
+  await expect(body.getByRole('button', { name: 'Add the next node' })).toHaveCount(0);
+  const bodyCheck = page.locator('[data-question="term-4"]');
+  await expect(bodyCheck.locator('.gv-choice')).toHaveCount(4);
+  await bodyCheck.locator('.gv-choice', { hasText: 'Area2D' }).click();
+  await expect(bodyCheck).toHaveAttribute('data-result', 'wrong');
+  await expect(bodyCheck.locator('.gv-feedback__wrong')).toHaveText('Not quite. The right answer is marked.');
+  await expect(bodyCheck.locator('[data-state="revealed-right"] .gv-choice__label')).toHaveText('CharacterBody2D');
+
+  // Camera2D: the full key-concepts tree, the camera first under Player, built one tap at a time.
+  const camera = page.locator('[data-step="term-7"]');
+  const rows = camera.locator('.gv-tree__row:visible');
+  await expect(rows).toHaveCount(1);
+  for (let i = 0; i < 3; i++) await camera.getByRole('button', { name: 'Add the next node' }).click();
+  await expect(rows).toHaveText(['PlayerCharacterBody2D', 'Camera2D', 'Sprite2D', 'CollisionShape2D']);
+  await expect(camera.getByRole('button', { name: 'All nodes added' })).toBeDisabled();
+
+  // A typed recall: a class name is case-sensitive, so the case-only miss gets the hint, then it is right.
+  const recall1 = page.locator('[data-question="recall-1"]');
+  await expect(page.locator('[data-step="recall-1"]').getByRole('heading', { name: 'Recall' })).toBeVisible();
+  const field = recall1.getByRole('textbox', { name: 'Name' });
+  await field.fill('signal');
+  await field.press('Enter');
+  await expect(recall1.locator('.gv-feedback')).toHaveText('Check the case. Godot’s class names are case-sensitive.');
+  await field.fill('Signal');
+  await field.press('Enter');
+  await expect(recall1.locator('.gv-feedback__right')).toHaveText('Second try, and you had it.');
+
+  // No code anywhere in Lesson 1 (decision 38 holds for it).
+  await expect(page.locator('.gv-lesson pre.gv-code')).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+});
+
 test('56: lesson 4, the first with code: a check, a typed blank in code, a code fix, Finish lesson', async ({ page }) => {
   await gotoStart(page);
   await open(page, 'Courses');
@@ -272,7 +333,7 @@ test('57: lesson 6 ends with the course table: every cell covered, a tap reveals
   await expect(listTable.locator('.gv-reveal__answer:visible')).toContainText('Any CanvasItem can draw.');
 });
 
-test('49–53, 89: lesson 1 (the chunk lesson) end to end, Finish lesson and what it says, course mode, the next session, and export v4', async ({ page }) => {
+test('49–53, 89, 94: lesson 1 end to end, Finish lesson and what it says, course mode, the next session, and export v4', async ({ page }) => {
   test.setTimeout(90_000);
   await gotoStart(page);
   await onlyFamily(page, 'godot-api', 3);
@@ -288,20 +349,22 @@ test('49–53, 89: lesson 1 (the chunk lesson) end to end, Finish lesson and wha
   await pretest(page, 2, true);
   await expect(page.getByRole('button', { name: 'Skip to the exercises' })).toBeHidden();
 
-  // A chunk check: its verdict and why end the chunk; no Next, the page just scrolls on (decision 69b).
-  const check = page.locator('[data-question="check-0"]');
-  await check.locator('.gv-choice').nth(2).click();
+  // A term's check, picked right: its verdict and why end the section; no Next, the page just scrolls on (decision 69b).
+  const check = page.locator('[data-question="term-4"]');
+  await check.locator('.gv-choice', { hasText: 'CharacterBody2D' }).click();
   await expect(check.locator('.gv-feedback__right')).toHaveText('Right.');
   await expect(check.locator('.gv-feedback > :last-child')).not.toBeEmpty();
   await expect(page.locator('.gv-lesson').getByRole('button', { name: 'Next', exact: true })).toHaveCount(0);
-  await page.getByRole('heading', { name: 'Nodes', exact: true }).scrollIntoViewIfNeeded();
 
-  // The tree drawing, one node at a time.
-  const tree = page.locator('.gv-tree__row:visible');
+  // The Sprite2D section's drawing: Player, then the sprite added under it.
+  const sprite = page.locator('[data-step="term-5"]');
+  await sprite.getByRole('heading', { name: 'Sprite2D', exact: true }).scrollIntoViewIfNeeded();
+  const tree = sprite.locator('.gv-tree__row:visible');
   await expect(tree).toHaveCount(1);
-  for (let i = 0; i < 3; i++) await page.getByRole('button', { name: 'Add the next node' }).click();
-  await expect(tree).toHaveCount(4);
-  await expect(page.getByRole('button', { name: 'All nodes added' })).toBeDisabled();
+  await sprite.getByRole('button', { name: 'Add the next node' }).click();
+  await expect(tree).toHaveCount(2);
+  await expect(sprite.getByRole('status')).toHaveText('Added Sprite2D under Player. All 2 nodes are in the tree.');
+  await expect(sprite.getByRole('button', { name: 'All nodes added' })).toBeDisabled();
 
   // Typed blank: a case-only miss gets the hint; the right word on the second try.
   const blank = page.locator('[data-kind="blank"]');

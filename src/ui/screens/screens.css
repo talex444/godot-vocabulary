@@ -909,8 +909,10 @@ button.gv-lesson-row:focus-visible {
 
 .gv-tree__row {
   display: flex;
+  /* At large text the class name moves to its own line rather than breaking a name mid-word. */
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 0 8px;
   min-height: 32px;
   margin-inline-start: calc(var(--depth, 0) * 20px);
   padding-inline-start: calc(min(var(--depth, 0), 1) * 8px);
