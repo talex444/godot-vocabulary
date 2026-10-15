@@ -265,10 +265,10 @@ test('360×780 portrait, the home page: the same', async ({ page }) => {
   await checkHome(page);
 });
 
-/** Lesson 0 done and nothing ready: the widest lessons count, "1 of 6 lessons", in the figure's place. */
+/** Lesson 0 done and nothing ready: the widest lessons count, "1 of 7 lessons", in the figure's place. */
 async function oneLessonDone(page: Page) {
   await enterArea(page, 'Godot');
-  const file = { ...exportFile(), version: 2, skipped: [], lessonsDone: [{ lessonId: 'c1-l0', at: new Date().toISOString() }] };
+  const file = { ...exportFile(), version: 2, skipped: [], lessonsDone: [{ lessonId: 'c1-editor', at: new Date().toISOString() }] };
   await importFromStart(page, file);
   await gotoHome(page);
 }
@@ -281,7 +281,7 @@ test('the home tiles at 360 and 320 px: the figure on one line, nothing overlapp
   await wideFont(page);
   await checkTiles(page, 'fresh, 320, wide font');
   await oneLessonDone(page);
-  await expect(page.locator('.gv-tile__lessons')).toHaveText('1 of 6 lessons');
+  await expect(page.locator('.gv-tile__lessons')).toHaveText('1 of 7 lessons');
   await checkTiles(page, 'one lesson done, 320');
   await page.setViewportSize({ width: 360, height: 780 });
   await checkTiles(page, 'one lesson done, 360');

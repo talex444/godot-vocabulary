@@ -4,8 +4,446 @@
   "title": "Step by step",
   "lessons": [
     {
-      "id": "c1-l0",
+      "id": "c1-editor",
       "order": 0,
+      "title": "What are the parts of the editor, and what is each one for?",
+      "page": {
+        "title": "First look at Godot's interface",
+        "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html"
+      },
+      "cardIds": [
+        "editor:panel:viewport",
+        "editor:control:toolbar",
+        "editor:dock:filesystem",
+        "editor:dock:scene",
+        "editor:dock:inspector",
+        "editor:panel:bottom-panel",
+        "editor:screen:2d",
+        "editor:screen:game",
+        "editor:screen:script"
+      ],
+      "need": "“When you open a new or an existing project, the editor's interface appears.” It is a whole window of panels at once, and every later lesson names them as it goes: add a node in the Scene dock, change it in the Inspector. Before any of that, each part needs a name and a job. The manual walks through them in order, the middle of the window first, then the docks on either side, the panel at the bottom, and the main screens you switch between at the top, and this lesson follows it one part at a time.",
+      "agenda": [
+        "The middle of the window: the viewport and its toolbar.",
+        "The docks on either side and the panel at the bottom: FileSystem, Scene, Inspector, the bottom panel.",
+        "Three of the five main screens: 2D, Game and Script."
+      ],
+      "terms": [
+        {
+          "cardId": "editor:panel:viewport",
+          "what": {
+            "text": "“In the center, below the scene selector is the viewport with its toolbar at the top, where you'll find different tools to move, scale, or lock the scene's nodes.” The scene selector is the row of tabs with the opened scenes, just under the buttons along the top of the window.\n\n“On either side of the viewport sit the docks. And at the bottom of the window lies the bottom panel.”",
+            "page": {
+              "title": "First look at Godot's interface",
+              "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html#first-look-at-godot-s-editor"
+            }
+          },
+          "when": "You reach for the viewport whenever you want to move, scale or lock the nodes of the scene you are working on; the tools for it sit along its top edge.",
+          "where": {
+            "text": "It fills the middle of the editor, with the docks on either side. The manual's picture shows it with the 3D screen active: the toolbar along the top, the 3D view under it.",
+            "image": {
+              "src": "editor_intro_3d_viewport.webp",
+              "alt": "The viewport with the 3D screen active: a row of tool buttons along the top ending in the menus Transform and View, a Perspective label at the top left, a grid floor with red, green and blue axis lines meeting in the middle, and a small X, Y and Z gizmo at the top right.",
+              "caption": "The viewport, its toolbar at the top (here the 3D workspace is active).",
+              "width": 741,
+              "height": 610
+            }
+          },
+          "example": {
+            "text": "The button on the far right of the scene tabs toggles distraction-free mode, which “maximizes or restores the viewport's size by hiding docks in the interface.” Press it when the scene needs the whole window, and press it again to bring the docks back."
+          },
+          "contrast": {
+            "other": "2D screen",
+            "text": "The 2D screen is one of the main screens you switch between with the buttons at the top of the window. The viewport is the area in the middle where the 2D or 3D screen you picked is shown, and its toolbar changes with it."
+          },
+          "check": {
+            "prompt": "In the center of the editor, below the scene tabs, with tools to move, scale or lock nodes along its top: what is this area called?",
+            "answer": "viewport",
+            "why": "“In the center, below the scene selector is the viewport with its toolbar at the top.”"
+          }
+        },
+        {
+          "cardId": "editor:control:toolbar",
+          "what": {
+            "text": "The viewport has its “toolbar at the top, where you'll find different tools to move, scale, or lock the scene's nodes.” And: “This toolbar changes based on the context and selected node.”",
+            "page": {
+              "title": "First look at Godot's interface",
+              "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html#first-look-at-godot-s-editor"
+            }
+          },
+          "when": "You reach for the toolbar when you want to move, scale or lock a node of your scene: you pick the tool there first.",
+          "where": {
+            "text": "It is the strip of buttons along the viewport's top edge. Here is the manual's picture of the 2D toolbar.",
+            "image": {
+              "src": "editor_intro_toolbar_2d.webp",
+              "alt": "The 2D toolbar: a row of small icon buttons starting with the selection arrow, highlighted, and the move, rotate and scale tools, with a lock button and a View menu near the end.",
+              "caption": "The 2D toolbar.",
+              "width": 552,
+              "height": 39
+            }
+          },
+          "example": {
+            "text": "Switch from the 2D screen to the 3D screen and the toolbar changes with it. The manual shows the 3D one: the same first four tools, then buttons of its own and two menus, Transform and View.",
+            "image": {
+              "src": "editor_intro_toolbar_3d.webp",
+              "alt": "The 3D toolbar: the same selection, move, rotate and scale buttons first, a lock button, two highlighted buttons with a sun and a globe, and the menus Transform and View at the end.",
+              "caption": "The 3D toolbar.",
+              "width": 596,
+              "height": 39
+            }
+          },
+          "contrast": {
+            "other": "Inspector",
+            "text": "Both change a node. The toolbar holds tools you use on the node in the viewport, such as moving or scaling it; the Inspector lists the selected node's properties so you can edit them one by one."
+          },
+          "check": {
+            "prompt": "The strip along the top of the viewport whose tools move, scale or lock the scene's nodes, and which changes with the selected node: which part is it?",
+            "answer": "toolbar",
+            "choices": ["main menu", "toolbar", "bottom panel", "scene tabs"],
+            "why": "“This toolbar changes based on the context and selected node.”"
+          }
+        },
+        {
+          "cardId": "editor:dock:filesystem",
+          "what": {
+            "text": "“On either side of the viewport sit the docks.” The first one the manual shows: “The FileSystem dock lists your project files, including scripts, images, audio samples, and more.”",
+            "page": {
+              "title": "First look at Godot's interface",
+              "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html#first-look-at-godot-s-editor"
+            }
+          },
+          "when": "You reach for the FileSystem dock when you need a file of your project: a script, a picture, a sound.",
+          "where": {
+            "text": "In the manual's pictures it sits at the bottom left. A new project lists one file in it, icon.svg, under res://.",
+            "image": {
+              "src": "editor_intro_filesystem_dock.webp",
+              "alt": "The FileSystem dock: a path field reading res://, a Filter Files field, then Favorites and a res:// folder holding one file, icon.svg.",
+              "caption": "The FileSystem dock of a new project.",
+              "width": 268,
+              "height": 339
+            }
+          },
+          "example": {
+            "text": "A bigger project fills it up. In the manual's platformer, pictured with the 2D screen further down, the FileSystem dock lists folders named audio, background, coin, enemy, platform and player, then files such as README.md and stage.tscn: what the game is made from, sorted into folders."
+          },
+          "contrast": {
+            "other": "Scene dock",
+            "text": "The FileSystem dock lists the files of the whole project. The Scene dock lists the nodes of the one scene that is active: open another scene and the Scene dock changes, while the FileSystem dock stays the same."
+          },
+          "check": {
+            "prompt": "Which dock lists your project's files, such as its scripts, images and audio samples?",
+            "answer": "FileSystem dock",
+            "choices": ["Scene dock", "FileSystem dock", "Inspector", "bottom panel"],
+            "why": "“The FileSystem dock lists your project files, including scripts, images, audio samples, and more.”"
+          }
+        },
+        {
+          "cardId": "editor:dock:scene",
+          "what": {
+            "text": "“The Scene dock lists the active scene's nodes.” What a node is, is the next lesson's question; here it is enough that a scene is made of nodes and this dock lists them.",
+            "page": {
+              "title": "First look at Godot's interface",
+              "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html#first-look-at-godot-s-editor"
+            }
+          },
+          "when": "You reach for the Scene dock when you want to see which nodes the scene you have open is made of.",
+          "where": {
+            "text": "In the manual's pictures it sits at the top left, above the FileSystem dock. Here the active scene is still empty, so the dock offers to make its first node: “Create Root Node:” with 2D Scene, 3D Scene, User Interface and Other Node.",
+            "image": {
+              "src": "editor_intro_scene_dock.webp",
+              "alt": "The Scene dock of an empty scene: a plus button and a filter field at the top, then Create Root Node: with four buttons, 2D Scene, 3D Scene, User Interface and Other Node.",
+              "caption": "The Scene dock before the scene has a node.",
+              "width": 184,
+              "height": 339
+            }
+          },
+          "example": {
+            "text": "In the manual's platformer, pictured with the 2D screen further down, the active scene is a level named Stage, and the Scene dock lists its nodes as a tree: Stage at the top, a TileMap and Coins under it, and Coin, Coin2, Coin3 and more under Coins. Each node's children are listed under it, indented."
+          },
+          "contrast": {
+            "other": "viewport",
+            "text": "Both show the same scene. The Scene dock lists its nodes by name, one line each, children under their parent; the viewport shows the scene itself, where its nodes are moved and scaled with the toolbar's tools."
+          },
+          "check": {
+            "prompt": "Which dock lists the nodes of the scene you are working on?",
+            "answer": "Scene dock",
+            "choices": ["FileSystem dock", "Scene dock", "Inspector", "bottom panel"],
+            "why": "“The Scene dock lists the active scene's nodes.”"
+          }
+        },
+        {
+          "cardId": "editor:dock:inspector",
+          "what": {
+            "text": "“The Inspector allows you to edit the properties of a selected node.”",
+            "page": {
+              "title": "First look at Godot's interface",
+              "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html#first-look-at-godot-s-editor"
+            }
+          },
+          "when": "You reach for the Inspector when a node is selected and you want to change one of its properties.",
+          "where": {
+            "text": "It is a dock too, on the other side of the viewport: at the right in the manual's pictures. Here a 2D node is selected, and the Inspector shows its name at the top and its properties below, in groups.",
+            "image": {
+              "src": "editor_intro_inspector_dock.webp",
+              "alt": "The Inspector with a node named Node2D selected: its name in a field at the top, a Filter Properties field, then folded groups of properties, Transform, then under CanvasItem, Visibility, Ordering, Texture and Material.",
+              "caption": "The Inspector for a selected node.",
+              "width": 234,
+              "height": 313
+            }
+          },
+          "example": {
+            "text": "In the picture the selected node's properties are folded into groups: Transform, Visibility, Ordering, Texture, Material. To change one, you open its group and edit the value. Select another node and the Inspector shows that node's properties instead."
+          },
+          "contrast": {
+            "other": "Scene dock",
+            "text": "The Scene dock shows which nodes there are: every node of the scene, in one list. The Inspector shows what one node is set to: the properties of the selected node, ready to edit."
+          },
+          "check": {
+            "prompt": "You have selected a node and want to change one of its properties. Which dock do you do it in?",
+            "answer": "Inspector",
+            "why": "“The Inspector allows you to edit the properties of a selected node.”"
+          }
+        },
+        {
+          "cardId": "editor:panel:bottom-panel",
+          "what": {
+            "text": "“And at the bottom of the window lies the bottom panel.” “The bottom panel, situated below the viewport, is the host for the debug console, the animation editor, the audio mixer, and more. They can take precious space, that's why they're folded by default.”",
+            "page": {
+              "title": "First look at Godot's interface",
+              "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html#first-look-at-godot-s-editor"
+            }
+          },
+          "when": "You reach for the bottom panel when you need one of the tools it hosts, such as the debug console or the animation editor.",
+          "where": {
+            "text": "It runs along the bottom of the window, below the viewport. Folded, it is a single row of names: Output, Debugger, Audio, Animation and Shader Editor.",
+            "image": {
+              "src": "editor_intro_bottom_panels.webp",
+              "alt": "The folded bottom panel: one row of tabs, Output, Debugger, Audio, Animation and Shader Editor, with a version number at the right.",
+              "caption": "The bottom panel, folded.",
+              "width": 883,
+              "height": 42
+            }
+          },
+          "example": {
+            "text": "“When you click on one, it expands vertically.” Click Animation in that row and the animation editor opens above it, as in the manual's picture. Bottom panels can also be shown or hidden with shortcuts, set in Editor Settings > Shortcuts under the Bottom Panels category.",
+            "image": {
+              "src": "editor_intro_bottom_panel_animation.webp",
+              "alt": "The bottom panel with Animation open: playback buttons and a time field at the top, an empty area reading Select an AnimationPlayer node to create and edit animations, a timeline bar, and the row of tabs at the bottom with Animation highlighted.",
+              "caption": "The animation editor, opened in the bottom panel.",
+              "width": 781,
+              "height": 277
+            }
+          },
+          "contrast": {
+            "other": "toolbar",
+            "text": "Both are strips along an edge of the viewport. The toolbar along its top holds the tools for the scene's nodes; the bottom panel below it holds whole tools of their own, such as the debug console, folded until you open one."
+          },
+          "check": {
+            "prompt": "Below the viewport, folded by default, it hosts the debug console, the animation editor and the audio mixer. What is it?",
+            "answer": "bottom panel",
+            "choices": ["toolbar", "Inspector", "bottom panel", "FileSystem dock"],
+            "why": "“The bottom panel, situated below the viewport, is the host for the debug console, the animation editor, the audio mixer, and more.”"
+          }
+        },
+        {
+          "cardId": "editor:screen:2d",
+          "what": {
+            "text": "“There are five main screen buttons centered at the top of the editor: 2D, 3D, Script, Game and Asset Library.” The first: “You'll use the 2D screen for all types of games. In addition to 2D games, the 2D screen is where you'll build your interfaces.”",
+            "page": {
+              "title": "First look at Godot's interface",
+              "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html#the-five-main-screens"
+            }
+          },
+          "when": "You reach for the 2D screen to build the scenes of a 2D game, and to build the interface of any game, a 3D one too.",
+          "where": {
+            "text": "Its button, 2D, is the first of the five at the top of the editor. The manual's picture is the platformer from the docks' examples: the 2D button is highlighted, and the viewport shows the level in 2D.",
+            "image": {
+              "src": "editor_intro_workspace_2d.webp",
+              "alt": "The editor in the 2D screen, the 2D button highlighted among 2D, 3D, Script, Game and AssetLib at the top. Top left, the Scene dock lists Stage, with TileMap and Coins under it and Coin to Coin11 under Coins; under it, the FileSystem dock lists the folders audio, background, coin, enemy, platform and player and files such as stage.tscn. The viewport shows the platformer level, platforms, trees, coins and enemies, with the 2D toolbar along its top; the Inspector is on the right and the bottom panel's row runs along the bottom.",
+              "caption": "The 2D screen, with the platformer's level open.",
+              "width": 1920,
+              "height": 1017
+            }
+          },
+          "example": {
+            "text": "A 3D game still has an interface: its menus, its buttons. The manual puts that work in the 2D screen, so even in a 3D game you switch to 2D to build them."
+          },
+          "contrast": {
+            "other": "Script screen",
+            "text": "Both are main screens, switched with the buttons at the top. The 2D screen is where you build scenes and interfaces in the viewport; the Script screen is a code editor, with no viewport at all."
+          },
+          "check": {
+            "prompt": "You are making a 3D game and need its menu, the interface the player clicks. Which main screen do you build that menu in?",
+            "answer": "2D screen",
+            "choices": ["3D screen", "2D screen", "Script screen", "Game screen"],
+            "why": "“In addition to 2D games, the 2D screen is where you'll build your interfaces.”"
+          }
+        },
+        {
+          "cardId": "editor:screen:game",
+          "what": {
+            "text": "“The Game screen is where your project will appear when running it from the editor. You can go through your project to test it, and pause it and adjust it in real time. Note that this is for testing how adjustments would work, any changes made here are not saved when the game stops running.”",
+            "page": {
+              "title": "First look at Godot's interface",
+              "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html#the-five-main-screens"
+            }
+          },
+          "when": "You reach for the Game screen when you run your project from the editor to test it, pause it, or try an adjustment while it runs.",
+          "where": {
+            "text": "Its button, Game, sits between Script and AssetLib at the top. In the manual's picture a 3D demo runs in it, on its title menu.",
+            "image": {
+              "src": "editor_intro_workspace_game.webp",
+              "alt": "The Game screen, its Game button highlighted at the top: a running demo shows the title TPS Demo, the menu buttons PLAY, PLAY ONLINE, SETTINGS and QUIT, and a robot. A strip of buttons above it starts with pause and step.",
+              "caption": "A project running in the Game screen.",
+              "width": 1360,
+              "height": 750
+            }
+          },
+          "example": {
+            "text": "You run the project, pause it in the Game screen and adjust something to see how it would work. When the game stops, that change is gone: to keep it, you make it in the scene itself, back in the editor."
+          },
+          "contrast": {
+            "other": "2D screen",
+            "text": "In the 2D screen you build the scene; in the Game screen the scene is running, and changes made there “are not saved when the game stops running.”"
+          },
+          "check": {
+            "prompt": "You run your project from the editor, pause it, and adjust something to test it. Which main screen is it running in?",
+            "answer": "Game screen",
+            "choices": ["2D screen", "Script screen", "Game screen", "viewport"],
+            "why": "“The Game screen is where your project will appear when running it from the editor.”"
+          }
+        },
+        {
+          "cardId": "editor:screen:script",
+          "what": {
+            "text": "“The Script screen is a complete code editor with a debugger, rich auto-completion, and built-in code reference.”",
+            "page": {
+              "title": "First look at Godot's interface",
+              "url": "https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html#the-five-main-screens"
+            }
+          },
+          "when": "You reach for the Script screen when you want to write or read a script: the code from Lesson 4 on is written there.",
+          "where": {
+            "text": "Its button, Script, is the third of the five at the top. The manual's picture shows a script open in it, with the list of open scripts and its functions on the left.",
+            "image": {
+              "src": "editor_intro_workspace_script.webp",
+              "alt": "The Script screen, its Script button highlighted at the top: a list of scripts on the left with one script open and its functions listed under it, the script's numbered lines in the middle, and the buttons Online Docs and Search Help at the top right.",
+              "caption": "The Script screen with a script open.",
+              "width": 904,
+              "height": 701
+            }
+          },
+          "example": {
+            "text": "Its built-in code reference is one button away. The Search Help button at its top right opens a window: “Type to search for any item.” Then: “Double-click on an item to open the corresponding page in the script main screen.”"
+          },
+          "contrast": {
+            "other": "FileSystem dock",
+            "text": "The FileSystem dock lists your scripts among the project's files; the Script screen is where a script is opened, written and read."
+          },
+          "check": {
+            "prompt": "Which main screen is a complete code editor, with a debugger and auto-completion?",
+            "answer": "Script screen",
+            "choices": ["Game screen", "Script screen", "2D screen", "bottom panel"],
+            "why": "“The Script screen is a complete code editor with a debugger, rich auto-completion, and built-in code reference.”"
+          }
+        }
+      ],
+      "recall": [
+        {
+          "prompt": "You want a picture file for your game, not a node of the open scene. Which dock lists it?",
+          "answer": "FileSystem dock",
+          "choices": ["Scene dock", "FileSystem dock", "viewport", "toolbar"],
+          "why": "The FileSystem dock lists your project files, images among them; the Scene dock lists the nodes of the active scene."
+        },
+        {
+          "prompt": "Distraction-free mode hides the docks so that one area of the editor is as large as it can be. Which area? Type its name.",
+          "answer": "viewport",
+          "why": "Distraction-free mode “maximizes or restores the viewport's size by hiding docks in the interface.”"
+        },
+        {
+          "prompt": "Select a different node and this strip of tools along the top of the viewport changes with it. Type its name.",
+          "answer": "toolbar",
+          "why": "“This toolbar changes based on the context and selected node.”"
+        }
+      ],
+      "compare": {
+        "a": {
+          "title": "The Scene dock in the platformer",
+          "text": "Stage at the top, a TileMap and Coins under it, Coin to Coin11 under Coins: the nodes of the level that is open."
+        },
+        "b": {
+          "title": "The FileSystem dock in the same picture",
+          "text": "Folders named audio, background, coin, enemy, platform and player, then files such as icon.webp, README.md and stage.tscn: the files of the whole project."
+        },
+        "question": {
+          "prompt": "Both docks show a tree of names. What is the difference?",
+          "choices": [
+            "The Scene dock lists the active scene's nodes; the FileSystem dock lists the project's files",
+            "The Scene dock lists the project's files; the FileSystem dock lists the scene's nodes",
+            "They list the same things, sorted two ways",
+            "The FileSystem dock lists only the scripts"
+          ],
+          "answer": 0,
+          "why": "“The FileSystem dock lists your project files”, and “the Scene dock lists the active scene's nodes.”"
+        }
+      },
+      "exercises": [
+        {
+          "type": "predict",
+          "prompt": "The bottom panel is folded. You click Animation in its row. What happens?",
+          "choices": [
+            "The panel expands vertically and shows the animation editor",
+            "The Game screen opens and the project runs",
+            "The animation editor takes the Inspector's place",
+            "Nothing, until the editor is restarted"
+          ],
+          "answer": 0,
+          "why": "“When you click on one, it expands vertically.”"
+        },
+        {
+          "type": "blank",
+          "prompt": "Type the missing name.",
+          "text": "“The ____ allows you to edit the properties of a selected node.”",
+          "answer": "Inspector",
+          "why": "The Inspector edits the properties of the node you have selected."
+        },
+        {
+          "type": "fix",
+          "plain": true,
+          "prompt": "Four notes on the editor. Which one is wrong?",
+          "lines": [
+            "The viewport sits in the center, with its toolbar at the top.",
+            "The Scene dock lists the active scene's nodes.",
+            "The FileSystem dock lists your project files, scripts and images among them.",
+            "What you change while the game runs in the Game screen is saved when it stops."
+          ],
+          "answer": 3,
+          "fixed": "What you change in the Game screen is not saved when the game stops running.",
+          "why": "The Game screen “is for testing how adjustments would work, any changes made here are not saved when the game stops running.”"
+        }
+      ],
+      "errors": [
+        {
+          "what": "The docks are gone and the viewport fills the whole window.",
+          "fix": "Distraction-free mode is on: press the button on the far right of the scene tabs, which “maximizes or restores the viewport's size by hiding docks”, to bring them back.",
+          "source": "Godot manual, First look at Godot's interface, First look at Godot's editor."
+        },
+        {
+          "what": "You adjusted something while the game ran in the Game screen, and once it stopped the change was gone.",
+          "fix": "That is what the Game screen is for: “any changes made here are not saved when the game stops running.” Make the change in the scene in the editor to keep it.",
+          "source": "Godot manual, First look at Godot's interface, The five main screens."
+        },
+        {
+          "what": "In the Project Manager, the Asset Library tab shows a “Go Online” button and no projects.",
+          "fix": "“For privacy reasons, the Godot project manager does not access the internet by default.” Click “Go Online”; you can change it later in the settings.",
+          "source": "Godot manual, First look at Godot's interface, The Project Manager."
+        }
+      ],
+      "exitStem": "The editor's main parts, and what each one is for: …"
+    },
+    {
+      "id": "c1-l0",
+      "order": 1,
       "title": "What is a Godot game made of when it runs?",
       "page": {
         "title": "Overview of Godot's key concepts",
@@ -218,7 +656,7 @@
     },
     {
       "id": "c1-l1",
-      "order": 1,
+      "order": 2,
       "title": "What is a scene made of, and how do you run one?",
       "page": { "title": "Nodes and Scenes", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/nodes_and_scenes.html" },
       "cardIds": [
@@ -231,7 +669,7 @@
         "gd:concept:main-scene",
         "gd:concept:res-path"
       ],
-      "need": "Lesson 0 said that a game is a tree of scenes and each scene is a tree of nodes. Now you build one. The manual's first scene holds a single node that draws “Hello World”, but the steps are the ones every scene goes through: pick a root node, set its properties, save it, run it.\n\nOne choice comes before all of them. An empty scene offers three ready-made root nodes, and the one you take decides what kind of scene you are making.",
+      "need": "Lesson 1 said that a game is a tree of scenes and each scene is a tree of nodes. Now you build one. The manual's first scene holds a single node that draws “Hello World”, but the steps are the ones every scene goes through: pick a root node, set its properties, save it, run it.\n\nOne choice comes before all of them. An empty scene offers three ready-made root nodes, and the one you take decides what kind of scene you are making.",
       "agenda": [
         "Nodes: what every node has, and how nodes form a tree.",
         "Scenes: one root node, saved to disk, used as often as you like.",
@@ -420,7 +858,7 @@
             "It cannot be added to another scene"
           ],
           "answer": 0,
-          "why": "“The instance of the scene appears as a single node with its internals hidden”, as lesson 0 showed with the Player."
+          "why": "“The instance of the scene appears as a single node with its internals hidden”, as lesson 1 showed with the Player."
         },
         {
           "type": "predict",
@@ -432,7 +870,7 @@
             "Two trees, one for each scene"
           ],
           "answer": 0,
-          "why": "The main scene “is the scene Godot will first load”, and every scene nested in it comes together in the one scene tree (lesson 0)."
+          "why": "The main scene “is the scene Godot will first load”, and every scene nested in it comes together in the one scene tree (lesson 1)."
         }
       ],
       "errors": [
@@ -456,7 +894,7 @@
     },
     {
       "id": "c1-l2",
-      "order": 2,
+      "order": 3,
       "title": "How can one scene appear many times in a game?",
       "page": { "title": "Creating instances", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/instancing.html" },
       "cardIds": [
@@ -644,7 +1082,7 @@
           "prompt": "You open `ball.tscn` itself. Which node is its root?",
           "choices": ["Ball, the `RigidBody2D`", "`Sprite2D`", "`CollisionShape2D`", "Main"],
           "answer": 0,
-          "why": "Scenes “always have one root node” (lesson 1); here it is “a `RigidBody2D` node as its root named Ball”."
+          "why": "Scenes “always have one root node” (lesson 2); here it is “a `RigidBody2D` node as its root named Ball”."
         },
         {
           "type": "predict",
@@ -656,7 +1094,7 @@
             "Main without the balls"
           ],
           "answer": 0,
-          "why": "F5 runs the main scene (lesson 1), and every instance in it comes together in the one scene tree (lesson 0)."
+          "why": "F5 runs the main scene (lesson 2), and every instance in it comes together in the one scene tree (lesson 1)."
         }
       ],
       "errors": [
@@ -680,7 +1118,7 @@
     },
     {
       "id": "c1-l3",
-      "order": 3,
+      "order": 4,
       "title": "How does a script make a node move?",
       "page": { "title": "Creating your first script", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/scripting_first_script.html" },
       "cardIds": [
@@ -883,7 +1321,7 @@
             "Four: one per instance and one in the file"
           ],
           "answer": 0,
-          "why": "“Every node instance with this script attached to it will have its own copy of the `speed` and `angular_speed` properties” (instances: lesson 2)."
+          "why": "“Every node instance with this script attached to it will have its own copy of the `speed` and `angular_speed` properties” (instances: lesson 3)."
         },
         {
           "type": "predict",
@@ -895,7 +1333,7 @@
             "When you open the Script workspace"
           ],
           "answer": 0,
-          "why": "The saved file is the plan (lesson 1); the engine calls `_process()` on the node in the running game's tree."
+          "why": "The saved file is the plan (lesson 2); the engine calls `_process()` on the node in the running game's tree."
         }
       ],
       "errors": [
@@ -919,7 +1357,7 @@
     },
     {
       "id": "c1-l4",
-      "order": 4,
+      "order": 5,
       "title": "How does a script know which key the player is pressing?",
       "page": { "title": "Listening to player input", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/scripting_player_input.html" },
       "cardIds": [
@@ -1073,7 +1511,7 @@
             "Left and Right swap"
           ],
           "answer": 0,
-          "why": "`delta` is what makes “our motion independent of our framerate” (lesson 3); without it the icon turns `angular_speed` radians every frame."
+          "why": "`delta` is what makes “our motion independent of our framerate” (lesson 4); without it the icon turns `angular_speed` radians every frame."
         },
         {
           "type": "predict",
@@ -1085,7 +1523,7 @@
             "They take turns, one frame each"
           ],
           "answer": 0,
-          "why": "Each instance is its own node running the same script (lesson 2), and the `Input` singleton is “a globally accessible object”."
+          "why": "Each instance is its own node running the same script (lesson 3), and the `Input` singleton is “a globally accessible object”."
         }
       ],
       "errors": [
@@ -1109,7 +1547,7 @@
     },
     {
       "id": "c1-l5",
-      "order": 5,
+      "order": 6,
       "title": "How does one node make code run in another?",
       "page": { "title": "Using signals", "url": "https://docs.godotengine.org/en/4.7/getting_started/step_by_step/signals.html" },
       "cardIds": [
@@ -1336,14 +1774,14 @@
             "It is removed from the script"
           ],
           "answer": 0,
-          "why": "The engine calls `_process()` every frame (lesson 3) only while processing is on; `set_process()` turns it on and off."
+          "why": "The engine calls `_process()` every frame (lesson 4) only while processing is on; `set_process()` turns it on and off."
         },
         {
           "type": "predict",
           "prompt": "Two instances of `sprite_2d.tscn` sit under the Node2D, and only the first one's `_on_button_pressed()` is connected to the `Button`. The player presses it. What stops?",
           "choices": ["Only the first sprite", "Both sprites", "Neither sprite", "The `Button`"],
           "answer": 0,
-          "why": "Each instance is its own node (lesson 2), and a connection joins the signal to one receiver."
+          "why": "Each instance is its own node (lesson 3), and a connection joins the signal to one receiver."
         }
       ],
       "errors": [

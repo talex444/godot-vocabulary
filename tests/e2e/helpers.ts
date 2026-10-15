@@ -72,11 +72,15 @@ export async function screenReady(page: Page, heading: string): Promise<void> {
   await settled(page);
 }
 
-/** Lesson 0 of course 1, read from the course file. */
+/** Course 1, read from the course file. */
 export const COURSE1 = JSON.parse(readFileSync('src/data/courses/course-1.json', 'utf8')) as {
-  lessons: { id: string; title: string; cardIds?: string[]; exitStem?: string }[];
+  lessons: { id: string; order: number; title: string; page: { title: string }; cardIds?: string[]; exitStem?: string }[];
 };
-export const LESSON0_TITLE = COURSE1.lessons[0]!.title;
+/** Lesson 0, whatever sits first in the course: since GV-8n the editor lesson, a term lesson (decision 70). */
+export const LESSON0 = COURSE1.lessons[0]!;
+export const LESSON0_TITLE = LESSON0.title;
+/** Lesson 1, the key concepts (`c1-l0`, lesson 0 before the shift), still a chunk lesson. */
+export const LESSON1 = COURSE1.lessons[1]!;
 
 /** From Start, one of the flat links. */
 export async function open(page: Page, name: 'Courses' | 'Settings' | 'Add card' | 'About'): Promise<void> {
@@ -300,7 +304,7 @@ export async function walkScreens(page: Page, visit: (name: ScreenName) => Promi
 
   await open(page, 'Courses');
   await visit('courses');
-  await page.locator('[data-lesson-id="c1-l0"] button').click();
+  await page.locator(`[data-lesson-id="${LESSON0.id}"] button`).click();
   await screenReady(page, LESSON0_TITLE);
   await visit('lesson');
   await page.getByRole('button', { name: 'Back to courses' }).click();

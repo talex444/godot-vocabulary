@@ -1,6 +1,6 @@
 import type { Card } from '../../cards/types';
 import { judgeBlank, judgeRecall, type BlankVerdict } from '../../courses/blank';
-import { getArea, type AreaId } from '../../areas/registry';
+import { familyTraits, getArea, type AreaId } from '../../areas/registry';
 import { cardsToAdd, finishedText, finishLabel } from '../../courses/finish';
 import { coursesFor, findLesson, pretestCards, sessionLessons, termName } from '../../courses/index';
 import { TERM_PARTS, termPage, type TermPageItem } from '../../courses/terms';
@@ -167,7 +167,7 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
       exercisesHeading,
       ...lesson.exercises.map((exercise, i) =>
         exercise.type === 'blank'
-          ? blankExercise(exercise, i)
+          ? blankExercise(exercise, i, [...cardsById.values()].some((c) => familyTraits(c.family).plainNames && termName(c) === exercise.answer))
           : exercise.type === 'fix'
             ? fixExercise(exercise, i)
             : choiceCheck(exercise, `exercise-${i}`, 'predict'),
@@ -477,8 +477,11 @@ function choiceCheck(check: ChoiceCheck, name: string, kind?: 'predict'): HTMLEl
   ]);
 }
 
-/** Type the missing word: exact match, a case hint, the answer after two misses (decision 35). */
-function blankExercise(exercise: BlankExercise, index: number): HTMLElement {
+/**
+ * Type the missing word: exact match, a case hint, the answer after two misses (decision 35). When the
+ * word is a plain name (a dock's, a screen's: `plainNames`), its case does not count, as in a typed recall.
+ */
+function blankExercise(exercise: BlankExercise, index: number, plain: boolean): HTMLElement {
   const input = gapField('Missing word', exercise.answer.length);
   const feedback = el('div', { class: 'gv-feedback', attrs: { role: 'status' } });
   const check = button('Check', { variant: 'secondary', onClick: () => judge() });
@@ -498,11 +501,11 @@ function blankExercise(exercise: BlankExercise, index: number): HTMLElement {
   ]);
   const judge = typedJudge(root, input, check, feedback, {
     answer: exercise.answer,
-    code: true,
+    code: !plain,
     why: exercise.why,
     noun: 'word',
     caseHint: 'Check the case. GDScript names are case-sensitive.',
-    judge: (typed, misses) => judgeBlank(typed, exercise.answer, misses),
+    judge: (typed, misses) => (plain ? judgeRecall(typed, exercise.answer, misses, false) : judgeBlank(typed, exercise.answer, misses)),
   });
   return root;
 }

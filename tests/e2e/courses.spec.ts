@@ -8,7 +8,9 @@ import {
   gotoStart,
   homeReady,
   importOnSettings,
+  LESSON0,
   LESSON0_TITLE,
+  LESSON1,
   onlyFamily,
   open,
   playSession,
@@ -18,15 +20,20 @@ import {
   tile,
 } from './helpers';
 
-// Courses (decisions 31–42, 69, done-criteria 47–53, 89): the list, lesson 0 end to end, Finish →
-// what happened, course mode and the lesson's cards first, and exit tickets through export v4.
+// Courses (decisions 31–42, 69, 70, 71, done-criteria 47–53, 89, 93): the list, Lesson 0 (the editor,
+// a term lesson) and Lesson 1 (key concepts, chunks) end to end, Finish → what happened, course mode and
+// the lesson's cards first, and exit tickets through export v4.
 
-const lesson0 = COURSE1.lessons[0]!;
 const TICKET = 'a tree of nodes, grouped into scenes, wired with signals.';
 
 async function openLesson0(page: Page): Promise<void> {
-  await page.locator('[data-lesson-id="c1-l0"] button').click();
+  await page.locator(`[data-lesson-id="${LESSON0.id}"] button`).click();
   await screenReady(page, LESSON0_TITLE);
+}
+
+async function openLesson1(page: Page): Promise<void> {
+  await page.locator(`[data-lesson-id="${LESSON1.id}"] button`).click();
+  await screenReady(page, LESSON1.title);
 }
 
 /** Taps the right (or a wrong) choice of a pretest question; the right one carries the card's id. */
@@ -38,24 +45,37 @@ async function pretest(page: Page, index: number, right: boolean): Promise<void>
   await rows.nth(right ? ids.indexOf(id!) : ids.findIndex((x) => x !== id)).click();
 }
 
-test('47: the course list shows course 1 with six written lessons in order; lesson 0 opens', async ({ page }) => {
+test('47, 93: the course list shows course 1 with seven written lessons, the editor lesson first as Lesson 0; it opens as a term lesson', async ({ page }) => {
   await gotoStart(page);
   await open(page, 'Courses');
   await expect(page.getByRole('heading', { name: 'Course 1: Step by step' })).toBeVisible();
   const rows = page.locator('.gv-lessons > li');
-  await expect(rows).toHaveCount(6);
+  await expect(rows).toHaveCount(7);
   for (const [i, lesson] of COURSE1.lessons.entries()) {
     await expect(rows.nth(i).getByRole('button')).toContainText(`Lesson ${i}: ${lesson.title}`);
+    await expect(rows.nth(i).getByRole('button')).toContainText(lesson.page.title);
   }
+  // Decision 70: the editor lesson is Lesson 0, and the key-concepts lesson (still c1-l0) is Lesson 1.
+  await expect(rows.nth(0)).toHaveAttribute('data-lesson-id', 'c1-editor');
+  await expect(rows.nth(0).getByRole('button')).toContainText('First look at Godot');
+  await expect(rows.nth(1)).toHaveAttribute('data-lesson-id', 'c1-l0');
+  await expect(rows.nth(1).getByRole('button')).toContainText('Lesson 1: What is a Godot game made of when it runs?');
   await expect(page.locator('.gv-lesson-row--planned')).toHaveCount(0);
-  // The course-end table shows on the list only once lesson 5 is done.
+  // The course-end table shows on the list only once the last lesson is done.
   await expect(page.locator('[data-reveal-table]')).toHaveCount(0);
-  await expect(page.locator('[data-lesson-id="c1-l0"]')).toHaveAttribute('data-done', 'false');
+  await expect(page.locator('[data-lesson-id="c1-editor"]')).toHaveAttribute('data-done', 'false');
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
   await openLesson0(page);
-  // The page follows the flow order of decision 37.
+  await expect(page.locator('.gv-card__family')).toHaveText('Course 1 · Lesson 0');
+  // The page follows the flow order of decision 37, with the term sections of decision 71 in the middle.
   const steps = await page.locator('[data-step]').evaluateAll((nodes) => nodes.map((n) => (n as HTMLElement).dataset.step));
-  expect(steps).toEqual(['pretest', 'need', 'chunk-0', 'chunk-1', 'chunk-2', 'chunk-3', 'compare', 'exercises', 'errors', 'exit']);
+  expect(steps).toEqual([
+    'pretest', 'need', 'term-list',
+    'term-0', 'term-1', 'term-2', 'term-3', 'recall-0',
+    'term-4', 'term-5', 'term-6', 'term-7', 'recall-1',
+    'term-8', 'recall-2',
+    'compare', 'exercises', 'errors', 'exit',
+  ]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
 });
 
@@ -71,14 +91,113 @@ test('48: a perfect pretest shows "Skip to the exercises", which only scrolls', 
   await skip.click();
   await expect(page.getByRole('heading', { name: 'Exercises' })).toBeFocused();
   // The explanation stays on the page.
-  await expect(page.locator('[data-step="chunk-0"]')).toHaveCount(1);
+  await expect(page.locator('[data-step="term-0"]')).toHaveCount(1);
 });
 
-test('56: lesson 3, the first with code: a check, a typed blank in code, a code fix, Finish lesson', async ({ page }) => {
+test('93: Lesson 0 lists its terms, gives each its six parts, and its checks and recalls mark right and wrong', async ({ page }) => {
+  await gotoStart(page);
+  await open(page, 'Courses');
+  await openLesson0(page);
+
+  // The pretest asks the three best-ranked editor cards.
+  const asked = await page.locator('[data-question^="pretest-"]').evaluateAll((nodes) => nodes.map((n) => (n as HTMLElement).dataset.cardId));
+  expect(asked).toEqual(['editor:dock:scene', 'editor:dock:inspector', 'editor:dock:filesystem']);
+
+  // The term list: every term, a same-page link that focuses its heading and leaves history alone.
+  const list = page.getByRole('navigation', { name: 'Terms in this lesson' });
+  await expect(list.getByRole('link')).toHaveText([
+    'viewport', 'toolbar', 'FileSystem dock', 'Scene dock', 'Inspector', 'bottom panel', '2D screen', 'Game screen', 'Script screen',
+  ]);
+  const before = await page.evaluate(() => history.length);
+  await list.getByRole('link', { name: 'Inspector', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Inspector', exact: true })).toBeFocused();
+  expect(await page.evaluate(() => history.length)).toBe(before);
+
+  // The first term: its name as the heading, then the six labelled parts, the manual's picture in Where it lives.
+  const term0 = page.locator('[data-step="term-0"]');
+  await expect(term0.getByRole('heading', { name: 'viewport', exact: true })).toBeVisible();
+  await expect(term0.locator('dt')).toHaveText(['What it is', 'When you’d reach for it', 'Where it lives', 'Example', 'Not to be confused with', 'Check']);
+  await expect(term0.locator('dd').first()).toContainText('“In the center, below the scene selector is the viewport');
+  await expect(term0.locator('dd').first().getByRole('link')).toHaveAttribute('href', /first_look_at_the_editor\.html#first-look-at-godot-s-editor$/);
+  const picture = term0.locator('dd').nth(2).locator('img');
+  await expect(picture).toHaveAttribute('src', /courses\/img\/editor_intro_3d_viewport\.webp$/);
+  await picture.scrollIntoViewIfNeeded();
+  await expect.poll(() => picture.evaluate((n: HTMLImageElement) => n.complete && n.naturalWidth)).toBe(741);
+  await expect(term0.locator('dd').nth(4)).toContainText('2D screen');
+
+  // Its check is typed: a wrong name, then the right one in another case (a dock's name ignores case).
+  const typed = page.locator('[data-question="term-0"]');
+  const field = typed.getByRole('textbox', { name: 'Name' });
+  await field.fill('scene view');
+  await field.press('Enter');
+  await expect(typed.locator('.gv-feedback')).toHaveText('Not that name. One more try.');
+  await field.fill('Viewport');
+  await typed.getByRole('button', { name: 'Check', exact: true }).click();
+  await expect(typed.locator('.gv-feedback__right')).toHaveText('Second try, and you had it.');
+  await expect(typed).toHaveAttribute('data-result', 'right');
+
+  // A picked check: four plain names, no class icons.
+  const picked = page.locator('[data-question="term-1"]');
+  await expect(picked.locator('.gv-choice')).toHaveCount(4);
+  await expect(picked.locator('.gv-choice img')).toHaveCount(0);
+  await picked.locator('.gv-choice', { hasText: 'toolbar' }).click();
+  await expect(picked.locator('.gv-feedback__right')).toHaveText('Right.');
+
+  // The first recall, after four terms: a wrong pick is marked and the right one revealed.
+  const recall0 = page.locator('[data-question="recall-0"]');
+  await expect(page.locator('[data-step="recall-0"]').getByRole('heading', { name: 'Recall' })).toBeVisible();
+  await recall0.locator('.gv-choice', { hasText: 'Scene dock' }).click();
+  await expect(recall0).toHaveAttribute('data-result', 'wrong');
+  await expect(recall0.locator('.gv-feedback__wrong')).toHaveText('Not quite. The right answer is marked.');
+  await expect(recall0.locator('[data-state="revealed-right"] .gv-choice__label')).toHaveText('FileSystem dock');
+
+  // The second recall is typed and right at once.
+  const recall1 = page.locator('[data-question="recall-1"]');
+  await recall1.getByRole('textbox', { name: 'Name' }).fill('viewport');
+  await recall1.getByRole('textbox', { name: 'Name' }).press('Enter');
+  await expect(recall1.locator('.gv-feedback__right')).toHaveText('Right.');
+
+  // The blank's answer is a dock's name: its case does not count, and the answer reads as a plain name.
+  const blank = page.locator('[data-kind="blank"]');
+  await blank.getByRole('textbox', { name: 'Missing word' }).fill('inspector');
+  await blank.getByRole('button', { name: 'Check', exact: true }).click();
+  await expect(blank.locator('.gv-feedback__right')).toHaveText('Right.');
+
+  // No code anywhere in Lesson 0 (decision 38 holds for it).
+  await expect(page.locator('.gv-lesson pre.gv-code')).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+});
+
+test('93: finishing Lesson 0 adds the nine editor cards; the home tile then names Lesson 1; the next session brings them first', async ({ page }) => {
+  await gotoStart(page);
+  await onlyFamily(page, 'godot-editor', 3);
+  await open(page, 'Courses');
+  await openLesson0(page);
+  const finish = page.getByRole('button', { name: 'Finish lesson: add 9 cards' });
+  await finish.click();
+  const status = page.locator('[data-step="exit"] .gv-finish__status');
+  await expect(status).toHaveText('Lesson 0 done. 9 cards added; your Godot sessions will bring them in before other new cards.');
+  await expect(page.getByRole('button', { name: 'Next: Lesson 1' })).toBeFocused();
+  await page.getByRole('button', { name: 'Back to courses' }).click();
+  await screenReady(page, 'Courses');
+  await expect(page.locator('[data-lesson-id="c1-editor"]')).toHaveAttribute('data-done', 'true');
+  await backToStart(page);
+  await page.getByRole('button', { name: 'All areas', exact: true }).click();
+  await homeReady(page);
+  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Next: Lesson 1, 1 of 7 lessons, Last used');
+  await enterArea(page, 'Godot');
+  // Course mode: the lesson's first cards, in its order, are the session's new cards (three a day here).
+  await startSession(page);
+  await expect(page.locator('.gv-card__family')).toHaveText('Godot editor');
+  const showings = await playSession(page);
+  expect([...new Set(showings.map((s) => s.cardId))].sort()).toEqual(LESSON0.cardIds!.slice(0, 3).sort());
+});
+
+test('56: lesson 4, the first with code: a check, a typed blank in code, a code fix, Finish lesson', async ({ page }) => {
   await gotoStart(page);
   await open(page, 'Courses');
   await page.locator('[data-lesson-id="c1-l3"] button').click();
-  await screenReady(page, COURSE1.lessons[3]!.title);
+  await screenReady(page, COURSE1.lessons[4]!.title);
 
   // The first chunk shows its code block, then its check.
   await expect(page.locator('[data-step="chunk-0"] pre.gv-code')).toContainText('extends Sprite2D');
@@ -104,19 +223,19 @@ test('56: lesson 3, the first with code: a check, a typed blank in code, a code 
   await expect(fix.locator('.gv-feedback pre.gv-code')).toContainText('func _process(delta):');
 
   await page.getByRole('button', { name: /^Finish lesson: add \d+ cards?$/ }).click();
-  await expect(page.locator('.gv-finish__status')).toHaveText(/^Lesson 3 done\. \d+ cards? added; /);
-  await expect(page.getByRole('button', { name: 'Next: Lesson 4' })).toBeFocused();
+  await expect(page.locator('.gv-finish__status')).toHaveText(/^Lesson 4 done\. \d+ cards? added; /);
+  await expect(page.getByRole('button', { name: 'Next: Lesson 5' })).toBeFocused();
   await page.getByRole('button', { name: 'Back to courses' }).click();
   await screenReady(page, 'Courses');
   await expect(page.locator('[data-lesson-id="c1-l3"]')).toHaveAttribute('data-done', 'true');
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
 });
 
-test('57: lesson 5 ends with the course table: every cell covered, a tap reveals one; the list keeps it once done', async ({ page }) => {
+test('57: lesson 6 ends with the course table: every cell covered, a tap reveals one; the list keeps it once done', async ({ page }) => {
   await gotoStart(page);
   await open(page, 'Courses');
   await page.locator('[data-lesson-id="c1-l5"] button').click();
-  await screenReady(page, COURSE1.lessons[5]!.title);
+  await screenReady(page, COURSE1.lessons[6]!.title);
 
   // After the exit ticket, before Mark done.
   const exit = page.locator('[data-step="exit"]');
@@ -141,7 +260,7 @@ test('57: lesson 5 ends with the course table: every cell covered, a tap reveals
 
   // The last lesson: the line says the course is finished, and there is no next lesson to offer.
   await page.getByRole('button', { name: /^Finish lesson/ }).click();
-  await expect(page.locator('.gv-finish__status')).toHaveText(/^Lesson 5 done\. .* Course 1 is finished\.$/);
+  await expect(page.locator('.gv-finish__status')).toHaveText(/^Lesson 6 done\. .* Course 1 is finished\.$/);
   await expect(page.getByRole('button', { name: /^Next: Lesson/ })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Back to courses' })).toBeFocused();
   await page.getByRole('button', { name: 'Back to courses' }).click();
@@ -153,12 +272,12 @@ test('57: lesson 5 ends with the course table: every cell covered, a tap reveals
   await expect(listTable.locator('.gv-reveal__answer:visible')).toContainText('Any CanvasItem can draw.');
 });
 
-test('49–53, 89: lesson 0 end to end, Finish lesson and what it says, course mode, the next session, and export v4', async ({ page }) => {
+test('49–53, 89: lesson 1 (the chunk lesson) end to end, Finish lesson and what it says, course mode, the next session, and export v4', async ({ page }) => {
   test.setTimeout(90_000);
   await gotoStart(page);
   await onlyFamily(page, 'godot-api', 3);
   await open(page, 'Courses');
-  await openLesson0(page);
+  await openLesson1(page);
 
   // Pretest: right and wrong are shown, nothing is scheduled.
   await pretest(page, 0, false);
@@ -205,7 +324,7 @@ test('49–53, 89: lesson 0 end to end, Finish lesson and what it says, course m
   await expect(page.locator('.gv-error-item')).toHaveCount(3);
 
   // Exit ticket, saved on the device.
-  await page.getByLabel(lesson0.exitStem!).fill(TICKET);
+  await page.getByLabel(LESSON1.exitStem!).fill(TICKET);
   await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(page.locator('[data-step="exit"] .gv-result')).toHaveText('Saved on this device.');
 
@@ -215,11 +334,11 @@ test('49–53, 89: lesson 0 end to end, Finish lesson and what it says, course m
   await finish.click();
   await expect(finish).toHaveCount(0);
   const status = page.locator('[data-step="exit"] .gv-finish__status');
-  await expect(status).toHaveText('Lesson 0 done. 9 cards added; your Godot sessions will bring them in before other new cards.');
+  await expect(status).toHaveText('Lesson 1 done. 9 cards added; your Godot sessions will bring them in before other new cards.');
   await expect(status).toHaveAttribute('aria-live', 'polite');
   // No automatic navigation: still the lesson, with the next lesson focused and one Back to courses.
   await expect(page.locator('.gv-lesson')).toHaveAttribute('data-lesson-id', 'c1-l0');
-  await expect(page.getByRole('button', { name: 'Next: Lesson 1' })).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Next: Lesson 2' })).toBeFocused();
   await expect(page.getByRole('button', { name: 'Back to courses' })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
   await page.getByRole('button', { name: 'Back to courses' }).click();
@@ -228,22 +347,22 @@ test('49–53, 89: lesson 0 end to end, Finish lesson and what it says, course m
   await expect(page.locator('[data-lesson-id="c1-l0"] .gv-tick')).toHaveCount(1);
 
   // Done again: reopening shows the ticket at the top; finishing again changes nothing and says so.
-  await openLesson0(page);
+  await openLesson1(page);
   await expect(page.getByRole('group', { name: 'Your exit ticket' })).toContainText(TICKET);
   await page.getByRole('button', { name: 'Finish lesson', exact: true }).click();
-  await expect(status).toHaveText('Lesson 0 done again. Your cards are unchanged.');
-  // Next: Lesson 1 opens lesson 1 in lesson 0's place, so Back still lands on the course list.
-  await page.getByRole('button', { name: 'Next: Lesson 1' }).click();
-  await screenReady(page, COURSE1.lessons[1]!.title);
+  await expect(status).toHaveText('Lesson 1 done again. Your cards are unchanged.');
+  // Next: Lesson 2 opens lesson 2 in lesson 1's place, so Back still lands on the course list.
+  await page.getByRole('button', { name: 'Next: Lesson 2' }).click();
+  await screenReady(page, COURSE1.lessons[2]!.title);
   await expect(page.locator('.gv-lesson')).toHaveAttribute('data-lesson-id', 'c1-l1');
   await page.goBack();
   await screenReady(page, 'Courses');
   await backToStart(page);
 
-  // The home tile names the next lesson now.
+  // The home tile names the first lesson not done: Lesson 0, the editor, which this test left alone.
   await page.getByRole('button', { name: 'All areas', exact: true }).click();
   await homeReady(page);
-  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Next: Lesson 1, 1 of 6 lessons, Last used');
+  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Next: Lesson 0, 1 of 7 lessons, Last used');
   await enterArea(page, 'Godot');
 
   // Course mode switched itself on.
@@ -260,11 +379,11 @@ test('49–53, 89: lesson 0 end to end, Finish lesson and what it says, course m
   expect(file.exitTickets).toEqual([{ lessonId: 'c1-l0', text: TICKET, date: expect.any(String) }]);
   await backToStart(page);
 
-  // The next session's new cards are lesson 0's first cards (three a day here).
+  // The next session's new cards are lesson 1's first cards (three a day here).
   await startSession(page);
   const showings = await playSession(page);
   const firsts = [...new Set(showings.map((s) => s.cardId))];
-  expect(firsts.sort()).toEqual(lesson0.cardIds!.slice(0, 3).sort());
+  expect(firsts.sort()).toEqual(LESSON1.cardIds!.slice(0, 3).sort());
   await page.getByRole('button', { name: 'Done' }).click();
   await startReady(page);
 
@@ -274,7 +393,7 @@ test('49–53, 89: lesson 0 end to end, Finish lesson and what it says, course m
   await backToStart(page);
   await open(page, 'Courses');
   await expect(page.locator('[data-lesson-id="c1-l0"]')).toHaveAttribute('data-done', 'false');
-  await openLesson0(page);
+  await openLesson1(page);
   await expect(page.getByRole('group', { name: 'Your exit ticket' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Back to courses' }).click();
   await screenReady(page, 'Courses');
@@ -284,6 +403,6 @@ test('49–53, 89: lesson 0 end to end, Finish lesson and what it says, course m
   await backToStart(page);
   await open(page, 'Courses');
   await expect(page.locator('[data-lesson-id="c1-l0"]')).toHaveAttribute('data-done', 'true');
-  await openLesson0(page);
+  await openLesson1(page);
   await expect(page.getByRole('group', { name: 'Your exit ticket' })).toContainText(TICKET);
 });

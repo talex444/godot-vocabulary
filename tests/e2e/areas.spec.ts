@@ -20,7 +20,7 @@ test('the app opens the home page: a tile per area with its figures, no last-use
   await gotoHome(page);
   expect(await look(page)).toEqual({ theme: 'home', base: '#130e09', font: 'system-ui, sans-serif', scheme: 'dark', title: 'Areas · Godot Vocabulary' });
   await expect(page.locator('.gv-tile')).toHaveCount(2);
-  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Next: Lesson 0, 6 lessons');
+  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Next: Lesson 0, 7 lessons');
   await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, No courses yet');
   await expect(page.getByText('Last used')).toHaveCount(0);
   await expect(page.getByText('Unofficial; not affiliated with or endorsed by the Godot Foundation or GitHub.')).toBeVisible();
@@ -52,7 +52,7 @@ test('a tile enters its area in its own look; the area page keeps only the app�
   // Home again: the area used last carries the tag.
   await gotoHome(page);
   await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, No courses yet, Last used');
-  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Next: Lesson 0, 6 lessons');
+  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Next: Lesson 0, 7 lessons');
   await enterArea(page, 'Godot');
   await open(page, 'Courses');
   await expect(page.getByRole('heading', { name: 'Course 1: Step by step' })).toBeVisible();
@@ -66,7 +66,7 @@ test('the tile counts ready reviews of the area’s enabled families', async ({ 
   const [g] = deck('github');
   await importFromStart(page, exportFile({ progress: [overdueProgress(a!), overdueProgress(b!), overdueProgress(g!)] }));
   await gotoHome(page);
-  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, 2 ready, 6 lessons, Last used');
+  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, 2 ready, 7 lessons, Last used');
   await expect(tile(page, 'Git & GitHub')).toHaveAccessibleName('Git & GitHub, 1 ready, No courses yet');
   // Both ready: the figures carry the one colour, no tile shows a Next line, and no line under the heading repeats them.
   await expect(page.locator('.gv-today')).toHaveCount(0);
@@ -129,7 +129,7 @@ test('fresh install: no line repeats the tile’s Next; no ready figure; the amb
   expect(next).toBe('400');
   await expect(tile(page, 'Godot').locator('.gv-tile__line')).toHaveText(['Next: Lesson 0']);
   const count = tile(page, 'Godot').locator('.gv-tile__lessons');
-  await expect(count).toHaveText('6 lessons');
+  await expect(count).toHaveText('7 lessons');
   const [countBox, labelBox, nextBox] = await Promise.all([count.boundingBox(), tile(page, 'Godot').locator('.gv-tile__label').boundingBox(), tile(page, 'Godot').locator('.gv-tile__line--next').boundingBox()]);
   // On the label's row, to its right; the Next line below them.
   expect(countBox!.x).toBeGreaterThan(labelBox!.x + labelBox!.width);

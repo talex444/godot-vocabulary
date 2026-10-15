@@ -25,9 +25,9 @@ Findings: 0.
 
 ## Godot
 
-Screens audited: start, settings, settings with the warning, settings (import choice), card (Godot editor), card answered (Godot editor), card (Godot API), card answered (Godot API), card (GDScript), card answered (GDScript), flipped card (Godot API), flipped card answered (Godot API), skip this card (reason field), summary, settings (skipped cards), add card, add card with errors, about, courses, lesson, lesson answered, lesson finished, lesson with code, lesson with the course table.
+Screens audited: start, settings, settings with the warning, settings (import choice), card (Godot editor), card answered (Godot editor), card (Godot API), card answered (Godot API), card (GDScript), card answered (GDScript), flipped card (Godot API), flipped card answered (Godot API), skip this card (reason field), summary, settings (skipped cards), add card, add card with errors, about, courses, lesson, lesson answered, lesson finished, lesson with chunks answered, lesson with code, lesson with the course table.
 
-Findings: 13.
+Findings: 14.
 
 | Screen | Selector | Text | Background | Expected | Actual |
 |--------|----------|------|------------|----------|--------|
@@ -42,6 +42,7 @@ Findings: 13.
 | lesson | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | lesson answered | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | lesson finished | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
+| lesson with chunks answered | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | lesson with code | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 | lesson with the course table | `.gv-button--primary` | #ffffff | #579eff | 4.5:1 | 2.71:1 |
 
@@ -63,7 +64,7 @@ Findings: 25.
 | settings | `.gv-skipped > h2` | #0366d6 | #1d2125 | 3:1 | 2.98:1 |
 | settings | `button[aria-describedby="export-help"]` | #ffffff | #717b85 | 4.5:1 | 4.3:1 |
 | settings | `button[aria-describedby="import-help"]` | #ffffff | #717b85 | 4.5:1 | 4.3:1 |
-| settings | `button[aria-label="Undo skip: extends"]` | #ffffff | #717b85 | 4.5:1 | 4.3:1 |
+| settings | `button[aria-label="Undo skip: Scene dock"]` | #ffffff | #717b85 | 4.5:1 | 4.3:1 |
 | settings | `nav > .gv-button--secondary.gv-button` | #ffffff | #717b85 | 4.5:1 | 4.3:1 |
 | settings | `section:nth-child(1) > h2` | #0366d6 | #1d2125 | 3:1 | 2.98:1 |
 | settings | `section:nth-child(3) > h2` | #0366d6 | #1d2125 | 3:1 | 2.98:1 |

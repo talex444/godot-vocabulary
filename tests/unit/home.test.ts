@@ -48,9 +48,9 @@ describe('home tiles', () => {
   it('says how many lessons there are until the first is done, then how far; and when an area has no course', () => {
     const empty = { progress: new Map(), settings: DEFAULT_SETTINGS, skipped: new Set<string>(), now };
     const area = getArea('godot')!;
-    expect(lessonsText(tileFigures(area, { ...empty, lessonsDone: [] }))).toBe('6 lessons');
-    expect(lessonsText(tileFigures(area, { ...empty, lessonsDone: ['c1-l0'] }))).toBe('1 of 6 lessons');
-    expect(lessonsText(tileFigures(area, { ...empty, lessonsDone: ['c1-l0', 'c1-l2', 'c1-l1', 'other'] }))).toBe('3 of 6 lessons');
+    expect(lessonsText(tileFigures(area, { ...empty, lessonsDone: [] }))).toBe('7 lessons');
+    expect(lessonsText(tileFigures(area, { ...empty, lessonsDone: ['c1-l0'] }))).toBe('1 of 7 lessons');
+    expect(lessonsText(tileFigures(area, { ...empty, lessonsDone: ['c1-l0', 'c1-l2', 'c1-editor', 'other'] }))).toBe('3 of 7 lessons');
     expect(lessonsText(tileFigures(getArea('github')!, { ...empty, lessonsDone: ['c1-l0'] }))).toBe('No courses yet');
   });
 
@@ -115,7 +115,10 @@ describe('home tiles', () => {
     const empty = { progress: new Map(), settings: DEFAULT_SETTINGS, skipped: new Set<string>(), now };
     const godot = getArea('godot')!;
     expect(tileFigures(godot, { ...empty, lessonsDone: [] }).nextLesson).toBe(0);
-    expect(tileFigures(godot, { ...empty, lessonsDone: ['c1-l0', 'c1-l1', 'c1-l3'] }).nextLesson).toBe(2);
+    // A done mark from before the shift (c1-l0, now Lesson 1) leaves the editor lesson, Lesson 0, next.
+    expect(tileFigures(godot, { ...empty, lessonsDone: ['c1-l0', 'c1-l1', 'c1-l3'] }).nextLesson).toBe(0);
+    expect(tileFigures(godot, { ...empty, lessonsDone: ['c1-editor'] }).nextLesson).toBe(1);
+    expect(tileFigures(godot, { ...empty, lessonsDone: ['c1-editor', 'c1-l0', 'c1-l2'] }).nextLesson).toBe(2);
     expect(tileFigures(godot, { ...empty, lessonsDone: godot.lessons.map((l) => l.id) }).nextLesson).toBeNull();
     expect(tileFigures(getArea('github')!, { ...empty, lessonsDone: [] }).nextLesson).toBeNull();
   });

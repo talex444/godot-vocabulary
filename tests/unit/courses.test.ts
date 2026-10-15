@@ -29,7 +29,10 @@ const nameOf = (id: string) => {
   return card ? termName(card) : undefined;
 };
 const COURSES: readonly Course[] = [course1 as Course];
+/** Lesson 0, the editor (decision 70): the first term lesson. */
 const lesson0 = COURSES[0]!.lessons[0] as CourseLesson;
+/** Lesson 1, the key concepts (`c1-l0`, the old lesson 0): still a chunk lesson. */
+const lesson1 = COURSES[0]!.lessons[1] as CourseLesson;
 
 describe('courses per area (decision 46; done-criteria 64)', () => {
   it('course 1 belongs to the Godot area; Git & GitHub has none yet', async () => {
@@ -53,11 +56,14 @@ describe('course files (decisions 31–42)', () => {
     expect(validateCourse(JSON.parse(readFileSync(`${dir}/${file}`, 'utf8')), nameOf)).toEqual([]);
   });
 
-  it('course 1 lists six lessons in order, all written, one per manual page', () => {
+  it('course 1 lists seven lessons in order, all written, one per manual page; the editor lesson is Lesson 0 (decision 70)', () => {
     const course = COURSES[0]!;
-    expect(course.lessons.map((l) => l.order)).toEqual([0, 1, 2, 3, 4, 5]);
+    expect(course.lessons.map((l) => l.order)).toEqual([0, 1, 2, 3, 4, 5, 6]);
+    // The ids did not move with the numbers, so done marks and exit tickets stay attached.
+    expect(course.lessons.map((l) => l.id)).toEqual(['c1-editor', 'c1-l0', 'c1-l1', 'c1-l2', 'c1-l3', 'c1-l4', 'c1-l5']);
     expect(course.lessons.filter(isPlanned)).toEqual([]);
     expect(course.lessons.map((l) => l.page.title)).toEqual([
+      "First look at Godot's interface",
       "Overview of Godot's key concepts",
       'Nodes and Scenes',
       'Creating instances',
@@ -67,8 +73,8 @@ describe('course files (decisions 31–42)', () => {
     ]);
   });
 
-  it('lessons 1–5 each have a predict, a typed blank, a fix and two or three sourced errors', () => {
-    for (const lesson of COURSES[0]!.lessons.slice(1) as CourseLesson[]) {
+  it('lessons 2–6 each have a predict, a typed blank, a fix and two or three sourced errors', () => {
+    for (const lesson of COURSES[0]!.lessons.slice(2) as CourseLesson[]) {
       const types = lesson.exercises.map((e) => e.type);
       expect(types, lesson.id).toEqual(expect.arrayContaining(['predict', 'blank', 'fix']));
       expect(lesson.cardIds.length, lesson.id).toBeGreaterThanOrEqual(3);
@@ -76,10 +82,11 @@ describe('course files (decisions 31–42)', () => {
       expect(lesson.errors.length, lesson.id).toBeLessThanOrEqual(3);
       for (const e of lesson.errors) expect(e.source, lesson.id).toMatch(/^(Godot manual, |Sorva 2012, Table A\.1, row \d+)/);
     }
-    // Lesson 3 is the first with code: a typed blank inside code and a code fix.
-    const lesson3 = COURSES[0]!.lessons[3] as CourseLesson;
-    expect(lesson3.exercises.some((e) => e.type === 'blank' && e.code)).toBe(true);
-    expect(lesson3.exercises.some((e) => e.type === 'fix' && !e.plain)).toBe(true);
+    // Lesson 4 (c1-l3) is the first with code: a typed blank inside code and a code fix.
+    const lesson4 = COURSES[0]!.lessons[4] as CourseLesson;
+    expect(lesson4.id).toBe('c1-l3');
+    expect(lesson4.exercises.some((e) => e.type === 'blank' && e.code)).toBe(true);
+    expect(lesson4.exercises.some((e) => e.type === 'fix' && !e.plain)).toBe(true);
   });
 
   it("every picture exists in public/courses/img at the size the lesson states", async () => {
@@ -110,18 +117,61 @@ describe('course files (decisions 31–42)', () => {
     }
   });
 
-  it('lesson 0 has no code, a drawing, every exercise type and two or three sourced errors', () => {
-    expect(JSON.stringify(lesson0)).not.toMatch(/"code":/);
-    expect(lesson0.chunks!.some((c) => c.drawing)).toBe(true);
-    expect(new Set(lesson0.exercises.map((e) => e.type))).toEqual(new Set(['predict', 'blank', 'fix']));
-    expect(lesson0.errors.length).toBeGreaterThanOrEqual(2);
+  it('lesson 1 (c1-l0, key concepts) has no code, a drawing, every exercise type and two or three sourced errors', () => {
+    expect(lesson1.id).toBe('c1-l0');
+    expect(JSON.stringify(lesson1)).not.toMatch(/"code":/);
+    expect(lesson1.chunks!.some((c) => c.drawing)).toBe(true);
+    expect(new Set(lesson1.exercises.map((e) => e.type))).toEqual(new Set(['predict', 'blank', 'fix']));
+    expect(lesson1.errors.length).toBeGreaterThanOrEqual(2);
   });
 
   it("the pretest is the lesson's three cards with the best frequency rank", () => {
-    const pretest = pretestCards(lesson0, cards);
-    expect(pretest).toHaveLength(3);
-    const ranks = lesson0.cardIds.map((id) => cards.find((c) => c.id === id)!.rank).sort((a, b) => a - b);
-    expect(pretest.map((c) => c.rank)).toEqual(ranks.slice(0, 3));
+    for (const lesson of [lesson0, lesson1]) {
+      const pretest = pretestCards(lesson, cards);
+      expect(pretest).toHaveLength(3);
+      const ranks = lesson.cardIds.map((id) => cards.find((c) => c.id === id)!.rank).sort((a, b) => a - b);
+      expect(pretest.map((c) => c.rank)).toEqual(ranks.slice(0, 3));
+    }
+    expect(pretestCards(lesson0, cards).map((c) => c.answer)).toEqual(['Scene dock', 'Inspector', 'FileSystem dock']);
+  });
+});
+
+describe('Lesson 0, first look at the editor (decisions 70, 71; done-criteria 93)', () => {
+  const PAGE = 'https://docs.godotengine.org/en/4.7/getting_started/introduction/first_look_at_the_editor.html';
+  const terms = lesson0.terms!;
+
+  it('is a term lesson of at most nine editor cards, one term each, in the order of the cardIds', () => {
+    expect(lesson0.id).toBe('c1-editor');
+    expect(lesson0.page.url).toBe(PAGE);
+    expect(lesson0.chunks).toBeUndefined();
+    expect(lesson0.cardIds.length).toBeLessThanOrEqual(9);
+    expect(lesson0.cardIds.every((id) => byId.get(id)?.family === 'godot-editor')).toBe(true);
+    expect(terms.map((t) => t.cardId)).toEqual(lesson0.cardIds);
+    expect(terms.map((t) => nameOf(t.cardId))).toEqual([
+      'viewport', 'toolbar', 'FileSystem dock', 'Scene dock', 'Inspector', 'bottom panel', '2D screen', 'Game screen', 'Script screen',
+    ]);
+  });
+
+  it('quotes the editor page in every term, shows its picture, and never shows code', () => {
+    expect(JSON.stringify(lesson0)).not.toMatch(/"code":/);
+    for (const t of terms) {
+      expect(t.what.text, t.cardId).toMatch(/“[^”]+”/);
+      expect(t.what.page.url.startsWith(PAGE), t.cardId).toBe(true);
+      expect(t.where.image?.src, t.cardId).toMatch(/^editor_intro_[\w.-]+\.webp$/);
+      // The contrast names another term of this lesson.
+      expect(terms.map((x) => nameOf(x.cardId)), t.cardId).toContain(t.contrast.other);
+      expect(t.contrast.other, t.cardId).not.toBe(nameOf(t.cardId));
+    }
+  });
+
+  it('has a check per term with four plain names or a typed name, and one recall after every fourth term', () => {
+    for (const t of terms) if (t.check.choices) expect(t.check.choices.every((c) => !c.includes('`')), t.cardId).toBe(true);
+    expect(terms.some((t) => !t.check.choices) && terms.some((t) => t.check.choices)).toBe(true);
+    expect(lesson0.recall).toHaveLength(Math.ceil(terms.length / 4));
+    expect(lesson0.recall!.map((r) => r.answer)).toEqual(['FileSystem dock', 'viewport', 'toolbar']);
+    expect(new Set(lesson0.exercises.map((e) => e.type))).toEqual(new Set(['predict', 'blank', 'fix']));
+    expect(lesson0.exercises.filter((e) => e.type === 'fix').every((e) => e.plain)).toBe(true);
+    for (const e of lesson0.errors) expect(e.source).toMatch(/^Godot manual, First look at Godot's interface, /);
   });
 });
 
@@ -146,10 +196,10 @@ describe('the term format (decision 71)', () => {
   });
 
   it('a lesson has chunks or terms: never both, never neither', () => {
-    expect(errorsAfter((l) => (l.chunks = structuredClone(lesson0.chunks)))).toContain(`${at}: has both chunks and terms; write the lesson in one format`);
+    expect(errorsAfter((l) => (l.chunks = structuredClone(lesson1.chunks)))).toContain(`${at}: has both chunks and terms; write the lesson in one format`);
     expect(errorsAfter((l) => { delete l.terms; delete l.recall; })).toContain(`${at}: no chunks and no terms; a written lesson needs one of them`);
     expect(errorsAfter((l) => (l.terms = []))).toContain(`${at}: no terms`);
-    expect(errorsAfter((l) => { delete l.terms; l.chunks = structuredClone(lesson0.chunks); })).toContain(`${at}: recall checks belong to a term lesson`);
+    expect(errorsAfter((l) => { delete l.terms; l.chunks = structuredClone(lesson1.chunks); })).toContain(`${at}: recall checks belong to a term lesson`);
   });
 
   it('every cardId has exactly one term, and every term is one of the cardIds', () => {
@@ -215,7 +265,7 @@ describe('the term format (decision 71)', () => {
     expect(lessonWords(lesson)).toBe(3 * per);
     lesson.terms![0]!.check.why = 'many more words that are never counted at all';
     expect(lessonWords(lesson)).toBe(3 * per);
-    expect(lessonWords(lesson0)).toBe(lesson0.chunks!.reduce((n, c) => n + c.text.split(/\s+/).filter(Boolean).length, 0));
+    expect(lessonWords(lesson1)).toBe(lesson1.chunks!.reduce((n, c) => n + c.text.split(/\s+/).filter(Boolean).length, 0));
   });
 });
 
@@ -226,7 +276,7 @@ describe('term check (decision 34)', () => {
 
   it('fails a lesson that uses an unmet card in code font, naming the lesson and the token', () => {
     const course = structuredClone(COURSES[0]) as Course;
-    const lesson = course.lessons[0] as CourseLesson;
+    const lesson = course.lessons[1] as CourseLesson;
     lesson.chunks![0]!.text += ' A `Timer` counts down.';
     const errors = checkCourse(course, cards) as string[];
     expect(errors).toHaveLength(1);
@@ -260,7 +310,7 @@ describe('term check (decision 34)', () => {
 });
 
 describe('course-end table (decision 41)', () => {
-  const lesson5 = COURSES[0]!.lessons[5] as CourseLesson;
+  const lesson5 = COURSES[0]!.lessons[6] as CourseLesson;
 
   it('ends course 1: Node2D, Control and Node3D against the three questions, every cell filled', () => {
     expect(lesson5.table!.rows.map((r) => r.head)).toEqual(['Node2D', 'Control', 'Node3D']);

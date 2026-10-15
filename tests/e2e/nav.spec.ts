@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { deck, enterArea, exportFile, gotoHome, homeReady, importFromStart, LESSON0_TITLE, open, overdueProgress, screenReady, startReady, tile } from './helpers';
+import { deck, enterArea, exportFile, gotoHome, homeReady, importFromStart, LESSON0, LESSON0_TITLE, open, overdueProgress, screenReady, startReady, tile } from './helpers';
 
 // Done-criteria 68 / decision 50: area pages titled with the area, All areas, and Back one screen at a
 // time, where the on-screen Back and the phone's (here the browser's) Back land on the same screen.
@@ -55,7 +55,7 @@ test('area → Courses → Back lands on the area page, with either Back', async
 test('decision 69a: a tile with nothing ready opens the area page, where Start and the course list are both one tap away', async ({ page }) => {
   await gotoHome(page);
   // The tile still names the next lesson, as information.
-  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Next: Lesson 0, 6 lessons');
+  await expect(tile(page, 'Godot')).toHaveAccessibleName('Godot, Next: Lesson 0, 7 lessons');
   await tile(page, 'Godot').click();
   await startReady(page, 'Godot');
   expect(await theme(page)).toBe('godot');
@@ -64,7 +64,7 @@ test('decision 69a: a tile with nothing ready opens the area page, where Start a
   // One tap to a session, one tap to the course list.
   await expect(page.getByRole('button', { name: 'Start', exact: true })).toBeVisible();
   await open(page, 'Courses');
-  await page.locator('[data-lesson-id="c1-l0"] button').click();
+  await page.locator(`[data-lesson-id="${LESSON0.id}"] button`).click();
   await screenReady(page, LESSON0_TITLE);
   // Back walks lesson → courses → area page → home.
   await page.goBack();

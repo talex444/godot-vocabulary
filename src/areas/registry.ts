@@ -55,7 +55,8 @@ const godot: Area = {
   theme: godotTokens(),
   // Godot's own PackedScene class icon (MIT), masked in grey like the branch icon; never the Godot logo.
   icon: 'icons/PackedScene.svg',
-  lessons: [0, 1, 2, 3, 4, 5].map((order) => ({ id: `c1-l${order}`, order })),
+  // The editor lesson is Lesson 0 and the rest shifted up by one; their ids did not change (decision 70).
+  lessons: [{ id: 'c1-editor', order: 0 }, ...[0, 1, 2, 3, 4, 5].map((n) => ({ id: `c1-l${n}`, order: n + 1 }))],
   load: once(async () => {
     const [editor, api, gdscript, course1] = await Promise.all([
       import('../data/cards.godot-editor.json'),

@@ -13,7 +13,9 @@ import {
   goNext,
   gotoHome,
   homeReady,
+  LESSON0,
   LESSON0_TITLE,
+  LESSON1,
   open,
   openArea,
   screenReady,
@@ -232,33 +234,48 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast inside 
 
   await open(page, 'Courses');
   await audit(page, 'courses');
-  await page.locator('[data-lesson-id="c1-l0"] button').click();
+  // Lesson 0, the term lesson: a typed check missed once, a picked check, a recall, the blank and the fix.
+  await page.locator(`[data-lesson-id="${LESSON0.id}"] button`).click();
   await screenReady(page, LESSON0_TITLE);
   await audit(page, 'lesson');
   await page.locator('[data-question="pretest-0"] .gv-choice').first().click();
-  await page.locator('[data-question="check-0"] .gv-choice').first().click();
-  await page.getByRole('button', { name: 'Add the next node' }).click();
-  await page.getByRole('textbox', { name: 'Missing word' }).fill('characterbody2d');
-  await page.getByRole('button', { name: 'Check', exact: true }).click();
+  const typed = page.locator('[data-question="term-0"]');
+  await typed.getByRole('textbox', { name: 'Name' }).fill('scene view');
+  await typed.getByRole('button', { name: 'Check', exact: true }).click();
+  await page.locator('[data-question="term-1"] .gv-choice').first().click();
+  await page.locator('[data-question="recall-0"] .gv-choice').first().click();
+  await page.getByRole('textbox', { name: 'Missing word' }).fill('Inspektor');
+  await page.locator('[data-kind="blank"]').getByRole('button', { name: 'Check', exact: true }).click();
   await page.locator('[data-kind="fix"] .gv-choice').first().click();
-  await page.getByText('Check the case.').waitFor();
+  await typed.getByText('Not that name. One more try.').waitFor();
   await audit(page, 'lesson answered');
   // Finished: the status line and its two buttons in the Finish button's place (decision 69c).
   await page.getByRole('button', { name: /^Finish lesson/ }).click();
   await page.locator('.gv-finish__status:not(:empty)').waitFor();
   await audit(page, 'lesson finished');
 
-  // Lesson 3's code (a blank inside code, code fix lines) and lesson 5's course table, two cells shown.
+  // Lesson 1, a chunk lesson: its check, the tree drawing, the typed blank with the case hint, the fix.
+  await page.getByRole('button', { name: 'Next: Lesson 1' }).click();
+  await screenReady(page, LESSON1.title);
+  await page.locator('[data-question="check-0"] .gv-choice').first().click();
+  await page.getByRole('button', { name: 'Add the next node' }).click();
+  await page.getByRole('textbox', { name: 'Missing word' }).fill('characterbody2d');
+  await page.getByRole('button', { name: 'Check', exact: true }).click();
+  await page.locator('[data-kind="fix"] .gv-choice').first().click();
+  await page.getByText('Check the case.').waitFor();
+  await audit(page, 'lesson with chunks answered');
+
+  // Lesson 4's code (a blank inside code, code fix lines) and lesson 6's course table, two cells shown.
   await page.getByRole('button', { name: 'Back to courses' }).click();
   await screenReady(page, 'Courses');
   await page.locator('[data-lesson-id="c1-l3"] button').click();
-  await screenReady(page, COURSE1.lessons[3]!.title);
+  await screenReady(page, COURSE1.lessons[4]!.title);
   await page.locator('[data-kind="fix"] .gv-choice').first().click();
   await audit(page, 'lesson with code');
   await page.getByRole('button', { name: 'Back to courses' }).click();
   await screenReady(page, 'Courses');
   await page.locator('[data-lesson-id="c1-l5"] button').click();
-  await screenReady(page, COURSE1.lessons[5]!.title);
+  await screenReady(page, COURSE1.lessons[6]!.title);
   await page.locator('.gv-reveal__cover').nth(0).click();
   await page.locator('.gv-reveal__cover').nth(4).click();
   await audit(page, 'lesson with the course table');
