@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { Card } from '../../src/cards/types';
 import editor from '../../src/data/cards.godot-editor.json';
@@ -10,7 +10,10 @@ const handWritten = JSON.parse(readFileSync('data/cards/godot-editor.json', 'utf
 const KINDS = ['dock', 'screen', 'panel', 'control'];
 const PAGE = 'getting_started/introduction/first_look_at_the_editor';
 const SECTIONS = ['The Project Manager', "First look at Godot's editor", 'The five main screens', 'Integrated class reference'];
-const rst = readFileSync(`data/sources/godot-docs/${PAGE.replace(/\//g, '_')}.rst`, 'utf8');
+// The page itself lives in the gitignored data/sources (`pnpm fetch-sources`), so on CI it is absent: the
+// checks against its text run only where it is on disk, as deck.test.ts does with the class XML.
+const rstPath = `data/sources/godot-docs/${PAGE.replace(/\//g, '_')}.rst`;
+const rst = existsSync(rstPath) ? readFileSync(rstPath, 'utf8') : null;
 
 describe('editor cards (data/cards/godot-editor.json)', () => {
   it('names the sixteen parts of the editor as the page writes them', () => {
@@ -37,7 +40,7 @@ describe('editor cards (data/cards/godot-editor.json)', () => {
       expect(c.source, c.id).toEqual({ doc: 'godot-docs 4.7', ref: expect.stringMatching(new RegExp(`^${PAGE}#`)), version: '4.7' });
       expect(SECTIONS, c.id).toContain(c.source.ref.split('#')[1]);
     }
-    for (const section of SECTIONS) expect(rst, section).toContain(`\n${section}\n`);
+    if (rst !== null) for (const section of SECTIONS) expect(rst, section).toContain(`\n${section}\n`);
   });
 
   it('ranks the cards 0..n-1, the parts course 1 uses first', () => {
@@ -61,6 +64,7 @@ describe('editor cards (data/cards/godot-editor.json)', () => {
 
   it('quotes only the page: every “…” in a prompt is the page’s own words', () => {
     // The page wraps its lines; compare on single spaces, with the bold marks taken out.
+    if (rst === null) return;
     const page = rst.replace(/\*\*/g, '').replace(/\s+/g, ' ');
     for (const c of cards) {
       for (const [, quote] of c.prompt.matchAll(/“([^”]+)”/g)) expect(page, `${c.id}: ${quote}`).toContain(quote!.replace(/’/g, "'"));
