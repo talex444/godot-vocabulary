@@ -1010,3 +1010,72 @@ Warm not muddy on the S24's OLED; the tiles still the subject; the amber pale en
 
 The 1.3.4 Pages deploy failed in `pnpm e2e` on the Ubuntu runner, `layout.spec.ts` "both due, 320: "Godot" broken inside a word"; the Android package passed. Cause, measured on the real page: the home wears the device's font (`src/theme/home.ts`, `--font-ui: system-ui, sans-serif`; the bundled Inter is the Godot area's, decision 48 gives the GitHub area and the home the system font), and the runner's system-ui is DejaVu Sans, about a fifth wider than Segoe UI or Roboto. At 320 px the label and the figure share 172 px. In Verdana bold (the nearest font on Windows, a little wider than DejaVu Sans bold) "12 ready" at 1.5rem takes 119 px and leaves the label 53 px, under "Godot"'s 69 px, so the word broke; in Segoe UI the figure is 97 px and the label 75 px. GV-8h's wide-font steps covered the 200 % layouts only, not this one, so the Windows run could not see it.
 Fix, `fix(home): a 320 px tile holds its words in a wide system font`: `screens.css` gives every tile the `minmax(min-content, 1fr)` label column (a name never breaks inside a word; the zero-state rule that had it is folded in), and a `@container (max-width: 19em)` rule for tiles under 304 px (the 320 px phone; a 360 px phone's tile is 328 px) sets the figure and the lessons count to 1.25rem and the columns to 8 px, so the two share 184 px and Verdana needs 168. `layout.spec.ts` applies Verdana to the whole tile through one `wideFont` helper and adds the 100 % steps: fresh at 320, both due at 320 and at 360. The new step fails on the old CSS ("both due, 320, wide font") and passes on the new. Gates green on Windows: typecheck, 210 unit, lint:css, build, 69 e2e.
+
+## GV-8k — v1.3.5: the type scale (19 px titles, 16 px text) and the tile that keeps its icon (2026-10-15)
+
+Decision 68; done-criteria 87–88. Commits, none pushed, no tag: `feat(type): two sizes, 19 px titles and 16 px text (decision 68)`, `fix(home): the count at text size, the stacked tile keeps its icon`, `chore(release): version 1.3.5`, and this one. Every commit had `typecheck`, `test` (217 unit), `lint:css`, `build` (with the budget check; first load 133,002 of 1,000,000 bytes) and `e2e` (69, then 71) green. There is no `docs: gv-8k review shots` commit: the shots are in the gitignored `data/sources/gv8k-shots/`, as GV-8i's were, and a commit would need `git add -f` on a path the repo keeps out.
+
+### The scale (`src/ui/kit.css` `:root`)
+`--title-size: 1.1875rem` (19 px) and `--text-size: 1rem` (16 px), next to `--gutter` and `--target`. The mapping, every `font-size` in `src/` (no script sets one):
+
+| Selector | File | Old | New |
+|---|---|---|---|
+| `html` | kit.css | 100% | `--text-size` (the same 16 px) |
+| `h1`–`h6` (new floor rule) | kit.css | browser default | `--text-size`; a title class wins |
+| `.gv-heading` (panel, lesson h2, step h3) | kit.css | 1.25rem (20) | `--title-size` (19) |
+| `.gv-stepper .gv-button` (+/−) | kit.css | 1.25rem | `--title-size` |
+| `.gv-choice__note` | kit.css | 1rem | `--text-size` |
+| `.gv-stat__label` | kit.css | 1rem | `--text-size` |
+| `.gv-stat__value` | kit.css | 1.25rem (20) | `--text-size` (16) |
+| `.gv-inline-code` | kit.css | 1em | 1em (its line's size) |
+| `.gv-code` | kit.css | 1rem | `--text-size` |
+| `.gv-app-name` (top bar) | screens.css | 1rem (16) | `--title-size` (19) |
+| `.gv-home .gv-heading` ("Areas") | screens.css | 1rem | `--text-size` |
+| `.gv-tile__label` | screens.css | 1.25rem (20) | `--title-size` (19) |
+| `.gv-tile__figure` ("12 ready") | screens.css | 1.5rem (24) | `--text-size` (16), 700, amber |
+| `.gv-tile__lessons` ("6 lessons") | screens.css | 1.5rem (24) | `--text-size` (16), 500, quiet grey |
+| `@container (max-width: 19em)` figure, count | screens.css | 1.25rem | rule deleted |
+| `@container (max-width: 16em)` figure, count | screens.css | 1.25rem | rule now 15em, no size of its own |
+| `.gv-family__name` (h3/h4) | screens.css | 1rem | `--text-size` |
+| `.gv-card__look` | screens.css | 1rem | `--text-size` |
+| `.gv-card__name` (flipped card) | screens.css | 1.25rem | `--title-size` |
+| `.gv-step h3` | screens.css | (1.25rem via `.gv-heading`) | `--title-size`, explicit |
+| `.gv-gap` | screens.css | 1rem | `--text-size` |
+| `.gv-reveal__head` (h4) | screens.css | 1rem | `--text-size` |
+
+`tests/unit/type-scale.test.ts` reads both stylesheets (comments stripped). It asserts that every `font-size` is one of `var(--title-size)`, `var(--text-size)` or `1em`, that no `font:` shorthand is anything but `inherit`, that no `.ts` under `src/` mentions a font size, and that the title selectors and the tile's figure and count use their token. The review spec logged every distinct computed size of every shown text element: on the home (fresh and both due, 360 and 320 px) and on lesson 0, at 100 % there are exactly two, 19 px (the app title, names, headings) and 16 px (everything else). At 130 % they are 24.7 px and 20.8 px.
+
+### The tile (`screens.css`)
+GV-8j's 19em rule is deleted (the 16 px figure needs no step-down), so the gaps are 12 px everywhere. The stacked rule's threshold moves from 16em to 15em. Its grid is `32px minmax(0, 1fr) 16px`: the icon keeps column 1 (no `display: none` anywhere), and the label, figure or count, lines and tag take column 2 in DOM order, left-aligned. The icon and the chevron (column 3) span rows 1–6 and are centred. The tag may wrap.
+
+Threshold arithmetic. A tile is the screen less the 2 × 16 px gutter: 328 px on a 360 px phone, 288 px on a 320 px one. The container's em is the tile's own font size (16 px × the setting), so 15em stacks a 360 px tile from 328/15 = 21.9 px (137 %) and a 320 px tile from 288/15 = 19.2 px (120 %). Side by side, the fixed parts are 116 px: padding 32, icon 32, three 12 px gaps (36), chevron 16. Measured bold widths at 100 % (Playwright, this machine):
+
+| Text | system-ui (Segoe UI) | Arial (≈ Roboto) | Verdana (≈ CI's DejaVu Sans) |
+|---|---:|---:|---:|
+| "Godot" at 19 px | 55.9 | 55.9 | 63.5 |
+| "Git & GitHub" at 19 px | 117.1 | 114.0 | 133.2 |
+| "3 ready" at 16 px | 55.7 | 56.0 | 67.7 |
+| "12 ready" at 16 px | 64.9 | 64.9 | 79.1 |
+| "120 ready" at 16 px | 74.1 | 73.8 | 90.5 |
+
+"Godot" + "12 ready" in Verdana is 142.6 px, about 8.9em, so the brief's 9.05em + 116 px holds. That fits a 360 px tile at 100 % (259 px) and 130 % (301 px), and a 320 px tile at 100 % and 115 %. At 200 % on 320 px the stacked text column is 288 − 32 − 32 − 24 − 16 = 184 px, and "12 ready" at 32 px in Verdana bold is 158 px, so it holds one line.
+
+**Open, for Tyler's pictures and the phone (88).** The brief's arithmetic used "Godot". "Git & GitHub" + "3 ready" in the device font is 173 px, so side by side it fits a 360 px tile only to (328 − 116)/173 = 122 %. Between about 122 % and the 137 % stacking point, the name breaks between words, "Git &" / "GitHub", beside the count (`due-360-130.png`). The S24 is a 360 px phone, so this shows at a 130 % setting whenever GitHub has reviews ready. It is allowed by the layout test (a name may wrap between words, never inside one), and the name still leads, so I did not change the decided threshold. A 320 px tile at 100 % did the same in 1.3.4 (`due-320-100.png`). If Tyler wants one line there, two ways are ready: `@container (max-width: 16em)` stacks a 360 px tile from 128 %, or `@container (max-width: calc(116px + 11.5em))` follows the longest name, which stacks a 360 px tile from 115 % but also a 320 px tile at 100 %.
+
+### Tests
+- `layout.spec.ts`: `checkTiles` now also fails a tile whose icon has no box, and a figure or count whose computed size is above the label's. The new test "the home tiles at 130, 150 and 200 % text…" covers 36 steps: fresh, one lesson done and both due, × 130/150/200 %, × 360/320 px, × the device font and Verdana. The old steps stay. By the 1.3.4 rule (`display: none` on the icon at 16em or less, which is 150 % on a 360 px tile), the icon assertion would fail there. That is reasoned, not run against the old CSS.
+- `areas.spec.ts`: fresh, the count is 16 px/500 and the name 19 px; both ready, the figure is 16 px/700 and starts right of the 19 px name. New: "decision 68: at 150 % text the tile is stacked and still shows its icon…" (icons 32 px on both tiles; the count beside the name at 100 % and under it at 150 %; 28.5 px name over a 24 px count).
+- `greyscale.spec.ts`: thumbnails regenerated and looked at, three clear values in both.
+
+### The review shots (`data/sources/gv8k-shots/`, 1× renders, 360×780 viewport)
+`fresh-360-{100,130,150,200}`, `due-360-{100,130,150,200}`, `fresh-320-{100,130}`, `due-320-{100,130}`, `lesson0-360-{100,130}` (scrolled to "Before you start"), `lesson0-top-360-{100,130}` (the lesson title above it). They come from a temporary spec, deleted before the commit. Looked at each: the icon is on every home tile at every setting; the count is never larger than the name; at 100 % the titles are 19 px and the text 16 px. In the stacked fresh tile the order is name, "Next: Lesson 0", "6 lessons" (DOM order). Lesson 0 reads as text with titles one step above, no heading at a browser size.
+
+### What only the phone can prove
+At Tyler's own setting on the S24: the icon shows, the name leads, the count is smaller, the lesson reads at 16/19; and how the Git & GitHub tile's two-line name looks when it has reviews ready.
+
+### Deviations and why
+1. **The app title grows from 16 to 19 px:** the brief lists it as a title.
+2. **A flipped card's name (`.gv-card__name`) is a title:** it is the card's heading. The brief lists "choices on a card" as text, which they are.
+3. **A floor rule sizes `h1`–`h6` at the text size:** no heading can fall back to a browser default. Class rules (`.gv-heading`) still make titles.
+4. **Stacked order with nothing ready is name, Next line, count, not name, count, lines:** the count is one of the lines in the DOM (decision 67), and the DOM order and accessible names are unchanged.
+5. **No shots commit:** the folder is gitignored (above).
