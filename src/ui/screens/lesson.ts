@@ -135,7 +135,7 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
       el('p', { class: 'gv-label', text: 'In this lesson' }),
       el('ol', { class: 'gv-agenda' }, lesson.agenda.map((line) => el('li', {}, inlineRich(line)))),
     ]),
-    ...lesson.chunks.map((chunk, i) =>
+    ...(lesson.chunks ?? []).map((chunk, i) =>
       step(`chunk-${i}`, [
         stepHeading(chunk.heading),
         ...paragraphs(chunk.text),

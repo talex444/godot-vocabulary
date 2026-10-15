@@ -42,7 +42,12 @@ export interface CourseLesson {
   /** A short paragraph that develops the question. */
   need: string;
   agenda: [string, string, string];
-  chunks: Chunk[];
+  /** The old format (lessons 1–5 until they are rewritten): explanation chunks, each with a check. A lesson has `chunks` or `terms`, never both. */
+  chunks?: Chunk[];
+  /** The term format (decision 71): one six-part section per card, in `cardIds`' teaching order. */
+  terms?: TermTreatment[];
+  /** The no-peeking cumulative checks: one after every fourth term and one after the last (`recallAfter`). Only with `terms`. */
+  recall?: RecallCheck[];
   compare: Compare;
   exercises: Exercise[];
   errors: LessonError[];
@@ -76,6 +81,33 @@ export interface Chunk {
   image?: LessonImage;
   drawing?: TreeDrawing;
   check: ChoiceCheck;
+}
+
+/** One term's treatment (decision 71): six parts, in this order, rendered as its own titled section. */
+export interface TermTreatment {
+  /** The card this term is; must be one of the lesson's cardIds, and every cardId has exactly one term. */
+  cardId: string;
+  /** (1) What it is: the manual's own sentences in “quotes” (decision 34), and the page they come from. */
+  what: { text: string; page: LessonPage };
+  /** (2) When you would reach for it: the need, before the example (Schell ch. 33). */
+  when: string;
+  /** (3) Where it lives in the editor: a sentence introducing the manual's screenshot of that spot (Docs for Developers ch. 6). */
+  where: { text: string; image?: LessonImage };
+  /** (4) One worked example: a drawing (lesson 0, no code: decision 38) or code shown line by line (from lesson 3: decision 32), never run. */
+  example: { text: string; drawing?: TreeDrawing; code?: string; image?: LessonImage };
+  /** (5) Not to be confused with: one contrast or non-example, naming the other thing. */
+  contrast: { other: string; text: string };
+  /** (6) The check, with the term hidden: its description, and the learner produces the name. */
+  check: RecallCheck;
+}
+
+/** A check that asks for a term from its description. With `choices`, four names to pick from; without, the name is typed. Never shows the sentence the answer sits in. */
+export interface RecallCheck {
+  prompt: string;
+  /** The term's name as the learner must produce it (a class name, a dock's name). */
+  answer: string;
+  choices?: [string, string, string, string];
+  why: string;
 }
 
 /** A four-choice question: predict the output, or which statement is true. */
@@ -149,13 +181,39 @@ export function isPlanned(lesson: CourseLesson | PlannedLesson): lesson is Plann
   return 'planned' in lesson && lesson.planned === true;
 }
 
-/** Words in the explanation chunks (what the 400–1,000 word budget counts). */
-export function chunkWords(lesson: CourseLesson): number {
-  return lesson.chunks.reduce((n, c) => n + c.text.split(/\s+/).filter(Boolean).length, 0);
+/** The fewest words a written lesson's explanation may have. */
+export const LESSON_WORDS_MIN = 400;
+
+/**
+ * The most words a written lesson's explanation may have: one cap for the whole lesson, never one per
+ * term (decision 72). PROVISIONAL at 2,400: decision 73 sets the figure from the rewritten lesson 0
+ * (its length plus a tenth) after Tyler has read it and said the length is right.
+ */
+export const LESSON_WORDS_MAX = 2400;
+
+const words = (text: string) => text.split(/\s+/).filter(Boolean).length;
+
+/**
+ * Words in a lesson's explanation (what the word budget counts): a chunk lesson's chunk texts; a term
+ * lesson's five prose parts of every term (what, when, where, example, contrast). Checks are not counted.
+ */
+export function lessonWords(lesson: CourseLesson): number {
+  if (lesson.terms) {
+    return lesson.terms.reduce((n, t) => n + [t.what.text, t.when, t.where.text, t.example.text, t.contrast.text].reduce((m, s) => m + words(s), 0), 0);
+  }
+  return (lesson.chunks ?? []).reduce((n, c) => n + words(c.text), 0);
 }
 
-/** Every problem with a course file's shape; empty when it is valid. */
-export function validateCourse(value: unknown): string[] {
+/** How many terms stand above each recall check: after every fourth term, and after the last when the count is not a multiple of four. */
+export function recallAfter(termCount: number): number[] {
+  return Array.from({ length: Math.ceil(termCount / 4) }, (_, i) => Math.min(4 * (i + 1), termCount));
+}
+
+/**
+ * Every problem with a course file's shape; empty when it is valid. `nameOf` gives a card's displayed
+ * name (`termName` in `src/courses/index.ts`); with it, each term's check must ask for its own card's name.
+ */
+export function validateCourse(value: unknown, nameOf?: (cardId: string) => string | undefined): string[] {
   const errors: string[] = [];
   const course = value as Partial<Course> | null;
   const str = (v: unknown) => typeof v === 'string' && v.trim().length > 0;
@@ -205,6 +263,35 @@ export function validateCourse(value: unknown): string[] {
     if (e?.image) image(e.image, `${at} image`);
     if (e?.drawing) drawing(e.drawing, `${at} drawing`);
   };
+  const recallCheck = (v: unknown, at: string) => {
+    const c = v as Partial<RecallCheck>;
+    need(str(c?.prompt) && str(c?.answer) && str(c?.why), at, 'prompt, answer and why required');
+    // The term is hidden: the prompt describes it and never names it.
+    if (str(c?.prompt) && str(c?.answer)) need(!new RegExp(`(^|[^\\w.])${c.answer!.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w])`).test(c.prompt!), at, `the prompt names the answer “${c.answer}”; describe it instead`);
+    if (c?.choices !== undefined) {
+      need(Array.isArray(c.choices) && c.choices.length === 4 && c.choices.every(str), at, 'four choices required');
+      need(new Set(c.choices).size === (c.choices?.length ?? 0), at, 'choices repeat');
+      need((c.choices ?? []).filter((x) => x === c.answer).length === 1, at, 'the choices must include the answer once');
+    }
+  };
+  const term = (v: unknown, at: string) => {
+    const t = v as Partial<TermTreatment>;
+    need(str(t?.what?.text), at, '(1) what it is: text missing');
+    if (str(t?.what?.text)) need(/“[^”]+”/.test(t!.what!.text), at, '(1) what it is: needs the manual’s own words in “quotes”');
+    page(t?.what?.page, `${at} (1) what it is`);
+    need(str(t?.when), at, '(2) when you’d reach for it: missing');
+    need(str(t?.where?.text), at, '(3) where it lives: text missing');
+    if (t?.where?.image) image(t.where.image, `${at} (3) where it lives image`);
+    need(str(t?.example?.text), at, '(4) example: text missing');
+    if (t?.example?.drawing) drawing(t.example.drawing, `${at} (4) example drawing`);
+    if (t?.example?.image) image(t.example.image, `${at} (4) example image`);
+    if (t?.example?.code !== undefined) need(str(t.example.code), `${at} (4) example`, 'empty code');
+    need(str(t?.contrast?.other), at, '(5) not to be confused with: the other’s name missing');
+    need(str(t?.contrast?.text), at, '(5) not to be confused with: text missing');
+    recallCheck(t?.check, `${at} (6) check`);
+    const name = str(t?.cardId) ? nameOf?.(t!.cardId!) : undefined;
+    if (name !== undefined && str(t?.check?.answer)) need(t!.check!.answer === name, `${at} (6) check`, `the answer must be the term’s own name, “${name}”`);
+  };
   const gaps = (s: string | undefined) => (s?.match(/_{4,}/g) ?? []).length;
 
   const ids = new Set<string>();
@@ -222,7 +309,38 @@ export function validateCourse(value: unknown): string[] {
     need(new Set(l.cardIds ?? []).size === (l.cardIds?.length ?? 0), at, 'cardIds repeat');
     need(str(l.need), at, 'need missing');
     need(Array.isArray(l.agenda) && l.agenda.length === 3 && l.agenda.every(str), at, 'agenda must be three lines');
-    need(Array.isArray(l.chunks) && l.chunks.length > 0, at, 'no chunks');
+    // One format per lesson: chunks (lessons 1–5 until they are rewritten) or terms (decision 71).
+    if (l.chunks !== undefined && l.terms !== undefined) errors.push(`${at}: has both chunks and terms; write the lesson in one format`);
+    else if (l.chunks === undefined && l.terms === undefined) errors.push(`${at}: no chunks and no terms; a written lesson needs one of them`);
+    else if (l.chunks !== undefined) need(Array.isArray(l.chunks) && l.chunks.length > 0, at, 'no chunks');
+    else need(Array.isArray(l.terms) && l.terms.length > 0, at, 'no terms');
+    if (l.recall !== undefined && l.terms === undefined) errors.push(`${at}: recall checks belong to a term lesson`);
+    if (Array.isArray(l.terms)) {
+      const cardIds = Array.isArray(l.cardIds) ? l.cardIds : [];
+      const taught = new Map<string, number>();
+      l.terms.forEach((t, i) => {
+        const where = `${at} term ${i} (${String(t?.cardId)})`;
+        need(str(t?.cardId), where, 'cardId missing');
+        if (str(t?.cardId)) {
+          need(cardIds.includes(t.cardId), where, 'cardId is not one of the lesson’s cardIds');
+          if (taught.has(t.cardId)) errors.push(`${where}: term ${taught.get(t.cardId)} already teaches this card`);
+          else taught.set(t.cardId, i);
+        }
+        term(t, where);
+      });
+      for (const id of cardIds) need(taught.has(id), `${at} card ${id}`, 'has no term section; every cardId needs one');
+      // Each recall sits after a group of four terms and asks for a term whose section is above it.
+      const after = recallAfter(l.terms.length);
+      const recall = Array.isArray(l.recall) ? l.recall : [];
+      need(recall.length === after.length, at, `recall must hold ${after.length} check${after.length === 1 ? '' : 's'} for ${l.terms.length} terms (one after every fourth term and one after the last)`);
+      const nameOfTerm = (t: TermTreatment) => (str(t?.cardId) ? nameOf?.(t.cardId) : undefined) ?? t?.check?.answer;
+      recall.forEach((r, i) => {
+        const where = `${at} recall ${i}`;
+        recallCheck(r, where);
+        const above = l.terms!.slice(0, after[i] ?? l.terms!.length).map(nameOfTerm);
+        if (str(r?.answer)) need(above.includes(r.answer), where, `“${r.answer}” is not the name of a term above it`);
+      });
+    }
     (l.chunks ?? []).forEach((c, i) => {
       const where = `${at} chunk ${i}`;
       need(str(c?.heading) && str(c?.text), where, 'heading and text required');

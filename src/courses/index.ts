@@ -29,6 +29,18 @@ export function pretestCards(lesson: CourseLesson, cards: readonly Card[]): Card
     .slice(0, PRETEST_SIZE);
 }
 
+const MEMBER_KINDS = new Set(['method', 'property', 'signal']);
+
+/**
+ * A card's displayed name, as the flipped card shows it: a class's name (`api:class:Node` → `Node`), a
+ * member with its class (`Node2D.position`), otherwise the card's answer (a keyword, a glossary term).
+ * A term section's heading and its check's answer are this name. `scripts/check-lessons.mjs` mirrors it.
+ */
+export function termName(card: Card): string {
+  const owner = card.requires?.replace(/^api:class:/, '');
+  return owner && MEMBER_KINDS.has(card.kind) ? `${owner}.${card.answer}` : card.answer;
+}
+
 /** The written lessons as the session builder sees them (course mode puts their cards first). */
 export function sessionLessons(courses: readonly Course[]): Lesson[] {
   return courses.flatMap((course) =>

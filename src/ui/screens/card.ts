@@ -1,5 +1,6 @@
 import { areaOf, familyLabel, familyTraits } from '../../areas/registry';
 import type { Card } from '../../cards/types';
+import { termName } from '../../courses/index';
 import type { Choice } from '../../session/choices';
 import type { Session } from '../../session/run';
 import type { Nav } from '../app';
@@ -40,14 +41,12 @@ function choiceText(card: Card, choice: Choice): string {
 
 /** The name a flipped card asks about: a class with its icon, a member or keyword in code font, or a term. */
 function flippedPrompt(card: Card): HTMLElement {
-  const owner = card.requires?.replace(/^api:class:/, '');
   const traits = familyTraits(card.family);
   if (traits.classIcons && card.kind === 'class') {
     return el('p', { class: 'gv-card__prompt gv-card__name' }, [icon(`icons/${card.answer}.svg`), el('span', { text: card.answer })]);
   }
   if (traits.plainNames) return el('p', { class: 'gv-card__prompt gv-card__name', text: card.answer });
-  const name = owner && MEMBER_KINDS.has(card.kind) ? `${owner}.${card.answer}` : card.answer;
-  return el('p', { class: 'gv-card__prompt gv-card__name' }, [el('code', { class: 'gv-inline-code', text: name })]);
+  return el('p', { class: 'gv-card__prompt gv-card__name' }, [el('code', { class: 'gv-inline-code', text: termName(card) })]);
 }
 
 /** One card: prompt, optional code, four choices; one tap locks them and shows the answer. */
