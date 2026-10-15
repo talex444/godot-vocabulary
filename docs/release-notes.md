@@ -6,7 +6,7 @@ Newest first. Each entry: what changed, what it means for you, why, and anything
 
 ### Summary
 - **Two text sizes everywhere: 19 px for titles and 16 px for everything else** (before your phone's own font setting). Titles are the app title, the tile names, the lesson title, the step headings in a lesson and the panel headings. Everything else is 16 px: body text, code, choices, the tile's "12 ready" and "6 lessons", stat values, links and the unofficial line. Nothing is smaller than 16 px or larger than 19 px.
-- **The home tile keeps its icon, and its count stays smaller than its name, at every phone font setting.** At the default setting the tile looks as it did in 1.3.4, with the count now at text size. With a larger font setting (from about 137 % on a 360 px wide phone, or 120 % on a 320 px one), the tile stacks its words under the name. The icon stays on the left and the chevron on the right.
+- **The home tile keeps its icon, and its count stays smaller than its name, at every phone font setting.** At the default setting the tile looks as it did in 1.3.4, with the count now at text size. With a larger font setting (from about 128 % on a 360 px wide phone, or 113 % on a 320 px one), the tile stacks its words under the name. The icon stays on the left and the chevron on the right.
 
 ### Impact
 - None on your data: progress, settings, lessons done and export files are unchanged. What a tile says, and what a screen reader reads for it, are unchanged.

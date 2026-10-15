@@ -298,14 +298,16 @@ html:has(.gv-home) {
 }
 
 /*
- * Stacked when the name and the count no longer fit side by side (decision 68): a tile of 15em or
- * less, which is a 360 px phone from about 137 % text and a 320 px phone from 120 %. Side by side,
+ * Stacked when the name and the count no longer fit side by side (decision 68): a tile of 16em or
+ * less, which is a 360 px phone from about 128 % text and a 320 px phone from 113 %. Android's font
+ * settings step 100, 115, 130, 150 %: "Git & GitHub" beside "3 ready" fits a 360 px tile only to
+ * about 122 %, so 115 % sits side by side and 130 % stacks, with no step in the gap. Side by side,
  * the text needs about 9.05em beside 116 px of fixed parts (padding 32, icon 32, three 12 px gaps,
  * chevron 16) in Verdana bold, the widest common sans: "Godot" at 19 px is about 65 px, "12 ready"
  * at 16 px about 80 px. The icon keeps column 1, the words take column 2 in DOM order (name, then
  * the figure or count as a text-size line, then the lines and the tag), the chevron column 3.
  */
-@container (max-width: 15em) {
+@container (max-width: 16em) {
   .gv-tile {
     grid-template-columns: 32px minmax(0, 1fr) 16px;
   }
