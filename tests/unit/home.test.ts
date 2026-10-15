@@ -120,33 +120,40 @@ describe('home tiles', () => {
 const coloured = (view: TileView) => [view.figure, ...view.lines].filter((t) => t?.action).map((t) => t!.text);
 const texts = (view: TileView) => [view.label, view.figure?.text, ...view.lines.map((l) => l.text), view.tag].filter(Boolean);
 
-describe('the home’s words and its one colour (decisions 63, 64, 66)', () => {
+/** The line drawn in the figure's place when nothing is ready (decision 67). */
+const lessonsFigure = (view: TileView) => view.lines.filter((l) => l.lessons).map((l) => l.text);
+
+describe('the home’s words and its pale amber (decisions 63, 64, 66, 67)', () => {
   const [godot, github] = [getArea('godot')!, getArea('github')!];
   const fig = (due: number, nextLesson: number | null, lessonsTotal: number, lessonsDone = 0) => ({ due, nextLesson, lessonsTotal, lessonsDone });
 
-  it('fresh install: no figure, the Godot tile names its next lesson in plain grey; no line repeats it', () => {
+  it('fresh install: no ready figure; the Godot tile names its next lesson in the amber, its count in the figure’s place; no line repeats it', () => {
     const tiles = [
       { area: godot, figures: fig(0, 0, 6) },
       { area: github, figures: fig(0, null, 0) },
     ];
     const [g, h] = tiles.map((t) => tileView(t.area, t.figures, false));
     expect(texts(g!)).toEqual(['Godot', 'Next: Lesson 0', '6 lessons']);
-    expect(coloured(g!)).toEqual([]);
+    expect(coloured(g!)).toEqual(['Next: Lesson 0']);
     expect(g!.lines.filter((l) => l.next).map((l) => l.text)).toEqual(['Next: Lesson 0']);
+    expect(lessonsFigure(g!)).toEqual(['6 lessons']);
+    // "No courses yet" is not a count: it stays a small line under the label.
     expect(texts(h!)).toEqual(['Git & GitHub', 'No courses yet']);
+    expect(lessonsFigure(h!)).toEqual([]);
     expect(coloured(h!)).toEqual([]);
     expect([g!.figure, h!.figure]).toEqual([undefined, undefined]);
     expect(todayText(tiles)).toBeUndefined();
   });
 
-  it('one area ready: only its figure carries the colour; the other tile names its next lesson; no line repeats a tile', () => {
+  it('one area ready: its figure carries the amber; the other tile’s Next line does; no line repeats a tile', () => {
     const tiles = [
       { area: godot, figures: fig(0, 2, 6, 2) },
       { area: github, figures: fig(3, null, 0) },
     ];
     const [g, h] = tiles.map((t) => tileView(t.area, t.figures, t.area.id === 'github'));
     expect(texts(g!)).toEqual(['Godot', 'Next: Lesson 2', '2 of 6 lessons']);
-    expect(coloured(g!)).toEqual([]);
+    expect(coloured(g!)).toEqual(['Next: Lesson 2']);
+    expect(lessonsFigure(g!)).toEqual(['2 of 6 lessons']);
     expect(texts(h!)).toEqual(['Git & GitHub', '3 ready', 'No courses yet', 'Last used']);
     expect(h!.tag).toBe('Last used');
     expect(coloured(h!)).toEqual(['3 ready']);
@@ -162,6 +169,8 @@ describe('the home’s words and its one colour (decisions 63, 64, 66)', () => {
     expect(texts(g!)).toEqual(['Godot', '12 ready', '6 lessons']);
     expect(coloured(g!)).toEqual(['12 ready']);
     expect(coloured(h!)).toEqual(['3 ready']);
+    // The figure holds the right side, so the lessons line stays a line.
+    expect([lessonsFigure(g!), lessonsFigure(h!)]).toEqual([[], []]);
     expect(todayText(tiles)).toBeUndefined();
   });
 
@@ -196,10 +205,11 @@ describe('the home’s words and its one colour (decisions 63, 64, 66)', () => {
     }
   });
 
-  it('every lesson done and nothing ready: "All lessons done", in grey; "Nothing waiting today."', () => {
+  it('every lesson done and nothing ready: "All lessons done", not the amber; "Nothing waiting today."', () => {
     const view = tileView(godot, fig(0, null, 6, 6), false);
     expect(texts(view)).toEqual(['Godot', 'All lessons done', '6 of 6 lessons']);
     expect(coloured(view)).toEqual([]);
+    expect(lessonsFigure(view)).toEqual(['6 of 6 lessons']);
     expect(todayText([{ area: godot, figures: fig(0, null, 6, 6) }, { area: github, figures: fig(0, null, 0) }])).toBe('Nothing waiting today.');
   });
 
@@ -209,11 +219,11 @@ describe('the home’s words and its one colour (decisions 63, 64, 66)', () => {
     expect(code).not.toMatch(/streak|welcome|good (morning|afternoon|evening)|hello|in a row/i);
   });
 
-  it('the Godot tile draws Godot’s PackedScene class icon, masked in the secondary grey like the branch icon', () => {
+  it('the Godot tile draws Godot’s PackedScene class icon, masked in the tan like the branch icon and the chevron', () => {
     expect(AREAS.map((a) => a.icon)).toEqual(['icons/PackedScene.svg', 'octicons/git-branch-24.svg']);
-    // Both are masks: the file's shape, the colour from the theme's secondary grey (screens.css).
+    // Both are masks: the file's shape, the colour from the home's tan (screens.css, decision 67).
     const css = readFileSync(new URL('../../src/ui/screens/screens.css', import.meta.url), 'utf8');
-    expect(css).toMatch(/\.gv-tile__icon,\s*\.gv-tile__chevron \{[^}]*background-color: var\(--font-secondary-color\);[^}]*mask: var\(--glyph/);
+    expect(css).toMatch(/\.gv-tile__icon,\s*\.gv-tile__chevron \{[^}]*background-color: var\(--home-tan-color\);[^}]*mask: var\(--glyph/);
     expect(existsSync(new URL('../../public/app-glyph-grey.svg', import.meta.url))).toBe(false);
   });
 

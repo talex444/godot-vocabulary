@@ -51,22 +51,25 @@ export const dueText = (due: number): string | undefined => (due > 0 ? `${due} r
 
 export const UNOFFICIAL_HOME = 'Unofficial; not affiliated with or endorsed by the Godot Foundation or GitHub.';
 
-/** One piece of a tile's text; `action` draws it in the home's one colour (decision 64). */
+/** One piece of a tile's text; `action` draws it in the home's pale amber, "do this next" (decision 67). */
 export interface TileText {
   text: string;
   action: boolean;
-  /** The "Next: Lesson N" line: secondary grey, a step above the lessons line, never coloured. */
+  /** The "Next: Lesson N" line: the next thing to do, in the pale amber. */
   next?: boolean;
+  /** The lessons count standing in the figure's place when nothing is ready ("6 lessons", decision 67). */
+  lessons?: boolean;
 }
 
 /** What a tile shows, in DOM order. */
 export interface TileView {
   label: string;
-  /** The right-hand figure, "N ready", in the action colour; none when nothing is ready. */
+  /** The right-hand figure, "N ready", in the pale amber; none when nothing is ready. */
   figure: TileText | undefined;
   /**
-   * Under the label: the next step (when nothing is ready and the area has courses), the lessons
-   * line, and "Last used" as a quiet line of its own when there is no figure to sit under.
+   * After the label: the next step (when nothing is ready and the area has courses), the lessons
+   * line, and "Last used" as a quiet line of its own when there is no figure to sit under. With no
+   * figure, the lessons line is drawn in the figure's place, so the tile's right side is never empty.
    */
   lines: TileText[];
   /** "Last used" in the right-hand column, under the figure (only when there is one). */
@@ -81,17 +84,19 @@ export interface TileView {
 
 /**
  * The words carry the meaning; the colour only repeats it (WCAG 1.4.1), on one element at most: the
- * figure when reviews are ready (a fact about the cards). Each figure is said once, and a zero is
- * not said at all (decision 66). The "Next: Lesson N" line is plain secondary text, so a fresh
- * install shows no colour at all (decision 64, amended).
+ * thing to do next, "12 ready" when reviews are ready, else "Next: Lesson N" (decision 67). Each
+ * figure is said once, and a zero is not said at all (decision 66); with nothing ready the lessons
+ * count takes the figure's place.
  */
 export function tileView(area: Area, figures: TileFigures, lastUsed: boolean): TileView {
   const lines: TileText[] = [];
   const text = dueText(figures.due);
-  if (text === undefined && figures.lessonsTotal > 0) {
-    lines.push(figures.nextLesson === null ? { text: 'All lessons done', action: false } : { text: `Next: Lesson ${figures.nextLesson}`, action: false, next: true });
+  const courses = figures.lessonsTotal > 0;
+  if (text === undefined && courses) {
+    lines.push(figures.nextLesson === null ? { text: 'All lessons done', action: false } : { text: `Next: Lesson ${figures.nextLesson}`, action: true, next: true });
   }
-  lines.push({ text: lessonsText(figures), action: false });
+  // "No courses yet" stays a small line under the label (the design seat): only a count stands in.
+  lines.push({ text: lessonsText(figures), action: false, ...(text === undefined && courses && { lessons: true }) });
   const figure = text === undefined ? undefined : { text, action: true };
   if (lastUsed && figure === undefined) lines.push({ text: 'Last used', action: false });
   const tag = lastUsed && figure !== undefined ? 'Last used' : undefined;
@@ -152,7 +157,7 @@ export function tileName(area: Area, figures: TileFigures, lastUsed: boolean): s
   return tileView(area, figures, lastUsed).name;
 }
 
-/** A decorative glyph drawn in the secondary grey: the file is the mask, the token its colour. */
+/** A decorative glyph drawn in the tan: the file is the mask, the token its colour. */
 function glyph(className: string, path: string): HTMLSpanElement {
   const node = el('span', { class: className, attrs: { 'aria-hidden': 'true' } });
   node.style.setProperty('--glyph', `url("${asset(path)}")`);
@@ -162,14 +167,17 @@ function glyph(className: string, path: string): HTMLSpanElement {
 const ACTION = ' gv-action';
 const NEXT = ' gv-tile__line--next';
 
+/** A line's class: its own for the lessons count in the figure's place, so no other line takes its size. */
+const lineClass = (line: TileText) => (line.lessons ? 'gv-tile__lessons' : `gv-tile__line${line.next ? NEXT : ''}`) + (line.action ? ACTION : '');
+
 function tile(area: Area, view: TileView, nav: Nav, status: HTMLElement): HTMLButtonElement {
   // The DOM keeps 1.3.0's order (label, then the lines); the grid in screens.css places the ready
-  // figure and "Last used" under it in the right-hand column.
+  // figure (or, with none, the lessons count) and "Last used" in the right-hand column.
   const node = el('button', { class: 'gv-tile', attrs: { type: 'button', 'data-area': area.id, 'aria-label': view.name } }, [
     el('span', { class: 'gv-tile__text' }, [
       el('span', { class: 'gv-tile__label', text: view.label }),
       view.figure !== undefined && el('span', { class: `gv-tile__figure${view.figure.action ? ACTION : ''}`, text: view.figure.text }),
-      ...view.lines.map((line) => el('span', { class: `gv-tile__line${line.next ? NEXT : ''}${line.action ? ACTION : ''}`, text: line.text })),
+      ...view.lines.map((line) => el('span', { class: lineClass(line), text: line.text })),
       view.tag !== undefined && el('span', { class: 'gv-tile__tag', text: view.tag }),
     ]),
     // After the text in the DOM, drawn beside it; decorative, since the label names the area.

@@ -84,26 +84,28 @@ const coloured = (page: Page) =>
     tiles.map((t) => [...t.querySelectorAll('.gv-tile__text > *')].filter((n) => getComputedStyle(n).color === action).map((n) => n.textContent)),
   ACTION_RGB);
 
-test('fresh install: no line repeats the tile’s Next; no figures; nothing is coloured; Next is plain secondary grey', async ({ page }) => {
+test('fresh install: no line repeats the tile’s Next; no ready figure; the amber marks only Next; the count stands in the figure’s place', async ({ page }) => {
   await gotoHome(page);
   await expect(tile(page, 'Godot')).toBeVisible();
   await expect(page.locator('.gv-today')).toHaveCount(0);
-  // Nothing ready: no figure at all, the right-hand column holds only the chevron.
+  // Nothing ready: no ready figure; the lessons count takes its place, quiet, at weight 500 (decision 67).
   await expect(page.locator('.gv-tile__figure')).toHaveCount(0);
-  expect(await coloured(page)).toEqual([[], []]);
-  // The Next line keeps its place and weight, in the theme's secondary grey, not the amber.
-  const next = await page.getByText('Next: Lesson 0', { exact: true }).evaluate((n) => {
-    const c = getComputedStyle(n);
-    const probe = document.createElement('span');
-    probe.style.color = 'var(--font-secondary-color)';
-    n.parentElement!.append(probe);
-    const secondary = c.color === getComputedStyle(probe).color;
-    probe.remove();
-    return { weight: c.fontWeight, secondary };
-  });
-  expect(next).toEqual({ weight: '400', secondary: true });
-  await expect(tile(page, 'Godot').locator('.gv-tile__line')).toHaveText(['Next: Lesson 0', '6 lessons']);
-  // The heading, the unofficial line and About stay grey.
+  expect(await coloured(page)).toEqual([['Next: Lesson 0'], []]);
+  // The Next line keeps its place and weight, in the pale amber: the next thing to do.
+  const next = await page.getByText('Next: Lesson 0', { exact: true }).evaluate((n) => getComputedStyle(n).fontWeight);
+  expect(next).toBe('400');
+  await expect(tile(page, 'Godot').locator('.gv-tile__line')).toHaveText(['Next: Lesson 0']);
+  const count = tile(page, 'Godot').locator('.gv-tile__lessons');
+  await expect(count).toHaveText('6 lessons');
+  const [countBox, labelBox, nextBox] = await Promise.all([count.boundingBox(), tile(page, 'Godot').locator('.gv-tile__label').boundingBox(), tile(page, 'Godot').locator('.gv-tile__line--next').boundingBox()]);
+  // On the label's row, to its right; the Next line below them.
+  expect(countBox!.x).toBeGreaterThan(labelBox!.x + labelBox!.width);
+  expect(nextBox!.y).toBeGreaterThanOrEqual(countBox!.y + countBox!.height - 1);
+  expect(await count.evaluate((n) => getComputedStyle(n).fontWeight)).toBe('500');
+  // "No courses yet" stays a small line under its label (the generic line style, not the count's).
+  await expect(tile(page, 'Git & GitHub').locator('.gv-tile__lessons')).toHaveCount(0);
+  await expect(tile(page, 'Git & GitHub').locator('.gv-tile__line')).toHaveText(['No courses yet']);
+  // The heading, the unofficial line and About are not the amber.
   const grey = await page.evaluate(
     (action) => ['.gv-heading', '.gv-unofficial', '.gv-links button'].every((s) => getComputedStyle(document.querySelector(s)!).color !== action),
     ACTION_RGB,
@@ -174,9 +176,15 @@ test('one static glow at the top right, on the home only: no sideways scroll at 
   }
   const painted = await page.evaluate(() => getComputedStyle(document.documentElement).backgroundImage);
   expect(painted).toMatch(/at (100% 0%|right top|top right)/);
-  // The tiles have no edge (decision 66): the fill alone, no border and no inset shadow.
-  const edges = await page.locator('.gv-tile').evaluateAll((tiles) => tiles.map((t) => [getComputedStyle(t).borderTopWidth, getComputedStyle(t).boxShadow]));
-  expect(edges).toEqual([['0px', 'none'], ['0px', 'none']]);
+  // The tiles have no border and no drop shadow (decisions 66, 67): a gradient fill at 225° and one
+  // 1 px lit top edge, drawn inside.
+  const edges = await page.locator('.gv-tile').evaluateAll((tiles) =>
+    tiles.map((t) => {
+      const c = getComputedStyle(t);
+      return { border: c.borderTopWidth, shadow: /^\S+\([^)]*\) 0px 1px 0px 0px inset$/.test(c.boxShadow), fill: c.backgroundImage.startsWith('linear-gradient(225deg') };
+    }),
+  );
+  expect(edges).toEqual([{ border: '0px', shadow: true, fill: true }, { border: '0px', shadow: true, fill: true }]);
   // Static: nothing animates or transitions on the root.
   expect(await page.evaluate(() => document.documentElement.getAnimations().length)).toBe(0);
 

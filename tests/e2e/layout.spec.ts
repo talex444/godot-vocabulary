@@ -186,8 +186,9 @@ async function checkHome(page: Page, options: { targets?: boolean; text?: boolea
 }
 
 /**
- * The home tile's own layout (decision 63): the ready figure stays on one line, the tile's parts do
- * not overlap one another, and all of them sit inside the tile. The label may wrap.
+ * The home tile's own layout (decisions 63, 67): the ready figure stays on one line, the tile's parts
+ * do not overlap one another, and all of them sit inside the tile. The label may wrap between words,
+ * never inside one; the lessons count in the figure's place may wrap too.
  */
 async function checkTiles(page: Page, where: string) {
   const tiles = await page.locator('.gv-tile').evaluateAll((nodes) =>
@@ -197,7 +198,12 @@ async function checkTiles(page: Page, where: string) {
       const figure = tile.querySelector('.gv-tile__figure');
       const range = document.createRange();
       if (figure) range.selectNodeContents(figure);
-      const parts = [...tile.querySelectorAll('.gv-tile__label, .gv-tile__figure, .gv-tile__line, .gv-tile__tag, .gv-tile__icon, .gv-tile__chevron')]
+      const label = tile.querySelector('.gv-tile__label')!;
+      const labelRange = document.createRange();
+      labelRange.selectNodeContents(label);
+      const labelLines = new Set([...labelRange.getClientRects()].map((r) => Math.round(r.top))).size;
+      const labelWords = label.textContent!.trim().split(/\s+/).length;
+      const parts = [...tile.querySelectorAll('.gv-tile__label, .gv-tile__figure, .gv-tile__lessons, .gv-tile__line, .gv-tile__tag, .gv-tile__icon, .gv-tile__chevron')]
         .filter((n) => n.getClientRects().length > 0)
         .map((n) => ({ name: `${n.className} "${n.textContent}"`, r: n.getBoundingClientRect(), spills: n.scrollWidth > n.clientWidth + 1 }));
       const overlapping: string[] = [];
@@ -211,10 +217,11 @@ async function checkTiles(page: Page, where: string) {
       const outside = parts.filter(({ r }) => r.left < box.left - 0.5 || r.right > box.right + 0.5 || r.top < box.top - 0.5 || r.bottom > box.bottom + 0.5).map((p) => p.name);
       const spilling = parts.filter((p) => p.spills).map((p) => p.name);
       const figureLines = figure ? new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size : 1;
-      return { figure: figure?.textContent ?? '(none)', figureLines, overlapping, outside, spilling };
+      return { figure: figure?.textContent ?? '(none)', figureLines, overlapping, outside, spilling, label: label.textContent, labelBroken: labelLines > labelWords };
     }),
   );
   for (const t of tiles) {
+    expect(t.labelBroken, `${where}: "${t.label}" broken inside a word`).toBe(false);
     expect(t.spilling, `${where}: text wider than its place in the tile`).toEqual([]);
     expect(t.figureLines, `${where}: "${t.figure}" on one line`).toBe(1);
     expect(t.overlapping, `${where}: tile parts overlapping`).toEqual([]);
@@ -234,11 +241,28 @@ test('360×780 portrait, the home page: the same', async ({ page }) => {
   await checkHome(page);
 });
 
+/** Lesson 0 done and nothing ready: the widest lessons count, "1 of 6 lessons", in the figure's place. */
+async function oneLessonDone(page: Page) {
+  await enterArea(page, 'Godot');
+  const file = { ...exportFile(), version: 2, skipped: [], lessonsDone: [{ lessonId: 'c1-l0', at: new Date().toISOString() }] };
+  await importFromStart(page, file);
+  await gotoHome(page);
+}
+
 test('the home tiles at 360 and 320 px: the figure on one line, nothing overlapping, nothing outside the tile', async ({ page }) => {
   await gotoHome(page);
   await checkTiles(page, 'fresh, 360');
   await page.setViewportSize({ width: 320, height: 780 });
   await checkTiles(page, 'fresh, 320');
+  await oneLessonDone(page);
+  await expect(page.locator('.gv-tile__lessons')).toHaveText('1 of 6 lessons');
+  await checkTiles(page, 'one lesson done, 320');
+  await page.setViewportSize({ width: 360, height: 780 });
+  await checkTiles(page, 'one lesson done, 360');
+  await page.setViewportSize({ width: 320, height: 780 });
+  await page.evaluate(() => (document.documentElement.style.fontSize = '200%'));
+  await checkTiles(page, 'one lesson done, 320, 200% text');
+  await page.evaluate(() => (document.documentElement.style.fontSize = ''));
   await bothDue(page);
   await checkTiles(page, 'both due, 320');
   await checkHome(page);
@@ -252,8 +276,13 @@ test('the home tiles at 360 and 320 px: the figure on one line, nothing overlapp
   await checkTiles(page, 'both due, 320, 200% text');
   // CI's system-ui is a Linux font wider than Segoe UI; Verdana, about the widest common sans, makes
   // this machine catch what that runner catches.
-  await page.addStyleTag({ content: '.gv-tile__figure { font-family: "Verdana", sans-serif; }' });
+  await page.addStyleTag({ content: '.gv-tile__figure, .gv-tile__lessons, .gv-tile__label { font-family: "Verdana", sans-serif; }' });
   await checkTiles(page, 'both due, 320, 200% text, wide font');
+  await oneLessonDone(page);
+  await page.addStyleTag({ content: '.gv-tile__figure, .gv-tile__lessons, .gv-tile__label { font-family: "Verdana", sans-serif; }' });
+  await checkTiles(page, 'one lesson done, 320, wide font');
+  await page.evaluate(() => (document.documentElement.style.fontSize = '200%'));
+  await checkTiles(page, 'one lesson done, 320, 200% text, wide font');
 });
 
 test('360×780 portrait: no horizontal scroll, every target 44×44, text at least 16 px', async ({ page }) => {
