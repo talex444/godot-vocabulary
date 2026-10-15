@@ -1258,3 +1258,25 @@ Checks: viewport and Inspector typed, the rest four names. Errors: distraction-f
 
 ### The reading copy
 `data/sources/gv8n-read/lesson-0-editor.md` (gitignored): the whole lesson in page order with the answers, each picture's file and caption, and the word count, for Tyler to read on his phone before release (done-criteria 93's open box).
+
+## GV-8o — Lesson 1, "What is a Godot game made of when it runs?", in the six-part treatment (2026-10-15)
+
+Decisions 71–73. One commit by the session, `feat(courses): lesson 1 rewritten in the six-part treatment (decision 71)` (9ea019e), with every gate green before it. The session was killed at 12:19 while assembling the reading copy (the manager's process restarted under it), so this paragraph, done-criteria 94 and the reading copy are the manager's, written from the committed lesson.
+
+**The lesson.** `c1-l0` (Lesson 1 after decision 70's shift) keeps its id, title, page, nine cards and exit stem, and is now a term lesson: nine terms in the page's order of ideas (Node, SceneTree, PackedScene, Signal, then the character's nodes CharacterBody2D, Sprite2D, CollisionShape2D, Camera2D, and Node3D last), three recall checks (after terms 4 and 8 and at the end: PackedScene typed, Signal typed, CollisionShape2D picked), `compare`, three exercises (predict, blank, fix with plain lines), sourced errors, no code anywhere (decision 38). Words the budget counts: **2,357** of the provisional 2,400 (decision 73 sets the cap from Tyler's read; see the reading copy).
+
+| Term | "What it is" source | "Where it lives" picture | Example | Not to be confused with | Check |
+|---|---|---|---|---|---|
+| Node | class reference + key concepts | `nodes_and_scenes_03_create_node_window.webp` | `key_concepts_character_nodes.webp` | Node2D and Node3D | pick |
+| SceneTree | class reference + key concepts | `key_concepts_scene_tree.webp` | text | the Scene dock | typed |
+| PackedScene | class reference | `signals_03_dragging_scene.webp` | `key_concepts_scene_example.webp` | the nodes made from it | pick |
+| Signal | class reference + key concepts | `signals_11_pressed_signals.webp` (newly copied) | `key_concepts_signals.webp` | a function call | pick |
+| CharacterBody2D | class reference + first 2D game | `first_2d_game_add_node.webp` | drawing: Player (root) | Area2D and AnimatableBody2D | pick |
+| Sprite2D | class reference | `scripting_first_script_add_sprite_node.webp` | drawing: + Sprite2D | the texture it shows | typed |
+| CollisionShape2D | class reference | `first_2d_game_player_coll_shape.webp` | drawing: + CollisionShape2D | an Area2D | pick |
+| Camera2D | class reference | `nodes_and_scenes_nodes.webp` | drawing: + Camera2D | the viewport | pick |
+| Node3D | class reference | `nodes_and_scenes_02_scene_dock.webp` | `nodes_and_scenes_3d_scene_example.webp` | Node | typed |
+
+**Schema and page changes it needed.** A term's example drawing may hold **one node** (the Player tree as it stands when CharacterBody2D adds its root): `validateCourse`'s `drawing()` takes a minimum of 1 for term examples (2 elsewhere), and the page's `treeDrawing` shows no Add button or status for a one-node tree. `screens.css`: the drawing row wraps at large text so a class name moves to its own line instead of breaking mid-word (`flex-wrap: wrap; gap: 0 8px`). `scripts/fetch-sources.mjs`: the `first_2d_game/` pictures join the image filter with the `first_2d_game_` prefix the files carry. Tests: `courses.test.ts` pins Lesson 1 as a term lesson (nine terms, three recalls, no code, a drawing in an example, every exercise type, two or three sourced errors); `courses.spec.ts`, `axe.spec.ts`, `helpers.ts` and `layout.spec.ts` follow the term lesson's question names and steps.
+
+**Pictures and the reading copy.** `data/sources/gv8o-shots/` (gitignored): the Node and CharacterBody2D sections, a recall step and the finish, at 360 px, 100 % and 130 %; looked at by the manager: six labels in order, the quoted text, the Scene dock picture under "Where it lives", the one-node drawing, the four-name check with its verdict. The reading copy is `data/sources/gv8o-read/lesson-1-key-concepts.md`, assembled from the committed JSON by the manager's script (the same shape as GV-8n's), copied to the vault for Tyler's read before release.
