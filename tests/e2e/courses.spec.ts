@@ -158,12 +158,13 @@ test('49–53: lesson 0 end to end, Mark done, course mode, the next session, an
   await pretest(page, 2, true);
   await expect(page.getByRole('button', { name: 'Skip to the exercises' })).toBeHidden();
 
-  // A chunk check, then Next moves to the next step.
+  // A chunk check: its verdict and why end the chunk; no Next, the page just scrolls on (decision 69b).
   const check = page.locator('[data-question="check-0"]');
   await check.locator('.gv-choice').nth(2).click();
   await expect(check.locator('.gv-feedback__right')).toHaveText('Right.');
-  await check.getByRole('button', { name: 'Next' }).click();
-  await expect(page.getByRole('heading', { name: 'Nodes', exact: true })).toBeFocused();
+  await expect(check.locator('.gv-feedback > :last-child')).not.toBeEmpty();
+  await expect(page.locator('.gv-lesson').getByRole('button', { name: 'Next', exact: true })).toHaveCount(0);
+  await page.getByRole('heading', { name: 'Nodes', exact: true }).scrollIntoViewIfNeeded();
 
   // The tree drawing, one node at a time.
   const tree = page.locator('.gv-tree__row:visible');

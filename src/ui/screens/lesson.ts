@@ -206,24 +206,7 @@ function example(e: Example): HTMLElement {
   ]);
 }
 
-/** Moves focus to the next step's heading; the Next of every check. */
-function nextStep(from: HTMLElement): void {
-  const steps = [...document.querySelectorAll<HTMLElement>('[data-step]')];
-  const current = from.closest<HTMLElement>('[data-step]');
-  const target = steps[steps.indexOf(current!) + 1]?.querySelector<HTMLElement>('h3');
-  if (!target) return;
-  target.scrollIntoView({ block: 'start' });
-  target.focus({ preventScroll: true });
-}
-
-function nextButton(): HTMLButtonElement {
-  const next = button('Next', { variant: 'flat' });
-  next.classList.add('gv-next');
-  next.addEventListener('click', () => nextStep(next));
-  return next;
-}
-
-/** The right/wrong line and the one-sentence why. */
+/** The right/wrong line and the one-sentence why: the last thing in a check (decision 69b, no Next). */
 function verdict(correct: boolean, wrongText: string, why: string): Node[] {
   return [
     el('p', { class: correct ? 'gv-feedback__right' : 'gv-feedback__wrong', text: correct ? 'Right.' : wrongText }),
@@ -267,7 +250,6 @@ function pretestItem(card: Card, index: number, cardsById: ReadonlyMap<string, C
 /** A four-choice check: a chunk's check, the compare question, or a predict exercise. */
 function choiceCheck(check: ChoiceCheck, name: string, kind?: 'predict'): HTMLElement {
   const feedback = el('div', { class: 'gv-feedback', attrs: { role: 'status' } });
-  const after = el('div', { class: 'gv-after' });
   const rows = check.choices.map((text, index) => {
     const row = choiceRow(text, { rich: true, onChoose: () => choose(index) });
     return row;
@@ -275,7 +257,6 @@ function choiceCheck(check: ChoiceCheck, name: string, kind?: 'predict'): HTMLEl
   function choose(index: number) {
     rows.forEach((row, i) => setChoiceState(row, i === index ? (i === check.answer ? 'chosen-right' : 'chosen-wrong') : i === check.answer ? 'revealed-right' : 'disabled'));
     feedback.replaceChildren(...verdict(index === check.answer, 'Not quite. The right answer is marked.', check.why));
-    after.replaceChildren(nextButton());
   }
   return el('div', { class: 'gv-question', attrs: { 'data-question': name, ...(kind ? { 'data-kind': kind } : {}) } }, [
     el('p', { class: 'gv-label', text: kind === 'predict' ? 'Predict' : 'Check' }),
@@ -283,7 +264,6 @@ function choiceCheck(check: ChoiceCheck, name: string, kind?: 'predict'): HTMLEl
     check.code ? codeBlock(check.code) : null,
     el('div', { class: 'gv-choices', attrs: { role: 'group', 'aria-label': 'Choices' } }, rows),
     feedback,
-    after,
   ]);
 }
 
@@ -291,7 +271,6 @@ function choiceCheck(check: ChoiceCheck, name: string, kind?: 'predict'): HTMLEl
 function blankExercise(exercise: BlankExercise, index: number): HTMLElement {
   const input = gapField('Missing word', exercise.answer.length);
   const feedback = el('div', { class: 'gv-feedback', attrs: { role: 'status' } });
-  const after = el('div', { class: 'gv-after' });
   let misses = 0;
   const check = button('Check', { variant: 'secondary', onClick: () => judge() });
   const line = exercise.code
@@ -307,7 +286,6 @@ function blankExercise(exercise: BlankExercise, index: number): HTMLElement {
     line,
     el('div', { class: 'gv-row' }, [check]),
     feedback,
-    after,
   ]);
   input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') judge();
@@ -316,7 +294,6 @@ function blankExercise(exercise: BlankExercise, index: number): HTMLElement {
     root.dataset.result = result;
     input.readOnly = true;
     check.disabled = true;
-    after.replaceChildren(nextButton());
   }
   function judge() {
     if (root.dataset.result) return;
@@ -353,7 +330,6 @@ function blankExercise(exercise: BlankExercise, index: number): HTMLElement {
 /** Which of four lines is the bug; the corrected line follows the answer. */
 function fixExercise(exercise: FixExercise, index: number): HTMLElement {
   const feedback = el('div', { class: 'gv-feedback', attrs: { role: 'status' } });
-  const after = el('div', { class: 'gv-after' });
   const rows = exercise.lines.map((line, i) => {
     const row = choiceRow(line, { rich: exercise.plain, onChoose: () => choose(i) });
     if (!exercise.plain) row.classList.add('gv-choice--code');
@@ -365,14 +341,12 @@ function fixExercise(exercise: FixExercise, index: number): HTMLElement {
       ? el('p', {}, [el('strong', { class: 'gv-fix-label', text: 'Fixed: ' }), ...inlineRich(exercise.fixed)])
       : el('div', {}, [el('p', { class: 'gv-label', text: 'Fixed:' }), codeBlock(exercise.fixed)]);
     feedback.replaceChildren(...verdict(i === exercise.answer, 'Not quite. The wrong line is marked.', exercise.why), fixed);
-    after.replaceChildren(nextButton());
   }
   return el('div', { class: 'gv-question', attrs: { 'data-question': `exercise-${index}`, 'data-kind': 'fix' } }, [
     el('p', { class: 'gv-label', text: 'Find the wrong line' }),
     el('p', { class: 'gv-card__prompt' }, inlineRich(exercise.prompt)),
     el('div', { class: 'gv-choices', attrs: { role: 'group', 'aria-label': 'Lines' } }, rows),
     feedback,
-    after,
   ]);
 }
 
