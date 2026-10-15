@@ -298,39 +298,25 @@ html:has(.gv-home) {
 }
 
 /*
- * A 320 px phone (a tile under 19em) in a wide system font. The home wears the device's own font
- * (src/theme/home.ts), and DejaVu Sans, the CI runner's system-ui, sets bold text about a fifth
- * wider than Segoe UI or Roboto. The figure steps down to the label's size and the columns close
- * up, so the label keeps its longest word beside the figure: in Verdana bold, about the widest
- * common sans, "12 ready" at 1.25rem is about 99 px and "Godot" about 69 px, in the 184 px they share.
+ * Stacked when the name and the count no longer fit side by side (decision 68): a tile of 15em or
+ * less, which is a 360 px phone from about 137 % text and a 320 px phone from 120 %. Side by side,
+ * the text needs about 9.05em beside 116 px of fixed parts (padding 32, icon 32, three 12 px gaps,
+ * chevron 16) in Verdana bold, the widest common sans: "Godot" at 19 px is about 65 px, "12 ready"
+ * at 16 px about 80 px. The icon keeps column 1, the words take column 2 in DOM order (name, then
+ * the figure or count as a text-size line, then the lines and the tag), the chevron column 3.
  */
-@container (max-width: 19em) {
+@container (max-width: 15em) {
   .gv-tile {
-    column-gap: 8px;
+    grid-template-columns: 32px minmax(0, 1fr) 16px;
   }
 
-  .gv-tile__figure,
-  .gv-tile__lessons {
-    font-size: var(--text-size);
-  }
-}
-
-/*
- * Large text on a narrow screen (200 % at 320 px): one column of text in DOM order, the chevron
- * beside it, no icon, so the label and figure never squeeze each other.
- */
-@container (max-width: 16em) {
-  .gv-tile {
-    grid-template-columns: minmax(0, 1fr) 16px;
-  }
-
-  .gv-tile__icon {
-    display: none;
+  .gv-tile__icon,
+  .gv-tile__chevron {
+    grid-row: 1 / span 6;
   }
 
   .gv-tile__chevron {
-    grid-column: 2;
-    grid-row: 1 / span 6;
+    grid-column: 3;
   }
 
   .gv-tile__label,
@@ -338,27 +324,13 @@ html:has(.gv-home) {
   .gv-tile__tag,
   .gv-tile__line,
   .gv-tile__lessons {
-    grid-area: auto / 1;
+    grid-area: auto / 2;
     justify-self: start;
     text-align: start;
   }
 
   .gv-tile:has(.gv-tile__lessons) .gv-tile__line {
-    grid-column: 1;
-  }
-
-  /*
-   * The figure keeps one line across the whole text column, one step smaller: "12 ready" at 200 %
-   * is 40 px glyphs, about 196 px in Verdana bold, the widest common sans, in about 232 px.
-   */
-  .gv-tile__figure {
-    justify-self: stretch;
-    font-size: var(--text-size);
-  }
-
-  /* The lessons count steps down with it, and wraps rather than truncates. */
-  .gv-tile__lessons {
-    font-size: var(--text-size);
+    grid-column: 2;
   }
 
   .gv-tile__tag {

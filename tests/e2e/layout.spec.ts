@@ -224,10 +224,27 @@ async function checkTiles(page: Page, where: string) {
       const outside = parts.filter(({ r }) => r.left < box.left - 0.5 || r.right > box.right + 0.5 || r.top < box.top - 0.5 || r.bottom > box.bottom + 0.5).map((p) => p.name);
       const spilling = parts.filter((p) => p.spills).map((p) => p.name);
       const figureLines = figure ? new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size : 1;
-      return { figure: figure?.textContent ?? '(none)', figureLines, overlapping, outside, spilling, label: label.textContent, labelBroken: labelLines > labelWords };
+      // Decision 68: the icon shows at every text size, and the count is never larger than the name.
+      const icon = tile.querySelector('.gv-tile__icon')!.getBoundingClientRect();
+      const size = (n: Element | null) => (n ? Number.parseFloat(getComputedStyle(n).fontSize) : 0);
+      const louder = [...tile.querySelectorAll('.gv-tile__figure, .gv-tile__lessons')].filter((n) => size(n) > size(label)).map((n) => `"${n.textContent}" ${size(n)}px`);
+      return {
+        figure: figure?.textContent ?? '(none)',
+        figureLines,
+        overlapping,
+        outside,
+        spilling,
+        label: label.textContent,
+        labelBroken: labelLines > labelWords,
+        iconShown: icon.width > 0 && icon.height > 0,
+        louder,
+        labelSize: size(label),
+      };
     }),
   );
   for (const t of tiles) {
+    expect(t.iconShown, `${where}: "${t.label}" shows its icon`).toBe(true);
+    expect(t.louder, `${where}: larger than the name (${t.labelSize}px)`).toEqual([]);
     expect(t.labelBroken, `${where}: "${t.label}" broken inside a word`).toBe(false);
     expect(t.spilling, `${where}: text wider than its place in the tile`).toEqual([]);
     expect(t.figureLines, `${where}: "${t.figure}" on one line`).toBe(1);
@@ -295,6 +312,35 @@ test('the home tiles at 360 and 320 px: the figure on one line, nothing overlapp
   await checkTiles(page, 'one lesson done, 320, wide font');
   await page.evaluate(() => (document.documentElement.style.fontSize = '200%'));
   await checkTiles(page, 'one lesson done, 320, 200% text, wide font');
+});
+
+/**
+ * Decision 68: Tyler's phone runs at a larger font setting than the default, so the tiles are checked
+ * at 130, 150 and 200 % text, at 360 and 320 px, in each common state, in the device font and then in
+ * the wide font: the icon shows, the count never out-sizes the name, nothing overlaps or spills.
+ */
+test('the home tiles at 130, 150 and 200 % text: the icon stays, the count is never larger than the name', async ({ page }) => {
+  const states: [string, (page: Page) => Promise<void>][] = [
+    ['fresh', gotoHome],
+    ['one lesson done', oneLessonDone],
+    ['both due', bothDue],
+  ];
+  for (const [state, arrive] of states) {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await gotoHome(page);
+    await arrive(page);
+    for (const font of ['device font', 'wide font']) {
+      if (font === 'wide font') await wideFont(page);
+      for (const scale of ['130%', '150%', '200%']) {
+        await page.evaluate((s) => (document.documentElement.style.fontSize = s), scale);
+        for (const width of [360, 320]) {
+          await page.setViewportSize({ width, height: 780 });
+          await checkTiles(page, `${state}, ${width}, ${scale} text, ${font}`);
+        }
+      }
+      await page.evaluate(() => (document.documentElement.style.fontSize = ''));
+    }
+  }
 });
 
 test('360×780 portrait: no horizontal scroll, every target 44×44, text at least 16 px', async ({ page }) => {

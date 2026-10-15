@@ -74,6 +74,39 @@ test('the tile counts ready reviews of the area’s enabled families', async ({ 
   await expect(page.getByText(/^Next: /)).toHaveCount(0);
   // "Last used" sits under the figure, in the right-hand column.
   await expect(tile(page, 'Godot').locator('.gv-tile__tag')).toHaveText('Last used');
+  // The figure at text size (decision 68): 16 px bold beside the 19 px name, on its right.
+  const godot = tile(page, 'Godot');
+  const [figure, label] = await Promise.all([godot.locator('.gv-tile__figure'), godot.locator('.gv-tile__label')].map((l) => l.evaluate((n) => {
+    const r = n.getBoundingClientRect();
+    return { size: getComputedStyle(n).fontSize, weight: getComputedStyle(n).fontWeight, left: r.left, right: r.right };
+  })));
+  expect(figure).toMatchObject({ size: '16px', weight: '700' });
+  expect(label!.size).toBe('19px');
+  expect(figure!.left).toBeGreaterThan(label!.right);
+});
+
+/** Per tile: its icon's width, and whether the figure or count sits beside the name or under it. */
+const tileShape = (page: Page) =>
+  page.locator('.gv-tile').evaluateAll((tiles) =>
+    tiles.map((t) => {
+      const box = (s: string) => t.querySelector(s)?.getBoundingClientRect();
+      const label = box('.gv-tile__label')!;
+      const count = box('.gv-tile__figure') ?? box('.gv-tile__lessons');
+      return {
+        icon: Math.round(box('.gv-tile__icon')!.width),
+        count: count === undefined ? 'none' : count.top >= label.bottom - 1 ? 'under' : count.left > label.right ? 'beside' : 'elsewhere',
+      };
+    }),
+  );
+
+test('decision 68: at 150 % text the tile is stacked and still shows its icon; at 100 % the count sits beside the name', async ({ page }) => {
+  await gotoHome(page);
+  expect(await tileShape(page)).toEqual([{ icon: 32, count: 'beside' }, { icon: 32, count: 'none' }]);
+  await page.evaluate(() => (document.documentElement.style.fontSize = '150%'));
+  expect(await tileShape(page)).toEqual([{ icon: 32, count: 'under' }, { icon: 32, count: 'none' }]);
+  // The count stays text size under the name: 24 px under a 28.5 px name at 150 %.
+  const sizes = await tile(page, 'Godot').evaluate((t) => ['.gv-tile__label', '.gv-tile__lessons'].map((s) => getComputedStyle(t.querySelector(s)!).fontSize));
+  expect(sizes).toEqual(['28.5px', '24px']);
 });
 
 const ACTION_RGB = 'rgb(227, 191, 127)'; // --home-action-color #e3bf7f
@@ -101,7 +134,9 @@ test('fresh install: no line repeats the tile’s Next; no ready figure; the amb
   // On the label's row, to its right; the Next line below them.
   expect(countBox!.x).toBeGreaterThan(labelBox!.x + labelBox!.width);
   expect(nextBox!.y).toBeGreaterThanOrEqual(countBox!.y + countBox!.height - 1);
-  expect(await count.evaluate((n) => getComputedStyle(n).fontWeight)).toBe('500');
+  // Text size (decision 68): 16 px under the 19 px name, weight 500.
+  expect(await count.evaluate((n) => [getComputedStyle(n).fontSize, getComputedStyle(n).fontWeight])).toEqual(['16px', '500']);
+  expect(await tile(page, 'Godot').locator('.gv-tile__label').evaluate((n) => getComputedStyle(n).fontSize)).toBe('19px');
   // "No courses yet" stays a small line under its label (the generic line style, not the count's).
   await expect(tile(page, 'Git & GitHub').locator('.gv-tile__lessons')).toHaveCount(0);
   await expect(tile(page, 'Git & GitHub').locator('.gv-tile__line')).toHaveText(['No courses yet']);
