@@ -29,9 +29,16 @@
 }
 
 /* The fonts (--font-ui, --font-code) and color-scheme come with the area's token map (src/theme/tokens.ts). */
+/*
+ * The type scale (decision 68): two sizes and nothing else, before the phone's own multiplier.
+ * Titles at 19 px: the app title, tile names, lesson and step headings, panel headings, the stepper's
+ * glyphs. Everything else at 16 px. tests/unit/type-scale.test.ts forbids a third size.
+ */
 :root {
   --gutter: 16px;
   --target: 44px;
+  --title-size: 1.1875rem;
+  --text-size: 1rem;
   --hover-overlay: color-mix(in srgb, var(--mono-color) 7%, transparent);
 }
 
@@ -45,7 +52,7 @@ html {
   background: var(--base-color);
   color: var(--font-color);
   font-family: var(--font-ui);
-  font-size: 100%;
+  font-size: var(--text-size);
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -54,6 +61,16 @@ html {
 body {
   margin: 0;
   min-height: 100dvh;
+}
+
+/* No browser-default heading sizes (decision 68): text size, unless its class makes it a title. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--text-size);
 }
 
 /* `hidden` wins over the display a class sets. */
@@ -95,7 +112,7 @@ body {
   margin: 0;
   color: var(--accent-color);
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: var(--title-size);
   line-height: 1.3;
 }
 
@@ -212,7 +229,7 @@ body {
 }
 
 .gv-choice__note {
-  font-size: 1rem;
+  font-size: var(--text-size);
 }
 
 .gv-choice__note:empty {
@@ -390,7 +407,7 @@ body {
 .gv-stepper .gv-button {
   padding: 0;
   width: var(--target);
-  font-size: 1.25rem;
+  font-size: var(--title-size);
 }
 
 /* Stat: label and value. */
@@ -402,13 +419,13 @@ body {
 
 .gv-stat__label {
   color: var(--font-secondary-color);
-  font-size: 1rem;
+  font-size: var(--text-size);
 }
 
 .gv-stat__value {
   margin: 0;
   color: var(--font-focus-color);
-  font-size: 1.25rem;
+  font-size: var(--text-size);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -450,7 +467,7 @@ body {
   background: var(--code-background-color);
   color: var(--code-text-color);
   font-family: var(--font-code);
-  font-size: 1rem;
+  font-size: var(--text-size);
   line-height: 1.6;
   tab-size: 4;
   white-space: pre-wrap;
