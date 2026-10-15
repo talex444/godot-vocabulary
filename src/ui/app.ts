@@ -36,8 +36,11 @@ export interface Nav {
   about(): void;
   /** The current area's course list. */
   courses(): void;
-  /** A lesson of the current area. */
-  lesson(id: string): void;
+  /**
+   * A lesson of the current area. With `replace`, it takes the current lesson's history entry (a
+   * finished lesson's "Next: Lesson N", decision 69c), so Back still lands on the course list.
+   */
+  lesson(id: string, replace?: boolean): void;
   placeholder(title: string): void;
 }
 
@@ -237,7 +240,12 @@ export function mountApp(host: HTMLElement): Nav {
     addCard: () => void go({ screen: 'addCard', area: areaOf(current) }),
     about: () => void go(current.area ? { screen: 'about', area: current.area } : { screen: 'about' }),
     courses: () => void go({ screen: 'courses', area: areaOf(current) }),
-    lesson: (id) => void go({ screen: 'lesson', area: areaOf(current), lesson: id }),
+    lesson: (id, replace) => {
+      if (!replace) return void go({ screen: 'lesson', area: areaOf(current), lesson: id });
+      current = { ...current, screen: 'lesson', area: areaOf(current), lesson: id };
+      history.replaceState(current, '');
+      void draw(current);
+    },
     placeholder: (title) => show(placeholderScreen(nav, title)),
   };
 

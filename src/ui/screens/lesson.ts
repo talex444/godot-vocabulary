@@ -1,27 +1,34 @@
 import type { Card } from '../../cards/types';
 import { judgeBlank } from '../../courses/blank';
-import type { AreaId } from '../../areas/registry';
-import { coursesFor, findLesson, pretestCards } from '../../courses/index';
-import type { BlankExercise, ChoiceCheck, Example, FixExercise, LessonImage, TreeDrawing } from '../../courses/types';
+import { getArea, type AreaId } from '../../areas/registry';
+import { cardsToAdd, finishedText, finishLabel } from '../../courses/finish';
+import { coursesFor, findLesson, pretestCards, sessionLessons } from '../../courses/index';
+import { isPlanned, type BlankExercise, type ChoiceCheck, type CourseLesson, type Example, type FixExercise, type LessonImage, type TreeDrawing } from '../../courses/types';
 import { drawChoices } from '../../session/choices';
 import { loadCards } from '../../session/deck';
-import { getExitTicket, markDoneSettings, markLessonDone, saveExitTicket } from '../../store/db';
+import { getExitTicket, getLessonsDoneIds, getProgress, getSkippedIds, markDoneSettings, markLessonDone, saveExitTicket } from '../../store/db';
 import type { Nav } from '../app';
 import { asset, button, choiceRow, codeBlock, el, gapField, heading, icon, inlineRich, panel, setChoiceState, textField } from '../kit';
 import { revealTable } from './reveal-table';
 
 /**
  * One lesson as one scrolling page (decision 37): question, pretest, the need, agenda, explanation
- * chunks each with a check, compare, exercises, "what you'll see when it's wrong", exit ticket, Mark
- * done. Nothing here touches the scheduler (decision 36); Mark done records the lesson and turns
- * course mode on.
+ * chunks each with a check, compare, exercises, "what you'll see when it's wrong", exit ticket, the
+ * Finish button. Nothing here touches the scheduler (decision 36); finishing records the lesson and
+ * turns course mode on, then says so in place, with the next lesson and the course list (decision 69c).
  */
 export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Promise<HTMLElement> {
   const courses = await coursesFor(area);
   const found = findLesson(lessonId, courses);
   if (!found) throw new Error(`No lesson ${lessonId}.`);
   const { course, lesson } = found;
-  const [cards, ticket] = await Promise.all([loadCards(course.area), getExitTicket(lessonId)]);
+  const [cards, ticket, seen, skipped, lessonsDone] = await Promise.all([
+    loadCards(course.area),
+    getExitTicket(lessonId),
+    getProgress(lesson.cardIds).then((p) => new Set(p.keys())),
+    getSkippedIds(),
+    getLessonsDoneIds(),
+  ]);
   const cardsById = new Map(cards.map((c) => [c.id, c]));
   const courseNumber = courses.indexOf(course) + 1;
 
@@ -59,15 +66,39 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
     },
   });
 
-  const markDone = button('Mark done', {
+  // The button says what finishing does (decision 69e); the count is read before the tap, so the line after it matches.
+  const again = lessonsDone.includes(lesson.id);
+  const added = cardsToAdd({
+    lesson,
+    lessons: sessionLessons(courses),
+    lessonsDone,
+    cardIds: new Set(cardsById.keys()),
+    seen,
+    skipped,
+  }).length;
+  const nextLesson = course.lessons
+    .filter((l): l is CourseLesson => !isPlanned(l))
+    .sort((a, b) => a.order - b.order)
+    .find((l) => l.order > lesson.order);
+  // A live region from the start, so the line is announced when it fills.
+  const finished = el('p', { class: 'gv-finish__status', attrs: { 'aria-live': 'polite' } });
+  const backNav = el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back to courses', { variant: 'secondary', onClick: () => nav.back() })]);
+  const markDone = button(finishLabel(added, again), {
     variant: 'primary',
     onClick: async () => {
       markDone.disabled = true;
       await markLessonDone(lesson.id);
       // The first finished lesson switches course mode on for its course's area (decision 36).
       await markDoneSettings(course.area);
-      // Back to the course list (which now shows the tick) or area page it was opened from.
-      nav.back();
+      // No automatic navigation: the button gives way to what happened and the two ways on.
+      finished.textContent = finishedText(lesson.order, added, again, getArea(course.area)?.label ?? 'Godot', nextLesson ? undefined : courseNumber);
+      const next = nextLesson ? button(`Next: Lesson ${nextLesson.order}`, { variant: 'primary', onClick: () => nav.lesson(nextLesson.id, true) }) : null;
+      const back = button('Back to courses', { variant: 'secondary', onClick: () => nav.back() });
+      for (const b of [next, back]) b?.classList.add('gv-wide');
+      markDone.replaceWith(el('div', { class: 'gv-stack gv-finish' }, [next, back]));
+      // The page's own Back to courses would now say the same thing twice.
+      backNav.remove();
+      (next ?? back).focus();
     },
   });
   markDone.classList.add('gv-wide');
@@ -150,12 +181,13 @@ export async function lessonScreen(nav: Nav, lessonId: string, area: AreaId): Pr
       ticketField.root,
       el('div', { class: 'gv-row' }, [saveTicket]),
       ticketStatus,
-      // The course-end table (decision 41) sits after the exit ticket, before Mark done.
+      // The course-end table (decision 41) sits after the exit ticket, before the Finish button.
       lesson.table ? el('h4', { class: 'gv-family__name', text: `Course ${courseNumber} in one table` }) : null,
       lesson.table ? revealTable(lesson.table) : null,
+      finished,
       markDone,
     ]),
-    el('nav', { class: 'gv-links', attrs: { 'aria-label': 'Back' } }, [button('Back to courses', { variant: 'secondary', onClick: () => nav.back() })]),
+    backNav,
   ]);
   return root;
 }

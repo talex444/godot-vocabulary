@@ -242,6 +242,10 @@ test('every screen passes axe (WCAG 2.2 AA) apart from reported contrast inside 
   await page.locator('[data-kind="fix"] .gv-choice').first().click();
   await page.getByText('Check the case.').waitFor();
   await audit(page, 'lesson answered');
+  // Finished: the status line and its two buttons in the Finish button's place (decision 69c).
+  await page.getByRole('button', { name: /^Finish lesson/ }).click();
+  await page.locator('.gv-finish__status:not(:empty)').waitFor();
+  await audit(page, 'lesson finished');
 
   // Lesson 3's code (a blank inside code, code fix lines) and lesson 5's course table, two cells shown.
   await page.getByRole('button', { name: 'Back to courses' }).click();

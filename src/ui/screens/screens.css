@@ -916,6 +916,21 @@ button.gv-lesson-row:focus-visible {
   white-space: pre-wrap;
 }
 
+/*
+ * Finishing a lesson (decision 69c): the status line is a live region from the start, so it stays
+ * rendered while empty (a `display: none` region is announced unreliably), only out of the flow.
+ */
+.gv-finish__status {
+  margin: 0;
+}
+
+.gv-finish__status:empty {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 /* The course-end table (decision 41): one Inspector-like block per class, each cell a covered button. */
 .gv-reveal__rows,
 .gv-reveal__cells {
