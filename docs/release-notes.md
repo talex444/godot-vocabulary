@@ -2,6 +2,22 @@
 
 Newest first. Each entry: what changed, what it means for you, why, and anything you need to do.
 
+## 1.3.6 — 2026-10-15
+
+### Summary
+- **A tile opens its area page.** Tapping Godot always opens the Godot page, where **Start** (a quick review) and **Courses** are both one tap away. The tile still says "Next: Lesson N" so you can see where you are. Before this, a tile with nothing ready went straight into the lesson.
+- **The Next buttons inside a lesson are gone.** A lesson is one page you scroll, so each check now ends with its verdict and the one-line why. Keep scrolling to go on.
+- **Finishing a lesson says what happened.** The button now names what it does: **Finish lesson: add 9 cards** (the lesson's cards that are not in your deck yet), or **Finish lesson** for a lesson you have already done. When you tap it, the button is replaced by one line, for example "Lesson 0 done. 9 cards added; your Godot sessions will bring them in before other new cards.", and two buttons: **Next: Lesson 1** and **Back to courses**. After the last lesson, the line says the course is finished and only **Back to courses** shows. A lesson done again says "Lesson 0 done again. Your cards are unchanged." Nothing moves you off the page by itself.
+
+### Impact
+- None on your data: progress, settings, lessons done and export files are unchanged. Finishing a lesson records the same things **Mark done** did.
+
+### Reasoning
+Decision 69 (`docs/decisions.md`), from your report after a day with 1.3.3: "This will make me close the app" (the tile went straight into a course when you only had time for a review), "the next button at the bottom of every lesson block is sort of pointless and sort of confusing" (you were scrolling anyway), and "there should be a smoother transition" when a lesson ends. The new line only says what the app really does: finishing a lesson puts its cards ahead of other new cards in that area's sessions. It promises no date, because a card gets a review date only once you answer it. Keeping your place in a lesson (69d) is a later version.
+
+### Actions required
+- None.
+
 ## 1.3.5 — 2026-10-15
 
 ### Summary
