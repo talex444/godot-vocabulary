@@ -2,6 +2,22 @@
 
 Newest first. Each entry: what changed, what it means for you, why, and anything you need to do.
 
+## 1.3.4 — 2026-10-15
+
+### Summary
+- **The Areas screen's chosen look: one warm light.** The look you picked from the pictures (B2): a pale amber light from the top right over a warm near-black page, and nothing from the bottom left. The tiles are a warm gradient whose lighter end faces the light, with a faint lit top edge and no drop shadow. A pressed tile sinks.
+- **Two warm inks.** A pale amber marks the next thing to do: "Next: Lesson N", or "12 ready" when reviews are waiting. A muted tan draws everything around it: the **Areas** heading, the tool icons, the chevrons and the "Nothing waiting today." line.
+- **A tile's right side is never empty when the area has lessons.** With nothing ready, the lessons count ("6 lessons", "1 of 6 lessons") sits where "12 ready" would be, the same size but a lighter weight, so the amber Next line still leads. On a narrow screen or with large text it wraps rather than squeezing the tile's name. "No courses yet" stays a small line under its name.
+
+### Impact
+- None on your data: progress, settings, lessons done and export files are unchanged. What a tile says, and what a screen reader reads for it, are unchanged.
+
+### Reasoning
+Decision 67 (`docs/decisions.md`): after a day with 1.3.3 ("yet its just brown"), you chose variant B2 from three real renders and asked for a paler orange. Three seats then checked it. The artist asked for one light only, and turned the tiles to face it. The design seat asked for every colour to be a token, two warm inks with one meaning each, and no drop shadow. The accessibility seat asked for every colour to be measured on both ends of every tile's gradient and at the glow's brightest point. Every text and control on the Areas screen still meets WCAG 2.2 AA (`docs/contrast-report.md`, "## Home": 0 of 64 text and 0 of 29 non-text pairs short).
+
+### Actions required
+- None.
+
 ## 1.3.3 — 2026-10-14
 
 ### Summary

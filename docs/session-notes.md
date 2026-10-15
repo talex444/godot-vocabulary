@@ -962,3 +962,46 @@ Whether the near-black page reads as warm, not brown or muddy, on the S24's OLED
 
 **GV-8h, 1.3.3 hotfix (no version bump):** the web deploy's e2e failed on the Ubuntu runner, "12 ready" wrapping in the stacked tile at 320 px and 200 % text, because CI's `system-ui` is a Linux font, wider than Segoe UI; tile text is now sized for the widest common sans. `fix(home): the ready figure stays on one line on wide fonts`: in the stacked layout the figure keeps `nowrap`, stretches across the text column and steps down to 1.25rem (1.5rem elsewhere).
 Arithmetic: 320 px less the page gutters, tile padding, chevron and gap leaves about 228 px; at 200 % the figure is 40 px glyphs, and "12 ready" in Verdana bold is about 4.9 em, so about 196 px (at the old 1.5rem, 48 px, about 236 px, which overflowed); the layout test now repeats its 200 % step with the figure in Verdana so the Windows run catches what the Linux runner catches.
+
+## GV-8i — v1.3.4: the home's chosen look, one warm light, two warm inks (2026-10-15)
+
+Decision 67 (variant B2, chosen by Tyler from pictures), with the three seats' changes; done-criteria 85–86. The vendored `frontend-design` skill was invoked first and followed. Grounding: a learner's home for a Godot and Git vocabulary app, dark, warm, one light. Then a plan: five colours (the night page, the tile's two stops, the pale amber, the tan), the type scale kept, the grid kept. The plan was reviewed against the skill's generic defaults: the drop shadow (the SaaS-card tell) and the tracked heading went, and the accent stays pale and means one thing. Then the build, then the critique below. Commits, none pushed, no tag: `feat(home): warm light, tokens for the chosen look`, `feat(home): the chosen look, one light, two warm inks`, `chore(release): version 1.3.4`, and this one. There was no `fix(home): after the design critique`: the critique found no real miss. Every commit had `typecheck`, `test`, `lint:css`, `build` (with the budget check; first load 132,890 of 1,000,000 bytes) and `e2e` (69) green.
+
+### The values (`src/theme/home.ts`)
+The ramp has eleven steps (was ten), measured LCh. The dark end is five even steps of about 5 L*, chroma rising with value, hue near 65°. Its two ends are B2's page and the artist's light stop; the middle steps are the nearest 8-bit colours to the plan. The inks are 1.3.3's, unchanged.
+
+| Grey | Hex | L* | C* | h | Role |
+|---|---|---:|---:|--:|---|
+| 0 | #130e09 | 4.3 | 2.9 | 69° | the page (also `HOME_BASE_COLOR`, the manifest and `theme-color`) |
+| 1 | #1f1a16 | 9.7 | 4.0 | 67° | pressed tile's dark end; panels |
+| 2 | #2d251f | 15.4 | 6.0 | 65° | tile's dark end at rest |
+| 3 | #372e27 | 19.7 | 6.6 | 66° | hovered tile's dark end; pressed tile's light end |
+| 4 | #433830 | 24.4 | 7.6 | 64° | tile's light end, at rest and hovered |
+| 5–10 | #77716c … #ffffff | 48–100 | ≤3.8 | 69° | as 1.3.3's g4–g9 |
+
+- **Tile:** `linear-gradient(225deg, light, dark)`. The light end faces the glow, so at the tile's top-right corner the tile is lighter than the ground the glow lights there, and the corner never dissolves into it (at B2's 135° the corner and the glow were 1.03:1). Hovered: the dark end lifts a step and the light end holds, because a lighter light end would take the quiet grey under 4.5:1 (g4 + 1 step, about L* 29, gives 4.0:1). Pressed: both ends sink a step and the lit edge goes out. The lit edge is `inset 0 1px 0` of the primary grey at 8 % (`--home-tile-edge-strength`), built with `color-mix` like the glow. There is no outer shadow.
+- **Inks:** pale amber `#e3bf7f` (LCh 79.1 / 37.3 / 83°) and tan `#cdb690` (75.1 / 22.5 / 84°): one hue, two chromas. B2's three warm values (`#e3bf7f`, `#e6c48a`, `#cdb690`) and its today line `#d6c6ae` fold into these two. The glow's colour is the pale amber itself, not a third amber (B2's `rgba(224,184,118,.2)` and `#e3bf7f` at 20 % differ by at most two 8-bit steps at the peak: `#3c301f` against `#3d3121`).
+- **Glow:** 20 %, reach 48vmax (about 370 px on a 360×780 phone), top right only; peak `#3d3121`, L* 21.2, between the tile's dark end and its light end.
+
+### The ratios (`docs/contrast-report.md` "## Home")
+0 of 64 text and 0 of 29 non-text pairs short, on nine surfaces. The lowest, all on a tile's light end `#433830`: quiet/tertiary grey 4.77:1, tan 5.79:1 (heading, today line, icon and chevron), pale amber 6.51:1, focus halo 3.38:1. On the glow peak: pale amber 7.25:1, tan 6.44:1, quiet 5.31:1, halo 3.76:1. The seat's hand ratios (pale amber ≈ 7.4, tan heading ≈ 6.5, chevron ≈ 6.2, halo ≈ 3.8 on the peak) land within 0.4 of the gate's, which win. The secondary button's edge on a panel is 3.58:1 (the panel darkened from L* 12.2 to 9.7). Retired: "the peak is darker than a tile" and the pinned `#27211c` / 14 % ceiling. Added: nine surfaces, and "on a tile, each ink's worst case is the gradient's light stop" for every ink and every state.
+
+### The zero-state count
+`tileView` marks the lessons line `lessons: true` only when nothing is ready and the area has lessons. Its element is `.gv-tile__lessons` (not `.gv-tile__line`), placed at `1 / 3`, 1.5rem, weight 500, in the quiet grey, end-aligned. "No courses yet" stays a `.gv-tile__line`. While a count is shown, the other lines span columns 2–3, so "Next: Lesson 1" is never squeezed by "1 of 6 lessons". The label column is `minmax(min-content, 1fr)` in that state: the first build broke "Godot" into "G / od / ot" at 320 px next to "1 of 6 lessons", which the old layout test did not catch. The count now wraps first ("1 of 6 / lessons" at 320 px; one line at 360 px). The layout test now imports one finished lesson and checks 360 px, 320 px, 200 % text and a Verdana label and count; it fails a label broken inside a word. The Next line now carries `gv-action`, the amber. DOM order and accessible names are unchanged.
+
+### The critique (the skill's last step), against B2 and the seats
+Looked at 2× colour renders of the fresh, ready and pressed home, and at the greyscale thumbnails. These were taken by a temporary Playwright spec into the gitignored `data/sources/gv8i-shots/`, deleted before the commit.
+- One light: reads as warmth from the top right, not a lit page; close to B2's render; nothing from the bottom left. **Holds.**
+- The tiles: the light end at the top right is visible; the corner stays distinct from the glow in colour and in greyscale (three values: ground, tiles, text); the lit edge is faint; the pressed tile visibly sinks. **Holds.**
+- The amber: pale, amber not orange, only on "Next: Lesson 0" / "12 ready"; the tan icons no longer compete with it, as B2's amber icons did. **Holds.**
+- Open for the phone, not changed on a guess: (1) "6 lessons" at 24 px/500 in grey is still large; whether the 16 px amber Next line leads is for Tyler's eyes (86). (2) The Git & GitHub tile's right side is empty while it has no courses, because the design seat kept "No courses yet" small. The release note says "when the area has lessons". (3) Banding: the glow falls 42 red levels (61 to 19) over about 370 px, roughly one level per 9 px; it looks smooth on the desktop render, and the OLED is the judge.
+
+### What only the phone can prove
+Warm not muddy on the S24's OLED; the tiles still the subject; the amber pale enough; the glow without banding; the count not out-shouting the Next line; the week question (84).
+
+### Deviations and why
+1. **Eleven greys, not ten:** the tile's three gradient states need five dark steps.
+2. **The glow's colour is the action ink**, not B2's `rgba(224,184,118,…)`: one fewer colour, the same paint.
+3. **Hover holds the light end:** the quiet grey's 4.5:1 decided it (see above).
+4. **The tokens test's warm-tint bound rose from 13 to 19 steps of red over blue:** `#433830` is 19.
+5. **The label column in the zero state is `minmax(min-content, 1fr)`:** not in the brief; it is what "wrap, never truncate" needed at 320 px.
