@@ -2,6 +2,21 @@
 
 Newest first. Each entry: what changed, what it means for you, why, and anything you need to do.
 
+## 1.4.0 — 2026-10-15
+
+### Summary
+- **Every term in a lesson now gets its full treatment**, in six parts, each term its own titled section: what it is (the manual's own sentence, with the page it comes from), when you'd reach for it, where it lives in the editor (with the manual's picture of that spot), one worked example, what it is not to be confused with, and a check that describes the term without naming it, so you produce the name instead of copying it. After every fourth term, a recall check on everything so far. A term list at the top of the lesson links to each section.
+- **A new Lesson 0, "What are the parts of the editor, and what is each one for?"**, written from the manual's "First look at Godot's interface": the viewport, the toolbar, the FileSystem dock, the Scene dock, the Inspector, the bottom panel, and the 2D, Game and Script screens. Its nine terms are a new **Godot editor** card family, which joins your Godot sessions when you finish the lesson.
+- **Lesson 1, "What is a Godot game made of when it runs?"**, is rewritten in the same treatment: Node, SceneTree, PackedScene, Signal, then the Player's nodes one at a time (CharacterBody2D, Sprite2D, CollisionShape2D, Camera2D), and Node3D, each quoted from its class reference page, with the Player tree drawn node by node.
+- **The lessons are renumbered.** The editor lesson is Lesson 0 and every later lesson moves up by one; the course now lists Lesson 0 to Lesson 6.
+
+### Impact
+- None on your data. Lessons done, exit tickets, progress and export files stay attached to the same lessons (their ids did not change); only the numbers shown move. The new Lesson 0 shows as not done, so the Godot tile says "Next: Lesson 0".
+- Settings gains a **Godot editor** family with 5 new cards a day. With the other families at their defaults the total is 25 a day, above the 20 the settings page warns about; lower one family if you want the total back at 20.
+
+### Reasoning
+Decisions 70 to 73 (`docs/decisions.md`), from your report after a day with the first course: "I was instructed to type CharacterBody2D but I didn't commit it to memory", "We didnt really go over the editor itself which should be important for lesson number one", and "i like the course length of course zero. i just had hope for more juice for the terms used… the doc already have the info. all you gotta do is place it." A five-seat board read its books on it: tool before content, so the editor first; contrast and non-examples; recall rather than recognition; the manual's own words placed, not paraphrased. The lesson cap stays provisional until you have read both lessons and said the length is right.
+
 ## 1.3.6 — 2026-10-15
 
 ### Summary
